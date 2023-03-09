@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 09, 2023 at 05:22 AM
+-- Generation Time: Mar 09, 2023 at 07:00 AM
 -- Server version: 10.4.25-MariaDB
 -- PHP Version: 8.1.10
 
@@ -24,6 +24,133 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `boroughs`
+--
+
+CREATE TABLE `boroughs` (
+  `borough_id` int(20) NOT NULL,
+  `borough_name` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `buildingtypes`
+--
+
+CREATE TABLE `buildingtypes` (
+  `building_type_id` int(20) NOT NULL,
+  `type_name` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `favorites`
+--
+
+CREATE TABLE `favorites` (
+  `favorite_id` int(20) NOT NULL,
+  `user_id` int(20) NOT NULL,
+  `listing_id` int(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `links`
+--
+
+CREATE TABLE `links` (
+  `link_id` int(20) NOT NULL,
+  `link_title` varchar(50) NOT NULL,
+  `href` varchar(50) DEFAULT NULL,
+  `location` varchar(20) NOT NULL,
+  `parent_id` int(20) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `listingphotos`
+--
+
+CREATE TABLE `listingphotos` (
+  `photo_id` int(20) NOT NULL,
+  `listing_id` int(20) NOT NULL,
+  `position` int(5) NOT NULL,
+  `path` varchar(200) NOT NULL,
+  `user_id` int(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `listingprices`
+--
+
+CREATE TABLE `listingprices` (
+  `price_id` int(20) NOT NULL,
+  `price` decimal(12,2) NOT NULL,
+  `dateSet` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `user_id` int(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `listingrooms`
+--
+
+CREATE TABLE `listingrooms` (
+  `listingRoom_id` int(20) NOT NULL,
+  `listing_id` int(20) NOT NULL,
+  `roomType_id` int(20) NOT NULL,
+  `numberOf` int(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `listings`
+--
+
+CREATE TABLE `listings` (
+  `listing_id` int(20) NOT NULL,
+  `user_id` int(20) NOT NULL,
+  `borough_id` int(20) NOT NULL,
+  `building_type_id` int(20) NOT NULL,
+  `name` varchar(200) NOT NULL,
+  `description` text NOT NULL,
+  `address` varchar(200) NOT NULL,
+  `size` float(8,2) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `roles`
+--
+
+CREATE TABLE `roles` (
+  `role_id` int(20) NOT NULL,
+  `role_name` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `roomtypes`
+--
+
+CREATE TABLE `roomtypes` (
+  `roomType_id` int(20) NOT NULL,
+  `roonName` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
@@ -34,7 +161,7 @@ CREATE TABLE `users` (
   `name` varchar(50) NOT NULL,
   `lastName` varchar(50) NOT NULL,
   `dateCreated` timestamp NOT NULL DEFAULT current_timestamp(),
-  `role_id` int(20) NOT NULL DEFAULT 0
+  `role_id` int(20) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -49,6 +176,77 @@ INSERT INTO `users` (`user_id`, `email`, `password`, `name`, `lastName`, `dateCr
 --
 
 --
+-- Indexes for table `boroughs`
+--
+ALTER TABLE `boroughs`
+  ADD PRIMARY KEY (`borough_id`);
+
+--
+-- Indexes for table `buildingtypes`
+--
+ALTER TABLE `buildingtypes`
+  ADD PRIMARY KEY (`building_type_id`);
+
+--
+-- Indexes for table `favorites`
+--
+ALTER TABLE `favorites`
+  ADD PRIMARY KEY (`favorite_id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `listing_id` (`listing_id`);
+
+--
+-- Indexes for table `links`
+--
+ALTER TABLE `links`
+  ADD PRIMARY KEY (`link_id`),
+  ADD KEY `parent_id` (`parent_id`);
+
+--
+-- Indexes for table `listingphotos`
+--
+ALTER TABLE `listingphotos`
+  ADD PRIMARY KEY (`photo_id`),
+  ADD UNIQUE KEY `listing_id` (`listing_id`),
+  ADD UNIQUE KEY `user_id` (`user_id`);
+
+--
+-- Indexes for table `listingprices`
+--
+ALTER TABLE `listingprices`
+  ADD PRIMARY KEY (`price_id`),
+  ADD UNIQUE KEY `user_id` (`user_id`);
+
+--
+-- Indexes for table `listingrooms`
+--
+ALTER TABLE `listingrooms`
+  ADD PRIMARY KEY (`listingRoom_id`),
+  ADD KEY `listing_id` (`listing_id`),
+  ADD KEY `roomType_id` (`roomType_id`);
+
+--
+-- Indexes for table `listings`
+--
+ALTER TABLE `listings`
+  ADD PRIMARY KEY (`listing_id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `borough_id` (`borough_id`),
+  ADD KEY `building_type_id` (`building_type_id`);
+
+--
+-- Indexes for table `roles`
+--
+ALTER TABLE `roles`
+  ADD PRIMARY KEY (`role_id`);
+
+--
+-- Indexes for table `roomtypes`
+--
+ALTER TABLE `roomtypes`
+  ADD PRIMARY KEY (`roomType_id`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
@@ -59,6 +257,66 @@ ALTER TABLE `users`
 --
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `boroughs`
+--
+ALTER TABLE `boroughs`
+  MODIFY `borough_id` int(20) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `buildingtypes`
+--
+ALTER TABLE `buildingtypes`
+  MODIFY `building_type_id` int(20) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `favorites`
+--
+ALTER TABLE `favorites`
+  MODIFY `favorite_id` int(20) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `links`
+--
+ALTER TABLE `links`
+  MODIFY `link_id` int(20) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `listingphotos`
+--
+ALTER TABLE `listingphotos`
+  MODIFY `photo_id` int(20) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `listingprices`
+--
+ALTER TABLE `listingprices`
+  MODIFY `price_id` int(20) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `listingrooms`
+--
+ALTER TABLE `listingrooms`
+  MODIFY `listingRoom_id` int(20) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `listings`
+--
+ALTER TABLE `listings`
+  MODIFY `listing_id` int(20) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `roles`
+--
+ALTER TABLE `roles`
+  MODIFY `role_id` int(20) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `roomtypes`
+--
+ALTER TABLE `roomtypes`
+  MODIFY `roomType_id` int(20) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `users`
