@@ -4,8 +4,8 @@ function createNewListing($user, $borough, $building_type, $name, $description, 
 
     $statement = "INSERT INTO listings (user_id, borough_id, building_type_id, listing_name, description, address, size) 
                   VALUES (?, ?, ?, ?, ?, ?, ?)";
-
     $prepSt = $conn->prepare($statement);
+    
     $prepSt->bindParam(1, $user);
     $prepSt->bindParam(2, $borough);
     $prepSt->bindParam(3, $building_type);
@@ -21,4 +21,13 @@ function createNewListing($user, $borough, $building_type, $name, $description, 
     return $last_id;
 }
 
+function saveListingPrice($listing, $price){
+    include ("connection.php");
+
+    $statement = "INSERT INTO listingprices (listing_id, price) VALUES (?, ?)";
+    $prepSt = $conn->prepare($statement);
+
+    $prepSt->bindParam(1, $listing);
+    $prepSt->bindParam(2, $price);
+}
 ?>

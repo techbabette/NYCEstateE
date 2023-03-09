@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 09, 2023 at 07:00 AM
+-- Generation Time: Mar 09, 2023 at 08:37 AM
 -- Server version: 10.4.25-MariaDB
 -- PHP Version: 8.1.10
 
@@ -78,7 +78,7 @@ CREATE TABLE `links` (
 CREATE TABLE `listingphotos` (
   `photo_id` int(20) NOT NULL,
   `listing_id` int(20) NOT NULL,
-  `position` int(5) NOT NULL,
+  `main` tinyint(1) NOT NULL,
   `path` varchar(200) NOT NULL,
   `user_id` int(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -91,9 +91,9 @@ CREATE TABLE `listingphotos` (
 
 CREATE TABLE `listingprices` (
   `price_id` int(20) NOT NULL,
+  `listing_id` int(20) NOT NULL,
   `price` decimal(12,2) NOT NULL,
-  `dateSet` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `user_id` int(20) NOT NULL
+  `dateSet` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -120,7 +120,7 @@ CREATE TABLE `listings` (
   `user_id` int(20) NOT NULL,
   `borough_id` int(20) NOT NULL,
   `building_type_id` int(20) NOT NULL,
-  `name` varchar(200) NOT NULL,
+  `listing_name` varchar(200) NOT NULL,
   `description` text NOT NULL,
   `address` varchar(200) NOT NULL,
   `size` float(8,2) NOT NULL
@@ -136,6 +136,14 @@ CREATE TABLE `roles` (
   `role_id` int(20) NOT NULL,
   `role_name` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `roles`
+--
+
+INSERT INTO `roles` (`role_id`, `role_name`) VALUES
+(1, 'standard'),
+(2, 'admin');
 
 -- --------------------------------------------------------
 
@@ -169,7 +177,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`user_id`, `email`, `password`, `name`, `lastName`, `dateCreated`, `role_id`) VALUES
-(1, 'ilija.krstic.155.21@ict.edu.rs', '459f6fe00d942096b0329947990bf4a7', 'Marko', 'Krstic', '2023-03-08 09:14:07', 0);
+(1, 'ilija.krstic.155.21@ict.edu.rs', '459f6fe00d942096b0329947990bf4a7', 'Marko', 'Krstic', '2023-03-08 09:14:07', 2);
 
 --
 -- Indexes for dumped tables
@@ -215,7 +223,7 @@ ALTER TABLE `listingphotos`
 --
 ALTER TABLE `listingprices`
   ADD PRIMARY KEY (`price_id`),
-  ADD UNIQUE KEY `user_id` (`user_id`);
+  ADD KEY `listing_id` (`listing_id`);
 
 --
 -- Indexes for table `listingrooms`
@@ -310,7 +318,7 @@ ALTER TABLE `listings`
 -- AUTO_INCREMENT for table `roles`
 --
 ALTER TABLE `roles`
-  MODIFY `role_id` int(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `role_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `roomtypes`
@@ -322,7 +330,7 @@ ALTER TABLE `roomtypes`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `user_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
