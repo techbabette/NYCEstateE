@@ -37,15 +37,23 @@ if(isset($_POST["createNewUser"])){
         echo $greska;
         die();
     }
-    require("../DataAccess/functions.php");
+    require("../DataAccess/userFunctions.php");
     try{
-        createNewUser($email, $pass, $name, $lastName);
-        http_response_code(201);
-        Header("Location: ../pages/login.html");
+        $emailInUse = checkIfEmailInUse($email);
+        if($emailInUse){
+            http_response_code(422);
+            $greska .= "Email already in use";
+            echo $greska;
+            die();
+        }
+        else{
+            createNewUser($email, $pass, $name, $lastName);
+            http_response_code(201);
+            Header("Location: ../pages/login.html");
+        }
     }
     catch(PDOException $e){
         http_response_code(500);
-        echo $e;
     }
 }
 else{
