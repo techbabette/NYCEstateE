@@ -30,4 +30,14 @@ function saveListingPrice($listing, $price){
     $prepSt->bindParam(1, $listing);
     $prepSt->bindParam(2, $price);
 }
+
+function getListings(){
+    include ("connection.php");
+
+    $statement = "SELECT listing_id, listing_name, borough_name, type_name
+                  FROM listings l INNER JOIN boroughs b ON l.borough_id = b.borough_id
+                  INNER JOIN listingprices lp ON l.listing_id = lp.listing_id
+                  INNER JOIN buildingtypes bt ON l.building_type_id = bt.building_type_id
+                  INNER JOIN listingphotos lph ON lph.listing_id = l.listing_id";
+}
 ?>
