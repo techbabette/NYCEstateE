@@ -19,6 +19,31 @@ function deleteSingleRow($table, $paramater, $paramaterValue){
     $prepSt = $conn->prepare($statement);
 
     $prepSt->bindParam(1, $paramaterValue, PDO::PARAM_INT);
+
+    $prepSt->execute();
+}
+
+function insertSingleParamater($table, $paramater, $paramaterName){
+    include ("connection.php");
+
+    $statement = "INSERT INTO $table ($paramaterName) 
+    VALUES (?)";
+    $prepSt = $conn->prepare($statement);
+
+    $prepSt->bindParam(1, $paramater);
+    
+    $prepSt->execute();
+}
+
+function getEverythingFromTable($table){
+    include ("connection.php");
+
+    $statement = "SELECT * FROM $table";
+    $prepSt = $conn->prepare($statement);
+
+    $prepSt->execute();
+
+    return $prepSt->fetchAll();
 }
 
 ?>
