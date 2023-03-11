@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 11, 2023 at 08:36 AM
+-- Generation Time: Mar 11, 2023 at 08:41 AM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -20,6 +20,18 @@ SET time_zone = "+00:00";
 --
 -- Database: `nycestate`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `accesslevels`
+--
+
+CREATE TABLE `accesslevels` (
+  `access_level_id` int(20) NOT NULL,
+  `level` int(10) NOT NULL,
+  `level_title` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -134,6 +146,7 @@ CREATE TABLE `listings` (
 
 CREATE TABLE `roles` (
   `role_id` int(20) NOT NULL,
+  `access_level_id` int(20) NOT NULL,
   `role_name` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -141,9 +154,9 @@ CREATE TABLE `roles` (
 -- Dumping data for table `roles`
 --
 
-INSERT INTO `roles` (`role_id`, `role_name`) VALUES
-(1, 'standard'),
-(2, 'admin');
+INSERT INTO `roles` (`role_id`, `access_level_id`, `role_name`) VALUES
+(1, 0, 'standard'),
+(2, 0, 'admin');
 
 -- --------------------------------------------------------
 
@@ -182,6 +195,12 @@ INSERT INTO `users` (`user_id`, `email`, `password`, `name`, `lastName`, `dateCr
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `accesslevels`
+--
+ALTER TABLE `accesslevels`
+  ADD PRIMARY KEY (`access_level_id`);
 
 --
 -- Indexes for table `boroughs`
@@ -246,7 +265,8 @@ ALTER TABLE `listings`
 -- Indexes for table `roles`
 --
 ALTER TABLE `roles`
-  ADD PRIMARY KEY (`role_id`);
+  ADD PRIMARY KEY (`role_id`),
+  ADD KEY `access_level_id` (`access_level_id`);
 
 --
 -- Indexes for table `roomtypes`
@@ -265,6 +285,12 @@ ALTER TABLE `users`
 --
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `accesslevels`
+--
+ALTER TABLE `accesslevels`
+  MODIFY `access_level_id` int(20) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `boroughs`
