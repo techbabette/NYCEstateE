@@ -29,4 +29,21 @@ function checkIfEmailInUse($email){
 
     return $result;
 }
+
+function attemptLogin($email, $password){
+    include ("connection.php");
+
+    $crypted = md5($password);
+
+    $statement = "SELECT email FROM users WHERE email = ? AND password = ?";
+    $prepSt = $conn->prepare($statement);
+
+    $prepSt->bindParam(1, $email);
+    $prepSt->bindParam(2, $password);
+
+    $prepSt->execute();
+    $result = $prepSt->rowCount() != 0;
+
+    return $result;
+}
 ?>
