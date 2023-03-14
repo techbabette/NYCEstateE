@@ -1,4 +1,10 @@
 <?php
+
+function echoNoPermission(){
+    http_response_code(302);
+    echo("../index.html");
+    die();
+}
 function updateTextValue($table,$toChange, $toChangeValue, $paramater, $paramaterValue){
     include ("connection.php");
 

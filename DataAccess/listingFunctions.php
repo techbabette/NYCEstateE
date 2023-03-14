@@ -31,6 +31,29 @@ function saveListingPrice($listing, $price){
     $prepSt->bindParam(2, $price);
 }
 
+function saveMainListingPhoto($listing, $path){
+    include ("connection.php");
+
+    $main = true;
+
+    $statement = "INSERT INTO listingphotos (listing_id, path, main) VALUES (?, ?, ?)";
+    $prepSt = $conn->prepare($statement);
+
+    $prepSt->bindParam(1, $listing, PDO::PARAM_INT);
+    $prepSt->bindParam(2, $path);
+    $prepSt->bindParam(3, $main);
+}
+
+function updateMainListingPhoto($listing, $path){
+    include ("connection.php");
+
+    $statement = "UPDATE listingphotos SET path = ? WHERE listing_id = ? AND main = true";
+    $prepSt = $conn->prepare($statement);
+
+    $prepSt->bindParam(1, $path);
+    $prepSt->bindParam(2, $listing, PDO::PARAM_INT);
+}
+
 function getListings(){
     include ("connection.php");
 
