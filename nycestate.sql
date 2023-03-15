@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 11, 2023 at 08:41 AM
+-- Generation Time: Mar 15, 2023 at 07:56 AM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -32,6 +32,15 @@ CREATE TABLE `accesslevels` (
   `level` int(10) NOT NULL,
   `level_title` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `accesslevels`
+--
+
+INSERT INTO `accesslevels` (`access_level_id`, `level`, `level_title`) VALUES
+(1, 0, 'Logged out'),
+(2, 1, 'Logged in'),
+(3, 2, 'Admin');
 
 -- --------------------------------------------------------
 
@@ -75,11 +84,20 @@ CREATE TABLE `favorites` (
 
 CREATE TABLE `links` (
   `link_id` int(20) NOT NULL,
+  `access_level_id` int(20) NOT NULL,
   `link_title` varchar(50) NOT NULL,
   `href` varchar(50) DEFAULT NULL,
+  `landing` tinyint(1) NOT NULL,
   `location` varchar(20) NOT NULL,
-  `parent_id` int(20) DEFAULT 0
+  `parent_id` int(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `links`
+--
+
+INSERT INTO `links` (`link_id`, `access_level_id`, `link_title`, `href`, `landing`, `location`, `parent_id`) VALUES
+(1, 1, 'NYCEstate', 'index.html', 1, 'head', NULL);
 
 -- --------------------------------------------------------
 
@@ -155,8 +173,8 @@ CREATE TABLE `roles` (
 --
 
 INSERT INTO `roles` (`role_id`, `access_level_id`, `role_name`) VALUES
-(1, 0, 'standard'),
-(2, 0, 'admin');
+(1, 2, 'standard'),
+(2, 3, 'admin');
 
 -- --------------------------------------------------------
 
@@ -227,6 +245,7 @@ ALTER TABLE `favorites`
 --
 ALTER TABLE `links`
   ADD PRIMARY KEY (`link_id`),
+  ADD UNIQUE KEY `access_level_id` (`access_level_id`),
   ADD KEY `parent_id` (`parent_id`);
 
 --
@@ -290,7 +309,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `accesslevels`
 --
 ALTER TABLE `accesslevels`
-  MODIFY `access_level_id` int(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `access_level_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `boroughs`
@@ -314,7 +333,7 @@ ALTER TABLE `favorites`
 -- AUTO_INCREMENT for table `links`
 --
 ALTER TABLE `links`
-  MODIFY `link_id` int(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `link_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `listingphotos`
