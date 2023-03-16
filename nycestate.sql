@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 15, 2023 at 07:56 AM
+-- Generation Time: Mar 16, 2023 at 09:12 AM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -38,9 +38,10 @@ CREATE TABLE `accesslevels` (
 --
 
 INSERT INTO `accesslevels` (`access_level_id`, `level`, `level_title`) VALUES
-(1, 0, 'Logged out'),
-(2, 1, 'Logged in'),
-(3, 2, 'Admin');
+(1, 1, 'Logged out'),
+(2, 2, 'Logged in'),
+(3, 3, 'Admin'),
+(4, 0, 'Only logged out');
 
 -- --------------------------------------------------------
 
@@ -309,7 +310,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `accesslevels`
 --
 ALTER TABLE `accesslevels`
-  MODIFY `access_level_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `access_level_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `boroughs`
