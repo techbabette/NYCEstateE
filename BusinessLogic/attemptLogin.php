@@ -1,5 +1,10 @@
 <?php
 session_start();
+
+$data = json_decode(file_get_contents('php://input'), true);
+$_POST = $data;
+
+$result;
 if(isset($_POST["attemptLogin"])){
 
     $pass = $_POST["pass"];
@@ -34,19 +39,22 @@ if(isset($_POST["attemptLogin"])){
     try{
         $loginAttempt = attemptLogin($email, md5($pass));
         if($loginAttempt){
-            http_response_code(200);
             $_SESSION["user"] = getUserInformation($email);
-            echo json_encode("index.html");
-            die();
+            http_response_code(302);
+            $result["general"] = "login.html";
+            echo $result;
         }
         else{
             http_response_code(403);
-            echo json_encode("Incorrect email/password");
+            $result["error"] = ("Incorrect email/password");
+            echo json_encode($result);
             die();
         }
     }
     catch(PDOException $e){
         http_response_code(500);
+        $result["error"] = $e;
+        echo json_encode($result);
     }
 }
 else{

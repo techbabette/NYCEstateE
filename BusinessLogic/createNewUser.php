@@ -68,9 +68,9 @@ if(isset($data["createNewUser"])){
         }
         else{
             createNewUser($email, $pass, $name, $lastName);
-            http_response_code(201);
+            http_response_code(302);
             $result["general"] = "login.html";
-            echo $result;
+            echo json_encode($result);
         }
     }
     catch(PDOException $e){
