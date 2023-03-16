@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 16, 2023 at 09:12 AM
+-- Generation Time: Mar 16, 2023 at 10:01 AM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -98,7 +98,11 @@ CREATE TABLE `links` (
 --
 
 INSERT INTO `links` (`link_id`, `access_level_id`, `link_title`, `href`, `landing`, `location`, `parent_id`) VALUES
-(1, 1, 'NYCEstate', 'index.html', 1, 'head', NULL);
+(1, 1, 'NYCEstate', 'index.html', 1, 'head', NULL),
+(3, 1, 'Home', 'index.html', 1, 'navbar', NULL),
+(4, 1, 'Listings', 'listings.html', 0, 'navbar', NULL),
+(5, 4, 'Login', 'login.html', 0, 'navbar', NULL),
+(6, 4, 'Register', 'register.html', 0, 'navbar', NULL);
 
 -- --------------------------------------------------------
 
@@ -246,8 +250,8 @@ ALTER TABLE `favorites`
 --
 ALTER TABLE `links`
   ADD PRIMARY KEY (`link_id`),
-  ADD UNIQUE KEY `access_level_id` (`access_level_id`),
-  ADD KEY `parent_id` (`parent_id`);
+  ADD KEY `parent_id` (`parent_id`),
+  ADD KEY `access_level_id` (`access_level_id`) USING BTREE;
 
 --
 -- Indexes for table `listingphotos`
@@ -334,7 +338,7 @@ ALTER TABLE `favorites`
 -- AUTO_INCREMENT for table `links`
 --
 ALTER TABLE `links`
-  MODIFY `link_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `link_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `listingphotos`
