@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 16, 2023 at 10:01 AM
+-- Generation Time: Mar 16, 2023 at 01:16 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -102,7 +102,9 @@ INSERT INTO `links` (`link_id`, `access_level_id`, `link_title`, `href`, `landin
 (3, 1, 'Home', 'index.html', 1, 'navbar', NULL),
 (4, 1, 'Listings', 'listings.html', 0, 'navbar', NULL),
 (5, 4, 'Login', 'login.html', 0, 'navbar', NULL),
-(6, 4, 'Register', 'register.html', 0, 'navbar', NULL);
+(6, 4, 'Register', 'register.html', 0, 'navbar', NULL),
+(7, 2, 'Favorites', 'favorites.html', 0, 'navbar', NULL),
+(8, 3, 'Admins', 'admin.html', 0, 'navbar', NULL);
 
 -- --------------------------------------------------------
 
@@ -213,7 +215,12 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`user_id`, `email`, `password`, `name`, `lastName`, `dateCreated`, `role_id`) VALUES
-(1, 'ilija.krstic.155.21@ict.edu.rs', '459f6fe00d942096b0329947990bf4a7', 'Marko', 'Krstic', '2023-03-08 09:14:07', 2);
+(1, 'ilija.krstic.155.21@ict.edu.rs', '459f6fe00d942096b0329947990bf4a7', 'Marko', 'Krstic', '2023-03-08 09:14:07', 2),
+(4, 'marinakrsticrf@gmail.com', 'ce16a80506a2e2c17ce18c18e26451da', 'Marina', 'Krstic', '2023-03-16 10:25:32', 2),
+(5, 'markomarkovic@gmail.com', 'ce16a80506a2e2c17ce18c18e26451da', 'Marko', 'Markovic', '2023-03-16 10:38:08', 1),
+(6, 'markomarkovic2@gmail.com', 'bb6f7131f2708601ee92f6495a474d53', 'Marko', 'Markovic', '2023-03-16 10:38:58', 1),
+(7, 'markomarkovic55@gmail.com', 'bb6f7131f2708601ee92f6495a474d53', 'Marko', 'Markovic', '2023-03-16 10:41:51', 1),
+(8, 'markomarkovic556@gmail.com', 'bb6f7131f2708601ee92f6495a474d53', 'Marko', 'Markovic', '2023-03-16 10:42:24', 1);
 
 --
 -- Indexes for dumped tables
@@ -338,7 +345,7 @@ ALTER TABLE `favorites`
 -- AUTO_INCREMENT for table `links`
 --
 ALTER TABLE `links`
-  MODIFY `link_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `link_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `listingphotos`
@@ -380,7 +387,7 @@ ALTER TABLE `roomtypes`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `user_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
