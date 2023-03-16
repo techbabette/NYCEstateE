@@ -8,8 +8,10 @@ function getLinks($accessLevel, $loggedIn){
     WHERE level <= ?";
 
     if($loggedIn){
-        $statement.= "AND level <> 0";
+        $statement.= " AND level <> 0";
     }
+
+    $statement.=" ORDER BY link_id";
 
     $prepSt = $conn->prepare($statement);
 

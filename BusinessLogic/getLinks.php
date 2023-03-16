@@ -1,6 +1,6 @@
 <?php
 include("../DataAccess/linkFunctions.php");
-$accessLevel = 0;
+$accessLevel = 1;
 $loggedIn = false;
 $result;
 if(isset($_SESSION["user"])){
@@ -9,6 +9,7 @@ if(isset($_SESSION["user"])){
 }
 try{
     $result["general"] = getLinks($accessLevel, $loggedIn);
+    $result["accessLevel"] = $accessLevel;
     http_response_code(200);
     echo json_encode($result);
 }

@@ -6,11 +6,28 @@ if (currentPage == "" || currentPage.toLowerCase() == "index.html") mainPage = t
 if (!mainPage) ajaxPath = "../BusinessLogic/"
 
 window.onload = function(){
-    readAjax("getLinks.php", consoleLog);
+    readAjax("getLinks.php", generateNavbar);
 }
 
-function consoleLog(data){
-    console.log(data);
+function generateNavbar(data){
+    let headerHolder = document.querySelector("#headerHolder");
+    let navbarHolder = document.querySelector("#navbarHolder");
+
+    let headerElement = data.filter(el => el.location == "head")[0];
+    let navbarElements = data.filter(el => el.location == "navbar");
+
+    headerHolder.href = headerElement.href;
+    headerHolder.text = headerElement.link_title;
+
+    for(let navbarElement of navbarElements){
+    navbarHolder.innerHTML += 
+    `
+      <li class="nav-item">
+        <a class="nav-link active" aria-current="page" href="${navbarElement.href}">${navbarElement.link_title}</a>
+      </li>
+    `
+    }
+
 }
 
 function createRequest(){
