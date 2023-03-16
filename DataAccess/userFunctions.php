@@ -46,4 +46,19 @@ function attemptLogin($email, $password){
 
     return $result;
 }
+
+function getUserInformation($email){
+    include ("connection.php");
+
+    $statement = "SELECT user_id, name + ` ` lastName, level 
+    FROM users u 
+    INNER JOIN roles r WHERE u.role_id = r.role_id
+    INNER JOIN accesslevels al WHERE r.access_level_id = al.access_level_id";
+    $prepSt = $conn->prepare($statement);
+
+    $prepSt -> execute();
+    $result = $prepSt->fetch();
+
+    return $result;
+}
 ?>

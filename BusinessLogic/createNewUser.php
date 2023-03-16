@@ -1,7 +1,26 @@
 <?php
 session_start();
-if(isset($_POST["createNewUser"])){
-    session_start();
+$result;
+
+$data = json_decode(file_get_contents('php://input'), true);
+$_POST = $data;
+
+if(isset($_SESSION["user"])){
+    http_response_code(403);
+    $result["error"] = "You are already logged in";
+    echo $result;
+}
+if(isset($data["createNewUser"])){
+    $errors = 0;
+    $greska = "";
+    if(!isset($_POST["name"]) || !isset($_POST["lastName"]) || !isset($_POST["pass"]) || !isset($_POST["email"])){
+        $errors++;
+        $result["error"] = "All fields are required";
+        $result["sentData"] = $_POST;
+        http_response_code(422);
+        echo json_encode($result);
+        die();
+    }
     $name = $_POST["name"];
     $lastName = $_POST["lastName"];
     $pass = $_POST["pass"];
@@ -15,19 +34,17 @@ if(isset($_POST["createNewUser"])){
     $rePass4 = '/[!\?\.]/'; 
     $rePass5 = '/^[A-Za-z0-9!\?\.]{7,30}$/';
     
-    $errors = 0;
-    $greska = "";
     if(!preg_match($reName, $name) || !preg_match($reName, $lastName))
     {
         $errors++;
-        $greska .= "Username";
+        $greska .= "Name/last name do not fit criteria";
     }
     if(!preg_match($rePass1, $pass) || !preg_match($rePass2, $pass)
     || !preg_match($rePass3, $pass) || !preg_match($rePass4, $pass)
     || !preg_match($rePass5, $pass))
     {
         $errors++;
-        $greska .= "Password";
+        $greska .= "Password does not fit criteria";
     }
     if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
         $errors++;
@@ -35,7 +52,8 @@ if(isset($_POST["createNewUser"])){
     }
     if($errors != 0){
         http_response_code(422);
-        echo $greska;
+        $result["error"] = $greska;
+        echo json_encode($result);
         die();
     }
     require("../DataAccess/userFunctions.php");
@@ -44,22 +62,26 @@ if(isset($_POST["createNewUser"])){
         if($emailInUse){
             http_response_code(422);
             $greska .= "Email already in use";
-            echo $greska;
+            $result["error"] = $greska;
+            echo json_encode($result);
             die();
         }
         else{
             createNewUser($email, $pass, $name, $lastName);
             http_response_code(201);
-            Header("Location: ../pages/login.html");
+            $result["general"] = "login.html";
+            echo $result;
         }
     }
     catch(PDOException $e){
         http_response_code(500);
+        echo json_encode($e);
     }
 }
 else{
     http_response_code(404);
-    echo "Error 404: Page not found";
+    $result["error"] = var_dump($data);
+    echo json_encode($result);
 }
 
 ?>

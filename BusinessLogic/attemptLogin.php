@@ -35,7 +35,7 @@ if(isset($_POST["attemptLogin"])){
         $loginAttempt = attemptLogin($email, md5($pass));
         if($loginAttempt){
             http_response_code(200);
-            //Add session
+            $_SESSION["user"] = getUserInformation($email);
             echo json_encode("index.html");
             die();
         }
