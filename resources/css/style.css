@@ -1,0 +1,12 @@
+.error-msg{
+    color: red;
+}
+.hidden{
+    display: none;
+}
+.success-outline{
+    border: 2px solid green;
+}
+.error-outline{
+    border: 2px solid red;
+}

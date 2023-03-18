@@ -37,18 +37,32 @@ window.onload = function(){
 
             let reEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
-            errors += reTestText(reName, nameField);
-            errors += reTestText(reName, lastNameField);
-            errors += reTestText(reEmail, emailField);
-            errors += reTestText(rePass1, passwordField);
-            errors += reTestText(rePass2, passwordField);
-            errors += reTestText(rePass3, passwordField);
-            errors += reTestText(rePass4, passwordField);
-            errors += reTestText(rePass5, passwordField);
+            let singleTests = [
+                {re : reName, field: nameField, message : `Name doesn't match format, eg "Nathan"`},
+                {re : reName, field: lastNameField, message : `Last name does not match format, eg "Smith"`},
+                {re : reEmail, field: emailField, message : `Email not valid`},
+            ]
+
+            let passwordTests = [
+            {re : rePass5, field: passwordField, message : `Password must be between 7 and 30 characters long`},
+            {re : rePass1, field: passwordField, message : `Password must contain an uppercase letter`},
+            {re : rePass2, field: passwordField, message : `Password must contain a lowercase letter`},
+            {re : rePass3, field: passwordField, message : `Password must contain a digit`},
+            {re : rePass4, field: passwordField, message : `Password must contain ! or ? or .`}
+            ]
+
+            for(let test of singleTests){
+                errors += reTestText(test.re, test.field, test.message);
+            }
+
+            for(let test of passwordTests){
+                let result = reTestText(test.re, test.field, test.message);
+                errors += result;
+
+                if(result > 0) break;
+            }
 
             let data = {"createNewUser" : true, "email" : email, "name" : name, "lastName" : lastName, "pass" : password};
-            console.log(data);
-
 
             if(errors == 0){
                 submitAjax("createNewUser", redirect, data, ["login.html", false]);
@@ -59,14 +73,40 @@ window.onload = function(){
         let loginForm = document.querySelector("#loginForm");
         loginForm.addEventListener("submit", function(e){
             e.preventDefault();
-            let email = document.querySelector("#emailInput").value;
-            let password = document.querySelector("#loginPasswordInput").value;
+
+            let emailField = document.querySelector("#emailInput");
+            let passwordField = document.querySelector("#loginPasswordInput");
+
+            let email = emailField.value;
+            let password = passwordField.value;
 
             //Check if data is valid
+            let errors = 0;
+
+            let rePass1 = /[A-Z]/; 
+            let rePass2 = /[a-z]/; 
+            let rePass3 = /[0-9]/; 
+            let rePass4 = /[!\?\.]/; 
+            let rePass5 = /^[A-Za-z0-9!\?\.]{7,30}$/;
+
+            let reEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
+            errors += reTestText(reEmail, emailField);
+
+            errors += reTestText(rePass1, passwordField);
+            errors += reTestText(rePass2, passwordField);
+            errors += reTestText(rePass3, passwordField);
+            errors += reTestText(rePass4, passwordField);
+            errors += reTestText(rePass5, passwordField);
 
             let data = {"attemptLogin" : true, "email" : email, "pass" : password};
-            
-            submitAjax("attemptLogin", redirect, data, ["index.html", true]);
+
+            if(errors == 0){
+                submitAjax("attemptLogin", redirect, data, ["index.html", true]);
+            }
+            else{
+                //Login failed
+            }
         })
     }
 }
@@ -136,9 +176,22 @@ function reTestText(regex, field, errorMessage = ""){
     let textValue = field.value;
     let passes = regex.test(textValue);
     if(passes){
+        if(errorMessage != ""){
+            let errorBox = field.nextElementSibling;
+            errorBox.classList.add("hidden");
+            field.classList.remove("error-outline");
+            field.classList.add("success-outline");
+        }
         return 0;
     }
     else{
+        if(errorMessage != ""){
+            let errorBox = field.nextElementSibling;
+            errorBox.innerText = errorMessage;
+            errorBox.classList.remove("hidden");
+            field.classList.remove("success-outline");
+            field.classList.add("error-outline");
+        }
         return 1;
     }
 }

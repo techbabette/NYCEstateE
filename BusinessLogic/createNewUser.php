@@ -13,7 +13,11 @@ if(isset($_SESSION["user"])){
 if(isset($data["createNewUser"])){
     $errors = 0;
     $greska = "";
-    if(!isset($_POST["name"]) || !isset($_POST["lastName"]) || !isset($_POST["pass"]) || !isset($_POST["email"])){
+    if(
+    (!isset($_POST["name"]) || empty($_POST["name"])) 
+    || (!isset($_POST["lastName"]) || empty($_POST["lastName"]))
+    || (!isset($_POST["pass"]) || empty($_POST["pass"]))
+    || (!isset($_POST["email"]) || empty($_POST["email"]))){
         $errors++;
         $result["error"] = "All fields are required";
         $result["sentData"] = $_POST;
