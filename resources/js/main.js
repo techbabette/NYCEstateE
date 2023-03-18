@@ -13,17 +13,46 @@ window.onload = function(){
         let registrationForm = document.querySelector("#registrationForm");
         registrationForm.addEventListener("submit", function(e){
             e.preventDefault();
-            let email = document.querySelector("#emailInput").value;
-            let name = document.querySelector("#nameInput").value;
-            let lastName = document.querySelector("#lastNameInput").value;
-            let password = document.querySelector("#registerPasswordInput").value;
+
+            let emailField = document.querySelector("#emailInput");
+            let nameField = document.querySelector("#nameInput");
+            let lastNameField = document.querySelector("#lastNameInput");
+            let passwordField = document.querySelector("#registerPasswordInput");
+
+            let email = emailField.value;
+            let name = nameField.value;
+            let lastName = lastNameField.value;
+            let password = passwordField.value;
 
             //Check if data is valid
+            let errors = 0;
+
+            let reName = /^[A-Z][a-z]{1,14}(\s[A-Z][a-z]{1,14}){0,2}$/;
+
+            let rePass1 = /[A-Z]/; 
+            let rePass2 = /[a-z]/; 
+            let rePass3 = /[0-9]/; 
+            let rePass4 = /[!\?\.]/; 
+            let rePass5 = /^[A-Za-z0-9!\?\.]{7,30}$/;
+
+            let reEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
+            errors += reTestText(reName, nameField);
+            errors += reTestText(reName, lastNameField);
+            errors += reTestText(reEmail, emailField);
+            errors += reTestText(rePass1, passwordField);
+            errors += reTestText(rePass2, passwordField);
+            errors += reTestText(rePass3, passwordField);
+            errors += reTestText(rePass4, passwordField);
+            errors += reTestText(rePass5, passwordField);
 
             let data = {"createNewUser" : true, "email" : email, "name" : name, "lastName" : lastName, "pass" : password};
-
             console.log(data);
-            submitAjax("createNewUser", redirect, data, ["login.html", false]);
+
+
+            if(errors == 0){
+                submitAjax("createNewUser", redirect, data, ["login.html", false]);
+            }
         })
     }
     if(currentPage == "login.html"){
@@ -101,6 +130,17 @@ function createRequest(){
         }
     }
     return request;
+}
+
+function reTestText(regex, field, errorMessage = ""){
+    let textValue = field.value;
+    let passes = regex.test(textValue);
+    if(passes){
+        return 0;
+    }
+    else{
+        return 1;
+    }
 }
 
 function redirect(args){
