@@ -118,15 +118,20 @@ function generateNavbar(response){
     accessLevel = response.accessLevel;
 
     let headerHolder = document.querySelector("#headerHolder");
+    let footerHeaderHolder = document.querySelector("#footerHeaderHolder");
     let navbarHolder = document.querySelector("#navbarHolder");
 
     let headerElement = data.filter(el => el.location == "head")[0];
     let navbarElements = data.filter(el => el.location == "navbar");
+    let footerElements = data.filter(el => el.location == "footer");
 
     url = generateUrl(headerElement, "pages/");
 
     headerHolder.href = url;
     headerHolder.text = headerElement.link_title;
+
+    footerHeaderHolder.href = url;
+    footerHeaderHolder.text = headerElement.link_title;
 
     for(let navbarElement of navbarElements){
     url = generateUrl(navbarElement, "pages/");
@@ -137,6 +142,7 @@ function generateNavbar(response){
       </li>
     `
     }
+
     if(accessLevel > 1){
         navbarHolder.innerHTML += 
         `
@@ -148,6 +154,11 @@ function generateNavbar(response){
         logoutButton.addEventListener("click", function(){
             readAjax("logout", redirect, ["login.html", false]);
         })
+    }
+
+    for(let footerElement of footerElements){
+        url = generateUrl(footerElements, "");
+
     }
 }
 

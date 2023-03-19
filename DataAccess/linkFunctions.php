@@ -2,8 +2,9 @@
 function getLinks($accessLevel, $loggedIn){
     include ("connection.php");
 
-    $statement = "SELECT link_title, href, landing, location, parent_id, level
+    $statement = "SELECT link_title, href, landing, location, parent_id, level, icon
     FROM links l
+    LEFT JOIN linkicons li ON l.link_id = li.link_id
     INNER JOIN accesslevels a ON l.access_level_id = a.access_level_id
     WHERE level <= ?";
 
@@ -11,7 +12,7 @@ function getLinks($accessLevel, $loggedIn){
         $statement.= " AND level <> 0";
     }
 
-    $statement.=" ORDER BY link_id";
+    $statement.=" ORDER BY l.link_id";
 
     $prepSt = $conn->prepare($statement);
 

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 16, 2023 at 01:16 PM
+-- Generation Time: Mar 19, 2023 at 07:34 AM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -80,6 +80,25 @@ CREATE TABLE `favorites` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `linkicons`
+--
+
+CREATE TABLE `linkicons` (
+  `link_icon_id` int(20) NOT NULL,
+  `link_id` int(20) NOT NULL,
+  `icon` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `linkicons`
+--
+
+INSERT INTO `linkicons` (`link_icon_id`, `link_id`, `icon`) VALUES
+(1, 9, 'icomoon-free:facebook');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `links`
 --
 
@@ -104,7 +123,8 @@ INSERT INTO `links` (`link_id`, `access_level_id`, `link_title`, `href`, `landin
 (5, 4, 'Login', 'login.html', 0, 'navbar', NULL),
 (6, 4, 'Register', 'register.html', 0, 'navbar', NULL),
 (7, 2, 'Favorites', 'favorites.html', 0, 'navbar', NULL),
-(8, 3, 'Admins', 'admin.html', 0, 'navbar', NULL);
+(8, 3, 'Admins', 'admin.html', 0, 'navbar', NULL),
+(9, 1, 'Facebook', 'https://www.facebook.com/', 0, 'footer', NULL);
 
 -- --------------------------------------------------------
 
@@ -253,6 +273,13 @@ ALTER TABLE `favorites`
   ADD KEY `listing_id` (`listing_id`);
 
 --
+-- Indexes for table `linkicons`
+--
+ALTER TABLE `linkicons`
+  ADD PRIMARY KEY (`link_icon_id`),
+  ADD KEY `link_id` (`link_id`);
+
+--
 -- Indexes for table `links`
 --
 ALTER TABLE `links`
@@ -342,10 +369,16 @@ ALTER TABLE `favorites`
   MODIFY `favorite_id` int(20) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `linkicons`
+--
+ALTER TABLE `linkicons`
+  MODIFY `link_icon_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `links`
 --
 ALTER TABLE `links`
-  MODIFY `link_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `link_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `listingphotos`
