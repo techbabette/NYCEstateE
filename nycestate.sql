@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 19, 2023 at 07:34 AM
+-- Generation Time: Mar 20, 2023 at 08:17 AM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -94,7 +94,10 @@ CREATE TABLE `linkicons` (
 --
 
 INSERT INTO `linkicons` (`link_icon_id`, `link_id`, `icon`) VALUES
-(1, 9, 'icomoon-free:facebook');
+(1, 9, 'icomoon-free:facebook'),
+(2, 10, 'la:twitter'),
+(3, 11, 'fa-file'),
+(4, 12, 'bx:sitemap');
 
 -- --------------------------------------------------------
 
@@ -124,7 +127,10 @@ INSERT INTO `links` (`link_id`, `access_level_id`, `link_title`, `href`, `landin
 (6, 4, 'Register', 'register.html', 0, 'navbar', NULL),
 (7, 2, 'Favorites', 'favorites.html', 0, 'navbar', NULL),
 (8, 3, 'Admins', 'admin.html', 0, 'navbar', NULL),
-(9, 1, 'Facebook', 'https://www.facebook.com/', 0, 'footer', NULL);
+(9, 1, 'Facebook', 'https://www.facebook.com/', 0, 'footer', NULL),
+(10, 1, 'Twitter', 'https://www.twitter.com/', 0, 'footer', NULL),
+(11, 1, 'Documentation', 'documentation.pdf', 1, 'footer', NULL),
+(12, 1, 'Sitemap', 'sitemap.xml', 1, 'footer', NULL);
 
 -- --------------------------------------------------------
 
@@ -372,13 +378,13 @@ ALTER TABLE `favorites`
 -- AUTO_INCREMENT for table `linkicons`
 --
 ALTER TABLE `linkicons`
-  MODIFY `link_icon_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `link_icon_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `links`
 --
 ALTER TABLE `links`
-  MODIFY `link_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `link_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `listingphotos`

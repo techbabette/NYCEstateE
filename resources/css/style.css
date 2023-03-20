@@ -1,3 +1,40 @@
+body{
+    overflow-x:hidden;
+  }
+.navbar{
+    min-height: 8vh;
+}
+.mk-page{
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+.mk-part-page{
+    min-height: 60vh;
+}
+.mk-long-page{
+    min-height: 92vh;
+}
+.mk-solo-page{
+    min-height: 77vh;
+}
+.mk-background{
+    background-color: black;
+}
+.mk-flex-center{
+    display: flex;
+    align-items: center;
+    text-align: center;
+}
+footer .row{
+    height: 100%;
+    margin: 0%;
+    width: 100%;
+}
+footer{
+    height: 15vh;
+}
 .error-msg{
     color: red;
 }
@@ -9,4 +46,13 @@
 }
 .error-outline{
     border: 2px solid red;
+}
+@media screen and (min-width: 992px) {
+    .navbar{
+        height: 8vh;
+        padding: 0% 2% 0% 2%;
+    }
+    footer .row{
+      padding: 0% 2% 0% 2% !important;
+    }
 }

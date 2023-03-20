@@ -135,7 +135,7 @@ function generateNavbar(response){
     footerHeaderHolder.text = headerElement.link_title;
 
     for(let navbarElement of navbarElements){
-        navbarHolder.innerHTML += generateLinkElement(navbarElement);
+        navbarHolder.innerHTML += generateLinkElement(navbarElement, "pages/");
     }
 
     if(accessLevel > 1){
@@ -277,9 +277,9 @@ function generateUrl(object, redirect = ""){
     return url;
  }
 
- function generateLinkElement(object){
+ function generateLinkElement(object, redirect = ""){
     let html;
-    let url = generateUrl(object);
+    let url = generateUrl(object, redirect);
     let text = object.link_title;
     let icon = object.icon;
     if(icon == null){
