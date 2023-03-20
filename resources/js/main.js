@@ -120,6 +120,7 @@ function generateNavbar(response){
     let headerHolder = document.querySelector("#headerHolder");
     let footerHeaderHolder = document.querySelector("#footerHeaderHolder");
     let navbarHolder = document.querySelector("#navbarHolder");
+    let footerHolder = document.querySelector("#footerHolder");
 
     let headerElement = data.filter(el => el.location == "head")[0];
     let navbarElements = data.filter(el => el.location == "navbar");
@@ -134,13 +135,7 @@ function generateNavbar(response){
     footerHeaderHolder.text = headerElement.link_title;
 
     for(let navbarElement of navbarElements){
-    url = generateUrl(navbarElement, "pages/");
-    navbarHolder.innerHTML += 
-    `
-      <li class="nav-item">
-        <a class="nav-link ${currentPage == navbarElement.href ? "active" : ""}" aria-current="page" href="${url}">${navbarElement.link_title}</a>
-      </li>
-    `
+        navbarHolder.innerHTML += generateLinkElement(navbarElement);
     }
 
     if(accessLevel > 1){
@@ -157,8 +152,7 @@ function generateNavbar(response){
     }
 
     for(let footerElement of footerElements){
-        url = generateUrl(footerElements, "");
-
+        footerHolder.innerHTML += generateLinkElement(footerElement);
     }
 }
 
@@ -281,4 +275,29 @@ function generateUrl(object, redirect = ""){
     }
     url += object.href;
     return url;
+ }
+
+ function generateLinkElement(object){
+    let html;
+    let url = generateUrl(object);
+    let text = object.link_title;
+    let icon = object.icon;
+    if(icon == null){
+        html = 
+        `
+        <li class="nav-item">
+          <a class="nav-link ${currentPage == object.href ? "active" : ""}" id=${text} aria-current="page" href="${url}">${text}</a>
+        </li>
+      `
+    }
+    else{
+        html = `
+        <li class="col-md-3 col-6 icon-holder">
+            <a class="" href="${url}">
+                <span class="iconify" id="${text}-icon" data-icon="${icon}"></span>
+            </a>
+        </li>
+        `
+    }
+    return html;
  }
