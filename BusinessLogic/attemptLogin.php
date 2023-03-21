@@ -40,7 +40,7 @@ if(isset($_POST["attemptLogin"])){
         $loginAttempt = attemptLogin($email, md5($pass));
         if($loginAttempt){
             $_SESSION["user"] = getUserInformation($email);
-            http_response_code(302);
+            http_response_code(308);
             $result["general"] = "login.html";
             echo $result;
         }

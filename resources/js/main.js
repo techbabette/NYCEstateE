@@ -3,11 +3,14 @@ let lastOfUrl = url[url.length - 1];
 let currentPage = lastOfUrl.split("?")[0].toLowerCase();
 let mainPage = false;
 let ajaxPath = "BusinessLogic/";
+let data;
 if (currentPage == "" || currentPage == "index.html") mainPage = true;
 if (!mainPage) ajaxPath = "../BusinessLogic/"
 
 window.onload = function(){
-    readAjax("getLinks", generateNavbar);
+    data = {currentPage}
+
+    submitAjax("getLinks", generateNavbar, data, ["index.html", true]);
 
     if(currentPage == "register.html"){
         let registrationForm = document.querySelector("#registrationForm");
@@ -223,7 +226,7 @@ function readAjax(url, resultFunction, args = []){
                 }
             }
             else if(request.status >= 300 && request.status < 400){
-                resultFunction(args);
+                redirect(args);
             }
             else{
                 console.log(request.responseText);
@@ -251,7 +254,7 @@ function submitAjax(url, resultFunction, data, args = []){
                 }
             }
             else if(request.status >= 300 && request.status < 400){
-                resultFunction(args);
+                redirect(args);
             }
             else{
                 let data = JSON.parse(request.responseText);
