@@ -1,8 +1,7 @@
 <?php
 
 function echoNoPermission(){
-    http_response_code(302);
-    echo("../index.html");
+    http_response_code(404);
     die();
 }
 function updateTextValue($table,$toChange, $toChangeValue, $paramater, $paramaterValue){

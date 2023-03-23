@@ -6,6 +6,7 @@ include("../DataAccess/linkFunctions.php");
 $data = json_decode(file_get_contents('php://input'), true);
 $_POST = $data;
 
+//Initialize access level as one
 $accessLevel = 1;
 $loggedIn = false;
 $result;

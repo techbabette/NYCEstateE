@@ -29,6 +29,10 @@ function saveListingPrice($listing, $price){
 
     $prepSt->bindParam(1, $listing);
     $prepSt->bindParam(2, $price);
+
+    $result = $prepSt->execute();
+
+    return $result;
 }
 
 function saveMainListingPhoto($listing, $path){
@@ -42,6 +46,25 @@ function saveMainListingPhoto($listing, $path){
     $prepSt->bindParam(1, $listing, PDO::PARAM_INT);
     $prepSt->bindParam(2, $path);
     $prepSt->bindParam(3, $main);
+
+    $result = $prepSt->execute();
+
+    return $result;
+}
+
+function saveListingRoom($listing, $room, $count){
+    include ("connection.php");
+
+    $statement = "INSERT INTO listingrooms (listing_id, roomType_id, numberOf) VALUES (?, ?, ?)";
+    $prepSt = $conn->prepare($statement);
+
+    $prepSt->bindParam(1, $listing, PDO::PARAM_INT);
+    $prepSt->bindParam(2, $room, PDO::PARAM_INT);
+    $prepSt->bindParam(3, $count, PDO::PARAM_INT);
+
+    $result = $prepSt->execute();
+
+    return $result;
 }
 
 function updateMainListingPhoto($listing, $path){
@@ -52,6 +75,29 @@ function updateMainListingPhoto($listing, $path){
 
     $prepSt->bindParam(1, $path);
     $prepSt->bindParam(2, $listing, PDO::PARAM_INT);
+
+    $result = $prepSt->execute();
+
+    return $result;
+}
+
+function getCurrentMainListingPhoto($listing){
+    include ("connection.php");
+
+    $statement = "SELECT path FROM listingphotos 
+                  WHERE main = 1
+                  ORDER BY dateUploaded DESC
+                  LIMIT 1";
+    $prepSt = $conn->prepare($statement);
+
+    $prepSt->execute();
+    $result = $prepSt->fetch();
+
+    return $result;
+}
+
+function getRoomsOfListing($listing){
+    include ("connection.php");
 }
 
 function getListings(){

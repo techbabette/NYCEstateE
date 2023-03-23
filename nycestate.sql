@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 20, 2023 at 08:17 AM
+-- Generation Time: Mar 23, 2023 at 06:53 AM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -143,7 +143,8 @@ CREATE TABLE `listingphotos` (
   `listing_id` int(20) NOT NULL,
   `main` tinyint(1) NOT NULL,
   `path` varchar(200) NOT NULL,
-  `user_id` int(20) NOT NULL
+  `user_id` int(20) NOT NULL,
+  `dateUploaded` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
