@@ -112,6 +112,9 @@ window.onload = function(){
             }
         })
     }
+    if(currentPage === "admin.html"){
+        
+    }
 }
 
 function generateNavbar(response){

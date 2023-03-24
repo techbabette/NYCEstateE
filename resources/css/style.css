@@ -47,6 +47,14 @@ footer{
 .error-outline{
     border: 2px solid red;
 }
+/*Admin panel classes*/
+#admin-panel-holder{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+#admin-info-holder{
+}
 @media screen and (min-width: 992px) {
     .navbar{
         height: 8vh;
