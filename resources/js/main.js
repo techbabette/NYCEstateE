@@ -113,7 +113,59 @@ window.onload = function(){
         })
     }
     if(currentPage === "admin.html"){
-        
+        let tables = [{title : "Users", headers : ["Name", "Last name","Email", "Date of creation", "Role"], target : "getUsers"},
+                      {title : "Listings", headers : ["Name", "Price","Description", "Address", "Size"], target : "getUsers"}];
+        let activeTable = 0;
+        let html = "";
+        let tabHolder = document.querySelector("#admin-tabs-holder");
+        let active;
+        for(let table in tables){
+            active = false;
+            let id = table;
+            let currTable = tables[id];
+            if(table == activeTable) active = true;
+            html += `<a href="#" data-id="${table}" class="btn ${active ? "btn-primary" : "btn-info"} admin-tab">${currTable["title"]}</a>`;
+        }
+        tabHolder.innerHTML = html;
+        let adminTabs = document.querySelectorAll(".admin-tab");
+        for(let tab of adminTabs){
+            tab.addEventListener("click", function(){
+                generateTable(this.dataset.id);
+                applyCurrentTab(this.dataset.id);
+            })
+        }
+        generateTable(activeTable);
+        function generateTable(tableId){
+            let mainTableRow = document.querySelector("#header-table-row");
+            let headers = tables[tableId].headers;
+            let html = "";
+            for(let header of headers){
+                html += `
+              <th>
+                ${header}
+              </th>`
+            }
+            html += 
+            `
+            <th>
+            Options
+            </th>
+            `
+            mainTableRow.innerHTML = html;
+            console.log(tables[tableId].headers);
+        }
+        function applyCurrentTab(tableId){
+            for(let tab of adminTabs){
+                if(tab.dataset.id != tableId){
+                    tab.classList.remove("btn-primary");
+                    tab.classList.add("btn-info");
+                }
+                else{
+                    tab.classList.add("btn-primary");
+                    tab.classList.remove("btn-info");
+                }
+            }
+        }
     }
 }
 
