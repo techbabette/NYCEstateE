@@ -115,10 +115,12 @@ window.onload = function(){
     if(currentPage === "admin.html"){
         let tables = [{title : "Users", headers : ["Name", "Last name","Email", "Date of creation", "Role"], target : "getUsers"},
                       {title : "Listings", headers : ["Name", "Price","Description", "Address", "Size"], target : "getUsers"}];
+        let table = document.querySelector("#element-table");
         let activeTable = 0;
         let html = "";
         let tabHolder = document.querySelector("#admin-tabs-holder");
         let active;
+        //For each table, generate a button
         for(let table in tables){
             active = false;
             let id = table;
@@ -127,6 +129,7 @@ window.onload = function(){
             html += `<a href="#" data-id="${table}" class="btn ${active ? "btn-primary" : "btn-info"} admin-tab">${currTable["title"]}</a>`;
         }
         tabHolder.innerHTML = html;
+        //To every button, add an event listener
         let adminTabs = document.querySelectorAll(".admin-tab");
         for(let tab of adminTabs){
             tab.addEventListener("click", function(){
@@ -135,10 +138,71 @@ window.onload = function(){
             })
         }
         generateTable(activeTable);
+        //Generates the structure of a table
         function generateTable(tableId){
-            let mainTableRow = document.querySelector("#header-table-row");
+            generateHeaderTableRow(table, tableId)
+            let target = tables[tableId].target;
+            //Makas an AJAX request and fills table with resulting information
+            readAjax(target, fillTable);
+        }
+        function applyCurrentTab(tableId){
+            activeTable = tableId;
+            for(let tab of adminTabs){
+                if(tab.dataset.id != tableId){
+                    tab.classList.remove("btn-primary");
+                    tab.classList.add("btn-info");
+                }
+                else{
+                    tab.classList.add("btn-primary");
+                    tab.classList.remove("btn-info");
+                }
+            }
+        }
+        function fillTable(data){
+            let html = "";
+            let counter = 1;
+            for(let row of data){
+                html += 
+                `
+                <tr>
+                <td>
+                ${counter++}
+                </td>
+                `
+                for(let i = 1; i < Object.keys(row).length / 2; i++){
+                    html += 
+                    `
+                    <td>
+                    ${row[i]}
+                    </td>
+                    `
+                }
+                html += 
+                `
+                <td>
+                <button type="button" class="btn btn-light">Edit</button>
+                <button type="button" data.id="${row["id"]}" class="btn btn-danger">Delete</button>
+                </td>
+                `
+                
+                html += `</tr>`;
+                console.log(row);
+            }
+            console.log(html);
+            table.innerHTML = "";
+            generateHeaderTableRow(table, activeTable);
+            table.innerHTML += html;
+        }
+        function generateHeaderTableRow(table, tableId){
+            let headerTableRow = document.createElement("tr");
+            headerTableRow.setAttribute("id", "header-table-row");
             let headers = tables[tableId].headers;
             let html = "";
+            html += 
+            `
+            <th>
+            #
+            </th>`
             for(let header of headers){
                 html += `
               <th>
@@ -151,20 +215,8 @@ window.onload = function(){
             Options
             </th>
             `
-            mainTableRow.innerHTML = html;
-            console.log(tables[tableId].headers);
-        }
-        function applyCurrentTab(tableId){
-            for(let tab of adminTabs){
-                if(tab.dataset.id != tableId){
-                    tab.classList.remove("btn-primary");
-                    tab.classList.add("btn-info");
-                }
-                else{
-                    tab.classList.add("btn-primary");
-                    tab.classList.remove("btn-info");
-                }
-            }
+            headerTableRow.innerHTML = html;
+            table.appendChild(headerTableRow);
         }
     }
 }
@@ -277,6 +329,7 @@ function readAjax(url, resultFunction, args = []){
                     resultFunction(data.general, args);
                 }
                 else{
+                    console.log(data.general);
                     resultFunction(data.general);
                 }
             }

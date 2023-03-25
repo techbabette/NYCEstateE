@@ -64,4 +64,18 @@ function getUserInformation($email){
 
     return $result;
 }
+
+function getAllUsers(){
+    include ("connection.php");
+
+    $statement = "SELECT user_id AS id, name, lastName, email, dateCreated, role_name
+                  FROM users u
+                  INNER JOIN roles r on u.role_id = r.role_id";
+    $prepSt = $conn->prepare($statement);
+
+    $prepSt->execute();
+    $result = $prepSt->fetchAll();
+
+    return $result;
+}
 ?>
