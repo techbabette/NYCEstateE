@@ -20,7 +20,6 @@ if(isset($data["createNewUser"])){
     || (!isset($_POST["email"]) || empty($_POST["email"]))){
         $errors++;
         $result["error"] = "All fields are required";
-        $result["sentData"] = $_POST;
         http_response_code(422);
         echo json_encode($result);
         die();

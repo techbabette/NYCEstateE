@@ -26,6 +26,7 @@ function deleteSingleRow($table, $paramater, $paramaterValue){
     $prepSt->bindParam(1, $paramaterValue, PDO::PARAM_INT);
 
     $prepSt->execute();
+
 }
 
 function insertSingleParamater($table, $paramater, $paramaterName){

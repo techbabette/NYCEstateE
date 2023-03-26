@@ -4,6 +4,7 @@ let currentPage = lastOfUrl.split("?")[0].toLowerCase();
 let mainPage = false;
 let ajaxPath = "BusinessLogic/";
 let data;
+let success;
 if (currentPage == "" || currentPage == "index.html") mainPage = true;
 if (!mainPage) ajaxPath = "../BusinessLogic/"
 
@@ -137,9 +138,10 @@ window.onload = function(){
                 applyCurrentTab(this.dataset.id);
             })
         }
-        generateTable(activeTable);
+        generateTable();
         //Generates the structure of a table
-        function generateTable(tableId){
+        function generateTable(){
+            let tableId = activeTable;
             generateHeaderTableRow(table, tableId)
             let target = tables[tableId].target;
             //Makas an AJAX request and fills table with resulting information
@@ -181,7 +183,7 @@ window.onload = function(){
                 `
                 <td>
                 <button type="button" class="btn btn-light">Edit</button>
-                <button type="button" data.id="${row["id"]}" class="btn btn-danger">Delete</button>
+                <button type="button" data-table="${tables[activeTable].title}" data-id="${row["id"]}" class="btn btn-danger delete-button">Delete</button>
                 </td>
                 `
                 
@@ -192,6 +194,14 @@ window.onload = function(){
             table.innerHTML = "";
             generateHeaderTableRow(table, activeTable);
             table.innerHTML += html;
+            let deleteButtons = document.querySelectorAll(".delete-button");
+            for(let button of deleteButtons){
+                button.addEventListener("click", function(){
+                    let tab = this.dataset.table;
+                    let elemId = this.dataset.id;
+                    adminDeleteRequest(tab, elemId);
+                })
+            }
         }
         function generateHeaderTableRow(table, tableId){
             let headerTableRow = document.createElement("tr");
@@ -217,6 +227,16 @@ window.onload = function(){
             `
             headerTableRow.innerHTML = html;
             table.appendChild(headerTableRow);
+        }
+        function adminDeleteRequest(table, elementId){
+            let data = {table, id : elementId};
+            console.log(data);
+            submitAjax("deleteFromTable", showResult, data);
+        }
+        function showResult(data){
+            let message = data.msg;
+            let header = success ? "Success" : "Failed";
+            generateTable();   
         }
     }
 }
@@ -354,6 +374,7 @@ function submitAjax(url, resultFunction, data, args = []){
             if(request.status >= 200 && request.status < 300){
                 console.log(request.responseText);
                 let data = JSON.parse(request.responseText);
+                success = true;
                 if(args != []){
                     resultFunction(data.general, args);
                 }
@@ -365,6 +386,7 @@ function submitAjax(url, resultFunction, data, args = []){
                 redirect(args);
             }
             else{
+                success = false;
                 let data = JSON.parse(request.responseText);
                 console.log(data["error"]);
             }
