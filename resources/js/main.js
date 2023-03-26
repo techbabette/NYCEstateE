@@ -109,7 +109,7 @@ window.onload = function(){
                 submitAjax("attemptLogin", redirect, data, ["index.html", true]);
             }
             else{
-                //Login failed
+                errorHandler("Incorrect email/password");
             }
         })
     }
@@ -286,6 +286,33 @@ function generateNavbar(response){
     }
 }
 
+function toggleShowElement(element){
+    let hidden = element.classList.contains("hidden");
+    if(hidden){
+        showElement(element);
+    }
+    else{
+        hideElement(element);
+    }
+}
+
+function showElement(element){
+    element.classList.remove("hidden");
+}
+
+function hideElement(element){
+    element.classList.add("hidden");
+}
+
+function errorHandler(error){
+    let errorHolder = document.querySelector("#error-message");
+    errorHolder.innerHTML = error;
+    showElement(errorHolder);
+    setTimeout(function(){
+        hideElement(errorHolder);
+    }, 1500);
+}
+
 function createRequest(){
     let request = false;
     try{
@@ -388,6 +415,7 @@ function submitAjax(url, resultFunction, data, args = []){
             else{
                 success = false;
                 let data = JSON.parse(request.responseText);
+                errorHandler(data["error"]);
                 console.log(data["error"]);
             }
         }

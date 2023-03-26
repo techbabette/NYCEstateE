@@ -55,6 +55,13 @@ footer{
 }
 #admin-info-holder{
 }
+#error-message{
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    padding: 20px;
+    z-index: 5;
+}
 @media screen and (min-width: 992px) {
     .navbar{
         height: 8vh;
