@@ -297,11 +297,11 @@ function toggleShowElement(element){
 }
 
 function showElement(element){
-    element.classList.remove("hidden");
+    element.classList.remove("hide");
 }
 
 function hideElement(element){
-    element.classList.add("hidden");
+    element.classList.add("hide");
 }
 
 function errorHandler(error){
@@ -310,7 +310,7 @@ function errorHandler(error){
     showElement(errorHolder);
     setTimeout(function(){
         hideElement(errorHolder);
-    }, 1500);
+    }, 2000);
 }
 
 function createRequest(){

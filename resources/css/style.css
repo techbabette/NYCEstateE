@@ -61,6 +61,13 @@ footer{
     right: 20px;
     padding: 20px;
     z-index: 5;
+
+    opacity: 1;
+    transition: opacity 200ms ease 0ms;
+}
+.hide{
+    opacity: 0 !important;
+    transition: opacity 1800ms ease 0ms;
 }
 @media screen and (min-width: 992px) {
     .navbar{
