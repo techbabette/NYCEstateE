@@ -114,8 +114,11 @@ window.onload = function(){
         })
     }
     if(currentPage === "admin.html"){
-        let tables = [{title : "Users", headers : ["Name", "Last name","Email", "Date of creation", "Role"], target : "getUsers"},
-                      {title : "Listings", headers : ["Name", "Price","Description", "Address", "Size"], target : "getUsers"}];
+        let tables = [
+                      {title : "Users", headers : ["Name", "Last name","Email", "Date of creation", "Role"], target : "getUsers", createNew : false},
+                      {title : "Listings", headers : ["Name", "Price","Description", "Address", "Size"], target : "getUsers", createNew : true},
+                      {title : "Links", headers : ["Title", "Access level","Link", "File location", "Location", "Parent", "Icon"], target : "getAllLinks", createNew : true}
+                    ];
         let table = document.querySelector("#element-table");
         let activeTable = 0;
         let html = "";
@@ -134,6 +137,7 @@ window.onload = function(){
         let adminTabs = document.querySelectorAll(".admin-tab");
         for(let tab of adminTabs){
             tab.addEventListener("click", function(){
+                activeTable = this.dataset.id;
                 generateTable(this.dataset.id);
                 applyCurrentTab(this.dataset.id);
             })
@@ -144,6 +148,8 @@ window.onload = function(){
             let tableId = activeTable;
             generateHeaderTableRow(table, tableId)
             let target = tables[tableId].target;
+            console.log(tableId);
+            console.log(target);
             //Makas an AJAX request and fills table with resulting information
             readAjax(target, fillTable);
         }
@@ -189,6 +195,17 @@ window.onload = function(){
                 
                 html += `</tr>`;
                 console.log(row);
+            }
+
+            //Code for generating the "Insert new" button;
+            if(tables[activeTable].createNew)
+            {
+                html += 
+                `
+                <tr>
+                <button type="button" class="btn btn-success">Insert new</button>
+                </tr>
+                `
             }
             console.log(html);
             table.innerHTML = "";
