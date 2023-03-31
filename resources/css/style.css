@@ -27,6 +27,25 @@ body{
     align-items: center;
     text-align: center;
 }
+.mk-modal {
+    position: fixed;
+    z-index: 2;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: rgba(0,0,0,0.4);
+}
+.mk-modal-content {
+    margin: 8% auto;
+    color: #f7bd2f !important;
+    background-color: #333333;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 90%;
+    border-radius: 1%;
+  }
 footer .row{
     height: 100%;
     margin: 0%;

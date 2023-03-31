@@ -114,10 +114,18 @@ window.onload = function(){
         })
     }
     if(currentPage === "admin.html"){
+        let currData;
+        let currModal;
+        let modalBackground = document.querySelector(".mk-modal");
+        window.addEventListener("click", function(e){
+            if(e.target === modalBackground){
+                closeModal(currModal, modalBackground);
+            }
+        })
         let tables = [
-                      {title : "Users", headers : ["Name", "Last name","Email", "Date of creation", "Role"], target : "getUsers", createNew : false},
-                      {title : "Listings", headers : ["Name", "Price","Description", "Address", "Size"], target : "getUsers", createNew : true},
-                      {title : "Links", headers : ["Title", "Access level","Link", "File location", "Location", "Parent", "Icon"], target : "getAllLinks", createNew : true}
+                      {title : "Users", headers : ["Name", "Last name","Email", "Date of creation", "Role"], target : "getUsers"},
+                      {title : "Listings", headers : ["Name", "Price","Description", "Address", "Size"], target : "getUsers", createNew : showListingCreateModal},
+                      {title : "Links", headers : ["Title", "Access level","Link", "File location", "Location", "Parent", "Icon"], target : "getAllLinks", createNew : showLinkCreateModal}
                     ];
         let table = document.querySelector("#element-table");
         let activeTable = 0;
@@ -169,6 +177,7 @@ window.onload = function(){
         function fillTable(data){
             let html = "";
             let counter = 1;
+            currData = data;
             for(let row of data){
                 html += 
                 `
@@ -198,12 +207,14 @@ window.onload = function(){
             }
 
             //Code for generating the "Insert new" button;
-            if(tables[activeTable].createNew)
+            //if the table should show a create new buttno
+            let createNew = tables[activeTable].createNew;
+            if(createNew)
             {
                 html += 
                 `
                 <tr>
-                <button type="button" class="btn btn-success">Insert new</button>
+                <button type="button" class="btn btn-success new-button">Insert new</button>
                 </tr>
                 `
             }
@@ -211,6 +222,12 @@ window.onload = function(){
             table.innerHTML = "";
             generateHeaderTableRow(table, activeTable);
             table.innerHTML += html;
+            if(createNew){
+                let newButton = document.querySelector(".new-button");
+                newButton.addEventListener("click", function(){
+                    createNew();
+                })
+            }
             let deleteButtons = document.querySelectorAll(".delete-button");
             for(let button of deleteButtons){
                 button.addEventListener("click", function(){
@@ -255,7 +272,26 @@ window.onload = function(){
             let header = success ? "Success" : "Failed";
             generateTable();   
         }
+        function showLinkCreateModal(){
+            let modal = document.querySelector("#link-modal");
+            currModal = modal;
+            openModal(modal, modalBackground)
+        }
+        function showListingCreateModal(){
+            let modal = document.querySelector("#listing-modal");
+            currModal = modal;
+            openModal(modal, modalBackground);
+        }
     }
+}
+
+function openModal(modal, modalBackground) {
+    showElement(modalBackground, "hidden");
+    showElement(modal, "hidden")
+}
+function closeModal(modal, modalBackground) {
+    hideElement(modalBackground, "hidden");
+    hideElement(modal, "hidden");
 }
 
 function generateNavbar(response){
@@ -313,12 +349,12 @@ function toggleShowElement(element){
     }
 }
 
-function showElement(element){
-    element.classList.remove("hide");
+function showElement(element, type="hide"){
+    element.classList.remove(type);
 }
 
-function hideElement(element){
-    element.classList.add("hide");
+function hideElement(element, type){
+    element.classList.add(type);
 }
 
 function errorHandler(error){
