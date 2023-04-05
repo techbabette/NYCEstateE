@@ -39,14 +39,32 @@ function getAllLinks(){
 
     return $results;
 }
-function testIFNULL(){
+function createNewLink($title, $href, $aLevel, $location, $landing){
     include ("connection.php");
 
-    $statement = "SELECT IFNULL(null, \"Novi tekst\")";
+    $statement = "INSERT INTO (link_title, href, access_level_id, location, landing) VALUES(?,?,?,?,?)";
     $prepSt = $conn->prepare($statement);
 
-    $prepSt->execute();
-    $results = $prepSt->fetchAll();
+    $prepSt->bindParam(1, $title);
+    $prepSt->bindParam(2, $href);
+    $prepSt->bindParam(3, $aLevel, PDO::PARAM_INT);
+    $prepSt->bindParam(4, $location);
+    $prepSt->bindParam(5, $landing, PDO::PARAM_INT);
+
+    $results = $prepSt->execute();
+    
+    return $results;
+}
+function createNewLinkIcon($linkId, $icon){
+    include ("connection.php");
+
+    $statement = "INSERT INTO (link_id, icon) VALUES(?,?)";
+    $prepSt = $conn->prepare($statement);
+
+    $prepSt->bindParam(1, $linkId, PDO::PARAM_INT);
+    $prepSt->bindParam(2, $icon);
+
+    $results = $prepSt->execute();
 
     return $results;
 }

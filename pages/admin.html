@@ -24,12 +24,49 @@
       </nav>
       <div class="container-fluid mk-page mk-solo-page">
         <!--modal background-->
-        <div id="modal-background" class="mk-modal hidden">
+        <div id="modal-background" class="mk-modal">
           <!--One of modal contents-->
-          <div id="link-modal" class="mk-modal-content hidden">
-            <h5>Create a new link</h5>
-            <form>
-
+          <div id="link-modal" class="mk-modal-content">
+            <h5 class="text-center">Create a new link</h5>
+            <form class="row mk-flex-center">
+              <div class="col-12">
+                <label for="LinkTitle">Link title</label>
+                <br/>
+                <input type="text" name="LinkTitle" id="LinkTitle" required="required"/>
+              </div>
+              <div class="col-12">
+                <label for="LinkHref">Link href</label>
+                <br/>
+                <input type="text" name="LinkHref" id="LinkHref" required="required"/>
+              </div>
+              <div class="col-12">
+                <label for="LinkIcon">Iconify icon (If any)</label>
+                <br/>
+                <input type="text" name="LinkIcon" id="LinkIcon"/>
+              </div>
+              <div class="col-12">
+                <label for="LinkTitle">Required access level</label>
+                <br/>
+                <select name="" id="LinkReqLevel" required>
+                  <option value="-1">Select an access level</option>
+                </select>
+              </div>
+              <div class="col-12">
+                <label for="LinkTitle">Location</label>
+                <br/>
+                <select name="" id="LinkReqLevel" required>
+                  <option value="-1">Select link location</option>
+                  <option value="Navbar">Navbar</option>
+                  <option value="Footer">Footer</option>
+                  <option value="Head">Head</option>
+                </select>
+              </div>
+              <div class="col-12">
+                <label for="LinkTitle">In root?</label>
+                <input type="checkbox" name="LinkRoot" id="LinkRoot"/>
+              </div>
+              <button id="linkSubmit" class="btn btn-success col-6" type="submit">Create new link</button>
+              <button id="linkCancel" class="btn btn-danger col-6" type="submit">Cancel</button>
             </form>
           </div>
           <div id="listing-modal" class="mk-modal-content hidden">
