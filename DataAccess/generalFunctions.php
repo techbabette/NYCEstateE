@@ -4,6 +4,10 @@ function echoNoPermission(){
     http_response_code(404);
     die();
 }
+function isValidJSON($str) {
+    json_decode($str);
+    return json_last_error() == JSON_ERROR_NONE;
+}
 function updateTextValue($table,$toChange, $toChangeValue, $paramater, $paramaterValue){
     include ("connection.php");
 
@@ -51,5 +55,14 @@ function getEverythingFromTable($table){
 
     return $prepSt->fetchAll();
 }
+function getEveryParamFromTable($table, $param){
+    include ("connection.php");
 
+    $statement = "SELECT $param FROM $table";
+    $prepSt = $conn->prepare($statement);
+
+    $prepSt->execute();
+
+    return $prepSt->fetchAll();
+}
 ?>
