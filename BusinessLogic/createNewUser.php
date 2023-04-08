@@ -72,18 +72,18 @@ if(isset($data["createNewUser"])){
         else{
             createNewUser($email, $pass, $name, $lastName);
             http_response_code(302);
-            $result["general"] = "login.html";
+            $result["general"] = "Success";
             echo json_encode($result);
         }
     }
     catch(PDOException $e){
         http_response_code(500);
-        echo json_encode($e);
+        $result["error"] = "Unexpected error occured";
+        echo json_encode($result);
     }
 }
 else{
     http_response_code(404);
-    $result["error"] = var_dump($data);
     echo json_encode($result);
 }
 

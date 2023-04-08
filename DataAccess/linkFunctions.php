@@ -42,7 +42,7 @@ function getAllLinks(){
 function createNewLink($title, $href, $aLevel, $location, $landing){
     include ("connection.php");
 
-    $statement = "INSERT INTO (link_title, href, access_level_id, location, landing) VALUES(?,?,?,?,?)";
+    $statement = "INSERT INTO links (link_title, href, access_level_id, location, landing) VALUES(?, ?, ?, ?, ?)";
     $prepSt = $conn->prepare($statement);
 
     $prepSt->bindParam(1, $title);
@@ -51,14 +51,14 @@ function createNewLink($title, $href, $aLevel, $location, $landing){
     $prepSt->bindParam(4, $location);
     $prepSt->bindParam(5, $landing, PDO::PARAM_INT);
 
-    $results = $prepSt->execute();
-    
-    return $results;
+    $prepSt->execute();
+
+    return $conn->lastInsertId();
 }
 function createNewLinkIcon($linkId, $icon){
     include ("connection.php");
 
-    $statement = "INSERT INTO (link_id, icon) VALUES(?,?)";
+    $statement = "INSERT INTO linkicons (link_id, icon) VALUES(?,?)";
     $prepSt = $conn->prepare($statement);
 
     $prepSt->bindParam(1, $linkId, PDO::PARAM_INT);

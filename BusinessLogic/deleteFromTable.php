@@ -33,12 +33,17 @@ switch($requestedTable){
         $dataTable = "listings";
         $dataParam = "listing_id";
         break;
+    case "Links" : 
+        $dataTable = "links";
+        $dataParam = "link_id";
+        break;
 }
 
 if($dataTable == ""){
     http_response_code(422);
     $result["error"] = "No such table";
     echo json_encode($result);
+    die();
 }
 
 try{
@@ -48,8 +53,8 @@ try{
     echo json_encode($result);
 }
 catch (PDOException $e){
-    http_response_code(200);
-    $result["error"]["msg"] = $e;
+    http_response_code(500);
+    $result["error"] = "An unexpected error occured";
     echo json_encode($result);
 }
 

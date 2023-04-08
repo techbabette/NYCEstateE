@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 23, 2023 at 06:53 AM
+-- Generation Time: Apr 08, 2023 at 07:16 AM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -86,18 +86,20 @@ CREATE TABLE `favorites` (
 CREATE TABLE `linkicons` (
   `link_icon_id` int(20) NOT NULL,
   `link_id` int(20) NOT NULL,
-  `icon` varchar(50) NOT NULL
+  `icon` varchar(50) NOT NULL,
+  `active` tinyint(1) NOT NULL DEFAULT 1,
+  `dateCreated` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `linkicons`
 --
 
-INSERT INTO `linkicons` (`link_icon_id`, `link_id`, `icon`) VALUES
-(1, 9, 'icomoon-free:facebook'),
-(2, 10, 'la:twitter'),
-(3, 11, 'fa-file'),
-(4, 12, 'bx:sitemap');
+INSERT INTO `linkicons` (`link_icon_id`, `link_id`, `icon`, `active`, `dateCreated`) VALUES
+(1, 9, 'icomoon-free:facebook', 1, '2023-04-08 03:58:37'),
+(2, 10, 'la:twitter', 1, '2023-04-08 03:58:37'),
+(3, 11, 'fa-file', 1, '2023-04-08 03:58:37'),
+(4, 12, 'bx:sitemap', 1, '2023-04-08 03:58:37');
 
 -- --------------------------------------------------------
 
@@ -167,9 +169,9 @@ CREATE TABLE `listingprices` (
 --
 
 CREATE TABLE `listingrooms` (
-  `listingRoom_id` int(20) NOT NULL,
+  `listing_room_id` int(20) NOT NULL,
   `listing_id` int(20) NOT NULL,
-  `roomType_id` int(20) NOT NULL,
+  `room_type_id` int(20) NOT NULL,
   `numberOf` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -217,7 +219,7 @@ INSERT INTO `roles` (`role_id`, `access_level_id`, `role_name`) VALUES
 --
 
 CREATE TABLE `roomtypes` (
-  `roomType_id` int(20) NOT NULL,
+  `room_type_id` int(20) NOT NULL,
   `roonName` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -242,12 +244,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`user_id`, `email`, `password`, `name`, `lastName`, `dateCreated`, `role_id`) VALUES
-(1, 'ilija.krstic.155.21@ict.edu.rs', '459f6fe00d942096b0329947990bf4a7', 'Marko', 'Krstic', '2023-03-08 09:14:07', 2),
 (4, 'marinakrsticrf@gmail.com', 'ce16a80506a2e2c17ce18c18e26451da', 'Marina', 'Krstic', '2023-03-16 10:25:32', 2),
-(5, 'markomarkovic@gmail.com', 'ce16a80506a2e2c17ce18c18e26451da', 'Marko', 'Markovic', '2023-03-16 10:38:08', 1),
-(6, 'markomarkovic2@gmail.com', 'bb6f7131f2708601ee92f6495a474d53', 'Marko', 'Markovic', '2023-03-16 10:38:58', 1),
-(7, 'markomarkovic55@gmail.com', 'bb6f7131f2708601ee92f6495a474d53', 'Marko', 'Markovic', '2023-03-16 10:41:51', 1),
-(8, 'markomarkovic556@gmail.com', 'bb6f7131f2708601ee92f6495a474d53', 'Marko', 'Markovic', '2023-03-16 10:42:24', 1);
+(5, 'markomarkovic@gmail.com', 'ce16a80506a2e2c17ce18c18e26451da', 'Marko', 'Markovic', '2023-03-16 10:38:08', 1);
 
 --
 -- Indexes for dumped tables
@@ -313,9 +311,9 @@ ALTER TABLE `listingprices`
 -- Indexes for table `listingrooms`
 --
 ALTER TABLE `listingrooms`
-  ADD PRIMARY KEY (`listingRoom_id`),
+  ADD PRIMARY KEY (`listing_room_id`),
   ADD KEY `listing_id` (`listing_id`),
-  ADD KEY `roomType_id` (`roomType_id`);
+  ADD KEY `roomType_id` (`room_type_id`);
 
 --
 -- Indexes for table `listings`
@@ -337,7 +335,7 @@ ALTER TABLE `roles`
 -- Indexes for table `roomtypes`
 --
 ALTER TABLE `roomtypes`
-  ADD PRIMARY KEY (`roomType_id`);
+  ADD PRIMARY KEY (`room_type_id`);
 
 --
 -- Indexes for table `users`
@@ -379,13 +377,13 @@ ALTER TABLE `favorites`
 -- AUTO_INCREMENT for table `linkicons`
 --
 ALTER TABLE `linkicons`
-  MODIFY `link_icon_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `link_icon_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `links`
 --
 ALTER TABLE `links`
-  MODIFY `link_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `link_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `listingphotos`
@@ -403,7 +401,7 @@ ALTER TABLE `listingprices`
 -- AUTO_INCREMENT for table `listingrooms`
 --
 ALTER TABLE `listingrooms`
-  MODIFY `listingRoom_id` int(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `listing_room_id` int(20) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `listings`
@@ -421,7 +419,7 @@ ALTER TABLE `roles`
 -- AUTO_INCREMENT for table `roomtypes`
 --
 ALTER TABLE `roomtypes`
-  MODIFY `roomType_id` int(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `room_type_id` int(20) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `users`

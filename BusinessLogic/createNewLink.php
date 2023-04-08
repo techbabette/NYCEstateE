@@ -3,13 +3,13 @@ session_start();
 $requiredLevel = 3;
 require("../DataAccess/generalFunctions.php");
 // If user not logged in, die
-// if(!isset($_SESSION["user"])){
-//     echoNoPermission();
-// }
+if(!isset($_SESSION["user"])){
+    echoNoPermission();
+}
 //If user's access level is too low, die
-// if($_SESSION["user"]["level"] < $requiredLevel){
-//     echoNoPermission();
-// }
+if($_SESSION["user"]["level"] < $requiredLevel){
+    echoNoPermission();
+}
 
 $json_params = file_get_contents("php://input");
 
@@ -40,14 +40,41 @@ $LinkTitle = $_POST["title"];
 $LinkHref = $_POST["href"];
 $LinkIcon = $_POST["icon"];
 $AccessLevelId = $_POST["aLevel"];
-$location = $_POST["location"];
+$LinkLocation = $_POST["location"];
 $main = $_POST["main"];
 
 $reTitle = '/^[A-Z][a-z]{2,15}(\s[A-Za-z][a-z]{2,15}){0,2}$/';
+$reHref = '/^[a-z]{3,40}\.[a-z]{2,5}$/';
+$reIcon = '/^[a-z:-]{5,30}$/';
 
 if(!preg_match($reTitle, $LinkTitle)){
     http_response_code(422);
     $result["error"] = "Link title does not match format";
+    echo json_encode($result);
+    die();
+}
+
+if(!preg_match($reHref, $LinkHref)){
+    http_response_code(422);
+    $result["error"] = "Link does not match format";
+    echo json_encode($result);
+    die();
+}
+
+if(!empty($LinkIcon) && !preg_match($reIcon, $LinkIcon)){
+    http_response_code(422);
+    $result["error"] = "Link icon does not match format";
+    echo json_encode($result);
+    die();
+}
+
+$acceptableLocations = array("head", "navbar", "footer");
+
+$locationAcceptable = in_array($LinkLocation, $acceptableLocations);
+
+if(!$locationAcceptable){
+    http_response_code(422);
+    $result["error"] = "Given location not allowed";
     echo json_encode($result);
     die();
 }
@@ -60,6 +87,7 @@ foreach($acceptableALevelIds as $aLevelId){
         break;
     }
 }
+
 if(!$idAcceptable){
     http_response_code(422);
     $result["error"] = "Non existing access level id provided";
@@ -67,6 +95,23 @@ if(!$idAcceptable){
     die();
 }
 
-$result["data"] = $acceptableALevelIds;
-echo json_encode($result);
+//Success
+require("../DataAccess/linkFunctions.php");
+try{
+    $lastInsertedId = createNewLink($LinkTitle, $LinkHref, $AccessLevelId, $LinkLocation, $main);
+    if(!empty($LinkIcon)){
+        createNewLinkIcon($lastInsertedId, $LinkIcon);
+    }
+    http_response_code(201);
+    $result["general"] = "Success";
+    echo json_encode($result);
+}
+catch(PDOException $e){
+    http_response_code(500);
+    // $result["error"] = "Unexpected error occured";
+    $result["error"] = $e;
+    echo json_encode($result);
+}
+// $result["data"] = gettype($main);
+// echo json_encode($result);
 ?>

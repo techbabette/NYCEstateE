@@ -353,7 +353,7 @@ function showElement(element, type="hide"){
     element.classList.remove(type);
 }
 
-function hideElement(element, type){
+function hideElement(element, type="hide"){
     element.classList.add(type);
 }
 
