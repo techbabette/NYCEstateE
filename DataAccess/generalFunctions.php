@@ -65,4 +65,15 @@ function getEveryParamFromTable($table, $param){
 
     return $prepSt->fetchAll();
 }
+function getEveryRowWhereParamFromTable($table, $param, $value){
+    include ("connection.php");
+
+    $statement = "SELECT $param FROM $table WHERE $param = ?";
+    $prepSt = $conn->prepare($statement);
+    $prepSt->bindParam(1, $value, PDO::PARAM_INT);
+
+    $prepSt->execute();
+
+    return $prepSt->fetchAll();
+}
 ?>

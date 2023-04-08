@@ -290,8 +290,8 @@ function openModal(modal, modalBackground) {
     showElement(modal, "hidden")
 }
 function closeModal(modal, modalBackground) {
-    hideElement(modalBackground, "hidden");
     hideElement(modal, "hidden");
+    hideElement(modalBackground, "hidden");
 }
 
 function generateNavbar(response){

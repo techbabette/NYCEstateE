@@ -20,22 +20,25 @@ if (strlen($json_params) > 0 && isValidJSON($json_params)){
 
 $result;
 
-    if
-    (
-    (!isset($_POST["title"]) || empty($_POST["title"])) 
-    || (!isset($_POST["href"]) || empty($_POST["href"]))
-    || (!isset($_POST["icon"]))
-    || (!isset($_POST["aLevel"]))
-    || (!isset($_POST["location"]) || empty($_POST["location"]))
-    || (!isset($_POST["main"])))
-    {
-        $result["error"] = "All fields are required";
-        $result["data"] = var_dump($_POST);
-        http_response_code(422);
-        echo json_encode($result);
-        die();
-    }
+if
+(
+   (!isset($_POST["linkId"]))
+|| (!isset($_POST["title"]) || empty($_POST["title"])) 
+|| (!isset($_POST["href"]) || empty($_POST["href"]))
+|| (!isset($_POST["icon"]))
+|| (!isset($_POST["aLevel"]))
+|| (!isset($_POST["location"]) || empty($_POST["location"]))
+|| (!isset($_POST["main"]))
+)
+{
+    $result["error"] = "All fields are required";
+    $result["data"] = var_dump($_POST);
+    http_response_code(422);
+    echo json_encode($result);
+    die();
+}
 
+$LinkId = $_POST["linkId"];
 $LinkTitle = $_POST["title"];
 $LinkHref = $_POST["href"];
 $LinkIcon = $_POST["icon"];
@@ -68,6 +71,15 @@ if(!empty($LinkIcon) && !preg_match($reIcon, $LinkIcon)){
     die();
 }
 
+$linkExists = count(getEveryRowWhereParamFromTable("links", "link_id", $LinkId)) > 0;
+
+if(!$linkExists){
+    http_response_code(422);
+    $result["error"] = "Provided link id does not exist";
+    echo json_encode($result);
+    die();
+}
+
 $acceptableLocations = array("head", "navbar", "footer");
 
 $locationAcceptable = in_array($LinkLocation, $acceptableLocations);
@@ -80,15 +92,15 @@ if(!$locationAcceptable){
 }
 
 $acceptableALevelIds = getEveryParamFromTable("accesslevels", "access_level_id");
-$idAcceptable = false;
+$aLIdAcceptable = false;
 foreach($acceptableALevelIds as $aLevelId){
     if($aLevelId["access_level_id"] == $AccessLevelId){
-        $idAcceptable = true;
+        $aLIdAcceptable = true;
         break;
     }
 }
 
-if(!$idAcceptable){
+if(!$aLIdAcceptable){
     http_response_code(422);
     $result["error"] = "Non existant access level id provided";
     echo json_encode($result);
@@ -98,12 +110,15 @@ if(!$idAcceptable){
 //Success
 require("../DataAccess/linkFunctions.php");
 try{
-    $lastInsertedId = createNewLink($LinkTitle, $LinkHref, $AccessLevelId, $LinkLocation, $main);
+    $response["general"] = "Success";
+    editLink($LinkId, $LinkTitle, $LinkHref, $AccessLevelId, $LinkLocation, $main);
     if(!empty($LinkIcon)){
-        createNewLinkIcon($lastInsertedId, $LinkIcon);
+        removeAllLinkIcons($LinkId);
+        createNewLinkIcon($LinkId, $LinkIcon);
     }
-    http_response_code(201);
-    $result["general"] = "Success";
+    else{
+        removeAllLinkIcons($LinkId);
+    }
     echo json_encode($result);
 }
 catch(PDOException $e){
@@ -112,6 +127,4 @@ catch(PDOException $e){
     // $result["error"] = $e;
     echo json_encode($result);
 }
-// $result["data"] = gettype($main);
-// echo json_encode($result);
 ?>

@@ -2,9 +2,8 @@
 function getLinks($accessLevel, $loggedIn){
     include ("connection.php");
 
-    $statement = "SELECT link_title, href, landing, location, parent_id, level, icon
+    $statement = "SELECT link_title, href, landing, location, parent_id, level, (SELECT icon FROM linkicons WHERE link_id = l.link_id AND active = 1) as icon
     FROM links l
-    LEFT JOIN linkicons li ON l.link_id = li.link_id
     INNER JOIN accesslevels a ON l.access_level_id = a.access_level_id
     WHERE level <= ?";
 
@@ -26,9 +25,9 @@ function getLinks($accessLevel, $loggedIn){
 function getAllLinks(){
     include ("connection.php");
 
-    $statement = "SELECT l.link_id AS id, link_title, level_title, href, IF(landing, \"Main\", \"Pages\"), location, IFNULL((SELECT link_title FROM links WHERE link_id = l.parent_id),\"None\") AS Parent, IFNULL(icon, \"None\") AS Icon 
+    $statement = "SELECT l.link_id AS id, link_title, level_title, href, IF(landing, \"Main\", \"Pages\"), location, IFNULL((SELECT link_title FROM links WHERE link_id = l.parent_id),\"None\") AS Parent, 
+                  IFNULL((SELECT icon FROM linkicons WHERE link_id = l.link_id AND active = 1), \"None\") AS icon 
                   FROM links l
-                  LEFT JOIN linkicons li ON l.link_id = li.link_id
                   INNER JOIN accesslevels a ON l.access_level_id = a.access_level_id
                   ORDER BY level desc
                   ";
@@ -55,6 +54,24 @@ function createNewLink($title, $href, $aLevel, $location, $landing){
 
     return $conn->lastInsertId();
 }
+function editLink($linkId, $title, $href, $aLevel, $location, $landing){
+    include ("connection.php");
+
+    $statement = "UPDATE links SET link_title = :title, href = :href, access_level_id = :aLevel, location = :location, landing = :landing
+                  WHERE link_id = :linkId";
+    $prepSt = $conn->prepare($statement);
+
+    prepSt->bindParam(:title, $title);
+    prepSt->bindParam(:href, $href);
+    prepSt->bindParam(:aLevel, $aLevel, PDO::PARAM_INT);
+    prepSt->bindParam(:location, $location);
+    prepSt->bindParam(:landing, $landing, PDO::PARAM_INT);
+    prepSt->bindParam(:linkId, $linkId, PDO::PARAM_INT);
+
+    $return = $prepSt->execute();
+
+    return $return;
+}
 function createNewLinkIcon($linkId, $icon){
     include ("connection.php");
 
@@ -64,8 +81,18 @@ function createNewLinkIcon($linkId, $icon){
     $prepSt->bindParam(1, $linkId, PDO::PARAM_INT);
     $prepSt->bindParam(2, $icon);
 
-    $results = $prepSt->execute();
+    $prepSt->execute();
 
-    return $results;
+    return $conn->lastInsertId();
+}
+function removeAllLinkIcons($linkId){
+    include ("connection.php");
+
+    $statement = "UPDATE linkicons SET active = 0 WHERE link_id = :linkId AND active = 1";
+    $prepSt = $conn->prepare($statement);
+
+    $prepSt->bindParam(:linkId, $linkId);
+
+    return $prepSt->execute();
 }
 ?>
