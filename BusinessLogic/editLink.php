@@ -110,7 +110,7 @@ if(!$aLIdAcceptable){
 //Success
 require("../DataAccess/linkFunctions.php");
 try{
-    $response["general"] = "Success";
+    $result["general"] = "Success";
     editLink($LinkId, $LinkTitle, $LinkHref, $AccessLevelId, $LinkLocation, $main);
     if(!empty($LinkIcon)){
         removeAllLinkIcons($LinkId);

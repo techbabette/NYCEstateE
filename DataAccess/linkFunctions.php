@@ -61,12 +61,12 @@ function editLink($linkId, $title, $href, $aLevel, $location, $landing){
                   WHERE link_id = :linkId";
     $prepSt = $conn->prepare($statement);
 
-    prepSt->bindParam(:title, $title);
-    prepSt->bindParam(:href, $href);
-    prepSt->bindParam(:aLevel, $aLevel, PDO::PARAM_INT);
-    prepSt->bindParam(:location, $location);
-    prepSt->bindParam(:landing, $landing, PDO::PARAM_INT);
-    prepSt->bindParam(:linkId, $linkId, PDO::PARAM_INT);
+    $prepSt->bindParam("title", $title);
+    $prepSt->bindParam("href", $href);
+    $prepSt->bindParam("aLevel", $aLevel, PDO::PARAM_INT);
+    $prepSt->bindParam("location", $location);
+    $prepSt->bindParam("landing", $landing, PDO::PARAM_INT);
+    $prepSt->bindParam("linkId", $linkId, PDO::PARAM_INT);
 
     $return = $prepSt->execute();
 
@@ -91,7 +91,7 @@ function removeAllLinkIcons($linkId){
     $statement = "UPDATE linkicons SET active = 0 WHERE link_id = :linkId AND active = 1";
     $prepSt = $conn->prepare($statement);
 
-    $prepSt->bindParam(:linkId, $linkId);
+    $prepSt->bindParam("linkId", $linkId);
 
     return $prepSt->execute();
 }
