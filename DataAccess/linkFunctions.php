@@ -38,6 +38,19 @@ function getAllLinks(){
 
     return $results;
 }
+function getSpecificLink($linkId){
+    include ("connection.php");
+
+    $statement = "SELECT link_title as title, href, (SELECT icon FROM linkicons WHERE link_id = l.link_id AND active = 1) as icon, access_level_id, location, landing FROM links l
+                  WHERE l.link_id = :link_id";
+    $prepSt = $conn->prepare($statement);
+    $prepSt->bindParam("link_id", $linkId);
+
+    $prepSt->execute();
+    $results = $prepSt->fetchAll();
+
+    return $results;
+}
 function createNewLink($title, $href, $aLevel, $location, $landing){
     include ("connection.php");
 

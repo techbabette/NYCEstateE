@@ -14,7 +14,7 @@ if($_SESSION["user"]["level"] < $requiredLevel){
 $json_params = file_get_contents("php://input");
 
 if (strlen($json_params) > 0 && isValidJSON($json_params)){
-    $decoded_params = json_decode($json_params);
+    $decoded_params = json_decode($json_params, true);
     $_POST = $decoded_params;
 }
 

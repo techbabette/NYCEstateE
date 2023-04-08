@@ -125,7 +125,7 @@ window.onload = function(){
         let tables = [
                       {title : "Users", headers : ["Name", "Last name","Email", "Date of creation", "Role"], target : "getUsers"},
                       {title : "Listings", headers : ["Name", "Price","Description", "Address", "Size"], target : "getUsers", createNew : showListingCreateModal},
-                      {title : "Links", headers : ["Title", "Access level","Link", "File location", "Location", "Parent", "Icon"], target : "getAllLinks", createNew : showLinkCreateModal}
+                      {title : "Links", headers : ["Title", "Access level","Link", "File location", "Location", "Parent", "Icon"], target : "getAllLinks", createNew : showLinkModal, edit : showLinkModal}
                     ];
         let table = document.querySelector("#element-table");
         let activeTable = 0;
@@ -151,6 +151,8 @@ window.onload = function(){
             })
         }
         generateTable();
+        //Set up all modals
+        setUpModals();
         //Generates the structure of a table
         function generateTable(){
             let tableId = activeTable;
@@ -197,7 +199,7 @@ window.onload = function(){
                 html += 
                 `
                 <td>
-                <button type="button" class="btn btn-light">Edit</button>
+                <button type="button" data-id="${row["id"]}" class="btn btn-light edit-button">Edit</button>
                 <button type="button" data-table="${tables[activeTable].title}" data-id="${row["id"]}" class="btn btn-danger delete-button">Delete</button>
                 </td>
                 `
@@ -209,6 +211,7 @@ window.onload = function(){
             //Code for generating the "Insert new" button;
             //if the table should show a create new buttno
             let createNew = tables[activeTable].createNew;
+            let edit = tables[activeTable].edit;
             if(createNew)
             {
                 html += 
@@ -225,8 +228,17 @@ window.onload = function(){
             if(createNew){
                 let newButton = document.querySelector(".new-button");
                 newButton.addEventListener("click", function(){
-                    createNew();
+                    createNew("create");
                 })
+            }
+            if(edit){
+                let editButtons = document.querySelectorAll(".edit-button");
+                for(let button of editButtons){
+                    button.addEventListener("click", function(){
+                        let elemId = this.dataset.id;
+                        showLinkModal(elemId);
+                    })
+                }
             }
             let deleteButtons = document.querySelectorAll(".delete-button");
             for(let button of deleteButtons){
@@ -272,15 +284,54 @@ window.onload = function(){
             let header = success ? "Success" : "Failed";
             generateTable();   
         }
-        function showLinkCreateModal(){
+        function showLinkModal(existingId = 0){
             let modal = document.querySelector("#link-modal");
             currModal = modal;
+            let type = existingId != 0 ? "edit" : "create";
+            if(type == "edit"){
+                let data = {id : existingId};
+                submitAjax("getSpecificLink", function(data){
+                    let linkTitleField = document.querySelector("#LinkTitle");
+                    let LinkHrefField = document.querySelector("#LinkHref");
+                    let LinkIconField = document.querySelector("#LinkIcon");
+                    let accessLevelSelect = document.querySelector("#LinkReqLevel");
+                    let LinkLocation = document.querySelector("#LinkLocation");
+                    let LinkRoot = document.querySelector("#LinkRoot");
+
+                    let firstRow = data[0];
+
+                    linkTitleField.value = firstRow.title;
+                    LinkHrefField.value = firstRow.href;
+                    LinkIconField.value = firstRow.icon ? firstRow.icon : "";
+                    accessLevelSelect.value = firstRow.access_level_id;
+                    LinkLocation.value = firstRow.location;
+                    LinkRoot.checked = firstRow.landing;
+                }, data);
+                let linkModalTitle = document.querySelector("#link-modal-title");
+                let modalSubmitButton = document.querySelector("#link-submit");
+                modalSubmitButton.innerText = "Edit link";
+                linkModalTitle.innerText = `Edit existing link`;
+            }
+            else{
+                let linkModalTitle = document.querySelector("#link-modal-title");
+                let modalSubmitButton = document.querySelector("#link-submit");
+                modalSubmitButton.innerText = "Create new link";
+                linkModalTitle.innerText = "Create a new link";
+            }
             openModal(modal, modalBackground)
         }
         function showListingCreateModal(){
             let modal = document.querySelector("#listing-modal");
             currModal = modal;
             openModal(modal, modalBackground);
+        }
+        //Setup functions
+        function setUpModals(){
+            setupLinkModal();
+        }
+        function setupLinkModal(){
+            let accessLevelSelect = document.querySelector("#LinkReqLevel");
+            readAjax("getAllAccessLevels", fillDropdown, [accessLevelSelect]);
         }
     }
 }
@@ -290,8 +341,21 @@ function openModal(modal, modalBackground) {
     showElement(modal, "hidden")
 }
 function closeModal(modal, modalBackground) {
-    hideElement(modal, "hidden");
     hideElement(modalBackground, "hidden");
+    hideElement(modal, "hidden");
+}
+
+function fillDropdown(data, args){
+    let selectElement = args[0];
+    html = "";
+    for(let row of data){
+        html += `<option value="${row.id}">${row.title}</option>`;
+    }
+    selectElement.innerHTML += html;
+}
+
+function preselectLinkValues(data){
+    let 
 }
 
 function generateNavbar(response){
@@ -439,6 +503,7 @@ function readAjax(url, resultFunction, args = []){
             else{
                 console.log(request.responseText);
                 let data = JSON.parse(request.responseText);
+                errorHandler(data["error"]);
                 console.log(data["error"]);
             }
         }
@@ -454,7 +519,6 @@ function submitAjax(url, resultFunction, data, args = []){
             if(request.status >= 200 && request.status < 300){
                 console.log(request.responseText);
                 let data = JSON.parse(request.responseText);
-                success = true;
                 if(args != []){
                     resultFunction(data.general, args);
                 }
@@ -466,7 +530,6 @@ function submitAjax(url, resultFunction, data, args = []){
                 redirect(args);
             }
             else{
-                success = false;
                 let data = JSON.parse(request.responseText);
                 errorHandler(data["error"]);
                 console.log(data["error"]);
@@ -476,6 +539,7 @@ function submitAjax(url, resultFunction, data, args = []){
 
     request.open("POST", ajaxPath+url+".php");
     request.setRequestHeader("Content-type", "application/json");
+    console.log(data);
     request.send(JSON.stringify(data));
 }
 

@@ -24,10 +24,10 @@
       </nav>
       <div class="container-fluid mk-page mk-solo-page">
         <!--modal background-->
-        <div id="modal-background" class="mk-modal">
+        <div id="modal-background" class="mk-modal hidden">
           <!--One of modal contents-->
-          <div id="link-modal" class="mk-modal-content">
-            <h5 class="text-center">Create a new link</h5>
+          <div id="link-modal" class="mk-modal-content hidden">
+            <h5 id="link-modal-title" class="text-center">Create a new link</h5>
             <form class="row mk-flex-center">
               <div class="col-12">
                 <label for="LinkTitle">Link title</label>
@@ -45,28 +45,28 @@
                 <input type="text" name="LinkIcon" id="LinkIcon"/>
               </div>
               <div class="col-12">
-                <label for="LinkTitle">Required access level</label>
+                <label for="LinkReqLevel">Required access level</label>
                 <br/>
                 <select name="" id="LinkReqLevel" required>
                   <option value="-1">Select an access level</option>
                 </select>
               </div>
               <div class="col-12">
-                <label for="LinkTitle">Location</label>
+                <label for="LinkLocation">Location</label>
                 <br/>
-                <select name="" id="LinkReqLevel" required>
+                <select name="" id="LinkLocation" required>
                   <option value="-1">Select link location</option>
-                  <option value="Navbar">Navbar</option>
-                  <option value="Footer">Footer</option>
-                  <option value="Head">Head</option>
+                  <option value="navbar">Navbar</option>
+                  <option value="footer">Footer</option>
+                  <option value="head">Head</option>
                 </select>
               </div>
               <div class="col-12">
-                <label for="LinkTitle">In root?</label>
+                <label for="LinkRoot">In root?</label>
                 <input type="checkbox" name="LinkRoot" id="LinkRoot"/>
               </div>
-              <button id="linkSubmit" class="btn btn-success col-6" type="submit">Create new link</button>
-              <button id="linkCancel" class="btn btn-danger col-6" type="submit">Cancel</button>
+              <button id="link-submit" class="btn btn-success col-6" type="submit">Create new link</button>
+              <button id="link-cancel" class="btn btn-danger col-6" type="submit">Cancel</button>
             </form>
           </div>
           <div id="listing-modal" class="mk-modal-content hidden">

@@ -11,11 +11,11 @@ if($_SESSION["user"]["level"] < $requiredLevel){
     echoNoPermission();
 }
 
-require("../DataAccess/linkFunctions.php");
+require("../DataAccess/accessLevelFunctions.php");
 $result;
 
 try{
-    $result["general"] = getAllLinks();
+    $result["general"] = getAllAccessLevels();
     http_response_code(200);
     echo json_encode($result);
 }
