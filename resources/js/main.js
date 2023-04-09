@@ -280,25 +280,35 @@ window.onload = function(){
             submitAjax("deleteFromTable", showResult, data);
         }
         function showResult(data){
-            let message = data.msg;
-            let header = success ? "Success" : "Failed";
-            console.log("Success");
             generateTable();   
         }
         function showLinkModal(existingId = 0){
             let modal = document.querySelector("#link-modal");
             globalData.currModal = modal;
             let type = existingId ? "edit" : "create";
+            //Select all fields
+            let linkTitleField = document.querySelector("#LinkTitle");
+            let LinkHrefField = document.querySelector("#LinkHref");
+            let LinkIconField = document.querySelector("#LinkIcon");
+            let accessLevelSelect = document.querySelector("#LinkReqLevel");
+            let LinkLocation = document.querySelector("#LinkLocation");
+            let LinkRoot = document.querySelector("#LinkRoot");
+            let linkIdField = document.querySelector("#linkId");
+
+            let linkModalTitle = document.querySelector("#link-modal-title");
+            let modalSubmitButton = document.querySelector("#link-submit");
+
+            
+            let elems = new Array(linkTitleField, LinkHrefField, LinkIconField, accessLevelSelect, LinkLocation)
+
+            //Remove success and error
+            for(let elem of elems){
+                removeError(elem);
+                removeSuccess(elem);
+            }
             if(type == "edit"){
                 let data = {id : existingId};
                 submitAjax("getSpecificLink", function(data){
-                    let linkTitleField = document.querySelector("#LinkTitle");
-                    let LinkHrefField = document.querySelector("#LinkHref");
-                    let LinkIconField = document.querySelector("#LinkIcon");
-                    let accessLevelSelect = document.querySelector("#LinkReqLevel");
-                    let LinkLocation = document.querySelector("#LinkLocation");
-                    let LinkRoot = document.querySelector("#LinkRoot");
-
                     let firstRow = data[0];
 
                     linkTitleField.value = firstRow.title;
@@ -309,22 +319,11 @@ window.onload = function(){
                     LinkRoot.checked = firstRow.landing;
                 }, data);
 
-                let linkIdField = document.querySelector("#linkId");
                 linkIdField.value = existingId;
-
-                let linkModalTitle = document.querySelector("#link-modal-title");
-                let modalSubmitButton = document.querySelector("#link-submit");
                 modalSubmitButton.innerText = "Edit link";
                 linkModalTitle.innerText = `Edit existing link`;
             }
             else{
-                let linkTitleField = document.querySelector("#LinkTitle");
-                let LinkHrefField = document.querySelector("#LinkHref");
-                let LinkIconField = document.querySelector("#LinkIcon");
-                let accessLevelSelect = document.querySelector("#LinkReqLevel");
-                let LinkLocation = document.querySelector("#LinkLocation");
-                let LinkRoot = document.querySelector("#LinkRoot");
-
                 linkTitleField.value = "";
                 LinkHrefField.value = "";
                 LinkIconField.value = "";
@@ -332,12 +331,9 @@ window.onload = function(){
                 LinkLocation.value = 0;
                 LinkRoot.checked = false;
 
-                let linkModalTitle = document.querySelector("#link-modal-title");
-                let modalSubmitButton = document.querySelector("#link-submit");
                 modalSubmitButton.innerText = "Create new link";
                 linkModalTitle.innerText = "Create a new link";
 
-                let linkIdField = document.querySelector("#linkId");
                 linkIdField.value = existingId;
             }
             openModal(modal, globalData.modalBackground)
@@ -549,21 +545,16 @@ function createRequest(){
 
 function testDropdown(field, negativeValue, errorMessage = ""){
     let value = field.value;
-    let errorBox = field.nextElementSibling;
     //On success
     if(value != negativeValue){
-        errorBox.innerText = "";
-        errorBox.classList.add("hidden");
-        field.classList.remove("error-outline");
-        field.classList.add("success-outline");
+        removeError(field);
+        addSuccess(field);
         return 0;
     }
     //On fail
     else{
-        errorBox.innerText = errorMessage;
-        errorBox.classList.remove("hidden");
-        field.classList.remove("success-outline");
-        field.classList.add("error-outline");
+        removeSuccess(field);
+        addError(field, errorMessage);
         return 1;
     }
 }
@@ -573,23 +564,40 @@ function reTestText(regex, field, errorMessage = ""){
     let passes = regex.test(textValue);
     if(passes){
         if(errorMessage != ""){
-            let errorBox = field.nextElementSibling;
-            errorBox.classList.add("hidden");
-            field.classList.remove("error-outline");
-            field.classList.add("success-outline");
+            removeError(field);
+            addSuccess(field);
         }
         return 0;
     }
     else{
         if(errorMessage != ""){
-            let errorBox = field.nextElementSibling;
-            errorBox.innerText = errorMessage;
-            errorBox.classList.remove("hidden");
-            field.classList.remove("success-outline");
-            field.classList.add("error-outline");
+            removeSuccess(field);
+            addError(field, errorMessage);
         }
         return 1;
     }
+}
+
+function addSuccess(field){
+    field.classList.add("success-outline");
+}
+
+function removeError(field){
+    let errorBox = field.nextElementSibling;
+    errorBox.innerText = "";
+    errorBox.classList.add("hidden");
+    field.classList.remove("error-outline");
+}
+
+function removeSuccess(field){
+    field.classList.remove("success-outline");
+}
+
+function addError(field, msg){
+    let errorBox = field.nextElementSibling;
+    errorBox.innerText = msg;
+    errorBox.classList.remove("hidden");
+    field.classList.add("error-outline");
 }
 
 function redirect(args){
