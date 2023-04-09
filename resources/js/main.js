@@ -4,6 +4,7 @@ let currentPage = lastOfUrl.split("?")[0].toLowerCase();
 let mainPage = false;
 let ajaxPath = "BusinessLogic/";
 let data;
+let globalData = {};
 let success;
 if (currentPage == "" || currentPage == "index.html") mainPage = true;
 if (!mainPage) ajaxPath = "../BusinessLogic/"
@@ -115,16 +116,15 @@ window.onload = function(){
     }
     if(currentPage === "admin.html"){
         let currData;
-        let currModal;
-        let modalBackground = document.querySelector(".mk-modal");
+        globalData.modalBackground = document.querySelector(".mk-modal");
         window.addEventListener("click", function(e){
-            if(e.target === modalBackground){
-                closeModal(currModal, modalBackground);
+            if(e.target === globalData.modalBackground){
+                closeCurrentModal();
             }
         })
         let tables = [
                       {title : "Users", headers : ["Name", "Last name","Email", "Date of creation", "Role"], target : "getUsers"},
-                      {title : "Listings", headers : ["Name", "Price","Description", "Address", "Size"], target : "getUsers", createNew : showListingCreateModal},
+                      {title : "Listings", headers : ["Name", "Price","Description", "Address", "Size"], target : "getUsers", createNew : showListingModal},
                       {title : "Links", headers : ["Title", "Access level","Link", "File location", "Location", "Parent", "Icon"], target : "getAllLinks", createNew : showLinkModal, edit : showLinkModal}
                     ];
         let table = document.querySelector("#element-table");
@@ -228,7 +228,7 @@ window.onload = function(){
             if(createNew){
                 let newButton = document.querySelector(".new-button");
                 newButton.addEventListener("click", function(){
-                    createNew("create");
+                    createNew();
                 })
             }
             if(edit){
@@ -236,7 +236,7 @@ window.onload = function(){
                 for(let button of editButtons){
                     button.addEventListener("click", function(){
                         let elemId = this.dataset.id;
-                        showLinkModal(elemId);
+                        edit(elemId);
                     })
                 }
             }
@@ -282,12 +282,13 @@ window.onload = function(){
         function showResult(data){
             let message = data.msg;
             let header = success ? "Success" : "Failed";
+            console.log("Success");
             generateTable();   
         }
         function showLinkModal(existingId = 0){
             let modal = document.querySelector("#link-modal");
-            currModal = modal;
-            let type = existingId != 0 ? "edit" : "create";
+            globalData.currModal = modal;
+            let type = existingId ? "edit" : "create";
             if(type == "edit"){
                 let data = {id : existingId};
                 submitAjax("getSpecificLink", function(data){
@@ -307,31 +308,124 @@ window.onload = function(){
                     LinkLocation.value = firstRow.location;
                     LinkRoot.checked = firstRow.landing;
                 }, data);
+
+                let linkIdField = document.querySelector("#linkId");
+                linkIdField.value = existingId;
+
                 let linkModalTitle = document.querySelector("#link-modal-title");
                 let modalSubmitButton = document.querySelector("#link-submit");
                 modalSubmitButton.innerText = "Edit link";
                 linkModalTitle.innerText = `Edit existing link`;
             }
             else{
+                let linkTitleField = document.querySelector("#LinkTitle");
+                let LinkHrefField = document.querySelector("#LinkHref");
+                let LinkIconField = document.querySelector("#LinkIcon");
+                let accessLevelSelect = document.querySelector("#LinkReqLevel");
+                let LinkLocation = document.querySelector("#LinkLocation");
+                let LinkRoot = document.querySelector("#LinkRoot");
+
+                linkTitleField.value = "";
+                LinkHrefField.value = "";
+                LinkIconField.value = "";
+                accessLevelSelect.value = 0;
+                LinkLocation.value = 0;
+                LinkRoot.checked = false;
+
                 let linkModalTitle = document.querySelector("#link-modal-title");
                 let modalSubmitButton = document.querySelector("#link-submit");
                 modalSubmitButton.innerText = "Create new link";
                 linkModalTitle.innerText = "Create a new link";
+
+                let linkIdField = document.querySelector("#linkId");
+                linkIdField.value = existingId;
             }
-            openModal(modal, modalBackground)
+            openModal(modal, globalData.modalBackground)
         }
-        function showListingCreateModal(){
+        function showListingModal(existingId = 0){
             let modal = document.querySelector("#listing-modal");
-            currModal = modal;
-            openModal(modal, modalBackground);
+            globalData.currModal = modal;
+            openModal(modal, globalData.modalBackground)
         }
         //Setup functions
         function setUpModals(){
+            let cancelButtons = document.querySelectorAll(".close-button");
+            for(let button of cancelButtons){
+                button.addEventListener("click", closeCurrentModal);
+            }
             setupLinkModal();
         }
         function setupLinkModal(){
             let accessLevelSelect = document.querySelector("#LinkReqLevel");
             readAjax("getAllAccessLevels", fillDropdown, [accessLevelSelect]);
+
+            let modalSubmitButton = document.querySelector("#link-submit");
+            modalSubmitButton.addEventListener("click", function(e){
+                e.preventDefault();
+                submitLinkForm();
+            })
+        }
+        function submitLinkForm(){
+            let LinkIdField = document.querySelector("#linkId");
+            let LinkTitleField = document.querySelector("#LinkTitle");
+            let LinkHrefField = document.querySelector("#LinkHref");
+            let LinkIconField = document.querySelector("#LinkIcon");
+            let accessLevelSelect = document.querySelector("#LinkReqLevel");
+            let LinkLocationSelect = document.querySelector("#LinkLocation");
+            let LinkRootCheck = document.querySelector("#LinkRoot");
+
+            let linkId = LinkIdField.value;
+            let linkTitle = LinkTitleField.value;
+            let LinkHref = LinkHrefField.value;
+            let LinkIcon = LinkIconField.value;
+            let accessLevel = accessLevelSelect.value;
+            let LinkLocation = LinkLocationSelect.value;
+            let LinkRoot = LinkRootCheck.checked;
+
+            let reTitle = /^[A-Z][a-z]{2,15}(\s[A-Za-z][a-z]{2,15}){0,2}$/;
+            let reHref = /(^[a-z]{3,40}\.[a-z]{2,5}$)/;
+            let reIcon = /(^$)|(^[a-z:-]{5,30}$)/;
+
+            let submitType = linkId ? "edit" : "create";
+
+            let data = {};
+
+            let target = "createNewLink";
+
+            if(submitType === "edit"){
+                data.linkId = linkId;
+                target = "editLink";
+            }
+            
+            let errors = 0;
+
+            if(reTestText(reTitle, LinkTitleField, "Title does not match format")) errors++;
+
+            if(reTestText(reHref, LinkHrefField, "Link href does not match format")) errors++;
+
+            if(reTestText(reIcon, LinkIconField, "Link icon does not match format")) errors++;
+
+            if(testDropdown(accessLevelSelect, 0, "You must select an access level")) errors++;
+
+            if(testDropdown(LinkLocationSelect, 0, "You must select a location")) errors++;
+
+            console.log(errors);
+
+            if(errors != 0){
+                return;
+            }
+            
+            data.title = linkTitle;
+            data.href = LinkHref;
+            data.icon = LinkIcon;
+            data.aLevel = accessLevel;
+            data.location = LinkLocation;
+            data.main = LinkRoot;
+
+            console.log("submitted");
+            submitAjax(target, showResult, data);
+
+            closeCurrentModal();
         }
     }
 }
@@ -345,6 +439,11 @@ function closeModal(modal, modalBackground) {
     hideElement(modal, "hidden");
 }
 
+function closeCurrentModal(){
+    hideElement(globalData.modalBackground, "hidden");
+    hideElement(globalData.currModal, "hidden");
+}
+
 function fillDropdown(data, args){
     let selectElement = args[0];
     html = "";
@@ -354,9 +453,6 @@ function fillDropdown(data, args){
     selectElement.innerHTML += html;
 }
 
-function preselectLinkValues(data){
-    let 
-}
 
 function generateNavbar(response){
     let url;
@@ -449,6 +545,27 @@ function createRequest(){
         }
     }
     return request;
+}
+
+function testDropdown(field, negativeValue, errorMessage = ""){
+    let value = field.value;
+    let errorBox = field.nextElementSibling;
+    //On success
+    if(value != negativeValue){
+        errorBox.innerText = "";
+        errorBox.classList.add("hidden");
+        field.classList.remove("error-outline");
+        field.classList.add("success-outline");
+        return 0;
+    }
+    //On fail
+    else{
+        errorBox.innerText = errorMessage;
+        errorBox.classList.remove("hidden");
+        field.classList.remove("success-outline");
+        field.classList.add("error-outline");
+        return 1;
+    }
 }
 
 function reTestText(regex, field, errorMessage = ""){

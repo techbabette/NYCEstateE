@@ -32,41 +32,47 @@
               <div class="col-12">
                 <label for="LinkTitle">Link title</label>
                 <br/>
-                <input type="text" name="LinkTitle" id="LinkTitle" required="required"/>
+                <input type="text" class="form-control"  name="LinkTitle" id="LinkTitle" required="required"/>
+                <span class="error-msg hidden"></span>
               </div>
               <div class="col-12">
                 <label for="LinkHref">Link href</label>
                 <br/>
-                <input type="text" name="LinkHref" id="LinkHref" required="required"/>
+                <input type="text" class="form-control"  name="LinkHref" id="LinkHref" required="required"/>
+                <span class="error-msg hidden"></span>
               </div>
               <div class="col-12">
                 <label for="LinkIcon">Iconify icon (If any)</label>
                 <br/>
-                <input type="text" name="LinkIcon" id="LinkIcon"/>
+                <input type="text" class="form-control" name="LinkIcon" id="LinkIcon"/>
+                <span class="error-msg hidden"></span>
               </div>
               <div class="col-12">
                 <label for="LinkReqLevel">Required access level</label>
                 <br/>
-                <select name="" id="LinkReqLevel" required>
-                  <option value="-1">Select an access level</option>
+                <select name="" class="form-control" id="LinkReqLevel" required>
+                  <option value="0">Select an access level</option>
                 </select>
+                <span class="error-msg hidden"></span>
               </div>
               <div class="col-12">
                 <label for="LinkLocation">Location</label>
                 <br/>
-                <select name="" id="LinkLocation" required>
-                  <option value="-1">Select link location</option>
+                <select name="" class="form-control"  id="LinkLocation" required>
+                  <option value="0">Select link location</option>
                   <option value="navbar">Navbar</option>
                   <option value="footer">Footer</option>
                   <option value="head">Head</option>
                 </select>
+                <span class="error-msg hidden"></span>
               </div>
               <div class="col-12">
                 <label for="LinkRoot">In root?</label>
                 <input type="checkbox" name="LinkRoot" id="LinkRoot"/>
               </div>
               <button id="link-submit" class="btn btn-success col-6" type="submit">Create new link</button>
-              <button id="link-cancel" class="btn btn-danger col-6" type="submit">Cancel</button>
+              <button id="link-cancel" class="btn btn-danger col-6 close-button" type="button">Cancel</button>
+              <input type="hidden" id="linkId" name="linkId" value="34657" />
             </form>
           </div>
           <div id="listing-modal" class="mk-modal-content hidden">
