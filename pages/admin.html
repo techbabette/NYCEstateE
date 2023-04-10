@@ -26,6 +26,48 @@
         <!--modal background-->
         <div id="modal-background" class="mk-modal hidden">
           <!--One of modal contents-->
+          <div id="user-modal" class="mk-modal-content hidden">
+            <h5 id="user-modal-title" class="text-center">Edit existing user</h5>
+            <form class="row mk-flex-center">
+              <div class="col-12">
+                <label for="userName">First name</label>
+                <br/>
+                <input type="text" class="form-control"  name="userName" id="userName" required="required"/>
+                <span class="error-msg hidden"></span>
+              </div>
+              <div class="col-12">
+                <label for="userLastName">Last name</label>
+                <br/>
+                <input type="text" class="form-control"  name="userLastName" id="userLastName" required="required"/>
+                <span class="error-msg hidden"></span>
+              </div>
+              <div class="col-12">
+                <label for="userEmail">Email</label>
+                <br/>
+                <input type="email" class="form-control"  name="userEmail" id="userEmail" required="required"/>
+                <span class="error-msg hidden"></span>
+              </div>
+              <div class="col-12">
+                <label for="userRole">Role</label>
+                <br/>
+                <select name="" class="form-control" id="userRole" required>
+                  <option value="0">Select a role</option>
+                </select>
+                <span class="error-msg hidden"></span>
+              </div>
+              <div class="col-12">
+                <label for="userLastName">Password (unchanged if empty)</label>
+                <br/>
+                <input type="password" class="form-control"  name="userPassword" id="userPassword"/>
+                <span class="error-msg hidden"></span>
+              </div>
+              <div class="col-12 my-2 p-2">
+                <button id="user-submit" class="btn btn-success col-6 my-1" type="submit">Edit user</button>
+                <button id="user-cancel" class="btn btn-danger col-6 my-1 close-button" type="button">Cancel</button>
+              </div>
+              <input type="hidden" id="userId" name="userId" value="0" />
+            </form>
+          </div>
           <div id="link-modal" class="mk-modal-content hidden">
             <h5 id="link-modal-title" class="text-center">Create a new link</h5>
             <form class="row mk-flex-center">
@@ -70,9 +112,11 @@
                 <label for="LinkRoot">In root?</label>
                 <input type="checkbox" name="LinkRoot" id="LinkRoot"/>
               </div>
-              <button id="link-submit" class="btn btn-success col-6" type="submit">Create new link</button>
-              <button id="link-cancel" class="btn btn-danger col-6 close-button" type="button">Cancel</button>
-              <input type="hidden" id="linkId" name="linkId" value="34657" />
+              <div class="col-12 my-2 p-2">
+              <button id="link-submit" class="btn btn-success my-1 col-6" type="submit">Create new link</button>
+              <button id="link-cancel" class="btn btn-danger my-1 col-6 close-button" type="button">Cancel</button>
+              </div>
+              <input type="hidden" id="linkId" name="linkId" value="0" />
             </form>
           </div>
           <div id="listing-modal" class="mk-modal-content hidden">

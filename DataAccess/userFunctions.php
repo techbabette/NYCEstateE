@@ -98,12 +98,37 @@ function getAllUsers(){
 
     $statement = "SELECT user_id AS id, name, lastName, email, dateCreated, role_name
                   FROM users u
-                  INNER JOIN roles r on u.role_id = r.role_id";
+                  INNER JOIN roles r on u.role_id = r.role_id
+                  ORDER BY r.role_id DESC";
     $prepSt = $conn->prepare($statement);
 
     $prepSt->execute();
     $result = $prepSt->fetchAll();
 
     return $result;
+}
+
+function getSpecificUser($userId){
+    include ("connection.php");
+
+    $statement = "SELECT name, lastName, email, role_id FROM users WHERE user_id = :user_id";
+    $prepSt = $conn->prepare($statement);
+
+    $prepSt->bindParam("user_id", $userId);
+
+    $prepSt->execute();
+
+    return $prepSt->fetchAll();
+}
+
+function getAllUserRoles(){
+    include ("connection.php");
+
+    $statement = "SELECT role_id AS id, role_name as title FROM roles ORDER BY id";
+    $prepSt = $conn->prepare($statement);
+
+    $prepSt->execute();
+
+    return $prepSt->fetchAll();
 }
 ?>

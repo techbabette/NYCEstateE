@@ -26,7 +26,7 @@ if
 || (!isset($_POST["email"]) || empty($_POST["email"])) 
 || (!isset($_POST["name"]) || empty($_POST["name"]))
 || (!isset($_POST["lastName"]) || empty($_POST["lastName"]))
-|| (!isset($_POST["role"]))
+|| (!isset($_POST["roleId"]))
 || (!isset($_POST["password"]))
 )
 {

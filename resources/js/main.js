@@ -12,6 +12,7 @@ if (!mainPage) ajaxPath = "../BusinessLogic/"
 window.onload = function(){
     data = {currentPage}
 
+    //Send current page to check if allwwed
     submitAjax("getLinks", generateNavbar, data, ["index.html", true]);
 
     if(currentPage == "register.html"){
@@ -123,7 +124,7 @@ window.onload = function(){
             }
         })
         let tables = [
-                      {title : "Users", headers : ["Name", "Last name","Email", "Date of creation", "Role"], target : "getUsers"},
+                      {title : "Users", headers : ["Name", "Last name","Email", "Date of creation", "Role"], target : "getUsers", edit : showUserModal},
                       {title : "Listings", headers : ["Name", "Price","Description", "Address", "Size"], target : "getUsers", createNew : showListingModal},
                       {title : "Links", headers : ["Title", "Access level","Link", "File location", "Location", "Parent", "Icon"], target : "getAllLinks", createNew : showLinkModal, edit : showLinkModal}
                     ];
@@ -282,6 +283,44 @@ window.onload = function(){
         function showResult(data){
             generateTable();   
         }
+        function showUserModal(existingId = 0){
+            let modal = document.querySelector("#user-modal");
+            globalData.currModal = modal;
+            let type = existingId ? "edit" : "create";
+
+            //Select all fields
+            let userNameField = document.querySelector("#userName");
+            let userLastNameField = document.querySelector("#userLastName");
+            let userEmailField = document.querySelector("#userEmail");
+            let userRoleField = document.querySelector("#userRole");
+            let userPasswordField = document.querySelector("#userPassword");
+            let userIdField = document.querySelector("#userId");
+
+            let elems = new Array(userEmailField, userNameField, userLastNameField, userRoleField, userPasswordField);
+
+            //Remove success and error
+            for(let elem of elems){
+                removeError(elem);
+                removeSuccess(elem);
+            }
+
+            if(type == "edit"){
+                let data = {id : existingId};
+                userIdField.value = existingId;
+                submitAjax("getSpecificUser", function(data){
+                    let firstRow = data[0];
+
+                    userNameField.value = firstRow.name;
+                    userLastNameField.value = firstRow.lastName;
+                    userEmailField.value = firstRow.email;
+                    userRoleField.value = firstRow.role_id;
+                }, data);
+            }
+            else{
+                //Not implemented nor intended
+            }
+            openModal(modal, globalData.modalBackground)
+        }
         function showLinkModal(existingId = 0){
             let modal = document.querySelector("#link-modal");
             globalData.currModal = modal;
@@ -350,6 +389,17 @@ window.onload = function(){
                 button.addEventListener("click", closeCurrentModal);
             }
             setupLinkModal();
+            setupUserModal();
+        }
+        function setupUserModal(){
+            let userRoleSelect = document.querySelector("#userRole"); 
+            readAjax("getAllRoles", fillDropdown, [userRoleSelect]);
+
+            let modalSubmitButton = document.querySelector("#user-submit");
+            modalSubmitButton.addEventListener("click", function(e){
+                e.preventDefault();
+                submitUserForm();
+            })
         }
         function setupLinkModal(){
             let accessLevelSelect = document.querySelector("#LinkReqLevel");
@@ -360,6 +410,74 @@ window.onload = function(){
                 e.preventDefault();
                 submitLinkForm();
             })
+        }
+        function submitUserForm(){
+            let userNameField = document.querySelector("#userName");
+            let userLastNameField = document.querySelector("#userLastName");
+            let userEmailField = document.querySelector("#userEmail");
+            let userRoleField = document.querySelector("#userRole");
+            let userPasswordField = document.querySelector("#userPassword");
+            let userIdField = document.querySelector("#userId");
+
+            let errors = 0;
+
+            let reName = /^[A-Z][a-z]{1,14}(\s[A-Z][a-z]{1,14}){0,2}$/;
+
+            let rePass1 = /[A-Z]/; 
+            let rePass2 = /[a-z]/; 
+            let rePass3 = /[0-9]/; 
+            let rePass4 = /[!\?\.]/; 
+            let rePass5 = /^[A-Za-z0-9!\?\.]{7,30}$/;
+
+            let reEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
+            let singleTests = [
+                {re : reName, field: userNameField, message : `Name doesn't match format, eg "Nathan"`},
+                {re : reName, field: userLastNameField, message : `Last name does not match format, eg "Smith"`},
+                {re : reEmail, field: userEmailField, message : `Email not valid`},
+            ]
+
+            let passwordTests = [
+                {re : rePass5, field: userPasswordField, message : `Password must be between 7 and 30 characters long`},
+                {re : rePass1, field: userPasswordField, message : `Password must contain an uppercase letter`},
+                {re : rePass2, field: userPasswordField, message : `Password must contain a lowercase letter`},
+                {re : rePass3, field: userPasswordField, message : `Password must contain a digit`},
+                {re : rePass4, field: userPasswordField, message : `Password must contain ! or ? or .`}
+            ]
+
+            for(let test of singleTests){
+                errors += reTestText(test.re, test.field, test.message);
+            }
+            
+            if(userPasswordField.value.length > 0){
+                for(let test of passwordTests){
+                    let result = reTestText(test.re, test.field, test.message);
+                    errors += result;
+    
+                    if(result > 0) break;
+                }
+            }
+
+            errors += testDropdown(userRoleField, 0, "You must select a role");
+
+            if(userIdField.value < 1) errors++;
+
+            if(errors != 0) return;
+
+            data = {};
+
+            target = "editUser";
+
+            data.userId = userIdField.value;
+
+            data.name = userNameField.value;
+            data.lastName = userLastNameField.value;
+            data.email = userEmailField.value;
+            data.password = userPasswordField.value;
+            data.roleId = userRoleField.value;
+
+            submitAjax(target, showResult, data);
+            closeCurrentModal();
         }
         function submitLinkForm(){
             let LinkIdField = document.querySelector("#linkId");
