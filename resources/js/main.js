@@ -67,7 +67,7 @@ window.onload = function(){
                 if(result > 0) break;
             }
 
-            let data = {"createNewUser" : true, "email" : email, "name" : name, "lastName" : lastName, "pass" : password};
+            let data = {"createNewUser" : true, "email" : email, "name" : name, "lastName" : lastName, "password" : password};
 
             if(errors == 0){
                 submitAjax("createNewUser", redirect, data, ["login.html", false]);

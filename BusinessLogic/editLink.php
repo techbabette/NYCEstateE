@@ -3,13 +3,13 @@ session_start();
 $requiredLevel = 3;
 require("../DataAccess/generalFunctions.php");
 // If user not logged in, die
-// if(!isset($_SESSION["user"])){
-//     echoNoPermission();
-// }
+if(!isset($_SESSION["user"])){
+    echoNoPermission();
+}
 //If user's access level is too low, die
-// if($_SESSION["user"]["level"] < $requiredLevel){
-//     echoNoPermission();
-// }
+if($_SESSION["user"]["level"] < $requiredLevel){
+    echoNoPermission();
+}
 
 $json_params = file_get_contents("php://input");
 
@@ -110,7 +110,6 @@ if(!$aLIdAcceptable){
 //Success
 require("../DataAccess/linkFunctions.php");
 try{
-    $result["general"] = "Success";
     editLink($LinkId, $LinkTitle, $LinkHref, $AccessLevelId, $LinkLocation, $main);
     if(!empty($LinkIcon)){
         removeAllLinkIcons($LinkId);
@@ -119,6 +118,7 @@ try{
     else{
         removeAllLinkIcons($LinkId);
     }
+    $result["general"] = "Success";
     echo json_encode($result);
 }
 catch(PDOException $e){

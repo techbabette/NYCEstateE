@@ -15,7 +15,35 @@ function createNewUser($email, $password, $name, $lastName){
 
     $prepSt->execute(); 
 }
+function editUser($userId, $email, $name, $lastName, $role){
+    include ("connection.php");
 
+    $statement = "UPDATE users SET email = :email, name = :name, lastName = :lastName, role_id = :role
+                  WHERE user_id = :userId";
+    $prepSt = $conn->prepare($statement);
+
+    $prepSt->bindParam("email", $email);
+    $prepSt->bindParam("name", $name);
+    $prepSt->bindParam("lastName", $lastName);
+    $prepSt->bindParam("role", $role, PDO::PARAM_INT);
+    $prepSt->bindParam("userId", $userId, PDO::PARAM_INT);
+    
+    return $prepSt->execute();
+}
+function editUserPassword($userId, $password){
+    include ("connection.php");
+
+    $crpyted = md5($password);
+
+    $statement = "UPDATE users SET password = :password
+                  WHERE user_id = :userId";
+    $prepSt = $conn->prepare($statement);
+
+    $prepSt->bindParam("userId", $userId, PDO::PARAM_INT);
+    $prepSt->bindParam("password", $crpyted);
+
+    return $prepSt->execute();
+}
 function checkIfEmailInUse($email){
     include ("connection.php");
 

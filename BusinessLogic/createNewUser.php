@@ -2,8 +2,12 @@
 session_start();
 $result;
 
-$data = json_decode(file_get_contents('php://input'), true);
-$_POST = $data;
+$json_params = file_get_contents("php://input");
+
+if (strlen($json_params) > 0 && isValidJSON($json_params)){
+    $decoded_params = json_decode($json_params, true);
+    $_POST = $decoded_params;
+}
 
 if(isset($_SESSION["user"])){
     http_response_code(403);
@@ -16,7 +20,7 @@ if(isset($data["createNewUser"])){
     if(
     (!isset($_POST["name"]) || empty($_POST["name"])) 
     || (!isset($_POST["lastName"]) || empty($_POST["lastName"]))
-    || (!isset($_POST["pass"]) || empty($_POST["pass"]))
+    || (!isset($_POST["password"]) || empty($_POST["password"]))
     || (!isset($_POST["email"]) || empty($_POST["email"]))){
         $errors++;
         $result["error"] = "All fields are required";
@@ -26,7 +30,7 @@ if(isset($data["createNewUser"])){
     }
     $name = $_POST["name"];
     $lastName = $_POST["lastName"];
-    $pass = $_POST["pass"];
+    $pass = $_POST["password"];
     $email = $_POST["email"];
 
     $reName = '/^[A-Z][a-z]{1,14}(\s[A-Z][a-z]{1,14}){0,2}$/';
@@ -36,6 +40,8 @@ if(isset($data["createNewUser"])){
     $rePass3 = '/[0-9]/'; 
     $rePass4 = '/[!\?\.]/'; 
     $rePass5 = '/^[A-Za-z0-9!\?\.]{7,30}$/';
+
+    $reEmail = '/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/'
     
     if(!preg_match($reName, $name) || !preg_match($reName, $lastName))
     {
@@ -49,7 +55,7 @@ if(isset($data["createNewUser"])){
         $errors++;
         $greska .= "Password does not fit criteria";
     }
-    if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
+    if(!preg_match($reEmail, $email)){
         $errors++;
         $greska .= "Email";
     }
