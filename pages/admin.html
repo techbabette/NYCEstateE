@@ -31,25 +31,21 @@
             <form class="row mk-flex-center">
               <div class="col-12">
                 <label for="userName">First name</label>
-                <br/>
                 <input type="text" class="form-control"  name="userName" id="userName" required="required"/>
                 <span class="error-msg hidden"></span>
               </div>
               <div class="col-12">
                 <label for="userLastName">Last name</label>
-                <br/>
                 <input type="text" class="form-control"  name="userLastName" id="userLastName" required="required"/>
                 <span class="error-msg hidden"></span>
               </div>
               <div class="col-12">
                 <label for="userEmail">Email</label>
-                <br/>
                 <input type="email" class="form-control"  name="userEmail" id="userEmail" required="required"/>
                 <span class="error-msg hidden"></span>
               </div>
               <div class="col-12">
                 <label for="userRole">Role</label>
-                <br/>
                 <select name="" class="form-control" id="userRole" required>
                   <option value="0">Select a role</option>
                 </select>
@@ -57,7 +53,6 @@
               </div>
               <div class="col-12">
                 <label for="userLastName">Password (unchanged if empty)</label>
-                <br/>
                 <input type="password" class="form-control"  name="userPassword" id="userPassword"/>
                 <span class="error-msg hidden"></span>
               </div>
@@ -73,25 +68,21 @@
             <form class="row mk-flex-center">
               <div class="col-12">
                 <label for="LinkTitle">Link title</label>
-                <br/>
                 <input type="text" class="form-control"  name="LinkTitle" id="LinkTitle" required="required"/>
                 <span class="error-msg hidden"></span>
               </div>
               <div class="col-12">
                 <label for="LinkHref">Link href</label>
-                <br/>
                 <input type="text" class="form-control"  name="LinkHref" id="LinkHref" required="required"/>
                 <span class="error-msg hidden"></span>
               </div>
               <div class="col-12">
                 <label for="LinkIcon">Iconify icon (If any)</label>
-                <br/>
                 <input type="text" class="form-control" name="LinkIcon" id="LinkIcon"/>
                 <span class="error-msg hidden"></span>
               </div>
               <div class="col-12">
                 <label for="LinkReqLevel">Required access level</label>
-                <br/>
                 <select name="" class="form-control" id="LinkReqLevel" required>
                   <option value="0">Select an access level</option>
                 </select>
@@ -120,9 +111,18 @@
             </form>
           </div>
           <div id="listing-modal" class="mk-modal-content hidden">
-            <h5>Create a new listing</h5>
-            <form>
-
+            <h5 id="listing-modal-title" class="text-center">Create a new listing</h5>
+            <form method="POST" enctype="multipart/form-data" class="row mk-flex-center">
+              <div class="col-12">
+                <label for="listingPhoto">Choose listing image</label>
+                <br>
+                <input type="file" id="listingPhoto" name="listingPhoto" required="required" accept="image/png, image/jpeg"/>
+              </div>
+              <div class="col-12 my-2 p-2">
+                <button id="listing-submit" class="btn btn-success my-1 col-6" type="submit">Create new listing</button>
+                <button id="listing-cancel" class="btn btn-danger my-1 col-6 close-button" type="button">Cancel</button>
+                </div>
+              <input type="hidden" id="listingId" name="listingId" value="0"/>
             </form>
           </div>
         </div>

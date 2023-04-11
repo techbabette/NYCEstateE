@@ -282,6 +282,7 @@ window.onload = function(){
         }
         function showResult(data){
             generateTable();   
+            closeCurrentModal();
         }
         function showUserModal(existingId = 0){
             let modal = document.querySelector("#user-modal");
@@ -390,6 +391,7 @@ window.onload = function(){
             }
             setupLinkModal();
             setupUserModal();
+            setupListingModal();
         }
         function setupUserModal(){
             let userRoleSelect = document.querySelector("#userRole"); 
@@ -399,6 +401,14 @@ window.onload = function(){
             modalSubmitButton.addEventListener("click", function(e){
                 e.preventDefault();
                 submitUserForm();
+            })
+        }
+        function setupListingModal(){
+            let modalSubmitButton = document.querySelector("#listing-submit");
+            modalSubmitButton.addEventListener("click", function(e){
+                console.log("Here");
+                e.preventDefault();
+                submitListingForm();
             })
         }
         function setupLinkModal(){
@@ -477,7 +487,27 @@ window.onload = function(){
             data.roleId = userRoleField.value;
 
             submitAjax(target, showResult, data);
-            closeCurrentModal();
+        }
+        function submitListingForm(){
+            let formData = new FormData();
+
+            let listingPhotoField = document.querySelector("#listingPhoto");
+            let listingIdField = document.querySelector("#listingId");
+
+            let listingId = listingIdField.value;
+
+            let type = listingId > 0 ? "edit" : "create";
+
+            let target = "createNewListing";
+
+            formData.append("listingPhoto", listingPhotoField.files[0]);
+
+            if(type === "edit"){
+                formData.append("listingId", listingId);
+                target = "editListing";
+            }
+
+            submitFormDataAjax(target, showResult, formData);
         }
         function submitLinkForm(){
             let LinkIdField = document.querySelector("#linkId");
@@ -500,7 +530,7 @@ window.onload = function(){
             let reHref = /(^[a-z]{3,40}\.[a-z]{2,5}$)/;
             let reIcon = /(^$)|(^[a-z:-]{5,30}$)/;
 
-            let submitType = linkId ? "edit" : "create";
+            let submitType = linkId > 0 ? "edit" : "create";
 
             let data = {};
 
@@ -538,8 +568,6 @@ window.onload = function(){
 
             console.log("submitted");
             submitAjax(target, showResult, data);
-
-            closeCurrentModal();
         }
     }
 }
@@ -784,6 +812,36 @@ function submitAjax(url, resultFunction, data, args = []){
     request.setRequestHeader("Content-type", "application/json");
     console.log(data);
     request.send(JSON.stringify(data));
+}
+
+function submitFormDataAjax(url, resultFunction, data, args = []){
+    let request = createRequest();
+    request.onreadystatechange = function(){
+        if(request.readyState == 4){
+            if(request.status >= 200 && request.status < 300){
+                console.log(request.responseText);
+                let data = JSON.parse(request.responseText);
+                if(args != []){
+                    resultFunction(data.general, args);
+                }
+                else{
+                    resultFunction(data.general);
+                }
+            }
+            else if(request.status >= 300 && request.status < 400){
+                redirect(args);
+            }
+            else{
+                let data = JSON.parse(request.responseText);
+                errorHandler(data["error"]);
+                console.log(data["error"]);
+            }
+        }
+    }
+
+    request.open("POST", ajaxPath+url+".php");
+    console.log(data);
+    request.send(data);
 }
 
 function generateUrl(object, redirect = ""){

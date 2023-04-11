@@ -32,7 +32,6 @@ if
 )
 {
     $result["error"] = "All fields are required";
-    $result["data"] = var_dump($_POST);
     http_response_code(422);
     echo json_encode($result);
     die();
