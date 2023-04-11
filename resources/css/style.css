@@ -74,13 +74,14 @@ footer{
 }
 #admin-info-holder{
 }
-#error-message{
+#error-holder{
     position: absolute;
     bottom: 20px;
     right: 20px;
     padding: 20px;
     z-index: 5;
-
+}
+.error-message{
     opacity: 1;
     transition: opacity 200ms ease 0ms;
 }

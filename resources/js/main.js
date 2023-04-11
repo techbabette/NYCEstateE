@@ -660,11 +660,16 @@ function hideElement(element, type="hide"){
 }
 
 function errorHandler(error){
-    let errorHolder = document.querySelector("#error-message");
-    errorHolder.innerHTML = error;
-    showElement(errorHolder);
+    let errorHolder = document.querySelector("#error-holder");
+    let errorMessage = document.createElement("span");
+    errorMessage.classList.add("error-message");
+    errorMessage.classList.add("alert");
+    errorMessage.classList.add("alert-danger");
+    errorMessage.innerText = error;
+    errorHolder.append(errorMessage);
+    // showElement(errorHolder);
     setTimeout(function(){
-        hideElement(errorHolder);
+        hideElement(errorMessage);
     }, 2000);
 }
 

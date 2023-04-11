@@ -43,8 +43,8 @@ if ($_FILES["listingPhoto"]["size"] > 8000000) {
     die();
 }
 
-if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif" ) {
-    $result["error"] = "Uploaded file of incorrect type".$imageFileType;
+if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg") {
+    $result["error"] = "Uploaded file of incorrect type ".$imageFileType;
     http_response_code(422);
     echo json_encode($result);
     die();
