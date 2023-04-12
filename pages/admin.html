@@ -114,6 +114,35 @@
             <h5 id="listing-modal-title" class="text-center">Create a new listing</h5>
             <form method="POST" enctype="multipart/form-data" class="row mk-flex-center">
               <div class="col-12">
+                <label for="listingTitle">Listing title</label>
+                <input type="text" class="form-control"  name="listingTitle" id="listingTitle" required="required"/>
+                <span class="error-msg hidden"></span>
+              </div>
+              <div class="col-12">
+                <label for="listingDescription">Listing description</label>
+                <input type="textarea" class="form-control"  name="listingDescription" id="listingDescription" required="required"/>
+                <span class="error-msg hidden"></span>
+              </div>
+              <div class="col-12">
+                <label for="listingSize">Listing size (in feet)</label>
+                <input type="number" class="form-control"  name="listingSize" id="listingSize" value="30" min="30" required="required"/>
+                <span class="error-msg hidden"></span>
+              </div>
+              <div class="col-12">
+                <label for="listingBorough">Borough</label>
+                <select name="listingBorough" class="form-control" id="listingBorough" required>
+                  <option value="0">Select a borough</option>
+                </select>
+                <span class="error-msg hidden"></span>
+              </div>
+              <div class="col-12">
+                <label for="listingBuildingType">Building type</label>
+                <select name="listingBuildingType" class="form-control" id="listingBuildingType" required>
+                  <option value="0">Select a building type</option>
+                </select>
+                <span class="error-msg hidden"></span>
+              </div>
+              <div class="col-12">
                 <label for="listingPhoto">Choose listing image</label>
                 <br>
                 <input type="file" id="listingPhoto" name="listingPhoto" required="required" accept="image/png, image/jpeg"/>

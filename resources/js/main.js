@@ -404,9 +404,14 @@ window.onload = function(){
             })
         }
         function setupListingModal(){
+            let boroughSelect = document.querySelector("#listingBorough");
+            let listingBuildingType = document.querySelector("#listingBuildingType");
+
+            readAjax("getAllBoroughs", fillDropdown, [boroughSelect]);
+            readAjax("getAllBuildingTypes", fillDropdown, [listingBuildingType]);
+
             let modalSubmitButton = document.querySelector("#listing-submit");
             modalSubmitButton.addEventListener("click", function(e){
-                console.log("Here");
                 e.preventDefault();
                 submitListingForm();
             })
