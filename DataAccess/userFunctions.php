@@ -1,4 +1,5 @@
 <?php
+error_reporting(0);
 function createNewUser($email, $password, $name, $lastName){
     include ("connection.php");
 
@@ -71,7 +72,9 @@ function attemptLogin($email, $password){
 
     $prepSt->execute();
 
-    $userId = $prepSt->fetch()["user_id"];
+    $object = $prepSt->fetch();
+
+    $userId = $object["user_id"];
 
     $result = $userId ? $userId : 0;
 

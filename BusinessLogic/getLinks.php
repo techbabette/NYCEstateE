@@ -20,7 +20,9 @@ session_start();
 //If user is logged in, get their access level and set logged in to true
 if(isset($_SESSION["user"])){
     $accessLevel = getUserLevel($_SESSION["user"]["user_id"])["level"];
-    $loggedIn = true;
+    if($accessLevel != 1){
+        $loggedIn = true;        
+    }
 }
 try{
     $result["general"]["links"] = getLinks($accessLevel, $loggedIn);

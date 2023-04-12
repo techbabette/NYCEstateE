@@ -25,6 +25,7 @@ function getUserLevel($id){
     }
     else{
         $result = array("user_id" => 0, "level" => 1);
+        session_unset();
         return $result;
     }
 }

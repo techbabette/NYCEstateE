@@ -1,4 +1,6 @@
 <?php
+require("../DataAccess/generalFunctions.php");
+
 session_start();
 $result;
 
@@ -14,7 +16,7 @@ if(isset($_SESSION["user"])){
     $result["error"] = "You are already logged in";
     echo $result;
 }
-if(isset($data["createNewUser"])){
+if(isset($_POST["createNewUser"])){
     $errors = 0;
     $greska = "";
     if(
@@ -41,7 +43,7 @@ if(isset($data["createNewUser"])){
     $rePass4 = '/[!\?\.]/'; 
     $rePass5 = '/^[A-Za-z0-9!\?\.]{7,30}$/';
 
-    $reEmail = '/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/'
+    $reEmail = '/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/';
     
     if(!preg_match($reName, $name) || !preg_match($reName, $lastName))
     {
