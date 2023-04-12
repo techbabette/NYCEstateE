@@ -1,8 +1,13 @@
 <?php
 session_start();
+require("../DataAccess/generalFunctions.php");
 
-$data = json_decode(file_get_contents('php://input'), true);
-$_POST = $data;
+$json_params = file_get_contents("php://input");
+
+if (strlen($json_params) > 0 && isValidJSON($json_params)){
+    $decoded_params = json_decode($json_params, true);
+    $_POST = $decoded_params;
+}
 
 $result;
 if(isset($_POST["attemptLogin"])){
@@ -39,10 +44,10 @@ if(isset($_POST["attemptLogin"])){
     try{
         $loginAttempt = attemptLogin($email, md5($pass));
         if($loginAttempt){
-            $_SESSION["user"] = getUserInformation($email);
+            $_SESSION["user"] = getUserInformation($loginAttempt);
             http_response_code(308);
-            $result["general"] = "login.html";
-            echo $result;
+            $result["general"] = "Success";
+            echo json_encode($result);
         }
         else{
             http_response_code(403);

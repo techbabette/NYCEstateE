@@ -1,8 +1,43 @@
 <?php
-
 function echoNoPermission(){
+    $result["error"] = "You are not permitted this action";
     http_response_code(404);
+    echo json_encode($result);
     die();
+}
+function getUserLevel($id){
+    include ("connection.php");
+
+    $statement = "SELECT user_id, level 
+    FROM users u 
+    INNER JOIN roles r ON u.role_id = r.role_id
+    INNER JOIN accesslevels al ON r.access_level_id = al.access_level_id
+    WHERE user_id = ?";
+    $prepSt = $conn->prepare($statement);
+
+    $prepSt->bindParam(1, $id, PDO::PARAM_INT);
+
+    $prepSt->execute();
+    $result = $prepSt->fetch();
+
+    if($prepSt->rowCount() > 0){
+        return $result;
+    }
+    else{
+        $result = array("user_id" => 0, "level" => 1);
+        return $result;
+    }
+}
+function checkAccessLevel($requiredLevel){
+    // If user not logged in, die
+    if(!isset($_SESSION["user"])){
+        echoNoPermission();
+    }
+
+    //If user's access level is too low, die
+    if(getUserLevel($_SESSION["user"]["user_id"])["level"] < $requiredLevel){
+        echoNoPermission();
+    }
 }
 function isValidJSON($str) {
     json_decode($str);

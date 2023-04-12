@@ -63,31 +63,34 @@ function attemptLogin($email, $password){
 
     $crypted = md5($password);
 
-    $statement = "SELECT email FROM users WHERE email = ? AND password = ?";
+    $statement = "SELECT email, user_id FROM users WHERE email = ? AND password = ?";
     $prepSt = $conn->prepare($statement);
 
     $prepSt->bindParam(1, $email);
     $prepSt->bindParam(2, $password);
 
     $prepSt->execute();
-    $result = $prepSt->rowCount() != 0;
+
+    $userId = $prepSt->fetch()["user_id"];
+
+    $result = $userId ? $userId : 0;
 
     return $result;
 }
 
-function getUserInformation($email){
+function getUserInformation($id){
     include ("connection.php");
 
     $statement = "SELECT user_id, CONCAT(name, ' ', lastName) AS username, level 
     FROM users u 
     INNER JOIN roles r ON u.role_id = r.role_id
     INNER JOIN accesslevels al ON r.access_level_id = al.access_level_id
-    WHERE email = ?";
+    WHERE user_id = ?";
     $prepSt = $conn->prepare($statement);
 
-    $prepSt->bindParam(1, $email);
+    $prepSt->bindParam(1, $id, PDO::PARAM_INT);
 
-    $prepSt -> execute();
+    $prepSt->execute();
     $result = $prepSt->fetch();
 
     return $result;

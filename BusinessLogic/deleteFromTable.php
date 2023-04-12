@@ -2,14 +2,7 @@
 session_start();
 $requiredLevel = 3;
 require("../DataAccess/generalFunctions.php");
-// If user not logged in, die
-if(!isset($_SESSION["user"])){
-    echoNoPermission();
-}
-//If user's access level is too low, die
-if($_SESSION["user"]["level"] < $requiredLevel){
-    echoNoPermission();
-}
+checkAccessLevel($requiredLevel);
 
 $data = json_decode(file_get_contents('php://input'), true);
 $_POST = $data;

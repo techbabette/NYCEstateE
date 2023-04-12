@@ -1,10 +1,14 @@
 <?php
 include("../DataAccess/linkFunctions.php");
+include("../DataAccess/userFunctions.php");
+require("../DataAccess/generalFunctions.php");
 
+$json_params = file_get_contents("php://input");
 
-//Get data from submitted JSON
-$data = json_decode(file_get_contents('php://input'), true);
-$_POST = $data;
+if (strlen($json_params) > 0 && isValidJSON($json_params)){
+    $decoded_params = json_decode($json_params, true);
+    $_POST = $decoded_params;
+}
 
 //Initialize access level as one
 $accessLevel = 1;
@@ -15,7 +19,7 @@ $allowed = false;
 session_start();
 //If user is logged in, get their access level and set logged in to true
 if(isset($_SESSION["user"])){
-    $accessLevel = $_SESSION["user"]["level"];
+    $accessLevel = getUserLevel($_SESSION["user"]["user_id"])["level"];
     $loggedIn = true;
 }
 try{
