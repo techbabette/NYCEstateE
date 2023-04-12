@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 08, 2023 at 07:16 AM
+-- Generation Time: Apr 12, 2023 at 12:27 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -54,6 +54,17 @@ CREATE TABLE `boroughs` (
   `borough_name` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `boroughs`
+--
+
+INSERT INTO `boroughs` (`borough_id`, `borough_name`) VALUES
+(1, 'Manhattan'),
+(2, 'Brooklyn'),
+(3, 'Queens'),
+(4, 'The Bronx'),
+(5, 'Staten Island');
+
 -- --------------------------------------------------------
 
 --
@@ -64,6 +75,14 @@ CREATE TABLE `buildingtypes` (
   `building_type_id` int(20) NOT NULL,
   `type_name` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `buildingtypes`
+--
+
+INSERT INTO `buildingtypes` (`building_type_id`, `type_name`) VALUES
+(1, 'Apartment'),
+(2, 'Duplex');
 
 -- --------------------------------------------------------
 
@@ -99,7 +118,8 @@ INSERT INTO `linkicons` (`link_icon_id`, `link_id`, `icon`, `active`, `dateCreat
 (1, 9, 'icomoon-free:facebook', 1, '2023-04-08 03:58:37'),
 (2, 10, 'la:twitter', 1, '2023-04-08 03:58:37'),
 (3, 11, 'fa-file', 1, '2023-04-08 03:58:37'),
-(4, 12, 'bx:sitemap', 1, '2023-04-08 03:58:37');
+(4, 12, 'bx:sitemap', 0, '2023-04-08 03:58:37'),
+(8, 12, 'bx:sitemap', 1, '2023-04-09 05:20:18');
 
 -- --------------------------------------------------------
 
@@ -122,7 +142,7 @@ CREATE TABLE `links` (
 --
 
 INSERT INTO `links` (`link_id`, `access_level_id`, `link_title`, `href`, `landing`, `location`, `parent_id`) VALUES
-(1, 1, 'NYCEstate', 'index.html', 1, 'head', NULL),
+(1, 1, 'Nyc Estates', 'index.html', 1, 'head', NULL),
 (3, 1, 'Home', 'index.html', 1, 'navbar', NULL),
 (4, 1, 'Listings', 'listings.html', 0, 'navbar', NULL),
 (5, 4, 'Login', 'login.html', 0, 'navbar', NULL),
@@ -159,7 +179,7 @@ CREATE TABLE `listingprices` (
   `price_id` int(20) NOT NULL,
   `listing_id` int(20) NOT NULL,
   `price` decimal(12,2) NOT NULL,
-  `dateSet` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -209,8 +229,8 @@ CREATE TABLE `roles` (
 --
 
 INSERT INTO `roles` (`role_id`, `access_level_id`, `role_name`) VALUES
-(1, 2, 'standard'),
-(2, 3, 'admin');
+(1, 2, 'Standard'),
+(2, 3, 'Admin');
 
 -- --------------------------------------------------------
 
@@ -220,7 +240,7 @@ INSERT INTO `roles` (`role_id`, `access_level_id`, `role_name`) VALUES
 
 CREATE TABLE `roomtypes` (
   `room_type_id` int(20) NOT NULL,
-  `roonName` varchar(50) NOT NULL
+  `room_name` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -245,7 +265,7 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`user_id`, `email`, `password`, `name`, `lastName`, `dateCreated`, `role_id`) VALUES
 (4, 'marinakrsticrf@gmail.com', 'ce16a80506a2e2c17ce18c18e26451da', 'Marina', 'Krstic', '2023-03-16 10:25:32', 2),
-(5, 'markomarkovic@gmail.com', 'ce16a80506a2e2c17ce18c18e26451da', 'Marko', 'Markovic', '2023-03-16 10:38:08', 1);
+(5, 'laznaemailadresa@ict.edu.rs', 'd0df4b94b9bfeff699bd026858547f17', 'Marko', 'Krstic', '2023-03-16 10:38:08', 1);
 
 --
 -- Indexes for dumped tables
@@ -359,13 +379,13 @@ ALTER TABLE `accesslevels`
 -- AUTO_INCREMENT for table `boroughs`
 --
 ALTER TABLE `boroughs`
-  MODIFY `borough_id` int(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `borough_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `buildingtypes`
 --
 ALTER TABLE `buildingtypes`
-  MODIFY `building_type_id` int(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `building_type_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `favorites`
@@ -377,7 +397,7 @@ ALTER TABLE `favorites`
 -- AUTO_INCREMENT for table `linkicons`
 --
 ALTER TABLE `linkicons`
-  MODIFY `link_icon_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `link_icon_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `links`
