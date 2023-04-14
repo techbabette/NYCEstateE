@@ -110,7 +110,7 @@
               <input type="hidden" id="linkId" name="linkId" value="0" />
             </form>
           </div>
-          <div id="listing-modal" class="mk-modal-content hidden">
+          <div id="listing-modal" class="mk-modal-content modal-dialog-scrollable hidden">
             <h5 id="listing-modal-title" class="text-center">Create a new listing</h5>
             <form method="POST" enctype="multipart/form-data" class="row mk-flex-center">
               <div class="col-12">
@@ -124,8 +124,18 @@
                 <span class="error-msg hidden"></span>
               </div>
               <div class="col-12">
+                <label for="listingAddress">Listing address</label>
+                <input type="text" class="form-control"  name="listingAddress" id="listingAddress" required="required"/>
+                <span class="error-msg hidden"></span>
+              </div>
+              <div class="col-12">
                 <label for="listingSize">Listing size (in feet)</label>
                 <input type="number" class="form-control"  name="listingSize" id="listingSize" value="30" min="30" required="required"/>
+                <span class="error-msg hidden"></span>
+              </div>
+              <div class="col-12">
+                <label for="listingPrice">Listing price (in dollars)</label>
+                <input type="number" class="form-control"  name="listingPrice" id="listingPrice" value="1000" min="1000" required="required"/>
                 <span class="error-msg hidden"></span>
               </div>
               <div class="col-12">
@@ -146,6 +156,7 @@
                 <label for="listingPhoto">Choose listing image</label>
                 <br>
                 <input type="file" id="listingPhoto" name="listingPhoto" required="required" accept="image/png, image/jpeg"/>
+                <span class="error-msg hidden"></span>
               </div>
               <div class="col-12 my-2 p-2">
                 <button id="listing-submit" class="btn btn-success my-1 col-6" type="submit">Create new listing</button>
@@ -168,28 +179,36 @@
                     <a href="#" class="btn btn-info">Boroughs</a>
                     <a href="#" class="btn btn-info">Room types</a>
                   </div>
-                  <table class="table" id="element-table">
-                    <tr id="header-table-row">
-                      <!-- <th>
-                        Name
-                      </th>
-                      <th>
-                        Price
-                      </th>
-                      <th>
-                        Description
-                      </th>
-                      <th>
-                        Address
-                      </th>
-                      <th>
-                        Size
-                      </th>
-                      <th>
-                        Options
-                      </th> -->
-                    </tr>
-                  </table>
+                  <div class="table-responsive">
+                    <table class="table table-responsive table-hover" id="element-table">
+                      <thead>
+                        <tr id="header-table-row">
+                        <!-- 
+                        <th>
+                          Name
+                        </th>
+                        <th>
+                          Price
+                        </th>
+                        <th>
+                          Description
+                        </th>
+                        <th>
+                          Address
+                        </th>
+                        <th>
+                          Size
+                        </th>
+                        <th>
+                          Options
+                        </th> -->
+                      </tr>
+                      </thead>
+                      <tbody id="table-result-holder">
+  
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
             </div>
         </div>

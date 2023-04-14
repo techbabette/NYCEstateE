@@ -159,8 +159,6 @@ window.onload = function(){
             let tableId = activeTable;
             generateHeaderTableRow(table, tableId)
             let target = tables[tableId].target;
-            console.log(tableId);
-            console.log(target);
             //Makas an AJAX request and fills table with resulting information
             readAjax(target, fillTable);
         }
@@ -180,6 +178,7 @@ window.onload = function(){
         function fillTable(data){
             let html = "";
             let counter = 1;
+            let tableResultHolder = document.querySelector("#table-result-holder");
             currData = data;
             for(let row of data){
                 html += 
@@ -223,9 +222,8 @@ window.onload = function(){
                 `
             }
             console.log(html);
-            table.innerHTML = "";
-            generateHeaderTableRow(table, activeTable);
-            table.innerHTML += html;
+            tableResultHolder.innerHTML = "";
+            tableResultHolder.innerHTML += html;
             if(createNew){
                 let newButton = document.querySelector(".new-button");
                 newButton.addEventListener("click", function(){
@@ -251,8 +249,7 @@ window.onload = function(){
             }
         }
         function generateHeaderTableRow(table, tableId){
-            let headerTableRow = document.createElement("tr");
-            headerTableRow.setAttribute("id", "header-table-row");
+            let headerTableRow = document.querySelector("#header-table-row");
             let headers = tables[tableId].headers;
             let html = "";
             html += 
@@ -273,7 +270,6 @@ window.onload = function(){
             </th>
             `
             headerTableRow.innerHTML = html;
-            table.appendChild(headerTableRow);
         }
         function adminDeleteRequest(table, elementId){
             let data = {table, id : elementId};
@@ -380,6 +376,15 @@ window.onload = function(){
         }
         function showListingModal(existingId = 0){
             let modal = document.querySelector("#listing-modal");
+
+            let type = existingId ? "edit" : "create";
+            let listingIdField = document.querySelector("#listingId");
+
+            listingIdField.value = existingId;
+
+            if(type == "edit"){
+            }
+
             globalData.currModal = modal;
             openModal(modal, globalData.modalBackground)
         }
@@ -496,6 +501,13 @@ window.onload = function(){
         function submitListingForm(){
             let formData = new FormData();
 
+            let listingTitleField = document.querySelector("#listingTitle");
+            let listingDescriptionField = document.querySelector("#listingDescription");
+            let listingAddressField = document.querySelector("#listingAddress");
+            let listingSizeField = document.querySelector("#listingSize");
+            let listingPriceField = document.querySelector("#listingPrice");
+            let listingBoroughSelect = document.querySelector("#listingBorough");
+            let listingBuildingType = document.querySelector("#listingBuildingType");
             let listingPhotoField = document.querySelector("#listingPhoto");
             let listingIdField = document.querySelector("#listingId");
 
@@ -505,14 +517,42 @@ window.onload = function(){
 
             let target = "createNewListing";
 
-            formData.append("listingPhoto", listingPhotoField.files[0]);
+            let errors;
 
-            if(type === "edit"){
+            if(type == "edit"){
                 formData.append("listingId", listingId);
                 target = "editListing";
             }
 
-            submitFormDataAjax(target, showResult, formData);
+            let reTitle = /^[A-Z][a-z]{2,15}(\s[A-Za-z][a-z]{2,15}){0,2}$/;
+            let reAddress = /^(([A-Z][a-z\d]+)|([0-9][1-9]*\.?))(\s[A-Za-z\d]+){0,7}\s(([1-9][0-9]{0,5}[\/-]?[A-Z])|([1-9][0-9]{0,5})|(NN))\.?$/
+            let reDescription = /^[A-Z][a-z]{0,50}(\s[A-Za-z][a-z]{2,50})*$/;
+
+            //tests
+
+            if(reTestText(reTitle, listingTitleField, "Title does not match format")) errors++;
+
+            if(reTestText(reDescription, listingDescriptionField, "Description does not match format")) errors++;
+
+            if(reTestText(reAddress, listingAddressField, "Address does not match format")) errors++;
+
+            if(testNumericBounds(listingSizeField, 30, "Size cannot be below 30 feet")) errors++;
+
+            if(testNumericBounds(listingPriceField, 1000, "Price cannot be below 1000$")) errors++;
+
+            if(testDropdown(listingBoroughSelect, 0, "You must select a borough")) errors++;
+
+            if(testDropdown(listingBuildingType, 0, "You must select a building type")) errors++;
+
+            if(testImage(listingPhotoField)) errors++;
+
+            
+
+            //On success
+            if(errors !== 0) return;
+            formData.append("listingPhoto", listingPhotoField.files[0]);
+
+            // submitFormDataAjax(target, showResult, formData);
         }
         function submitLinkForm(){
             let LinkIdField = document.querySelector("#linkId");
@@ -699,6 +739,30 @@ function createRequest(){
     return request;
 }
 
+function testGeneric(field, failValue, errorMessage = ""){
+    let value = field.value;
+    if(value == failValue){
+        removeSuccess(field);
+        addError(field, errorMessage);
+        return 1;
+    }
+    removeError(field);
+    addSuccess(field);
+    return 0;
+}
+
+function testNumericBounds(field, minimalValue, errorMessage = ""){
+    let value = field.value;
+    if(value < minimalValue){
+        removeSuccess(field);
+        addError(field, errorMessage);
+        return 1;
+    }
+    removeError(field);
+    addSuccess(field);
+    return 0;
+}
+
 function testDropdown(field, negativeValue, errorMessage = ""){
     let value = field.value;
     //On success
@@ -713,6 +777,18 @@ function testDropdown(field, negativeValue, errorMessage = ""){
         addError(field, errorMessage);
         return 1;
     }
+}
+
+function testImage(field, errorMessage = ""){
+    let value = field.value;
+
+    if(value == ""){
+        removeSuccess(field);
+        addError(field, errorMessage);
+        return 1;
+    }
+    removeSuccess(field);
+    addError(field, errorMessage);
 }
 
 function reTestText(regex, field, errorMessage = ""){
@@ -749,7 +825,7 @@ function removeSuccess(field){
     field.classList.remove("success-outline");
 }
 
-function addError(field, msg){
+function addError(field, msg = ""){
     let errorBox = field.nextElementSibling;
     errorBox.innerText = msg;
     errorBox.classList.remove("hidden");
