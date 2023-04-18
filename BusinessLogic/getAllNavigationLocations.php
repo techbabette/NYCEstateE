@@ -3,13 +3,13 @@ session_start();
 $requiredLevel = 3;
 require("../DataAccess/generalFunctions.php");
 
-// checkAccessLevel($requiredLevel);
+checkAccessLevel($requiredLevel);
 
-require("../DataAccess/buildingTypeFunctions.php");
+require("../DataAccess/navigationLocationFunctions.php");
 $result;
 
 try{
-    $result["general"] = getAllBuildingTypes();
+    $result["general"] = getAllNavigationLocations();
     http_response_code(200);
     echo json_encode($result);
 }

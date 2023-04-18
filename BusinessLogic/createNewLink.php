@@ -48,7 +48,8 @@ if(!empty($LinkIcon) && !preg_match($reIcon, $LinkIcon)){
     echoUnprocessableEntity("Link icon does not match format");
 }
 
-$acceptableLocations = array("head", "navbar", "footer");
+require("../DataAccess/navigationLocationFunctions.php");
+$acceptableLocations = getAllNavigationLocations();
 
 $locationAcceptable = in_array($LinkLocation, $acceptableLocations);
 

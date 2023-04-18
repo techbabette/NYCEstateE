@@ -57,7 +57,8 @@ if(!$linkExists){
     echoUnprocessableEntity("Provided id link does not exist");
 }
 
-$acceptableLocations = array("head", "navbar", "footer");
+require("../DataAccess/navigationLocationFunctions.php");
+$acceptableLocations = getAllNavigationLocations();
 
 $locationAcceptable = in_array($LinkLocation, $acceptableLocations);
 

@@ -425,6 +425,9 @@ window.onload = function(){
             let accessLevelSelect = document.querySelector("#LinkReqLevel");
             readAjax("getAllAccessLevels", fillDropdown, [accessLevelSelect]);
 
+            let locationSelect = document.querySelector("#LinkLocation");
+            readAjax("getAllNavigationLocations", fillDropdown, [locationSelect, true]);
+
             let modalSubmitButton = document.querySelector("#link-submit");
             modalSubmitButton.addEventListener("click", function(e){
                 e.preventDefault();
@@ -640,9 +643,28 @@ function closeCurrentModal(){
 
 function fillDropdown(data, args){
     let selectElement = args[0];
+    let simple = args[1];
+    let value;
+    let title;
     html = "";
     for(let row of data){
-        html += `<option value="${row.id}">${row.title}</option>`;
+        if(simple){
+            value = row;
+            title = row;
+        }
+        else{
+            value = row.id;
+            title = row.title;
+        }
+        let firstLetter = title.charAt(0);
+
+        let firstLetterCap = firstLetter.toUpperCase();
+
+        let remainingLetters = title.slice(1);
+
+        title = firstLetterCap + remainingLetters;
+
+        html += `<option value="${value}">${title}</option>`;
     }
     selectElement.innerHTML += html;
 }
