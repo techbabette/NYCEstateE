@@ -57,7 +57,7 @@ if(isset($_POST["attemptLogin"])){
         }
     }
     catch(PDOException $e){
-        echoUnexpectedError()
+        echoUnexpectedError();
     }
 }
 else{

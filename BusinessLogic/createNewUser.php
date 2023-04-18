@@ -78,7 +78,7 @@ if(isset($_POST["createNewUser"])){
         }
     }
     catch(PDOException $e){
-        echoUnexpectedError()
+        echoUnexpectedError();
     }
 }
 else{

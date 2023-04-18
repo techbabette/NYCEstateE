@@ -21,6 +21,10 @@ function createNewListing($user, $borough, $building_type, $name, $description, 
     return $last_id;
 }
 
+function editListing($borough, $building_type, $name, $description, $address, $size){
+    
+}
+
 function saveListingPrice($listing, $price){
     include ("connection.php");
 
