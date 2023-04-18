@@ -42,7 +42,7 @@ if(!preg_match($reDescription, $listingDescription)){
     echoUnprocessableEntity("Description does not match format");
 }
 if(!preg_match($reAddress, $listingAddress)){
-    echoUnprocessableEntity("Address does not match format");
+    echoUnprocessableEntity("Address does not match format", $listingAddress);
 }
 
 if($listingSize < 30){
@@ -73,7 +73,7 @@ if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg
     echoUnprocessableEntity("Uploaded file of incorrect type".$imageFileType);
 }
 
-$boroughExists == count(getEveryRowWhereParamFromTable("boroughs", "borough_id", $listingBorough)) > 0;
+$boroughExists = count(getEveryRowWhereParamFromTable("boroughs", "borough_id", $listingBorough)) > 0;
 if(!$boroughExists){
     echoUnprocessableEntity("Invalid borough selected");
 }
@@ -83,6 +83,19 @@ if(!$buildingTypeExists){
     echoUnprocessableEntity("Invalid building type selected");
 }
 
+
+require("../DataAccess/listingFunctions.php");
+try{
+    $lastInsertedId = createNewListing($_SESSION["user"]["user_id"], $listingBorough, $listingBuildingType, $listingTitle, $listingDescription, $listingAddress, $listingSize );
+    saveListingPrice($lastInsertedId, $listingPrice);
+    saveMainListingPhoto($lastInsertedId, $newFileName.".".$imageFileType);
+}
+catch (PDOException $e){
+    http_response_code(500);
+    $result["error"] = "Unexpected error occured";
+    // $result["error"] = $e;
+    echo json_encode($result);
+}
 
 move_uploaded_file($_FILES["listingPhoto"]["tmp_name"], $target_file);
 $result["general"] = "Success";

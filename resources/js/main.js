@@ -125,7 +125,7 @@ window.onload = function(){
         })
         let tables = [
                       {title : "Users", headers : ["Name", "Last name","Email", "Date of creation", "Role"], target : "getUsers", edit : showUserModal},
-                      {title : "Listings", headers : ["Name", "Price","Description", "Address", "Size"], target : "getUsers", createNew : showListingModal},
+                      {title : "Listings", headers : ["Name", "Price","Description", "Address", "Size"], target : "getAllListings", createNew : showListingModal},
                       {title : "Links", headers : ["Title", "Access level","Link", "File location", "Location", "Parent", "Icon"], target : "getAllLinks", createNew : showLinkModal, edit : showLinkModal}
                     ];
         let table = document.querySelector("#element-table");
@@ -520,7 +520,7 @@ window.onload = function(){
 
             let target = "createNewListing";
 
-            let errors;
+            let errors = 0;
 
             if(type == "edit"){
                 formData.append("listingId", listingId);
@@ -549,20 +549,22 @@ window.onload = function(){
 
             if(testImage(listingPhotoField)) errors++;
 
-            
+            console.log(`Step one, errors = ${errors}`);
 
             //On success
             if(errors !== 0) return;
             formData.append("listingPhoto", listingPhotoField.files[0]);
             formData.append("listingTitle", listingTitleField.value);
             formData.append("listingDescription", listingDescriptionField.value);
-            formData.append("listingAddress", listingSizeField.value);
+            formData.append("listingAddress", listingAddressField.value);
             formData.append("listingSize", listingTitleField.value);
             formData.append("listingPrice", listingPriceField.value);
-            formData.append("listingBorough", listingPriceField.value);
+            formData.append("listingBorough", listingBoroughSelect.value);
             formData.append("listingBuildingType", listingBuildingTypeSelect.value);
 
-            // submitFormDataAjax(target, showResult, formData);
+            console.log("Step two");
+
+            submitFormDataAjax(target, showResult, formData);
         }
         function submitLinkForm(){
             let LinkIdField = document.querySelector("#linkId");
@@ -809,14 +811,13 @@ function testDropdown(field, negativeValue, errorMessage = ""){
 
 function testImage(field, errorMessage = ""){
     let value = field.value;
-
     if(value == ""){
         removeSuccess(field);
         addError(field, errorMessage);
         return 1;
     }
-    removeSuccess(field);
-    addError(field, errorMessage);
+    removeError(field);
+    addSuccess(field);
 }
 
 function reTestText(regex, field, errorMessage = ""){

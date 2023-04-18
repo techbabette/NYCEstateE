@@ -16,7 +16,7 @@ function createNewListing($user, $borough, $building_type, $name, $description, 
 
     $prepSt->execute(); 
 
-    $last_id = $conn->lastInsertedId();
+    $last_id = $conn->lastInsertId();
     
     return $last_id;
 }
@@ -27,7 +27,7 @@ function saveListingPrice($listing, $price){
     $statement = "INSERT INTO listingprices (listing_id, price) VALUES (?, ?)";
     $prepSt = $conn->prepare($statement);
 
-    $prepSt->bindParam(1, $listing);
+    $prepSt->bindParam(1, $listing, PDO::PARAM_INT);
     $prepSt->bindParam(2, $price);
 
     $result = $prepSt->execute();
@@ -98,6 +98,20 @@ function getCurrentMainListingPhoto($listing){
 
 function getRoomsOfListing($listing){
     include ("connection.php");
+}
+
+function getAllListings(){
+    include ("connection.php");
+
+    $statement = "SELECT l.listing_id, listing_name, price, description, address, size
+                  FROM listings l INNER JOIN listingprices lp ON l.listing_id = lp.listing_id
+                  WHERE lp.date = (SELECT MAX(date) FROM listingprices WHERE listing_id = l.listing_id)";
+    $prepSt = $conn->prepare($statement);
+
+    $prepSt->execute();
+    $result = $prepSt->fetchAll();
+
+    return $result;
 }
 
 function getListings(){

@@ -1,6 +1,6 @@
 <?php
-function echoUnprocessableEntity($message){
-    $result["error"] = $message;
+function echoUnprocessableEntity($message, $input = ""){
+    $result["error"] = $message.$input;
     http_response_code(422);
     echo json_encode($result);
     die();
