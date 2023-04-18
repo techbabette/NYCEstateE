@@ -62,20 +62,13 @@ if(isset($_POST["createNewUser"])){
         $greska .= "Email";
     }
     if($errors != 0){
-        http_response_code(422);
-        $result["error"] = $greska;
-        echo json_encode($result);
-        die();
+        echoUnprocessableEntity($greska);
     }
     require("../DataAccess/userFunctions.php");
     try{
         $emailInUse = checkIfEmailInUse($email);
         if($emailInUse){
-            http_response_code(422);
-            $greska .= "Email already in use";
-            $result["error"] = $greska;
-            echo json_encode($result);
-            die();
+            echoUnprocessableEntity("Email already in use");
         }
         else{
             createNewUser($email, $pass, $name, $lastName);

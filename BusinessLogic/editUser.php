@@ -23,11 +23,7 @@ if
 || (!isset($_POST["password"]))
 )
 {
-    $result["error"] = "All fields are required";
-    $result["data"] = var_dump($_POST);
-    http_response_code(422);
-    echo json_encode($result);
-    die();
+    echoUnprocessableEntity("All fields are required");
 }
 
 $userId = $_POST["userId"];
@@ -49,10 +45,7 @@ $reEmail = '/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/';
 
 if(!preg_match($reName, $name) || !preg_match($reName, $lastName))
 {
-    http_response_code(422);
-    $result["error"] = "Name/last name does not fit criteria";
-    echo json_encode($result);
-    die();
+    echoUnprocessableEntity("Name/last name does not fit criteria");
 }
 //If new password provided, check if valid
 if(!empty($password)){
@@ -60,36 +53,24 @@ if(!empty($password)){
     || !preg_match($rePass3, $password) || !preg_match($rePass4, $password)
     || !preg_match($rePass5, $password))
     {
-        http_response_code(422);
-        $result["error"] = "Password does not fit criteria";
-        echo json_encode($result);
-        die();
+        echoUnprocessableEntity("Password does not fit criteria");
     }
 }
 
 if(!preg_match($reEmail, $email)){
-    http_response_code(422);
-    $result["error"] = "Invalid email";
-    echo json_encode($result);
-    die();
+    echoUnprocessableEntity("Invalid email");
 }
 
 //Check if provided role exists
 $roleExists = count(getEveryRowWhereParamFromTable("roles", "role_id", $roleId)) > 0;
 if(!$roleExists){
-    http_response_code(422);
-    $result["error"] = "Provided role id does not exist";
-    echo json_encode($result);
-    die();
+    echoUnprocessableEntity("Invalid role provided");
 }
 
 //Check if provided user exists
 $userExists = count(getEveryRowWhereParamFromTable("users", "user_id", $userId)) > 0;
 if(!$userExists){
-    http_response_code(422);
-    $result["error"] = "Provided user id does not exist";
-    echo json_encode($result);
-    die();
+    echoUnprocessableEntity("Provided user does not exist");
 }
 
 //Success

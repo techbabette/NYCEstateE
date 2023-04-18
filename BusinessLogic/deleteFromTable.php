@@ -33,10 +33,7 @@ switch($requestedTable){
 }
 
 if($dataTable == ""){
-    http_response_code(422);
-    $result["error"] = "No such table";
-    echo json_encode($result);
-    die();
+    echoUnprocessableEntity("No such table");
 }
 
 try{

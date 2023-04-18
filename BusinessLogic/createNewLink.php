@@ -22,11 +22,7 @@ $result;
     || (!isset($_POST["location"]) || empty($_POST["location"]))
     || (!isset($_POST["main"])))
     {
-        $result["error"] = "All fields are required";
-        $result["data"] = var_dump($_POST);
-        http_response_code(422);
-        echo json_encode($result);
-        die();
+        echoUnprocessableEntity("All fields are required");
     }
 
 $LinkTitle = $_POST["title"];
@@ -41,24 +37,15 @@ $reHref = '/^[a-z]{3,40}\.[a-z]{2,5}$/';
 $reIcon = '/^[a-z:-]{5,30}$/';
 
 if(!preg_match($reTitle, $LinkTitle)){
-    http_response_code(422);
-    $result["error"] = "Link title does not match format";
-    echo json_encode($result);
-    die();
+    echoUnprocessableEntity("Link title does not match format");
 }
 
 if(!preg_match($reHref, $LinkHref)){
-    http_response_code(422);
-    $result["error"] = "Link does not match format";
-    echo json_encode($result);
-    die();
+    echoUnprocessableEntity("Link does not match format");
 }
 
 if(!empty($LinkIcon) && !preg_match($reIcon, $LinkIcon)){
-    http_response_code(422);
-    $result["error"] = "Link icon does not match format";
-    echo json_encode($result);
-    die();
+    echoUnprocessableEntity("Link icon does not match format");
 }
 
 $acceptableLocations = array("head", "navbar", "footer");
@@ -66,10 +53,7 @@ $acceptableLocations = array("head", "navbar", "footer");
 $locationAcceptable = in_array($LinkLocation, $acceptableLocations);
 
 if(!$locationAcceptable){
-    http_response_code(422);
-    $result["error"] = "Given location not allowed";
-    echo json_encode($result);
-    die();
+    echoUnprocessableEntity("Invalid location provided");
 }
 
 $acceptableALevelIds = getEveryParamFromTable("accesslevels", "access_level_id");
@@ -82,10 +66,7 @@ foreach($acceptableALevelIds as $aLevelId){
 }
 
 if(!$idAcceptable){
-    http_response_code(422);
-    $result["error"] = "Non existant access level id provided";
-    echo json_encode($result);
-    die();
+    echoUnprocessableEntity("Invalid access level provided");
 }
 
 //Success
