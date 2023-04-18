@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 12, 2023 at 12:27 PM
+-- Generation Time: Apr 18, 2023 at 06:02 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -169,6 +169,15 @@ CREATE TABLE `listingphotos` (
   `dateUploaded` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `listingphotos`
+--
+
+INSERT INTO `listingphotos` (`photo_id`, `listing_id`, `main`, `path`, `user_id`, `dateUploaded`) VALUES
+(3, 4, 1, '16818274541544568656643ea67eb94c0.png', 0, '2023-04-18 14:17:34'),
+(8, 9, 1, '16818277701740783198643ea7ba155bc.png', 0, '2023-04-18 14:22:50'),
+(9, 10, 1, '16818279161838106824643ea84c88e7d.png', 0, '2023-04-18 14:25:16');
+
 -- --------------------------------------------------------
 
 --
@@ -181,6 +190,19 @@ CREATE TABLE `listingprices` (
   `price` decimal(12,2) NOT NULL,
   `date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `listingprices`
+--
+
+INSERT INTO `listingprices` (`price_id`, `listing_id`, `price`, `date`) VALUES
+(3, 4, '2000.00', '2023-04-18 14:17:34'),
+(4, 5, '1000.00', '2023-04-18 14:19:40'),
+(5, 6, '2000.00', '2023-04-18 14:20:48'),
+(6, 7, '2000.00', '2023-04-18 14:21:40'),
+(7, 8, '2000.00', '2023-04-18 14:21:57'),
+(8, 9, '2000.00', '2023-04-18 14:22:50'),
+(9, 10, '1000.00', '2023-04-18 14:25:16');
 
 -- --------------------------------------------------------
 
@@ -211,6 +233,19 @@ CREATE TABLE `listings` (
   `address` varchar(200) NOT NULL,
   `size` float(8,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `listings`
+--
+
+INSERT INTO `listings` (`listing_id`, `user_id`, `borough_id`, `building_type_id`, `listing_name`, `description`, `address`, `size`) VALUES
+(4, 0, 1, 1, 'New listing', 'New description', 'Kings street 25', 35.00),
+(5, 0, 1, 1, 'New listing', 'New description', 'Kings street 25', 0.00),
+(6, 0, 1, 1, 'New listing', 'New description', 'Kings street 25', 35.00),
+(7, 0, 1, 1, 'New listing', 'New description', 'Kings street 25', 35.00),
+(8, 0, 1, 1, 'New listing', 'New description', 'Kings street 25', 35.00),
+(9, 0, 1, 1, 'New listing', 'New description', 'Kings street 25', 35.00),
+(10, 4, 1, 1, 'New listing', 'New description', 'Kings street 25', 0.00);
 
 -- --------------------------------------------------------
 
@@ -318,7 +353,7 @@ ALTER TABLE `links`
 ALTER TABLE `listingphotos`
   ADD PRIMARY KEY (`photo_id`),
   ADD UNIQUE KEY `listing_id` (`listing_id`),
-  ADD UNIQUE KEY `user_id` (`user_id`);
+  ADD KEY `user_id` (`user_id`) USING BTREE;
 
 --
 -- Indexes for table `listingprices`
@@ -403,19 +438,19 @@ ALTER TABLE `linkicons`
 -- AUTO_INCREMENT for table `links`
 --
 ALTER TABLE `links`
-  MODIFY `link_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `link_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `listingphotos`
 --
 ALTER TABLE `listingphotos`
-  MODIFY `photo_id` int(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `photo_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `listingprices`
 --
 ALTER TABLE `listingprices`
-  MODIFY `price_id` int(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `price_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `listingrooms`
@@ -427,7 +462,7 @@ ALTER TABLE `listingrooms`
 -- AUTO_INCREMENT for table `listings`
 --
 ALTER TABLE `listings`
-  MODIFY `listing_id` int(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `listing_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `roles`
@@ -445,7 +480,7 @@ ALTER TABLE `roomtypes`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `user_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
