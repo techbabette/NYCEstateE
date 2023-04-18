@@ -152,12 +152,13 @@
                 </select>
                 <span class="error-msg hidden"></span>
               </div>
-              <div class="col-12">
+              <div class="col-12 flex">
                 <label for="listingPhoto">Choose listing image</label>
-                <br>
+                </br>
                 <input type="file" id="listingPhoto" name="listingPhoto" required="required" accept="image/png, image/jpeg"/>
                 <span class="error-msg hidden"></span>
-                <img src="..." class="img-fluid" alt="...">
+                </br>
+                <img src="..." id="main-photo-preview" class="img-fluid w-25" alt="image preview">
               </div>
               <div class="col-12 my-2 p-2">
                 <button id="listing-submit" class="btn btn-success my-1 col-6" type="submit">Create new listing</button>

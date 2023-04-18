@@ -415,6 +415,14 @@ window.onload = function(){
             readAjax("getAllBoroughs", fillDropdown, [boroughSelect]);
             readAjax("getAllBuildingTypes", fillDropdown, [listingBuildingType]);
 
+            let fileReader = new FileReader();
+            let previewHolder = document.querySelector("#main-photo-preview");
+            fileReader.onload = function (e) {previewHolder.src = this.result;}
+            let listingPhotoField = document.querySelector("#listingPhoto");
+            listingPhotoField.addEventListener("change", function(){
+                fileReader.readAsDataURL(listingPhotoField.files[0]);
+            })
+
             let modalSubmitButton = document.querySelector("#listing-submit");
             modalSubmitButton.addEventListener("click", function(e){
                 e.preventDefault();
