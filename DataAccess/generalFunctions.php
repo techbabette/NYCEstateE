@@ -1,4 +1,10 @@
 <?php
+function echoUnprocessableEntity($message){
+    $result["error"] = $message;
+    http_response_code(422);
+    echo json_encode($result);
+    die();
+}
 function echoNoPermission(){
     $result["error"] = "You are not permitted this action";
     http_response_code(404);

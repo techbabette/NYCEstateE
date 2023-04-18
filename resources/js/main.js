@@ -507,7 +507,7 @@ window.onload = function(){
             let listingSizeField = document.querySelector("#listingSize");
             let listingPriceField = document.querySelector("#listingPrice");
             let listingBoroughSelect = document.querySelector("#listingBorough");
-            let listingBuildingType = document.querySelector("#listingBuildingType");
+            let listingBuildingTypeSelect = document.querySelector("#listingBuildingType");
             let listingPhotoField = document.querySelector("#listingPhoto");
             let listingIdField = document.querySelector("#listingId");
 
@@ -525,7 +525,7 @@ window.onload = function(){
             }
 
             let reTitle = /^[A-Z][a-z]{2,15}(\s[A-Za-z][a-z]{2,15}){0,2}$/;
-            let reAddress = /^(([A-Z][a-z\d]+)|([0-9][1-9]*\.?))(\s[A-Za-z\d]+){0,7}\s(([1-9][0-9]{0,5}[\/-]?[A-Z])|([1-9][0-9]{0,5})|(NN))\.?$/
+            let reAddress = /^(([A-Z][a-z\d]+)|([0-9][1-9]*\.?))(\s[A-Za-z\d]+){0,7}\s(([1-9][0-9]{0,5}[\/-]?[A-Z])|([1-9][0-9]{0,5})|(NN))\.?$/;
             let reDescription = /^[A-Z][a-z]{0,50}(\s[A-Za-z][a-z]{2,50})*$/;
 
             //tests
@@ -536,13 +536,13 @@ window.onload = function(){
 
             if(reTestText(reAddress, listingAddressField, "Address does not match format")) errors++;
 
-            if(testNumericBounds(listingSizeField, 30, "Size cannot be below 30 feet")) errors++;
+            if(testGeneric(listingSizeField, listingSizeField.value < 30, "Size cannot be below 30 feet")) errors++;
 
-            if(testNumericBounds(listingPriceField, 1000, "Price cannot be below 1000$")) errors++;
+            if(testGeneric(listingPriceField, listingPriceField.value < 1000, "Price cannot be below 1000$")) errors++;
 
             if(testDropdown(listingBoroughSelect, 0, "You must select a borough")) errors++;
 
-            if(testDropdown(listingBuildingType, 0, "You must select a building type")) errors++;
+            if(testDropdown(listingBuildingTypeSelect, 0, "You must select a building type")) errors++;
 
             if(testImage(listingPhotoField)) errors++;
 
@@ -551,6 +551,13 @@ window.onload = function(){
             //On success
             if(errors !== 0) return;
             formData.append("listingPhoto", listingPhotoField.files[0]);
+            formData.append("listingTitle", listingTitleField.value);
+            formData.append("listingDescription", listingDescriptionField.value);
+            formData.append("listingAddress", listingSizeField.value);
+            formData.append("listingSize", listingTitleField.value);
+            formData.append("listingPrice", listingPriceField.value);
+            formData.append("listingBorough", listingPriceField.value);
+            formData.append("listingBuildingType", listingBuildingTypeSelect.value);
 
             // submitFormDataAjax(target, showResult, formData);
         }
@@ -739,9 +746,8 @@ function createRequest(){
     return request;
 }
 
-function testGeneric(field, failValue, errorMessage = ""){
-    let value = field.value;
-    if(value == failValue){
+function testGeneric(field, statement, errorMessage = ""){
+    if(statement){
         removeSuccess(field);
         addError(field, errorMessage);
         return 1;

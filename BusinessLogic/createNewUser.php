@@ -48,7 +48,7 @@ if(isset($_POST["createNewUser"])){
     if(!preg_match($reName, $name) || !preg_match($reName, $lastName))
     {
         $errors++;
-        $greska .= "Name/last name do not fit criteria";
+        $greska .= "Name/last name does not fit criteria";
     }
     if(!preg_match($rePass1, $pass) || !preg_match($rePass2, $pass)
     || !preg_match($rePass3, $pass) || !preg_match($rePass4, $pass)
