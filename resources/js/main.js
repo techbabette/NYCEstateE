@@ -536,8 +536,8 @@ window.onload = function(){
             }
 
             let reTitle = /^[A-Z][a-z]{2,15}(\s[A-Za-z][a-z]{2,15}){0,2}$/;
-            let reAddress = /^(([A-Z][a-z\d]+)|([0-9][1-9]*\.?))(\s[A-Za-z\d]+){0,7}\s(([1-9][0-9]{0,5}[\/-]?[A-Z])|([1-9][0-9]{0,5})|(NN))\.?$/;
-            let reDescription = /^[A-Z][a-z]{0,50}(\s[A-Za-z][a-z]{2,50})*$/;
+            let reAddress = /^(([A-Z][a-z\d']+)|([0-9][1-9]*\.?))(\s[A-Za-z\d][a-z\d']+){0,7}\s(([1-9][0-9]{0,5}[\/-]?[A-Z])|([1-9][0-9]{0,5})|(NN))\.?$/;
+            let reDescription = /^[A-Z][a-z']{0,50}(\s[A-Za-z][a-z']{0,50})*$/;
 
             //tests
 
@@ -565,7 +565,7 @@ window.onload = function(){
             formData.append("listingTitle", listingTitleField.value);
             formData.append("listingDescription", listingDescriptionField.value);
             formData.append("listingAddress", listingAddressField.value);
-            formData.append("listingSize", listingTitleField.value);
+            formData.append("listingSize", listingSizeField.value);
             formData.append("listingPrice", listingPriceField.value);
             formData.append("listingBorough", listingBoroughSelect.value);
             formData.append("listingBuildingType", listingBuildingTypeSelect.value);

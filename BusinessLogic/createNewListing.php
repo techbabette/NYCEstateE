@@ -32,8 +32,8 @@ $listingBorough = $_POST["listingBorough"];
 $listingBuildingType = $_POST["listingBuildingType"];
 
 $reTitle = '/^[A-Z][a-z]{2,15}(\s[A-Za-z][a-z]{2,15}){0,2}$/';
-$reAddress = '/^(([A-Z][a-z\d]+)|([0-9][1-9]*\.?))(\s[A-Za-z\d]+){0,7}\s(([1-9][0-9]{0,5}[\/-]?[A-Z])|([1-9][0-9]{0,5})|(NN))\.?$/';
-$reDescription = '/^[A-Z][a-z]{0,50}(\s[A-Za-z][a-z]{2,50})*$/';
+$reAddress = '/^(([A-Z][a-z\d\']+)|([0-9][1-9]*\.?))(\s[A-Za-z\d][a-z\d\']+){0,7}\s(([1-9][0-9]{0,5}[\/-]?[A-Z])|([1-9][0-9]{0,5})|(NN))\.?$/';
+$reDescription = '/^[A-Z][a-z\']{0,50}(\s[A-Za-z][a-z\']{0,50})*$/';
 
 if(!preg_match($reTitle, $listingTitle)){
     echoUnprocessableEntity("Title does not match format");
@@ -86,7 +86,7 @@ if(!$buildingTypeExists){
 
 require("../DataAccess/listingFunctions.php");
 try{
-    $lastInsertedId = createNewListing($_SESSION["user"]["user_id"], $listingBorough, $listingBuildingType, $listingTitle, $listingDescription, $listingAddress, $listingSize );
+    $lastInsertedId = createNewListing($_SESSION["user"]["user_id"], $listingBorough, $listingBuildingType, $listingTitle, $listingDescription, $listingAddress, $listingSize);
     saveListingPrice($lastInsertedId, $listingPrice);
     saveMainListingPhoto($lastInsertedId, $newFileName.".".$imageFileType);
 }
