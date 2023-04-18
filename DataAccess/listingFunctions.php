@@ -103,7 +103,7 @@ function getRoomsOfListing($listing){
 function getAllListings(){
     include ("connection.php");
 
-    $statement = "SELECT l.listing_id, listing_name, price, description, address, size
+    $statement = "SELECT l.listing_id AS id, listing_name, price, description, address, size
                   FROM listings l INNER JOIN listingprices lp ON l.listing_id = lp.listing_id
                   WHERE lp.date = (SELECT MAX(date) FROM listingprices WHERE listing_id = l.listing_id)";
     $prepSt = $conn->prepare($statement);

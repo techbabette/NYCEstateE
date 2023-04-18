@@ -57,9 +57,7 @@ if(isset($_POST["attemptLogin"])){
         }
     }
     catch(PDOException $e){
-        http_response_code(500);
-        $result["error"] = $e;
-        echo json_encode($result);
+        echoUnexpectedError()
     }
 }
 else{

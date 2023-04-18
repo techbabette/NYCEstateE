@@ -30,7 +30,5 @@ try{
     echo json_encode($result);
 }
 catch (PDOException $e){
-    $result["error"] = $e;
-    http_response_code(500);
-    echo json_encode($result);
+    echoUnexpectedError()
 }

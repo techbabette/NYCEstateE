@@ -94,9 +94,6 @@ try{
     echo json_encode($result);
 }
 catch(PDOException $e){
-    http_response_code(500);
-    $result["error"] = "Unexpected error occured";
-    // $result["error"] = $e;
-    echo json_encode($result);
+    echoUnexpectedError()
 }
 ?>

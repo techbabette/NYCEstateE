@@ -5,6 +5,12 @@ function echoUnprocessableEntity($message, $input = ""){
     echo json_encode($result);
     die();
 }
+function echoUnexpectedError($e = "An unexpected error occured"){
+    $result["error"] = $e;
+    http_response_code(500);
+    echo json_encode($result);
+    die();
+}
 function echoNoPermission(){
     $result["error"] = "You are not permitted this action";
     http_response_code(404);

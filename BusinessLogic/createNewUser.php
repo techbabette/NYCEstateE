@@ -78,9 +78,7 @@ if(isset($_POST["createNewUser"])){
         }
     }
     catch(PDOException $e){
-        http_response_code(500);
-        $result["error"] = "Unexpected error occured";
-        echo json_encode($result);
+        echoUnexpectedError()
     }
 }
 else{

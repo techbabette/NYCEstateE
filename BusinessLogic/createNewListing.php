@@ -91,10 +91,7 @@ try{
     saveMainListingPhoto($lastInsertedId, $newFileName.".".$imageFileType);
 }
 catch (PDOException $e){
-    http_response_code(500);
-    $result["error"] = "Unexpected error occured";
-    // $result["error"] = $e;
-    echo json_encode($result);
+    echoUnexpectedError()
 }
 
 move_uploaded_file($_FILES["listingPhoto"]["tmp_name"], $target_file);

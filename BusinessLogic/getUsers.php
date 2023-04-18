@@ -12,6 +12,6 @@ try{
     echo json_encode($result);
 }
 catch (PDOException $e){
-    http_response_code(500);
+    echoUnexpectedError()
 }
 ?>
