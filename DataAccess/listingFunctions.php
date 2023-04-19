@@ -59,7 +59,7 @@ function saveMainListingPhoto($listing, $path){
 function saveListingRoom($listing, $room, $count){
     include ("connection.php");
 
-    $statement = "INSERT INTO listingrooms (listing_id, roomType_id, numberOf) VALUES (?, ?, ?)";
+    $statement = "INSERT INTO listingrooms (listing_id, room_type_id, numberOf) VALUES (?, ?, ?)";
     $prepSt = $conn->prepare($statement);
 
     $prepSt->bindParam(1, $listing, PDO::PARAM_INT);

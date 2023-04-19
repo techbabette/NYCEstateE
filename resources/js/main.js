@@ -125,7 +125,7 @@ window.onload = function(){
         })
         let tables = [
                       {title : "Users", headers : ["Name", "Last name","Email", "Date of creation", "Role"], target : "getUsers", edit : showUserModal},
-                      {title : "Listings", headers : ["Name", "Price","Description", "Address", "Size"], target : "getAllListings", createNew : showListingModal},
+                      {title : "Listings", headers : ["Name", "Price","Description", "Address", "Size"], target : "getAllListings", createNew : showListingModal, edit: showListingModal},
                       {title : "Links", headers : ["Title", "Access level","Link", "File location", "Location", "Parent", "Icon"], target : "getAllLinks", createNew : showLinkModal, edit : showLinkModal}
                     ];
         let table = document.querySelector("#element-table");
@@ -133,6 +133,7 @@ window.onload = function(){
         let html = "";
         let tabHolder = document.querySelector("#admin-tabs-holder");
         let active;
+        globalData.rooms = new Array();
         //For each table, generate a button
         for(let table in tables){
             active = false;
@@ -378,11 +379,48 @@ window.onload = function(){
             let modal = document.querySelector("#listing-modal");
 
             let type = existingId ? "edit" : "create";
+
+            let listingTitleField = document.querySelector("#listingTitle");
+            let listingDescriptionField = document.querySelector("#listingDescription");
+            let listingAddressField = document.querySelector("#listingAddress");
+            let listingSizeField = document.querySelector("#listingSize");
+            let listingPriceField = document.querySelector("#listingPrice");
+            let listingBoroughSelect = document.querySelector("#listingBorough");
+            let listingBuildingTypeSelect = document.querySelector("#listingBuildingType");
+            let listingPhotoField = document.querySelector("#listingPhoto");
             let listingIdField = document.querySelector("#listingId");
+
+            let listingModalTitle = document.querySelector("#listing-modal-title");
+            let modalSubmitButton = document.querySelector("#listing-submit");
+
+            listingModalTitle.innerText = "Edit listing";
+            modalSubmitButton.innerText = "Edit listing";
+
+            let elems = new Array(listingTitleField, listingDescriptionField, listingAddressField, listingSizeField, listingPriceField, listingBoroughSelect, listingBuildingTypeSelect, listingPhotoField);
+
+            for(let elem of elems){
+                removeError(elem);
+                removeSuccess(elem);
+            }
 
             listingIdField.value = existingId;
 
             if(type == "edit"){
+                let data = {id : existingId};
+                submitAjax("getSpecificListing", function(){
+
+                }, data);
+
+            }
+            else{
+                listingTitleField.value = "";
+                listingAddressField.value = "";
+                listingDescriptionField.value = "";
+                listingSizeField.value = 30; 
+                listingPriceField.value = 1000;
+                listingBoroughSelect.value = 0;
+                listingBuildingTypeSelect.value = 0; 
+                listingPhotoField.value = "";
             }
 
             globalData.currModal = modal;
@@ -411,9 +449,11 @@ window.onload = function(){
         function setupListingModal(){
             let boroughSelect = document.querySelector("#listingBorough");
             let listingBuildingType = document.querySelector("#listingBuildingType");
+            let listingRoomsList = document.querySelector("#listingRoomsList");
 
             readAjax("getAllBoroughs", fillDropdown, [boroughSelect]);
             readAjax("getAllBuildingTypes", fillDropdown, [listingBuildingType]);
+            readAjax("getAllRoomTypes", fillDropdown, [listingRoomsList]);
 
             let fileReader = new FileReader();
             let previewHolder = document.querySelector("#main-photo-preview");
@@ -422,6 +462,20 @@ window.onload = function(){
             listingPhotoField.addEventListener("change", function(){
                 fileReader.readAsDataURL(listingPhotoField.files[0]);
             })
+
+            let addListingRoomButton = document.querySelector("#addListingRoomButton");
+            addListingRoomButton.addEventListener("click", function(e){
+                e.preventDefault();
+                let roomId = listingRoomsList.options[listingRoomsList.selectedIndex].value;
+                let roomText = listingRoomsList.options[listingRoomsList.selectedIndex].text;
+                if(roomId==0){
+                    addError(listingRoomsList, "Must select a room before adding");
+                    removeSuccess(listingRoomsList);
+                    return;
+                }
+                removeError(listingRoomsList);
+                addRoom(roomId, roomText);
+            });
 
             let modalSubmitButton = document.querySelector("#listing-submit");
             modalSubmitButton.addEventListener("click", function(e){
@@ -557,6 +611,20 @@ window.onload = function(){
 
             if(testImage(listingPhotoField)) errors++;
 
+            let roomSelects = document.querySelectorAll(".listingRoom");
+            let arrayOfRooms = new Array();
+            for(let roomElement of roomSelects){
+                if(testGeneric(roomElement, roomElement.value < 1)) {
+                    errors++;
+                    continue;
+                }
+                arrayOfRooms.push({roomId : parseInt(roomElement.dataset.id), count : parseInt(roomElement.value)});
+            }
+
+            let listingRooms = JSON.stringify(arrayOfRooms);
+
+            console.log(listingRooms);
+
             console.log(`Step one, errors = ${errors}`);
 
             //On success
@@ -570,6 +638,9 @@ window.onload = function(){
             formData.append("listingBorough", listingBoroughSelect.value);
             formData.append("listingBuildingType", listingBuildingTypeSelect.value);
 
+            if(arrayOfRooms.length > 0){
+                formData.append("listingRooms", listingRooms);
+            }
             console.log("Step two");
 
             submitFormDataAjax(target, showResult, formData);
@@ -633,6 +704,34 @@ window.onload = function(){
 
             console.log("submitted");
             submitAjax(target, showResult, data);
+        }
+        function addRoom(roomId, roomText){
+            let html = "";
+            let roomHolder = document.querySelector("#room-holder");
+            let existingInputField = document.querySelector(`#room${roomId}`);
+            if(existingInputField){
+                let currValue = existingInputField.value;
+                existingInputField.value = parseInt(currValue) + 1;
+                return;
+            }
+            let newRoomHolder = document.createElement("div");
+            html += 
+            `<label for="room${roomId}" class="d-block">${roomText}</label>
+            <input type="number" value="1" min="1" class="form-control d-inline listingRoom w-50" data-id="${roomId}" name="listingRoom${roomId}" id="room${roomId}">
+            <button class="btn btn-danger d-inline removeRoom" id="removeButton${roomId}">Remove</button>`
+            newRoomHolder.innerHTML += html;
+            roomHolder.appendChild(newRoomHolder);
+            let removeButtons = document.querySelectorAll(`.removeRoom`);
+            for(let elem of removeButtons){
+                addRemoveParentOnClickListener(elem);
+            }
+        }
+        function addRemoveParentOnClickListener(element){
+            element.addEventListener("click", function(e){
+            e.preventDefault();
+            let parentElement = this.parentElement;
+            parentElement.remove();
+        });
         }
     }
 }
@@ -863,9 +962,11 @@ function removeSuccess(field){
 }
 
 function addError(field, msg = ""){
-    let errorBox = field.nextElementSibling;
-    errorBox.innerText = msg;
-    errorBox.classList.remove("hidden");
+    if(msg != ""){
+        let errorBox = field.nextElementSibling;
+        errorBox.innerText = msg;
+        errorBox.classList.remove("hidden");
+    }
     field.classList.add("error-outline");
 }
 

@@ -82,13 +82,27 @@ $buildingTypeExists = count(getEveryRowWhereParamFromTable("buildingtypes", "bui
 if(!$buildingTypeExists){
     echoUnprocessableEntity("Invalid building type selected");
 }
+$rooms = array();
 
+if(isset($_POST["listingRooms"])){
+    $rooms = json_decode($_POST["listingRooms"]);    
+}
+
+foreach($rooms as $room){
+    $roomExists = count(getEveryRowWhereParamFromTable("roomtypes", "room_type_id", $room->roomId)) > 0;
+    if(!$roomExists){
+        echoUnprocessableEntity("Invalid room type selected");
+    }
+}
 
 require("../DataAccess/listingFunctions.php");
 try{
     $lastInsertedId = createNewListing($_SESSION["user"]["user_id"], $listingBorough, $listingBuildingType, $listingTitle, $listingDescription, $listingAddress, $listingSize);
     saveListingPrice($lastInsertedId, $listingPrice);
     saveMainListingPhoto($lastInsertedId, $newFileName.".".$imageFileType);
+    foreach($rooms as $room){
+        saveListingRoom($lastInsertedId, $room->roomId, $room->count);
+    }
 }
 catch (PDOException $e){
     echoUnexpectedError();
