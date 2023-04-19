@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 18, 2023 at 06:02 PM
+-- Generation Time: Apr 19, 2023 at 12:59 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -165,7 +165,6 @@ CREATE TABLE `listingphotos` (
   `listing_id` int(20) NOT NULL,
   `main` tinyint(1) NOT NULL,
   `path` varchar(200) NOT NULL,
-  `user_id` int(20) NOT NULL,
   `dateUploaded` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -173,10 +172,10 @@ CREATE TABLE `listingphotos` (
 -- Dumping data for table `listingphotos`
 --
 
-INSERT INTO `listingphotos` (`photo_id`, `listing_id`, `main`, `path`, `user_id`, `dateUploaded`) VALUES
-(3, 4, 1, '16818274541544568656643ea67eb94c0.png', 0, '2023-04-18 14:17:34'),
-(8, 9, 1, '16818277701740783198643ea7ba155bc.png', 0, '2023-04-18 14:22:50'),
-(9, 10, 1, '16818279161838106824643ea84c88e7d.png', 0, '2023-04-18 14:25:16');
+INSERT INTO `listingphotos` (`photo_id`, `listing_id`, `main`, `path`, `dateUploaded`) VALUES
+(3, 4, 1, '16818274541544568656643ea67eb94c0.png', '2023-04-18 14:17:34'),
+(11, 12, 1, '1681897858933328828643fb982abdef.jpg', '2023-04-19 09:50:58'),
+(15, 16, 1, '16818980812027868961643fba617d826.jpg', '2023-04-19 09:54:41');
 
 -- --------------------------------------------------------
 
@@ -197,12 +196,8 @@ CREATE TABLE `listingprices` (
 
 INSERT INTO `listingprices` (`price_id`, `listing_id`, `price`, `date`) VALUES
 (3, 4, '2000.00', '2023-04-18 14:17:34'),
-(4, 5, '1000.00', '2023-04-18 14:19:40'),
-(5, 6, '2000.00', '2023-04-18 14:20:48'),
-(6, 7, '2000.00', '2023-04-18 14:21:40'),
-(7, 8, '2000.00', '2023-04-18 14:21:57'),
-(8, 9, '2000.00', '2023-04-18 14:22:50'),
-(9, 10, '1000.00', '2023-04-18 14:25:16');
+(11, 12, '1000.00', '2023-04-19 09:50:58'),
+(15, 16, '1000.00', '2023-04-19 09:54:41');
 
 -- --------------------------------------------------------
 
@@ -214,8 +209,17 @@ CREATE TABLE `listingrooms` (
   `listing_room_id` int(20) NOT NULL,
   `listing_id` int(20) NOT NULL,
   `room_type_id` int(20) NOT NULL,
-  `numberOf` int(10) NOT NULL
+  `numberOf` int(10) NOT NULL,
+  `active` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `listingrooms`
+--
+
+INSERT INTO `listingrooms` (`listing_room_id`, `listing_id`, `room_type_id`, `numberOf`, `active`) VALUES
+(1, 16, 2, 2, 1),
+(2, 16, 1, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -240,12 +244,8 @@ CREATE TABLE `listings` (
 
 INSERT INTO `listings` (`listing_id`, `user_id`, `borough_id`, `building_type_id`, `listing_name`, `description`, `address`, `size`) VALUES
 (4, 0, 1, 1, 'New listing', 'New description', 'Kings street 25', 35.00),
-(5, 0, 1, 1, 'New listing', 'New description', 'Kings street 25', 0.00),
-(6, 0, 1, 1, 'New listing', 'New description', 'Kings street 25', 35.00),
-(7, 0, 1, 1, 'New listing', 'New description', 'Kings street 25', 35.00),
-(8, 0, 1, 1, 'New listing', 'New description', 'Kings street 25', 35.00),
-(9, 0, 1, 1, 'New listing', 'New description', 'Kings street 25', 35.00),
-(10, 4, 1, 1, 'New listing', 'New description', 'Kings street 25', 0.00);
+(12, 4, 1, 1, 'Newer listing', 'This is the newest listing', 'King\'s street 20', 30.00),
+(16, 4, 3, 1, 'Listing with rooms', 'This listing has rooms', 'King\'s street 50', 30.00);
 
 -- --------------------------------------------------------
 
@@ -277,6 +277,14 @@ CREATE TABLE `roomtypes` (
   `room_type_id` int(20) NOT NULL,
   `room_name` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `roomtypes`
+--
+
+INSERT INTO `roomtypes` (`room_type_id`, `room_name`) VALUES
+(1, 'Livingroom'),
+(2, 'Bedroom');
 
 -- --------------------------------------------------------
 
@@ -352,8 +360,7 @@ ALTER TABLE `links`
 --
 ALTER TABLE `listingphotos`
   ADD PRIMARY KEY (`photo_id`),
-  ADD UNIQUE KEY `listing_id` (`listing_id`),
-  ADD KEY `user_id` (`user_id`) USING BTREE;
+  ADD UNIQUE KEY `listing_id` (`listing_id`);
 
 --
 -- Indexes for table `listingprices`
@@ -444,25 +451,25 @@ ALTER TABLE `links`
 -- AUTO_INCREMENT for table `listingphotos`
 --
 ALTER TABLE `listingphotos`
-  MODIFY `photo_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `photo_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `listingprices`
 --
 ALTER TABLE `listingprices`
-  MODIFY `price_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `price_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `listingrooms`
 --
 ALTER TABLE `listingrooms`
-  MODIFY `listing_room_id` int(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `listing_room_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `listings`
 --
 ALTER TABLE `listings`
-  MODIFY `listing_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `listing_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `roles`
@@ -474,7 +481,7 @@ ALTER TABLE `roles`
 -- AUTO_INCREMENT for table `roomtypes`
 --
 ALTER TABLE `roomtypes`
-  MODIFY `room_type_id` int(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `room_type_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `users`
