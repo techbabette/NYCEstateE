@@ -14,18 +14,21 @@ if (strlen($json_params) > 0 && isValidJSON($json_params)){
 $result;
 
 if(!isset($_POST["id"])){
-    echoUnprocessableEntity("Must provide a valid link id");
+    echoUnprocessableEntity("Must provide a valid listing id");
 }
 
 $id = $_POST["id"];
 
-require("../DataAccess/linkFunctions.php");
+require("../DataAccess/listingFunctions.php");
 
 try{
-    $result["general"] = getSpecificLink($id);
+    $listing["main"] = getSpecificListing($id);
+    $listing["photo"] = getCurrentMainListingPhoto($id);
+    $listing["rooms"] = getRoomsOfListing($id);
+    $result["general"] = $listing;
     http_response_code(200);
     echo json_encode($result);
 }
 catch (PDOException $e){
-    echoUnexpectedError();
+    echoUnexpectedError($e);
 }

@@ -389,6 +389,7 @@ window.onload = function(){
             let listingBuildingTypeSelect = document.querySelector("#listingBuildingType");
             let listingPhotoField = document.querySelector("#listingPhoto");
             let listingIdField = document.querySelector("#listingId");
+            let listingImagePreview = document.querySelector("#main-photo-preview");
 
             let listingModalTitle = document.querySelector("#listing-modal-title");
             let modalSubmitButton = document.querySelector("#listing-submit");
@@ -404,11 +405,30 @@ window.onload = function(){
             }
 
             listingIdField.value = existingId;
+            removeAllRooms();
+            listingImagePreview.src = "";
 
             if(type == "edit"){
                 let data = {id : existingId};
-                submitAjax("getSpecificListing", function(){
-
+                submitAjax("getSpecificListing", function(data){
+                    console.log(data);
+                    let core = data.main;
+                    let photo = data.photo;
+                    let rooms = data.rooms;
+                    listingTitleField.value = core.listing_name;
+                    listingAddressField.value = core.address;
+                    listingDescriptionField.value = core.description;
+                    listingSizeField.value = core.size; 
+                    listingPriceField.value = core.price;
+                    listingBoroughSelect.value = core.borough_id;
+                    listingBuildingTypeSelect.value = core.building_type_id; 
+                    listingImagePreview.src = `../resources/imgs/${photo.path}`;
+                    
+                    globalData.startingRooms = new Array();
+                    for(let room of rooms){
+                        addRoom(room.room_type_id, room.room_name, room.numberOf);
+                        globalData.startingRooms.push({roomId : room.room_type_id, count : room.numberOf});
+                    }
                 }, data);
 
             }
@@ -705,7 +725,7 @@ window.onload = function(){
             console.log("submitted");
             submitAjax(target, showResult, data);
         }
-        function addRoom(roomId, roomText){
+        function addRoom(roomId, roomText, count = 1){
             let html = "";
             let roomHolder = document.querySelector("#room-holder");
             let existingInputField = document.querySelector(`#room${roomId}`);
@@ -717,7 +737,7 @@ window.onload = function(){
             let newRoomHolder = document.createElement("div");
             html += 
             `<label for="room${roomId}" class="d-block">${roomText}</label>
-            <input type="number" value="1" min="1" class="form-control d-inline listingRoom w-50" data-id="${roomId}" name="listingRoom${roomId}" id="room${roomId}">
+            <input type="number" value="${count}" min="1" class="form-control d-inline listingRoom w-50" data-id="${roomId}" name="listingRoom${roomId}" id="room${roomId}">
             <button class="btn btn-danger d-inline removeRoom" id="removeButton${roomId}">Remove</button>`
             newRoomHolder.innerHTML += html;
             roomHolder.appendChild(newRoomHolder);
@@ -725,6 +745,10 @@ window.onload = function(){
             for(let elem of removeButtons){
                 addRemoveParentOnClickListener(elem);
             }
+        }
+        function removeAllRooms(){
+            let roomHolder = document.querySelector("#room-holder");
+            roomHolder.innerHTML = "";
         }
         function addRemoveParentOnClickListener(element){
             element.addEventListener("click", function(e){

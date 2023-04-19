@@ -89,10 +89,12 @@ function getCurrentMainListingPhoto($listing){
     include ("connection.php");
 
     $statement = "SELECT path FROM listingphotos 
-                  WHERE main = 1
+                  WHERE main = 1 AND listing_id = :listing_id
                   ORDER BY dateUploaded DESC
                   LIMIT 1";
     $prepSt = $conn->prepare($statement);
+
+    $prepSt->bindParam("listing_id", $listing, PDO::PARAM_INT);
 
     $prepSt->execute();
     $result = $prepSt->fetch();
@@ -102,6 +104,35 @@ function getCurrentMainListingPhoto($listing){
 
 function getRoomsOfListing($listing){
     include ("connection.php");
+
+    $statement = "SELECT rt.room_name, rt.room_type_id, lr.numberOf 
+                  FROM roomtypes rt INNER JOIN listingrooms lr ON rt.room_type_id = lr.room_type_id
+                  INNER JOIN listings li ON lr.listing_id = li.listing_id
+                  WHERE li.listing_id = :listing_id";
+    $prepSt = $conn->prepare($statement);
+
+    $prepSt->bindParam("listing_id", $listing, PDO::PARAM_INT);
+
+    $prepSt->execute();
+    $result = $prepSt->fetchAll();
+
+    return $result;
+}
+
+function getSpecificListing($listing){
+    include ("connection.php");
+
+    $statement = "SELECT listing_name, description, (SELECT price FROM listingprices WHERE listing_id = :listing_id ORDER BY date DESC LIMIT 1) as price, size, address, borough_id, building_type_id
+                  FROM listings li
+                  WHERE listing_id = :listing_id";
+    $prepSt = $conn->prepare($statement);
+
+    $prepSt->bindParam("listing_id", $listing, PDO::PARAM_INT);
+
+    $prepSt->execute();
+    $result = $prepSt->fetch();
+
+    return $result;
 }
 
 function getAllListings(){
