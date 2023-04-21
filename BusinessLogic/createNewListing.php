@@ -57,9 +57,9 @@ if($listingPrice < 1000){
     echoUnprocessableEntity("Price cannot be below 1000$");
 }
 
-// if($listingPrice > 1000000000){
-//     echoUnprocessableEntity("Price cannot be above 1000000000$");
-// }
+if($listingPrice > 1000000000){
+    echoUnprocessableEntity("Price cannot be above 1000000000$");
+}
 
 $target_dir = "../resources/imgs/";
 $nameToSave = basename($_FILES["listingPhoto"]["name"]);

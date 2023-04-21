@@ -629,7 +629,7 @@ window.onload = function(){
 
             if(testGeneric(listingPriceField, listingPriceField.value < 1000, "Price cannot be below 1000$")) errors++;
 
-            // if(testGeneric(listingPriceField, listingPriceField.value > 1000000000, "Price cannot be above 1000000000$")) errors++;
+            if(testGeneric(listingPriceField, listingPriceField.value > 1000000000, "Price cannot be above 1000000000$")) errors++;
 
             if(testDropdown(listingBoroughSelect, 0, "You must select a borough")) errors++;
 
