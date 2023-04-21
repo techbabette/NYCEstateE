@@ -22,4 +22,17 @@ function getAllBoroughsCount(){
 
     return $prepSt->fetchAll();
 }
+function getSpecificBorough($id){
+    require ("connection.php");
+
+    $statement = "SELECT borough_name AS title FROM boroughs
+                  WHERE borough_id = :borough_id";
+    $prepSt = $conn->prepare($statement);
+
+    $prepSt->bindParam("borough_id", $id, PDO::PARAM_INT);
+
+    $prepSt->execute();
+
+    return $prepSt->fetch();
+}
 ?>

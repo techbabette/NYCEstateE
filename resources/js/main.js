@@ -127,7 +127,7 @@ window.onload = function(){
                       {title : "Users", headers : ["Name", "Last name","Email", "Date of creation", "Role"], target : "getUsers", edit : showUserModal},
                       {title : "Listings", headers : ["Name", "Price","Description", "Address", "Size"], target : "getAllListings", createNew : showListingModal, edit: showListingModal},
                       {title : "Links", headers : ["Title", "Access level","Link", "File location", "Location",  "Priority", "Parent", "Icon"], target : "getAllLinks", createNew : showLinkModal, edit : showLinkModal},
-                      {title : "Boroughs", headers : ["Title", "Number of listings"], target : "getAllBoroughsCount"},
+                      {title : "Boroughs", headers : ["Title", "Number of listings"], target : "getAllBoroughsCount", createNew: showBoroughModal, edit: showBoroughModal},
                       {title : "Building types", headers : ["Title", "Number of listings"], target : "getAllBuildingTypesCount"},
                       {title : "Room types", headers : ["Title"], target : "getAllRoomTypes"}
                     ];
@@ -380,6 +380,40 @@ window.onload = function(){
             }
             openModal(modal, globalData.modalBackground)
         }
+        function showBoroughModal(existingId = 0){
+            let modal = document.querySelector("#borough-modal");
+
+            let type = existingId ? "edit" : "create";
+
+            let boroughNameField = document.querySelector("#boroughName");
+
+            let boroughTitle = document.querySelector("#borough-modal-title");
+            let boroughSubmitButton = document.querySelector("#borough-submit");
+
+            if(type == "edit"){
+                let data = {id : existingId};
+                boroughTitle.innerText = "Edit borough";
+                boroughSubmitButton.innerText = "Edit borough";
+                submitAjax("getSpecificBorough", function(data){
+                    console.log(data.title);
+                    boroughNameField.value = data.title;
+                }, data);
+            }
+            else{
+                boroughTitle.innerText = "Create new borough";
+                boroughSubmitButton.innerText = "Create borough";
+            }
+            
+            let elems = new Array(boroughNameField);
+
+            for(let elem of elems){
+                removeError(elem);
+                removeSuccess(elem);
+            }
+
+            globalData.currModal = modal;
+            openModal(modal, globalData.modalBackground);
+        }
         function showListingModal(existingId = 0){
             let modal = document.querySelector("#listing-modal");
 
@@ -398,9 +432,6 @@ window.onload = function(){
 
             let listingModalTitle = document.querySelector("#listing-modal-title");
             let modalSubmitButton = document.querySelector("#listing-submit");
-
-            listingModalTitle.innerText = "Edit listing";
-            modalSubmitButton.innerText = "Edit listing";
 
             let elems = new Array(listingTitleField, listingDescriptionField, listingAddressField, listingSizeField, listingPriceField, listingBoroughSelect, listingBuildingTypeSelect, listingPhotoField);
 
@@ -435,7 +466,8 @@ window.onload = function(){
                         globalData.startingRooms.push({roomId : room.room_type_id, count : room.numberOf});
                     }
                 }, data);
-
+                listingModalTitle.innerText = "Edit listing";
+                modalSubmitButton.innerText = "Edit listing";
             }
             else{
                 listingTitleField.value = "";
@@ -446,6 +478,8 @@ window.onload = function(){
                 listingBoroughSelect.value = 0;
                 listingBuildingTypeSelect.value = 0; 
                 listingPhotoField.value = "";
+                listingModalTitle.innerText = "Create new listing";
+                modalSubmitButton.innerText = "Create listing";
             }
 
             globalData.currModal = modal;
@@ -460,6 +494,7 @@ window.onload = function(){
             setupLinkModal();
             setupUserModal();
             setupListingModal();
+            setupBoroughModal();
         }
         function setupUserModal(){
             let userRoleSelect = document.querySelector("#userRole"); 
@@ -479,6 +514,7 @@ window.onload = function(){
             readAjax("getAllBoroughs", fillDropdown, [boroughSelect]);
             readAjax("getAllBuildingTypes", fillDropdown, [listingBuildingType]);
             readAjax("getAllRoomTypes", fillDropdown, [listingRoomsList]);
+            
 
             let fileReader = new FileReader();
             let previewHolder = document.querySelector("#main-photo-preview");
@@ -519,6 +555,13 @@ window.onload = function(){
             modalSubmitButton.addEventListener("click", function(e){
                 e.preventDefault();
                 submitLinkForm();
+            })
+        }
+        function setupBoroughModal(){
+            let modalSubmitButton = document.querySelector("#borough-submit");
+            modalSubmitButton.addEventListener("click", function(e){
+                e.preventDefault();
+                // submitLinkForm();
             })
         }
         function submitUserForm(){

@@ -63,6 +63,23 @@
               <input type="hidden" id="userId" name="userId" value="0" />
             </form>
           </div>
+          <!--One field modal-->
+          <div id="borough-modal" class="mk-modal-content hidden">
+            <h5 id="borough-modal-title" class="text-center">Create new borough</h5>
+            <form class="row mk-flex-center">
+              <div class="col-12">
+                <label for="userName">Borough name</label>
+                <input type="text" class="form-control"  name="boroughName" id="boroughName" required="required"/>
+                <span class="error-msg hidden"></span>
+              </div>
+              <div class="col-12 my-2 p-2">
+                <button id="borough-submit" class="btn btn-success col-6 my-1" type="submit">Create new borough</button>
+                <button id="borough-cancel" class="btn btn-danger col-6 my-1 close-button" type="button">Cancel</button>
+              </div>
+              <input type="hidden" id="boroughId" name="boroughId" value="0" />
+            </form>
+          </div>
+          <!--End of one field modal-->
           <div id="link-modal" class="mk-modal-content hidden">
             <h5 id="link-modal-title" class="text-center">Create a new link</h5>
             <form class="row mk-flex-center">
