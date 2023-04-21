@@ -129,7 +129,7 @@ window.onload = function(){
                       {title : "Links", headers : ["Title", "Access level","Link", "File location", "Location",  "Priority", "Parent", "Icon"], target : "getAllLinks", createNew : showLinkModal, edit : showLinkModal},
                       {title : "Boroughs", headers : ["Title", "Number of listings"], target : "getAllBoroughsCount"},
                       {title : "Building types", headers : ["Title", "Number of listings"], target : "getAllBuildingTypesCount"},
-                      {title : "Room types", headers : ["Title", "Number of listings"], target : "getAllRoomTypes"}
+                      {title : "Room types", headers : ["Title"], target : "getAllRoomTypes"}
                     ];
         let table = document.querySelector("#element-table");
         let activeTable = 0;
