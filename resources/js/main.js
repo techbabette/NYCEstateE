@@ -126,7 +126,7 @@ window.onload = function(){
         let tables = [
                       {title : "Users", headers : ["Name", "Last name","Email", "Date of creation", "Role"], target : "getUsers", edit : showUserModal},
                       {title : "Listings", headers : ["Name", "Price","Description", "Address", "Size"], target : "getAllListings", createNew : showListingModal, edit: showListingModal},
-                      {title : "Links", headers : ["Title", "Access level","Link", "File location", "Location", "Parent", "Icon"], target : "getAllLinks", createNew : showLinkModal, edit : showLinkModal}
+                      {title : "Links", headers : ["Title", "Access level","Link", "File location", "Location",  "Priority", "Parent", "Icon"], target : "getAllLinks", createNew : showLinkModal, edit : showLinkModal}
                     ];
         let table = document.querySelector("#element-table");
         let activeTable = 0;
@@ -331,12 +331,13 @@ window.onload = function(){
             let LinkLocation = document.querySelector("#LinkLocation");
             let LinkRoot = document.querySelector("#LinkRoot");
             let linkIdField = document.querySelector("#linkId");
+            let LinkPriorityField = document.querySelector("#linkPriority");
 
             let linkModalTitle = document.querySelector("#link-modal-title");
             let modalSubmitButton = document.querySelector("#link-submit");
 
             
-            let elems = new Array(linkTitleField, LinkHrefField, LinkIconField, accessLevelSelect, LinkLocation)
+            let elems = new Array(linkTitleField, LinkHrefField, LinkIconField, accessLevelSelect, LinkLocation, LinkPriorityField);
 
             //Remove success and error
             for(let elem of elems){
@@ -354,6 +355,7 @@ window.onload = function(){
                     accessLevelSelect.value = firstRow.access_level_id;
                     LinkLocation.value = firstRow.location;
                     LinkRoot.checked = firstRow.landing;
+                    LinkPriorityField.value = firstRow.priority;
                 }, data);
 
                 linkIdField.value = existingId;
@@ -623,7 +625,11 @@ window.onload = function(){
 
             if(testGeneric(listingSizeField, listingSizeField.value < 30, "Size cannot be below 30 feet")) errors++;
 
+            if(testGeneric(listingSizeField, listingSizeField.value > 100000, "Size cannot be above 100000 feet")) errors++;
+
             if(testGeneric(listingPriceField, listingPriceField.value < 1000, "Price cannot be below 1000$")) errors++;
+
+            // if(testGeneric(listingPriceField, listingPriceField.value > 1000000000, "Price cannot be above 1000000000$")) errors++;
 
             if(testDropdown(listingBoroughSelect, 0, "You must select a borough")) errors++;
 
@@ -672,7 +678,9 @@ window.onload = function(){
             let LinkIconField = document.querySelector("#LinkIcon");
             let accessLevelSelect = document.querySelector("#LinkReqLevel");
             let LinkLocationSelect = document.querySelector("#LinkLocation");
+            let LinkPriorityField = document.querySelector("#linkPriority");
             let LinkRootCheck = document.querySelector("#LinkRoot");
+            
 
             let linkId = LinkIdField.value;
             let linkTitle = LinkTitleField.value;
@@ -681,6 +689,7 @@ window.onload = function(){
             let accessLevel = accessLevelSelect.value;
             let LinkLocation = LinkLocationSelect.value;
             let LinkRoot = LinkRootCheck.checked;
+            let linkPriority = LinkPriorityField.value;
 
             let reTitle = /^[A-Z][a-z]{2,15}(\s[A-Za-z][a-z]{2,15}){0,2}$/;
             let reHref = /(^[a-z]{3,40}\.[a-z]{2,5}$)/;
@@ -709,7 +718,9 @@ window.onload = function(){
 
             if(testDropdown(LinkLocationSelect, 0, "You must select a location")) errors++;
 
-            console.log(errors);
+            if(testGeneric(LinkPriorityField, linkPriority < 1, "Link priority cannot be lower than 1")) errors++;
+
+            if(testGeneric(LinkPriorityField, linkPriority > 99, "Link priority cannot be higher than 99")) errors++;
 
             if(errors != 0){
                 return;
@@ -721,8 +732,8 @@ window.onload = function(){
             data.aLevel = accessLevel;
             data.location = LinkLocation;
             data.main = LinkRoot;
+            data.priority = linkPriority;
 
-            console.log("submitted");
             submitAjax(target, showResult, data);
         }
         function addRoom(roomId, roomText, count = 1){

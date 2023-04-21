@@ -21,7 +21,8 @@ if
 || (!isset($_POST["icon"]))
 || (!isset($_POST["aLevel"]))
 || (!isset($_POST["location"]) || empty($_POST["location"]))
-|| (!isset($_POST["main"]))
+|| (!isset($_POST["main"])
+|| (!isset($_POST["priority"])))
 )
 {
     echoUnprocessableEntity("All fields are required");
@@ -34,6 +35,7 @@ $LinkIcon = $_POST["icon"];
 $AccessLevelId = $_POST["aLevel"];
 $LinkLocation = $_POST["location"];
 $main = $_POST["main"];
+$priority = $_POST["priority"];
 
 $reTitle = '/^[A-Z][a-z]{2,15}(\s[A-Za-z][a-z]{2,15}){0,2}$/';
 $reHref = '/^[a-z]{3,40}\.[a-z]{2,5}$/';
@@ -49,6 +51,14 @@ if(!preg_match($reHref, $LinkHref)){
 
 if(!empty($LinkIcon) && !preg_match($reIcon, $LinkIcon)){
     echoUnprocessableEntity("Link icon does not match format");
+}
+
+if($priority < 1){
+    echoUnprocessableEntity("Link priority cannot be lower than 1");
+}
+
+if($priority > 99){
+    echoUnprocessableEntity("Link priority cannot be higher than 99");
 }
 
 $linkExists = count(getEveryRowWhereParamFromTable("links", "link_id", $LinkId)) > 0;
@@ -82,7 +92,7 @@ if(!$aLIdAcceptable){
 //Success
 require("../DataAccess/linkFunctions.php");
 try{
-    editLink($LinkId, $LinkTitle, $LinkHref, $AccessLevelId, $LinkLocation, $main);
+    editLink($LinkId, $LinkTitle, $LinkHref, $AccessLevelId, $LinkLocation, $priority, $main);
     if(!empty($LinkIcon)){
         removeAllLinkIcons($LinkId);
         createNewLinkIcon($LinkId, $LinkIcon);

@@ -11,7 +11,7 @@ function getLinks($accessLevel, $loggedIn){
         $statement.= " AND level <> 0";
     }
 
-    $statement.=" ORDER BY l.link_id";
+    $statement.=" ORDER BY l.priority DESC";
 
     $prepSt = $conn->prepare($statement);
 
@@ -25,11 +25,11 @@ function getLinks($accessLevel, $loggedIn){
 function getAllLinks(){
     include ("connection.php");
 
-    $statement = "SELECT l.link_id AS id, link_title, level_title, href, IF(landing, \"Main\", \"Pages\"), location, IFNULL((SELECT link_title FROM links WHERE link_id = l.parent_id),\"None\") AS Parent, 
+    $statement = "SELECT l.link_id AS id, link_title, level_title, href, IF(landing, \"Root\", \"Pages\"), location, priority, IFNULL((SELECT link_title FROM links WHERE link_id = l.parent_id),\"None\") AS Parent, 
                   IFNULL((SELECT icon FROM linkicons WHERE link_id = l.link_id AND active = 1), \"None\") AS icon 
                   FROM links l
                   INNER JOIN accesslevels a ON l.access_level_id = a.access_level_id
-                  ORDER BY level desc
+                  ORDER BY location DESC, priority DESC 
                   ";
     $prepSt = $conn->prepare($statement);
 
@@ -41,7 +41,7 @@ function getAllLinks(){
 function getSpecificLink($linkId){
     include ("connection.php");
 
-    $statement = "SELECT link_title as title, href, (SELECT icon FROM linkicons WHERE link_id = l.link_id AND active = 1) as icon, access_level_id, location, landing FROM links l
+    $statement = "SELECT link_title as title, href, (SELECT icon FROM linkicons WHERE link_id = l.link_id AND active = 1) as icon, access_level_id, location, priority, landing FROM links l
                   WHERE l.link_id = :link_id";
     $prepSt = $conn->prepare($statement);
     $prepSt->bindParam("link_id", $linkId);
@@ -67,10 +67,10 @@ function createNewLink($title, $href, $aLevel, $location, $landing){
 
     return $conn->lastInsertId();
 }
-function editLink($linkId, $title, $href, $aLevel, $location, $landing){
+function editLink($linkId, $title, $href, $aLevel, $location, $priority, $landing){
     include ("connection.php");
 
-    $statement = "UPDATE links SET link_title = :title, href = :href, access_level_id = :aLevel, location = :location, landing = :landing
+    $statement = "UPDATE links SET link_title = :title, href = :href, access_level_id = :aLevel, location = :location, priority = :priority, landing = :landing
                   WHERE link_id = :linkId";
     $prepSt = $conn->prepare($statement);
 
@@ -78,6 +78,7 @@ function editLink($linkId, $title, $href, $aLevel, $location, $landing){
     $prepSt->bindParam("href", $href);
     $prepSt->bindParam("aLevel", $aLevel, PDO::PARAM_INT);
     $prepSt->bindParam("location", $location);
+    $prepSt->bindParam("priority", $priority, PDO::PARAM_INT);
     $prepSt->bindParam("landing", $landing, PDO::PARAM_INT);
     $prepSt->bindParam("linkId", $linkId, PDO::PARAM_INT);
 

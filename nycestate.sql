@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 19, 2023 at 12:59 PM
+-- Generation Time: Apr 21, 2023 at 05:44 AM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -117,9 +117,10 @@ CREATE TABLE `linkicons` (
 INSERT INTO `linkicons` (`link_icon_id`, `link_id`, `icon`, `active`, `dateCreated`) VALUES
 (1, 9, 'icomoon-free:facebook', 1, '2023-04-08 03:58:37'),
 (2, 10, 'la:twitter', 1, '2023-04-08 03:58:37'),
-(3, 11, 'fa-file', 1, '2023-04-08 03:58:37'),
+(3, 11, 'fa-file', 0, '2023-04-08 03:58:37'),
 (4, 12, 'bx:sitemap', 0, '2023-04-08 03:58:37'),
-(8, 12, 'bx:sitemap', 1, '2023-04-09 05:20:18');
+(8, 12, 'bx:sitemap', 1, '2023-04-09 05:20:18'),
+(9, 11, 'fa-file', 1, '2023-04-21 03:34:17');
 
 -- --------------------------------------------------------
 
@@ -134,6 +135,7 @@ CREATE TABLE `links` (
   `href` varchar(50) DEFAULT NULL,
   `landing` tinyint(1) NOT NULL,
   `location` varchar(20) NOT NULL,
+  `priority` int(2) NOT NULL DEFAULT 1,
   `parent_id` int(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -141,18 +143,18 @@ CREATE TABLE `links` (
 -- Dumping data for table `links`
 --
 
-INSERT INTO `links` (`link_id`, `access_level_id`, `link_title`, `href`, `landing`, `location`, `parent_id`) VALUES
-(1, 1, 'Nyc Estates', 'index.html', 1, 'head', NULL),
-(3, 1, 'Home', 'index.html', 1, 'navbar', NULL),
-(4, 1, 'Listings', 'listings.html', 0, 'navbar', NULL),
-(5, 4, 'Login', 'login.html', 0, 'navbar', NULL),
-(6, 4, 'Register', 'register.html', 0, 'navbar', NULL),
-(7, 2, 'Favorites', 'favorites.html', 0, 'navbar', NULL),
-(8, 3, 'Admins', 'admin.html', 0, 'navbar', NULL),
-(9, 1, 'Facebook', 'https://www.facebook.com/', 0, 'footer', NULL),
-(10, 1, 'Twitter', 'https://www.twitter.com/', 0, 'footer', NULL),
-(11, 1, 'Documentation', 'documentation.pdf', 1, 'footer', NULL),
-(12, 1, 'Sitemap', 'sitemap.xml', 1, 'footer', NULL);
+INSERT INTO `links` (`link_id`, `access_level_id`, `link_title`, `href`, `landing`, `location`, `priority`, `parent_id`) VALUES
+(1, 1, 'Nyc Estates', 'index.html', 1, 'head', 1, NULL),
+(3, 1, 'Home', 'index.html', 1, 'navbar', 99, NULL),
+(4, 1, 'Listings', 'listings.html', 0, 'navbar', 97, NULL),
+(5, 4, 'Login', 'login.html', 0, 'navbar', 95, NULL),
+(6, 4, 'Register', 'register.html', 0, 'navbar', 94, NULL),
+(7, 2, 'Favorites', 'favorites.html', 0, 'navbar', 96, NULL),
+(8, 3, 'Admins', 'admin.html', 0, 'navbar', 98, NULL),
+(9, 1, 'Facebook', 'https://www.facebook.com/', 0, 'footer', 1, NULL),
+(10, 1, 'Twitter', 'https://www.twitter.com/', 0, 'footer', 1, NULL),
+(11, 1, 'Documentation', 'documentation.pdf', 1, 'footer', 99, NULL),
+(12, 1, 'Sitemap', 'sitemap.xml', 1, 'footer', 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -439,7 +441,7 @@ ALTER TABLE `favorites`
 -- AUTO_INCREMENT for table `linkicons`
 --
 ALTER TABLE `linkicons`
-  MODIFY `link_icon_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `link_icon_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `links`
