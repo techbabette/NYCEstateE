@@ -126,7 +126,10 @@ window.onload = function(){
         let tables = [
                       {title : "Users", headers : ["Name", "Last name","Email", "Date of creation", "Role"], target : "getUsers", edit : showUserModal},
                       {title : "Listings", headers : ["Name", "Price","Description", "Address", "Size"], target : "getAllListings", createNew : showListingModal, edit: showListingModal},
-                      {title : "Links", headers : ["Title", "Access level","Link", "File location", "Location",  "Priority", "Parent", "Icon"], target : "getAllLinks", createNew : showLinkModal, edit : showLinkModal}
+                      {title : "Links", headers : ["Title", "Access level","Link", "File location", "Location",  "Priority", "Parent", "Icon"], target : "getAllLinks", createNew : showLinkModal, edit : showLinkModal},
+                      {title : "Boroughs", headers : ["Title", "Number of listings"], target : "getAllBoroughsCount"},
+                      {title : "Building types", headers : ["Title", "Number of listings"], target : "getAllBuildingTypesCount"},
+                      {title : "Room types", headers : ["Title", "Number of listings"], target : "getAllRoomTypes"}
                     ];
         let table = document.querySelector("#element-table");
         let activeTable = 0;
