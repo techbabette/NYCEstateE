@@ -128,8 +128,8 @@ window.onload = function(){
                       {title : "Listings", headers : ["Name", "Price","Description", "Address", "Size"], target : "getAllListings", createNew : showListingModal, edit: showListingModal},
                       {title : "Links", headers : ["Title", "Access level","Link", "File location", "Location",  "Priority", "Parent", "Icon"], target : "getAllLinks", createNew : showLinkModal, edit : showLinkModal},
                       {title : "Boroughs", headers : ["Title", "Number of listings"], target : "getAllBoroughsCount", createNew: showBoroughModal, edit: showBoroughModal},
-                      {title : "Building types", headers : ["Title", "Number of listings"], target : "getAllBuildingTypesCount"},
-                      {title : "Room types", headers : ["Title"], target : "getAllRoomTypes"}
+                      {title : "Building types", headers : ["Title", "Number of listings"], target : "getAllBuildingTypesCount", createNew: showBuildingTypeModal, edit: showBuildingTypeModal},
+                      {title : "Room types", headers : ["Title"], target : "getAllRoomTypes", createNew: showRoomTypeModal, edit: showRoomTypeModal}
                     ];
         let table = document.querySelector("#element-table");
         let activeTable = 0;
@@ -421,6 +421,86 @@ window.onload = function(){
             globalData.currModal = modal;
             openModal(modal, globalData.modalBackground);
         }
+        function showBuildingTypeModal(existingId = 0){
+            let modal = document.querySelector("#buildingType-modal");
+
+            let type = existingId ? "edit" : "create";
+
+            let buildingTypeNameField = document.querySelector("#buildingTypeName");
+
+            let buildingTypeId = document.querySelector("#buildingTypeId");
+
+            buildingTypeNameField.value = "";
+            buildingTypeId.value = existingId;
+
+            let buildingTypeTitle = document.querySelector("#buildingType-modal-title");
+            let buildingTypeSubmitButton = document.querySelector("#buildingType-submit");
+
+            if(type == "edit"){
+                let data = {id : existingId};
+                buildingTypeTitle.innerText = "Edit building type";
+                buildingTypeSubmitButton.innerText = "Edit building type";
+                submitAjax("getSpecificBuildingType", function(data){
+                    buildingTypeNameField.value = data.title;
+                }, data);
+            }
+            else{
+                buildingTypeTitle.innerText = "Create new building type";
+                buildingTypeSubmitButton.innerText = "Create building type";
+            }
+            
+
+
+            let elems = new Array(buildingTypeNameField);
+
+            for(let elem of elems){
+                removeError(elem);
+                removeSuccess(elem);
+            }
+
+            globalData.currModal = modal;
+            openModal(modal, globalData.modalBackground);
+        }
+        function showRoomTypeModal(existingId = 0){
+            let modal = document.querySelector("#roomType-modal");
+
+            let type = existingId ? "edit" : "create";
+
+            let roomTypeNameField = document.querySelector("#roomTypeName");
+
+            let roomTypeId = document.querySelector("#roomTypeId");
+
+            roomTypeNameField.value = "";
+            roomTypeId.value = existingId;
+
+            let roomTypeTitle = document.querySelector("#roomType-modal-title");
+            let roomTypeSubmitButton = document.querySelector("#roomType-submit");
+
+            if(type == "edit"){
+                let data = {id : existingId};
+                roomTypeTitle.innerText = "Edit room type";
+                roomTypeSubmitButton.innerText = "Edit room type";
+                submitAjax("getSpecificRoomType", function(data){
+                    roomTypeNameField.value = data.title;
+                }, data);
+            }
+            else{
+                roomTypeTitle.innerText = "Create new room type";
+                roomTypeSubmitButton.innerText = "Create room type";
+            }
+            
+
+
+            let elems = new Array(roomTypeNameField);
+
+            for(let elem of elems){
+                removeError(elem);
+                removeSuccess(elem);
+            }
+
+            globalData.currModal = modal;
+            openModal(modal, globalData.modalBackground);
+        }
         function showListingModal(existingId = 0){
             let modal = document.querySelector("#listing-modal");
 
@@ -502,6 +582,8 @@ window.onload = function(){
             setupUserModal();
             setupListingModal();
             setupBoroughModal();
+            setupBuildingTypeModal();
+            setupRoomTypeModal();
         }
         function setupUserModal(){
             let userRoleSelect = document.querySelector("#userRole"); 
@@ -546,10 +628,10 @@ window.onload = function(){
             });
 
             let modalSubmitButton = document.querySelector("#listing-submit");
-            modalSubmitButton.addEventListener("click", function(e){
+            addEventListenerOnce("click", modalSubmitButton, function(e){
                 e.preventDefault();
                 submitListingForm();
-            })
+            });
         }
         function setupLinkModal(){
             let accessLevelSelect = document.querySelector("#LinkReqLevel");
@@ -559,16 +641,30 @@ window.onload = function(){
             readAjax("getAllNavigationLocations", fillDropdown, [locationSelect, true]);
 
             let modalSubmitButton = document.querySelector("#link-submit");
-            modalSubmitButton.addEventListener("click", function(e){
+            addEventListenerOnce("click", modalSubmitButton, function(e){
                 e.preventDefault();
                 submitLinkForm();
-            })
+            });
         }
         function setupBoroughModal(){
             let modalSubmitButton = document.querySelector("#borough-submit");
-            modalSubmitButton.addEventListener("click", function(e){
+            addEventListenerOnce("click", modalSubmitButton, function(e){
                 e.preventDefault();
                 submitBoroughForm();
+            });
+        }
+        function setupBuildingTypeModal(){
+            let modalSubmitButton = document.querySelector("#buildingType-submit");
+            addEventListenerOnce("click", modalSubmitButton, function(e){
+                e.preventDefault();
+                submitBuildingTypeForm();
+            })
+        }
+        function setupRoomTypeModal(){
+            let modalSubmitButton = document.querySelector("#roomType-submit");
+            addEventListenerOnce("click", modalSubmitButton, function(e){
+                e.preventDefault();
+                submitRoomTypeForm();
             })
         }
         function submitUserForm(){
@@ -819,7 +915,71 @@ window.onload = function(){
             data.boroughName = boroughNameField.value;
 
             submitAjax(target, showResult, data);
+            // submitAjax(target, callMultipleFunctions, data, [showResult, setupListingModal]);
         }
+        function submitBuildingTypeForm(){
+            let buildingTypeNameField = document.querySelector("#buildingTypeName");
+            let buildingTypeIdField = document.querySelector("#buildingTypeId");
+
+            let buildingTypeId = buildingTypeIdField.value;
+
+            let reBuildingTypeName = /^[A-Z][a-z']{1,50}(\s[A-Za-z][a-z']{1,50}){0,3}$/;
+
+            let errors = 0;
+
+            let type = buildingTypeId > 0 ? "edit" : "create";
+
+            let target = "createNewBuildingType";
+
+            let data = {};
+
+            if(type == "edit"){
+                target = "editBuildingType";
+                data.id = buildingTypeId;
+            }
+
+            if(reTestText(reBuildingTypeName, buildingTypeNameField, `Building type name does not match format, eg "The Queens"`)) errors ++;
+
+            if(errors != 0){
+                return;
+            }
+
+            data.buildingTypeName = buildingTypeNameField.value;
+
+            submitAjax(target, showResult, data);
+        }
+        function submitRoomTypeForm(){
+            let roomTypeNameField = document.querySelector("#roomTypeName");
+            let roomTypeIdField = document.querySelector("#roomTypeId");
+
+            let roomTypeId = roomTypeIdField.value;
+
+            let reRoomTypeName = /^[A-Z][a-z']{1,50}(\s[A-Za-z][a-z']{1,50}){0,3}$/;
+
+            let errors = 0;
+
+            let type = roomTypeId > 0 ? "edit" : "create";
+
+            let target = "createNewRoomType";
+
+            let data = {};
+
+            if(type == "edit"){
+                target = "editRoomType";
+                data.id = roomTypeId;
+            }
+
+            if(reTestText(reRoomTypeName, roomTypeNameField, `Room type name does not match format, eg "The Queens"`)) errors ++;
+
+            if(errors != 0){
+                return;
+            }
+
+            data.roomTypeName = roomTypeNameField.value;
+
+            submitAjax(target, showResult, data);
+        }
+
         function addRoom(roomId, roomText, count = 1){
             let html = "";
             let roomHolder = document.querySelector("#room-holder");
@@ -844,6 +1004,16 @@ window.onload = function(){
         function removeAllRooms(){
             let roomHolder = document.querySelector("#room-holder");
             roomHolder.innerHTML = "";
+        }
+        function addEventListenerOnce(event, element, onEvent, listenerMark = ""){
+            let listenerMarker = event + listenerMark;
+
+            if(element.classList.contains(listenerMarker)){
+                return;
+            }
+
+            element.classList.add(listenerMarker);
+            element.addEventListener(event, onEvent);
         }
         function addRemoveParentOnClickListener(element){
             element.addEventListener("click", function(e){
@@ -940,6 +1110,15 @@ function generateNavbar(response){
 
     for(let footerElement of footerElements){
         footerHolder.innerHTML += generateLinkElement(footerElement);
+    }
+}
+
+function callMultipleFunctions(data, functions){
+    let firstFunction = functions[0];
+    firstFunction(data);
+    for(let i = 1; i < functions.length; i++){
+        let currFunc = functions[i];
+        currFunc();
     }
 }
 

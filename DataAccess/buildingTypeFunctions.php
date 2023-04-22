@@ -22,4 +22,17 @@ function getAllBuildingTypesCount(){
 
     return $prepSt->fetchAll();
 }
+function getSpecificBuildingType($id){
+    require ("connection.php");
+
+    $statement = "SELECT type_name AS title FROM buildingtypes
+                  WHERE building_type_id = :building_type_id";
+    $prepSt = $conn->prepare($statement);
+
+    $prepSt->bindParam("building_type_id", $id, PDO::PARAM_INT);
+
+    $prepSt->execute();
+
+    return $prepSt->fetch();
+}
 ?>
