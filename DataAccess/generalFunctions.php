@@ -81,6 +81,18 @@ function deleteSingleRow($table, $paramater, $paramaterValue){
 
 }
 
+function softDeleteSingleRow($table, $parameter, $parameterValue){
+    include ("connection.php");
+
+    $statement = "UPDATE $table SET dateDeleted = NOW() WHERE $parameter = ?";
+    $prepSt = $conn->prepare($statement);
+
+    $prepSt->bindParam(1, $parameterValue, PDO::PARAM_INT);
+
+    $prepSt->execute();
+} 
+
+
 function insertSingleParamater($table, $paramater, $paramaterName){
     include ("connection.php");
 

@@ -14,6 +14,7 @@ function getAllBoroughsCount(){
 
     $statement = "SELECT b.borough_id AS id, borough_name as title, COUNT(l.listing_id) as Count
                   FROM boroughs b LEFT JOIN listings l ON b.borough_id = l.borough_id
+                  WHERE l.dateDeleted IS NULL
                   GROUP BY b.borough_id, borough_name
                   ORDER BY COUNT(*) DESC";
     $prepSt = $conn->prepare($statement);

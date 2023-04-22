@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 22, 2023 at 03:20 PM
+-- Generation Time: Apr 22, 2023 at 03:45 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -178,7 +178,8 @@ CREATE TABLE `listingphotos` (
 INSERT INTO `listingphotos` (`photo_id`, `listing_id`, `main`, `path`, `dateUploaded`) VALUES
 (3, 4, 1, '16818274541544568656643ea67eb94c0.png', '2023-04-18 14:17:34'),
 (11, 12, 1, '1681897858933328828643fb982abdef.jpg', '2023-04-19 09:50:58'),
-(15, 16, 1, '16818980812027868961643fba617d826.jpg', '2023-04-19 09:54:41');
+(15, 16, 1, '16818980812027868961643fba617d826.jpg', '2023-04-19 09:54:41'),
+(16, 17, 1, '168217066120666745526443e325515b3.jpg', '2023-04-22 13:37:41');
 
 -- --------------------------------------------------------
 
@@ -200,7 +201,8 @@ CREATE TABLE `listingprices` (
 INSERT INTO `listingprices` (`price_id`, `listing_id`, `price`, `date`) VALUES
 (3, 4, '2000.00', '2023-04-18 14:17:34'),
 (11, 12, '1000.00', '2023-04-19 09:50:58'),
-(15, 16, '1000.00', '2023-04-19 09:54:41');
+(15, 16, '1000.00', '2023-04-19 09:54:41'),
+(16, 17, '1000.00', '2023-04-22 13:37:41');
 
 -- --------------------------------------------------------
 
@@ -238,17 +240,20 @@ CREATE TABLE `listings` (
   `listing_name` varchar(200) NOT NULL,
   `description` text NOT NULL,
   `address` varchar(200) NOT NULL,
-  `size` float(8,2) NOT NULL
+  `size` float(8,2) NOT NULL,
+  `dateCreated` timestamp NOT NULL DEFAULT current_timestamp(),
+  `dateDeleted` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `listings`
 --
 
-INSERT INTO `listings` (`listing_id`, `user_id`, `borough_id`, `building_type_id`, `listing_name`, `description`, `address`, `size`) VALUES
-(4, 0, 1, 1, 'New listing', 'New description', 'Kings street 25', 35.00),
-(12, 4, 1, 1, 'Newer listing', 'This is the newest listing', 'King\'s street 20', 30.00),
-(16, 4, 3, 1, 'Listing with rooms', 'This listing has rooms', 'King\'s street 50', 30.00);
+INSERT INTO `listings` (`listing_id`, `user_id`, `borough_id`, `building_type_id`, `listing_name`, `description`, `address`, `size`, `dateCreated`, `dateDeleted`) VALUES
+(4, 0, 1, 1, 'New listing', 'New description', 'Kings street 25', 35.00, '2023-04-22 13:24:08', NULL),
+(12, 4, 1, 1, 'Newer listing', 'This is the newest listing', 'King\'s street 20', 30.00, '2023-04-22 13:24:08', NULL),
+(16, 4, 3, 1, 'Listing with rooms', 'This listing has rooms', 'King\'s street 50', 30.00, '2023-04-22 13:24:08', NULL),
+(17, 4, 3, 2, 'Listing delete', 'This will be deleted', 'King\'s street 20', 30.00, '2023-04-22 13:37:41', '2023-04-22 13:44:39');
 
 -- --------------------------------------------------------
 
@@ -455,13 +460,13 @@ ALTER TABLE `links`
 -- AUTO_INCREMENT for table `listingphotos`
 --
 ALTER TABLE `listingphotos`
-  MODIFY `photo_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `photo_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `listingprices`
 --
 ALTER TABLE `listingprices`
-  MODIFY `price_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `price_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `listingrooms`
@@ -473,7 +478,7 @@ ALTER TABLE `listingrooms`
 -- AUTO_INCREMENT for table `listings`
 --
 ALTER TABLE `listings`
-  MODIFY `listing_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `listing_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `roles`

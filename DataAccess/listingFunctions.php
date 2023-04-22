@@ -140,7 +140,8 @@ function getAllListings(){
 
     $statement = "SELECT l.listing_id AS id, listing_name, price, description, address, size
                   FROM listings l INNER JOIN listingprices lp ON l.listing_id = lp.listing_id
-                  WHERE lp.date = (SELECT MAX(date) FROM listingprices WHERE listing_id = l.listing_id)";
+                  WHERE lp.date = (SELECT MAX(date) FROM listingprices WHERE listing_id = l.listing_id)
+                  AND l.dateDeleted IS NULL";
     $prepSt = $conn->prepare($statement);
 
     $prepSt->execute();

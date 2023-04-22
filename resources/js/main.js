@@ -278,11 +278,13 @@ window.onload = function(){
         function adminDeleteRequest(table, elementId){
             let data = {table, id : elementId};
             console.log(data);
-            submitAjax("deleteFromTable", showResult, data);
+            submitAjax("deleteFromTable", showResult, data, {closeModal : false});
         }
-        function showResult(data){
+        function showResult(data, args){
             generateTable();   
-            closeCurrentModal();
+            if(args.closeModal){
+                closeCurrentModal();
+            };
         }
         function showUserModal(existingId = 0){
             let modal = document.querySelector("#user-modal");

@@ -13,6 +13,8 @@ $requestedId = $_POST["id"];
 $dataTable = "";
 $dataParam = "";
 
+$type = "hard";
+
 switch($requestedTable){
     case "Users" : 
         $dataTable = "users";
@@ -25,6 +27,7 @@ switch($requestedTable){
     case "Listings" : 
         $dataTable = "listings";
         $dataParam = "listing_id";
+        $type = "soft";
         break;
     case "Links" : 
         $dataTable = "links";
@@ -36,9 +39,20 @@ if($dataTable == ""){
     echoUnprocessableEntity("No such table");
 }
 
+$exists = count(getEveryRowWhereParamFromTable($dataTable, $dataParam, $requestedId)) > 0;
+
+if(!$exists){
+    echoUnprocessableEntity(substr($requestedTable, 0, -1)." with given id does not exist");
+}
+
 try{
-    deleteSingleRow($dataTable, $dataParam, $requestedId);
-    $result["general"]["msg"] = "Successfully deleted";
+    if($type == "hard"){
+        deleteSingleRow($dataTable, $dataParam, $requestedId);
+    }
+    else{
+        softDeleteSingleRow($dataTable, $dataParam, $requestedId);
+    }
+    $result["general"] = "Successfully deleted ".substr($requestedTable, 0, -1);
     http_response_code(200);
     echo json_encode($result);
 }
