@@ -1,16 +1,16 @@
 let url = window.location.href.split("/");
 let lastOfUrl = url[url.length - 1];
-let currentPage = lastOfUrl.split("?")[0].toLowerCase();
+let currentPage = lastOfUrl.split("?")[0].toLowerCase().replace(/[^A-Za-z0-9\.]/gi, "");
 let mainPage = false;
 let ajaxPath = "BusinessLogic/";
 let data;
 let globalData = {};
 let success;
 if (currentPage == "" || currentPage == "index.html") mainPage = true;
-if (!mainPage) ajaxPath = "../BusinessLogic/"
+if (!mainPage) ajaxPath = "../BusinessLogic/";
 
 window.onload = function(){
-    data = {currentPage}
+    data = {currentPage};
 
     //Send current page to check if allwwed
     submitAjax("getLinks", generateNavbar, data, ["index.html", true]);
