@@ -387,6 +387,11 @@ window.onload = function(){
 
             let boroughNameField = document.querySelector("#boroughName");
 
+            let boroughIdField = document.querySelector("#boroughId");
+
+            boroughNameField.value = "";
+            boroughIdField.value = existingId;
+
             let boroughTitle = document.querySelector("#borough-modal-title");
             let boroughSubmitButton = document.querySelector("#borough-submit");
 
@@ -404,6 +409,8 @@ window.onload = function(){
                 boroughSubmitButton.innerText = "Create borough";
             }
             
+
+
             let elems = new Array(boroughNameField);
 
             for(let elem of elems){
@@ -561,7 +568,7 @@ window.onload = function(){
             let modalSubmitButton = document.querySelector("#borough-submit");
             modalSubmitButton.addEventListener("click", function(e){
                 e.preventDefault();
-                // submitLinkForm();
+                submitBoroughForm();
             })
         }
         function submitUserForm(){
@@ -779,6 +786,37 @@ window.onload = function(){
             data.location = LinkLocation;
             data.main = LinkRoot;
             data.priority = linkPriority;
+
+            submitAjax(target, showResult, data);
+        }
+        function submitBoroughForm(){
+            let boroughNameField = document.querySelector("#boroughName");
+            let boroughIdField = document.querySelector("#boroughId");
+
+            let boroughId = boroughIdField.value;
+
+            let reBoroughName = /^[A-Z][a-z']{1,50}(\s[A-Za-z][a-z']{1,50}){0,3}$/;
+
+            let errors = 0;
+
+            let type = boroughId > 0 ? "edit" : "create";
+
+            let target = "createNewBorough";
+
+            let data = {};
+
+            if(type == "edit"){
+                target = "editBorough";
+                data.id = boroughId;
+            }
+
+            if(reTestText(reBoroughName, boroughNameField, `Borough name does not match format, eg "The Queens"`)) errors ++;
+
+            if(errors != 0){
+                return;
+            }
+
+            data.boroughName = boroughNameField.value;
 
             submitAjax(target, showResult, data);
         }

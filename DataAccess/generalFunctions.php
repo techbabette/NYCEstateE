@@ -91,6 +91,8 @@ function insertSingleParamater($table, $paramater, $paramaterName){
     $prepSt->bindParam(1, $paramater);
     
     $prepSt->execute();
+
+    return $conn->lastInsertId();
 }
 
 function getEverythingFromTable($table){
