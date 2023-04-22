@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 21, 2023 at 05:44 AM
+-- Generation Time: Apr 22, 2023 at 03:20 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -82,7 +82,8 @@ CREATE TABLE `buildingtypes` (
 
 INSERT INTO `buildingtypes` (`building_type_id`, `type_name`) VALUES
 (1, 'Apartment'),
-(2, 'Duplex');
+(2, 'Duplex'),
+(3, 'House');
 
 -- --------------------------------------------------------
 
@@ -286,7 +287,8 @@ CREATE TABLE `roomtypes` (
 
 INSERT INTO `roomtypes` (`room_type_id`, `room_name`) VALUES
 (1, 'Livingroom'),
-(2, 'Bedroom');
+(2, 'Bedroom'),
+(3, 'Bathroom');
 
 -- --------------------------------------------------------
 
@@ -309,8 +311,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`user_id`, `email`, `password`, `name`, `lastName`, `dateCreated`, `role_id`) VALUES
-(4, 'marinakrsticrf@gmail.com', 'ce16a80506a2e2c17ce18c18e26451da', 'Marina', 'Krstic', '2023-03-16 10:25:32', 2),
-(5, 'laznaemailadresa@ict.edu.rs', 'd0df4b94b9bfeff699bd026858547f17', 'Marko', 'Krstic', '2023-03-16 10:38:08', 1);
+(4, 'marinakrsticrf@gmail.com', '$2y$10$uZvQ1Eu.TyUrZs/yAOuDkOE5wM/Gvg0suI7CEGD2kM0Q8U5V31Y4K', 'Marina', 'Krstic', '2023-03-16 10:25:32', 2),
+(5, 'laznaemailadresa@ict.edu.rs', '$2y$10$lTp9Xb6XiQVYZy.cg3GnX.3yw7Lc0JQGUUrgLcOy9jWJx.VJOoPCS', 'Marko', 'Krstic', '2023-03-16 10:38:08', 1);
 
 --
 -- Indexes for dumped tables
@@ -423,13 +425,13 @@ ALTER TABLE `accesslevels`
 -- AUTO_INCREMENT for table `boroughs`
 --
 ALTER TABLE `boroughs`
-  MODIFY `borough_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `borough_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `buildingtypes`
 --
 ALTER TABLE `buildingtypes`
-  MODIFY `building_type_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `building_type_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `favorites`
@@ -483,7 +485,7 @@ ALTER TABLE `roles`
 -- AUTO_INCREMENT for table `roomtypes`
 --
 ALTER TABLE `roomtypes`
-  MODIFY `room_type_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `room_type_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `users`

@@ -42,15 +42,15 @@ if(isset($_POST["attemptLogin"])){
 
     require("../DataAccess/userFunctions.php");
     try{
-        $loginAttempt = attemptLogin($email, md5($pass));
+        $loginAttempt = attemptLogin($email, $pass);
         if($loginAttempt){
             $_SESSION["user"] = getUserInformation($loginAttempt);
-            http_response_code(308);
+            http_response_code(302);
             $result["general"] = "Success";
             echo json_encode($result);
         }
         else{
-            http_response_code(403);
+            http_response_code(401);
             $result["error"] = ("Incorrect email/password");
             echo json_encode($result);
             die();

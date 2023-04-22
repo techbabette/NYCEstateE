@@ -1,9 +1,12 @@
 <?php
 error_reporting(0);
+function encryptPassword($password){
+    return password_hash($password, PASSWORD_DEFAULT);
+}
 function createNewUser($email, $password, $name, $lastName){
     include ("connection.php");
 
-    $crypted = md5($password);
+    $crypted = encryptPassword($password);
 
     $statement = "INSERT INTO users (email, password, name, lastName) 
                   VALUES (?, ?, ?, ?)";
@@ -34,14 +37,14 @@ function editUser($userId, $email, $name, $lastName, $role){
 function editUserPassword($userId, $password){
     include ("connection.php");
 
-    $crpyted = md5($password);
+    $crypted = encryptPassword($password);
 
     $statement = "UPDATE users SET password = :password
                   WHERE user_id = :userId";
     $prepSt = $conn->prepare($statement);
 
     $prepSt->bindParam("userId", $userId, PDO::PARAM_INT);
-    $prepSt->bindParam("password", $crpyted);
+    $prepSt->bindParam("password", $crypted);
 
     return $prepSt->execute();
 }
@@ -62,23 +65,25 @@ function checkIfEmailInUse($email){
 function attemptLogin($email, $password){
     include ("connection.php");
 
-    $crypted = md5($password);
-
-    $statement = "SELECT email, user_id FROM users WHERE email = ? AND password = ?";
+    $statement = "SELECT password, user_id FROM users WHERE email = ?";
     $prepSt = $conn->prepare($statement);
 
     $prepSt->bindParam(1, $email);
-    $prepSt->bindParam(2, $password);
 
     $prepSt->execute();
 
-    $object = $prepSt->fetch();
+    $user = $prepSt->fetch();
 
-    $userId = $object["user_id"];
+    $userId = $user["user_id"];
 
-    $result = $userId ? $userId : 0;
+    $encryptedPassword = $user["password"];
 
-    return $result;
+    if(password_verify($password, $encryptedPassword)){
+        return $userId;
+    }
+    else{
+        return 0;
+    }
 }
 
 function getUserInformation($id){
