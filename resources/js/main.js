@@ -129,7 +129,8 @@ window.onload = function(){
                       {title : "Links", headers : ["Title", "Access level","Link", "File location", "Location",  "Priority", "Parent", "Icon"], target : "getAllLinks", createNew : showLinkModal, edit : showLinkModal},
                       {title : "Boroughs", headers : ["Title", "Number of listings"], target : "getAllBoroughsCount", createNew: showBoroughModal, edit: showBoroughModal},
                       {title : "Building types", headers : ["Title", "Number of listings"], target : "getAllBuildingTypesCount", createNew: showBuildingTypeModal, edit: showBuildingTypeModal},
-                      {title : "Room types", headers : ["Title"], target : "getAllRoomTypes", createNew: showRoomTypeModal, edit: showRoomTypeModal}
+                      {title : "Room types", headers : ["Title"], target : "getAllRoomTypes", createNew: showRoomTypeModal, edit: showRoomTypeModal},
+                      {title : "Deleted listings", headers : ["Name", "Price","Description", "Address", "Size"], target : "getAllDeletedListings", edit: showListingModal, restore : "restoreListing"},
                     ];
         let table = document.querySelector("#element-table");
         let activeTable = 0;
@@ -200,15 +201,19 @@ window.onload = function(){
                     </td>
                     `
                 }
+
                 html += 
                 `
                 <td>
                 <button type="button" data-id="${row["id"]}" class="btn btn-light edit-button">Edit</button>
-                <button type="button" data-table="${tables[activeTable].title}" data-id="${row["id"]}" class="btn btn-danger delete-button">Delete</button>
-                </td>
                 `
-                
-                html += `</tr>`;
+                if(tables[activeTable].restore){
+                    html += `<button type="button" data-table="${tables[activeTable].title}" data-id="${row["id"]}" class="btn btn-success restore-button">Restore</button>`
+                }
+                else{
+                    html += `<button type="button" data-table="${tables[activeTable].title}" data-id="${row["id"]}" class="btn btn-danger delete-button">Delete</button>`
+                }
+                html += `</td></tr>`;
                 console.log(row);
             }
 
@@ -216,6 +221,7 @@ window.onload = function(){
             //if the table should show a create new buttno
             let createNew = tables[activeTable].createNew;
             let edit = tables[activeTable].edit;
+            let restore = tables[activeTable].restore;
             if(createNew)
             {
                 html += 
@@ -237,10 +243,23 @@ window.onload = function(){
             if(edit){
                 let editButtons = document.querySelectorAll(".edit-button");
                 for(let button of editButtons){
-                    button.addEventListener("click", function(){
+                    button.addEventListener("click", function(e){
+                        e.preventDefault();
                         let elemId = this.dataset.id;
                         edit(elemId);
                     })
+                }
+            }
+            if(restore)
+            {
+                let restoreButtons = document.querySelectorAll(".restore-button");
+                for(let button of restoreButtons){
+                    addEventListenerOnce("click", button, function(e){
+                        e.preventDefault();
+                        let elemId = this.dataset.id;
+                        let data = {id : elemId};
+                        submitAjax(restore, showResult, data, {closeModal : false});
+                    });
                 }
             }
             let deleteButtons = document.querySelectorAll(".delete-button");
@@ -734,7 +753,7 @@ window.onload = function(){
             data.password = userPasswordField.value;
             data.roleId = userRoleField.value;
 
-            submitAjax(target, showResult, data);
+            submitAjax(target, showResult, data, {closeModal : true});
         }
         function submitListingForm(){
             let formData = new FormData();
@@ -820,7 +839,7 @@ window.onload = function(){
             }
             console.log("Step two");
 
-            submitFormDataAjax(target, showResult, formData);
+            submitFormDataAjax(target, showResult, formData, {closeModal : true});
         }
         function submitLinkForm(){
             let LinkIdField = document.querySelector("#linkId");
@@ -885,7 +904,7 @@ window.onload = function(){
             data.main = LinkRoot;
             data.priority = linkPriority;
 
-            submitAjax(target, showResult, data);
+            submitAjax(target, showResult, data, {closeModal : true});
         }
         function submitBoroughForm(){
             let boroughNameField = document.querySelector("#boroughName");
@@ -916,7 +935,7 @@ window.onload = function(){
 
             data.boroughName = boroughNameField.value;
 
-            submitAjax(target, showResult, data);
+            submitAjax(target, showResult, data, {closeModal : true});
             // submitAjax(target, callMultipleFunctions, data, [showResult, setupListingModal]);
         }
         function submitBuildingTypeForm(){
@@ -948,7 +967,7 @@ window.onload = function(){
 
             data.buildingTypeName = buildingTypeNameField.value;
 
-            submitAjax(target, showResult, data);
+            submitAjax(target, showResult, data, {closeModal : true});
         }
         function submitRoomTypeForm(){
             let roomTypeNameField = document.querySelector("#roomTypeName");
@@ -979,7 +998,7 @@ window.onload = function(){
 
             data.roomTypeName = roomTypeNameField.value;
 
-            submitAjax(target, showResult, data);
+            submitAjax(target, showResult, data, {closeModal : true});
         }
 
         function addRoom(roomId, roomText, count = 1){

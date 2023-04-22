@@ -150,6 +150,33 @@ function getAllListings(){
     return $result;
 }
 
+function getAllDeletedListings(){
+    include ("connection.php");
+
+    $statement = "SELECT l.listing_id AS id, listing_name, price, description, address, size
+                  FROM listings l INNER JOIN listingprices lp ON l.listing_id = lp.listing_id
+                  WHERE lp.date = (SELECT MAX(date) FROM listingprices WHERE listing_id = l.listing_id)
+                  AND l.dateDeleted IS NOT NULL";
+    $prepSt = $conn->prepare($statement);
+
+    $prepSt->execute();
+    $result = $prepSt->fetchAll();
+
+    return $result;
+}
+
+function restoreListing($id){
+    include ("connection.php");
+
+    $statement = "UPDATE listings SET dateDeleted = NULL
+                  WHERE listing_id = :listing_id";
+    $prepSt = $conn->prepare($statement);
+
+    $prepSt->bindParam("listing_id", $id, PDO::PARAM_INT);
+
+    return $prepSt->execute();
+}
+
 function getListings(){
     include ("connection.php");
 

@@ -8,7 +8,7 @@ require("../DataAccess/listingFunctions.php");
 $result;
 
 try{
-    $result["general"] = getAllListings();
+    $result["general"] = getAllDeletedListings();
     http_response_code(200);
     echo json_encode($result);
 }
