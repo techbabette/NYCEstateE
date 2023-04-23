@@ -33,7 +33,7 @@ $LinkLocation = $_POST["location"];
 $main = $_POST["main"];
 
 $reTitle = '/^[A-Z][a-z]{2,15}(\s[A-Za-z][a-z]{2,15}){0,2}$/';
-$reHref = '/^[a-z]{3,40}\.[a-z]{2,5}$/';
+$reHref = '/^(https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[-a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&\/=]*))||([a-z]{3,40}\.[a-z]{2,5})$/';
 $reIcon = '/^[a-z:-]{5,30}$/';
 
 if(!preg_match($reTitle, $LinkTitle)){
