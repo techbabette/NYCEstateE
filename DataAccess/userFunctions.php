@@ -4,7 +4,7 @@ function encryptPassword($password){
     return password_hash($password, PASSWORD_DEFAULT);
 }
 function createNewUser($email, $password, $name, $lastName){
-    include ("connection.php");
+    include ("../../connection.php");
 
     $crypted = encryptPassword($password);
 
@@ -20,7 +20,7 @@ function createNewUser($email, $password, $name, $lastName){
     $prepSt->execute(); 
 }
 function editUser($userId, $email, $name, $lastName, $role){
-    include ("connection.php");
+    include ("../../connection.php");
 
     $statement = "UPDATE users SET email = :email, name = :name, lastName = :lastName, role_id = :role
                   WHERE user_id = :userId";
@@ -35,7 +35,7 @@ function editUser($userId, $email, $name, $lastName, $role){
     return $prepSt->execute();
 }
 function editUserPassword($userId, $password){
-    include ("connection.php");
+    include ("../../connection.php");
 
     $crypted = encryptPassword($password);
 
@@ -49,7 +49,7 @@ function editUserPassword($userId, $password){
     return $prepSt->execute();
 }
 function checkIfEmailInUse($email){
-    include ("connection.php");
+    include ("../../connection.php");
 
     $statement = "SELECT email FROM users WHERE email = ?";
     $prepSt = $conn->prepare($statement);
@@ -63,7 +63,7 @@ function checkIfEmailInUse($email){
 }
 
 function attemptLogin($email, $password){
-    include ("connection.php");
+    include ("../../connection.php");
 
     $statement = "SELECT password, user_id FROM users WHERE email = ?";
     $prepSt = $conn->prepare($statement);
@@ -87,7 +87,7 @@ function attemptLogin($email, $password){
 }
 
 function getUserInformation($id){
-    include ("connection.php");
+    include ("../../connection.php");
 
     $statement = "SELECT user_id, CONCAT(name, ' ', lastName) AS username, level 
     FROM users u 
@@ -105,7 +105,7 @@ function getUserInformation($id){
 }
 
 function getAllUsers(){
-    include ("connection.php");
+    include ("../../connection.php");
 
     $statement = "SELECT user_id AS id, name, lastName, email, dateCreated, role_name
                   FROM users u
@@ -120,7 +120,7 @@ function getAllUsers(){
 }
 
 function getSpecificUser($userId){
-    include ("connection.php");
+    include ("../../connection.php");
 
     $statement = "SELECT name, lastName, email, role_id FROM users WHERE user_id = :user_id";
     $prepSt = $conn->prepare($statement);
@@ -133,7 +133,7 @@ function getSpecificUser($userId){
 }
 
 function getAllUserRoles(){
-    include ("connection.php");
+    include ("../../connection.php");
 
     $statement = "SELECT role_id AS id, role_name as title FROM roles ORDER BY id";
     $prepSt = $conn->prepare($statement);

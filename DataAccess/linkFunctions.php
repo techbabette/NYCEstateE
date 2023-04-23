@@ -1,6 +1,6 @@
 <?php
 function getLinks($accessLevel, $loggedIn){
-    include ("connection.php");
+    include ("../../connection.php");
 
     $statement = "SELECT link_title, href, landing, location, parent_id, level, (SELECT icon FROM linkicons WHERE link_id = l.link_id AND active = 1) as icon
     FROM links l
@@ -23,7 +23,7 @@ function getLinks($accessLevel, $loggedIn){
     return $results;
 }
 function getAllLinks(){
-    include ("connection.php");
+    include ("../../connection.php");
 
     $statement = "SELECT l.link_id AS id, link_title, level_title, href, IF(landing, \"Root\", \"Pages\"), location, priority, IFNULL((SELECT link_title FROM links WHERE link_id = l.parent_id),\"None\") AS Parent, 
                   IFNULL((SELECT icon FROM linkicons WHERE link_id = l.link_id AND active = 1), \"None\") AS icon 
@@ -39,7 +39,7 @@ function getAllLinks(){
     return $results;
 }
 function getSpecificLink($linkId){
-    include ("connection.php");
+    include ("../../connection.php");
 
     $statement = "SELECT link_title as title, href, (SELECT icon FROM linkicons WHERE link_id = l.link_id AND active = 1) as icon, access_level_id, location, priority, landing FROM links l
                   WHERE l.link_id = :link_id";
@@ -52,7 +52,7 @@ function getSpecificLink($linkId){
     return $results;
 }
 function createNewLink($title, $href, $aLevel, $location, $landing){
-    include ("connection.php");
+    include ("../../connection.php");
 
     $statement = "INSERT INTO links (link_title, href, access_level_id, location, landing) VALUES(?, ?, ?, ?, ?)";
     $prepSt = $conn->prepare($statement);
@@ -68,7 +68,7 @@ function createNewLink($title, $href, $aLevel, $location, $landing){
     return $conn->lastInsertId();
 }
 function editLink($linkId, $title, $href, $aLevel, $location, $priority, $landing){
-    include ("connection.php");
+    include ("../../connection.php");
 
     $statement = "UPDATE links SET link_title = :title, href = :href, access_level_id = :aLevel, location = :location, priority = :priority, landing = :landing
                   WHERE link_id = :linkId";
@@ -87,7 +87,7 @@ function editLink($linkId, $title, $href, $aLevel, $location, $priority, $landin
     return $return;
 }
 function createNewLinkIcon($linkId, $icon){
-    include ("connection.php");
+    include ("../../connection.php");
 
     $statement = "INSERT INTO linkicons (link_id, icon) VALUES(?,?)";
     $prepSt = $conn->prepare($statement);
@@ -100,7 +100,7 @@ function createNewLinkIcon($linkId, $icon){
     return $conn->lastInsertId();
 }
 function removeAllLinkIcons($linkId){
-    include ("connection.php");
+    include ("../../connection.php");
 
     $statement = "UPDATE linkicons SET active = 0 WHERE link_id = :linkId AND active = 1";
     $prepSt = $conn->prepare($statement);

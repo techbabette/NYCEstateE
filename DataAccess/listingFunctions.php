@@ -1,6 +1,6 @@
 <?php
 function createNewListing($user, $borough, $building_type, $name, $description, $address, $size){
-    include ("connection.php");
+    include ("../../connection.php");
 
     $statement = "INSERT INTO listings (user_id, borough_id, building_type_id, listing_name, description, address, size) 
                   VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -26,7 +26,7 @@ function editListing($borough, $building_type, $name, $description, $address, $s
 }
 
 function saveListingPrice($listing, $price){
-    include ("connection.php");
+    include ("../../connection.php");
 
     $statement = "INSERT INTO listingprices (listing_id, price) VALUES (?, ?)";
     $prepSt = $conn->prepare($statement);
@@ -40,7 +40,7 @@ function saveListingPrice($listing, $price){
 }
 
 function saveMainListingPhoto($listing, $path){
-    include ("connection.php");
+    include ("../../connection.php");
 
     $main = true;
 
@@ -57,7 +57,7 @@ function saveMainListingPhoto($listing, $path){
 }
 
 function saveListingRoom($listing, $room, $count){
-    include ("connection.php");
+    include ("../../connection.php");
 
     $statement = "INSERT INTO listingrooms (listing_id, room_type_id, numberOf) VALUES (?, ?, ?)";
     $prepSt = $conn->prepare($statement);
@@ -72,7 +72,7 @@ function saveListingRoom($listing, $room, $count){
 }
 
 function updateMainListingPhoto($listing, $path){
-    include ("connection.php");
+    include ("../../connection.php");
 
     $statement = "UPDATE listingphotos SET path = ? WHERE listing_id = ? AND main = true";
     $prepSt = $conn->prepare($statement);
@@ -86,7 +86,7 @@ function updateMainListingPhoto($listing, $path){
 }
 
 function getCurrentMainListingPhoto($listing){
-    include ("connection.php");
+    include ("../../connection.php");
 
     $statement = "SELECT path FROM listingphotos 
                   WHERE main = 1 AND listing_id = :listing_id
@@ -103,7 +103,7 @@ function getCurrentMainListingPhoto($listing){
 }
 
 function getRoomsOfListing($listing){
-    include ("connection.php");
+    include ("../../connection.php");
 
     $statement = "SELECT rt.room_name, rt.room_type_id, lr.numberOf 
                   FROM roomtypes rt INNER JOIN listingrooms lr ON rt.room_type_id = lr.room_type_id
@@ -120,7 +120,7 @@ function getRoomsOfListing($listing){
 }
 
 function getSpecificListing($listing){
-    include ("connection.php");
+    include ("../../connection.php");
 
     $statement = "SELECT listing_name, description, (SELECT price FROM listingprices WHERE listing_id = :listing_id ORDER BY date DESC LIMIT 1) as price, size, address, borough_id, building_type_id
                   FROM listings li
@@ -136,7 +136,7 @@ function getSpecificListing($listing){
 }
 
 function getAllListings(){
-    include ("connection.php");
+    include ("../../connection.php");
 
     $statement = "SELECT l.listing_id AS id, listing_name, price, description, address, size
                   FROM listings l INNER JOIN listingprices lp ON l.listing_id = lp.listing_id
@@ -151,7 +151,7 @@ function getAllListings(){
 }
 
 function getAllDeletedListings(){
-    include ("connection.php");
+    include ("../../connection.php");
 
     $statement = "SELECT l.listing_id AS id, listing_name, price, description, address, size
                   FROM listings l INNER JOIN listingprices lp ON l.listing_id = lp.listing_id
@@ -166,7 +166,7 @@ function getAllDeletedListings(){
 }
 
 function restoreListing($id){
-    include ("connection.php");
+    include ("../../connection.php");
 
     $statement = "UPDATE listings SET dateDeleted = NULL
                   WHERE listing_id = :listing_id";
@@ -178,7 +178,7 @@ function restoreListing($id){
 }
 
 function getListings(){
-    include ("connection.php");
+    include ("../../connection.php");
 
     $statement = "SELECT listing_id, listing_name, borough_name, type_name
                   FROM listings l INNER JOIN boroughs b ON l.borough_id = b.borough_id
