@@ -862,7 +862,7 @@ window.onload = function(){
             let linkPriority = LinkPriorityField.value;
 
             let reTitle = /^[A-Z][a-z]{2,15}(\s[A-Za-z][a-z]{2,15}){0,2}$/;
-            let reHref = /(^[a-z]{3,40}\.[a-z]{2,5}$)/;
+            let reHref = /(https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[-a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&\/=]*))||(^[a-z]{3,40}\.[a-z]{2,5}$)/;
             let reIcon = /(^$)|(^[a-z:-]{5,30}$)/;
 
             let submitType = linkId > 0 ? "edit" : "create";
