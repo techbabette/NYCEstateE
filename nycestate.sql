@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 22, 2023 at 03:45 PM
+-- Generation Time: Apr 23, 2023 at 03:11 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -42,6 +42,19 @@ INSERT INTO `accesslevels` (`access_level_id`, `level`, `level_title`) VALUES
 (2, 2, 'Logged in'),
 (3, 3, 'Admin'),
 (4, 0, 'Only logged out');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `answers`
+--
+
+CREATE TABLE `answers` (
+  `answer_id` int(20) NOT NULL,
+  `question_id` int(20) NOT NULL,
+  `answer` varchar(255) NOT NULL,
+  `dateDeleted` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -253,7 +266,19 @@ INSERT INTO `listings` (`listing_id`, `user_id`, `borough_id`, `building_type_id
 (4, 0, 1, 1, 'New listing', 'New description', 'Kings street 25', 35.00, '2023-04-22 13:24:08', NULL),
 (12, 4, 1, 1, 'Newer listing', 'This is the newest listing', 'King\'s street 20', 30.00, '2023-04-22 13:24:08', NULL),
 (16, 4, 3, 1, 'Listing with rooms', 'This listing has rooms', 'King\'s street 50', 30.00, '2023-04-22 13:24:08', NULL),
-(17, 4, 3, 2, 'Listing delete', 'This will be deleted', 'King\'s street 20', 30.00, '2023-04-22 13:37:41', '2023-04-22 13:44:39');
+(17, 4, 3, 2, 'Listing delete', 'This will be deleted', 'King\'s street 20', 30.00, '2023-04-22 13:37:41', '2023-04-22 21:32:22');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `questions`
+--
+
+CREATE TABLE `questions` (
+  `question_id` int(20) NOT NULL,
+  `question` varchar(255) NOT NULL,
+  `dateDeleted` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -298,6 +323,18 @@ INSERT INTO `roomtypes` (`room_type_id`, `room_name`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `useranswers`
+--
+
+CREATE TABLE `useranswers` (
+  `useranswer_id` int(20) NOT NULL,
+  `user_id` int(20) NOT NULL,
+  `answer_id` int(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
@@ -328,6 +365,13 @@ INSERT INTO `users` (`user_id`, `email`, `password`, `name`, `lastName`, `dateCr
 --
 ALTER TABLE `accesslevels`
   ADD PRIMARY KEY (`access_level_id`);
+
+--
+-- Indexes for table `answers`
+--
+ALTER TABLE `answers`
+  ADD PRIMARY KEY (`answer_id`),
+  ADD KEY `question_id` (`question_id`);
 
 --
 -- Indexes for table `boroughs`
@@ -396,6 +440,12 @@ ALTER TABLE `listings`
   ADD KEY `building_type_id` (`building_type_id`);
 
 --
+-- Indexes for table `questions`
+--
+ALTER TABLE `questions`
+  ADD PRIMARY KEY (`question_id`);
+
+--
 -- Indexes for table `roles`
 --
 ALTER TABLE `roles`
@@ -407,6 +457,14 @@ ALTER TABLE `roles`
 --
 ALTER TABLE `roomtypes`
   ADD PRIMARY KEY (`room_type_id`);
+
+--
+-- Indexes for table `useranswers`
+--
+ALTER TABLE `useranswers`
+  ADD PRIMARY KEY (`useranswer_id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `answer_id` (`answer_id`);
 
 --
 -- Indexes for table `users`
@@ -425,6 +483,12 @@ ALTER TABLE `users`
 --
 ALTER TABLE `accesslevels`
   MODIFY `access_level_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `answers`
+--
+ALTER TABLE `answers`
+  MODIFY `answer_id` int(20) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `boroughs`
@@ -481,6 +545,12 @@ ALTER TABLE `listings`
   MODIFY `listing_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
+-- AUTO_INCREMENT for table `questions`
+--
+ALTER TABLE `questions`
+  MODIFY `question_id` int(20) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `roles`
 --
 ALTER TABLE `roles`
@@ -491,6 +561,12 @@ ALTER TABLE `roles`
 --
 ALTER TABLE `roomtypes`
   MODIFY `room_type_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `useranswers`
+--
+ALTER TABLE `useranswers`
+  MODIFY `useranswer_id` int(20) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `users`
