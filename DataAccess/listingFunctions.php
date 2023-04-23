@@ -21,8 +21,16 @@ function createNewListing($user, $borough, $building_type, $name, $description, 
     return $last_id;
 }
 
-function editListing($borough, $building_type, $name, $description, $address, $size){
-    
+function editListing($listing_id, $borough, $building_type, $name, $description, $address, $size){
+    include ("../../connection.php");
+
+    $statement = "UPDATE listings SET (borough_id, building_type_id, listing_name, description, address, size)
+                  WHERE listing_id = :listing_id";
+    $prepSt = $conn->prepare($statement);
+
+    $prepSt->bindParam("listing_id", $listing_id, PDO::PARAM_INT);
+
+    return $prepSt->execute();
 }
 
 function saveListingPrice($listing, $price){
@@ -71,6 +79,33 @@ function saveListingRoom($listing, $room, $count){
     return $result;
 }
 
+function updateListingRoomCount($listing_id, $room_type_id, $numberOf){
+    include ("../../connection.php");
+
+    $statement = "UPDATE listingrooms SET numberOf :numberOf
+                  WHERE listing_id = :listing_id AND room_type_id = :room_type_id";
+    $prepSt = $conn->prepare($statement);
+
+    $prepSt->bindParam("listing_id", $listing_id, PDO::PARAM_INT);
+    $prepSt->bindParam("room_type_id", $room_type_id, PDO::PARAM_INT);
+    $prepSt->bindParam("numberOf", $numberOf, PDO::PARAM_INT);
+
+    return $prepSt->execute();
+}
+
+function removeListingRoom($listing_id, $room_type_id){
+    include ("../../connection.php");
+
+    $statement = "DELETE FROM listingrooms
+                  WHERE listing_id = :listing_id AND room_type_id = :room_type_id";
+    $prepSt = $conn->prepare($statement);
+
+    $prepSt->bindParam("listing_id", $listing_id, PDO::PARAM_INT);
+    $prepSt->bindParam("room_type_id", $room_type_id, PDO::PARAM_INT);
+
+    return $prepSt->execute();
+}
+
 function updateMainListingPhoto($listing, $path){
     include ("../../connection.php");
 
@@ -106,7 +141,8 @@ function getRoomsOfListing($listing){
     include ("../../connection.php");
 
     $statement = "SELECT rt.room_name, rt.room_type_id, lr.numberOf 
-                  FROM roomtypes rt INNER JOIN listingrooms lr ON rt.room_type_id = lr.room_type_id
+                  FROM roomtypes rt 
+                  INNER JOIN listingrooms lr ON rt.room_type_id = lr.room_type_id
                   INNER JOIN listings li ON lr.listing_id = li.listing_id
                   WHERE li.listing_id = :listing_id";
     $prepSt = $conn->prepare($statement);
@@ -146,6 +182,18 @@ function getAllListings(){
 
     $prepSt->execute();
     $result = $prepSt->fetchAll();
+
+    return $result;
+}
+
+function getPriceOfListing($listing_id){
+    $statement = "SELECT price FROM listingprices WHERE listing_id = :listing_id ORDER BY date DESC LIMIT 1";
+    $prepSt = $conn->prepare($statement);
+
+    $prepSt->bindParam("listing_id", $listing, PDO::PARAM_INT);
+
+    $prepSt->execute();
+    $result = $prepSt->fetch();
 
     return $result;
 }
