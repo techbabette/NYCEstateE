@@ -129,7 +129,7 @@ window.onload = function(){
                       {title : "Links", headers : ["Title", "Access level","Link", "File location", "Location",  "Priority", "Parent", "Icon"], target : "getAllLinks", createNew : showLinkModal, edit : showLinkModal},
                       {title : "Boroughs", headers : ["Title", "Number of listings"], target : "getAllBoroughsCount", createNew: showBoroughModal, edit: showBoroughModal},
                       {title : "Building types", headers : ["Title", "Number of listings"], target : "getAllBuildingTypesCount", createNew: showBuildingTypeModal, edit: showBuildingTypeModal},
-                      {title : "Survey questions", headers : ["Title", "Number of answers"], target : "getAllQuestions", createNew : showBuildingTypeModal, edit: showBuildingTypeModal},
+                      {title : "Survey questions", headers : ["Title", "Number of answers"], target : "getAllQuestions", createNew : showQuestionModal, edit: showQuestionModal},
                       {title : "Room types", headers : ["Title"], target : "getAllRoomTypes", createNew: showRoomTypeModal, edit: showRoomTypeModal},
                       {title : "Deleted listings", headers : ["Name", "Price","Description", "Address", "Size"], target : "getAllDeletedListings", edit: showListingModal, restore : "restoreListing"},
                     ];
@@ -592,7 +592,21 @@ window.onload = function(){
             }
 
             globalData.currModal = modal;
-            openModal(modal, globalData.modalBackground)
+            openModal(modal, globalData.modalBackground);
+        }
+        function showQuestionModal(existingId = 0){
+            let modal = document.querySelector("#question-modal");
+
+            let answerHolder = document.querySelector("#question-answer-holder");
+
+            let type = existingId ? "edit" : "create";
+
+            globalData.numberOfAnswers = 1;
+
+            answerHolder.innerHTML = "";
+
+            globalData.currModal = modal;
+            openModal(modal, globalData.modalBackground);
         }
         //Setup functions
         function setUpModals(){
@@ -606,6 +620,7 @@ window.onload = function(){
             setupBoroughModal();
             setupBuildingTypeModal();
             setupRoomTypeModal();
+            setupQuestionModal();
         }
         function setupUserModal(){
             let userRoleSelect = document.querySelector("#userRole"); 
@@ -687,6 +702,13 @@ window.onload = function(){
             addEventListenerOnce("click", modalSubmitButton, function(e){
                 e.preventDefault();
                 submitRoomTypeForm();
+            })
+        }
+        function setupQuestionModal(){
+            let questionAddAnswerButton = document.querySelector("#questionAddAnswer");
+            addEventListenerOnce("click", questionAddAnswerButton, function(e){
+                e.preventDefault();
+                addAnswer(globalData.numberOfAnswers++, "");
             })
         }
         function submitUserForm(){
@@ -1001,7 +1023,28 @@ window.onload = function(){
 
             submitAjax(target, showResult, data, {closeModal : true});
         }
+        function addAnswer(num, answerText, answerId = 0){
+            let answerHolder = document.querySelector("#question-answer-holder");
+            let newAnswerHolder = document.createElement("div");
 
+            let html = 
+            `
+            <label for="answer${num}" class="d-block">Answer ${num}</label>
+            <input type="text" value="${answerText}" class="form-control d-inline questionAnswer w-50" data-id="${answerId}" name="answer${num}" id="answer${num}">
+            <button class="btn btn-danger d-inline removeAnswer">Remove</button>
+            `
+            newAnswerHolder.innerHTML += html;
+            answerHolder.appendChild(newAnswerHolder);
+            let removeButtons = document.querySelectorAll("removeAnswer");
+
+            for(let elem of removeButtons){
+                addEventListenerOnce("click", elem, function(e){
+                    e.preventDefault();
+                    let parentElement = this.parentElement;
+                    parentElement.remove;
+                })
+            }
+        }
         function addRoom(roomId, roomText, count = 1){
             let html = "";
             let roomHolder = document.querySelector("#room-holder");
