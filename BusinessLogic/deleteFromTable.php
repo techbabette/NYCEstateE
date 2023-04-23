@@ -33,6 +33,19 @@ switch($requestedTable){
         $dataTable = "links";
         $dataParam = "link_id";
         break;
+    case "Building types" :
+        $dataTable = "buildingtypes";
+        $dataParam = "building_type_id";
+        break;
+    case "Room types" : 
+        $dataTable = "roomtypes";
+        $dataParam = "room_type_id";
+        break;
+    case "Survey questions" :
+        $dataTable = "questions";
+        $dataParam = "question_id";
+        $type = "soft";
+        break;
 }
 
 if($dataTable == ""){
@@ -57,6 +70,7 @@ try{
     echo json_encode($result);
 }
 catch (PDOException $e){
+    //If collation error, echoUnprocessableEntity instead
     echoUnexpectedError();
 }
 
