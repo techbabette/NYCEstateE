@@ -97,13 +97,13 @@ window.onload = function(){
 
             let reEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
-            errors += reTestText(reEmail, emailField);
+            errors += reTestText(reEmail, emailField, "");
 
-            errors += reTestText(rePass1, passwordField);
-            errors += reTestText(rePass2, passwordField);
-            errors += reTestText(rePass3, passwordField);
-            errors += reTestText(rePass4, passwordField);
-            errors += reTestText(rePass5, passwordField);
+            errors += reTestText(rePass1, passwordField, "");
+            errors += reTestText(rePass2, passwordField, "");
+            errors += reTestText(rePass3, passwordField, "");
+            errors += reTestText(rePass4, passwordField, "");
+            errors += reTestText(rePass5, passwordField, "");
 
             let data = {"attemptLogin" : true, "email" : email, "pass" : password};
 
@@ -723,6 +723,12 @@ window.onload = function(){
                 e.preventDefault();
                 addAnswer(globalData.numberOfAnswers++, "");
             })
+
+            let modalSubmitButton = document.querySelector("#question-submit");
+            addEventListenerOnce("click", modalSubmitButton, function(e){
+                e.preventDefault();
+                submitQuestionForm();
+            })
         }
         function submitUserForm(){
             let userNameField = document.querySelector("#userName");
@@ -842,12 +848,12 @@ window.onload = function(){
             if(testDropdown(listingBuildingTypeSelect, 0, "You must select a building type")) errors++;
 
             if(type === "create"){
-                if(testImage(listingPhotoField)) errors++;
+                if(testImage(listingPhotoField), "") errors++;
             }
             let roomSelects = document.querySelectorAll(".listingRoom");
             let arrayOfRooms = new Array();
             for(let roomElement of roomSelects){
-                if(testGeneric(roomElement, roomElement.value < 1)) {
+                if(testGeneric(roomElement, roomElement.value < 1), "Number of rooms cannot be less than one", 2) {
                     errors++;
                     continue;
                 }
@@ -1040,6 +1046,21 @@ window.onload = function(){
 
             submitAjax(target, showResult, data, {closeModal : true});
         }
+        function submitQuestionForm(){
+            let questionNameField = document.querySelector("#questionName");
+            let questionIdField = document.querySelector("#questionId");
+
+            let reQuestion = /^[A-Z][a-z']{1,20}(\s[A-Za-z][a-z']{0,20}){2,10}$/;
+            let reAnswer = /^[A-Z][a-z']{1,20}(\s[A-Za-z][a-z']{0,20}){2,10}$/;
+
+            let providedAnswers = document.querySelectorAll(".questionAnswer");
+
+            let errors = 0;
+
+            for(let answer of providedAnswers){
+               errors += reTestText(reAnswer, answer, "Answer does not fit format, eg: Yes I do (at least three words)", 2);
+            }
+        }
         function addAnswer(num, answerText, answerId = 0){
             let answerHolder = document.querySelector("#question-answer-holder");
             let newAnswerHolder = document.createElement("div");
@@ -1049,6 +1070,7 @@ window.onload = function(){
             <label for="answer${num}" class="d-block">Answer ${num}</label>
             <input type="text" value="${answerText}" class="form-control d-inline questionAnswer w-50" data-id="${answerId}" name="answer${num}" id="answer${num}">
             <button class="btn btn-danger d-inline removeAnswer">Remove</button>
+            <span class="error-msg hidden d-block"></span>
             `
             newAnswerHolder.innerHTML += html;
             answerHolder.appendChild(newAnswerHolder);
@@ -1075,7 +1097,8 @@ window.onload = function(){
             html += 
             `<label for="room${roomId}" class="d-block">${roomText}</label>
             <input type="number" value="${count}" min="1" class="form-control d-inline listingRoom w-50" data-id="${roomId}" name="listingRoom${roomId}" id="room${roomId}">
-            <button class="btn btn-danger d-inline removeRoom" id="removeButton${roomId}">Remove</button>`
+            <button class="btn btn-danger d-inline removeRoom" id="removeButton${roomId}">Remove</button>
+            <span class="error-msg hidden d-block"></span>`
             newRoomHolder.innerHTML += html;
             roomHolder.appendChild(newRoomHolder);
             let removeButtons = document.querySelectorAll(`.removeRoom`);
@@ -1257,10 +1280,10 @@ function createRequest(){
     return request;
 }
 
-function testGeneric(field, statement, errorMessage = ""){
+function testGeneric(field, statement, errorMessage, errorHolderDistance = 1){
     if(statement){
         removeSuccess(field);
-        addError(field, errorMessage);
+        addError(field, errorMessage, errorHolderDistance);
         return 1;
     }
     removeError(field);
@@ -1268,11 +1291,11 @@ function testGeneric(field, statement, errorMessage = ""){
     return 0;
 }
 
-function testNumericBounds(field, minimalValue, errorMessage = ""){
+function testNumericBounds(field, minimalValue, errorMessage, errorHolderDistance = 1){
     let value = field.value;
     if(value < minimalValue){
         removeSuccess(field);
-        addError(field, errorMessage);
+        addError(field, errorMessage, errorHolderDistance);
         return 1;
     }
     removeError(field);
@@ -1280,7 +1303,7 @@ function testNumericBounds(field, minimalValue, errorMessage = ""){
     return 0;
 }
 
-function testDropdown(field, negativeValue, errorMessage = ""){
+function testDropdown(field, negativeValue, errorMessage, errorHolderDistance = 1){
     let value = field.value;
     //On success
     if(value != negativeValue){
@@ -1291,23 +1314,23 @@ function testDropdown(field, negativeValue, errorMessage = ""){
     //On fail
     else{
         removeSuccess(field);
-        addError(field, errorMessage);
+        addError(field, errorMessage, errorHolderDistance);
         return 1;
     }
 }
 
-function testImage(field, errorMessage = ""){
+function testImage(field, errorMessage, errorHolderDistance = 1){
     let value = field.value;
     if(value == ""){
         removeSuccess(field);
-        addError(field, errorMessage);
+        addError(field, errorMessage, errorHolderDistance);
         return 1;
     }
     removeError(field);
     addSuccess(field);
 }
 
-function reTestText(regex, field, errorMessage = ""){
+function reTestText(regex, field, errorMessage, errorHolderDistance = 1){
     let textValue = field.value;
     let passes = regex.test(textValue);
     if(passes){
@@ -1320,10 +1343,17 @@ function reTestText(regex, field, errorMessage = ""){
     else{
         if(errorMessage != ""){
             removeSuccess(field);
-            addError(field, errorMessage);
+            addError(field, errorMessage, errorHolderDistance);
         }
         return 1;
     }
+}
+
+function getNthNextElement(field, n){
+    for(let i = 0; i < n; i++){
+        field = field.nextElementSibling;
+    }
+    return field;
 }
 
 function addSuccess(field){
@@ -1341,9 +1371,9 @@ function removeSuccess(field){
     field.classList.remove("success-outline");
 }
 
-function addError(field, msg = ""){
+function addError(field, msg, errorHolderDistance){
     if(msg != ""){
-        let errorBox = field.nextElementSibling;
+    let errorBox = getNthNextElement(field, errorHolderDistance);
         errorBox.innerText = msg;
         errorBox.classList.remove("hidden");
     }
