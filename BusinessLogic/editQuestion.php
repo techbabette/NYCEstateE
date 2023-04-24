@@ -110,7 +110,7 @@ catch (PDOException $e){
     echoUnexpectedError();
 }
 
-$result["general"] = "Successfully edit question";
+$result["general"] = "Successfully edited question";
 http_response_code(201);
 echo json_encode($result)
 ?>
