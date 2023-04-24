@@ -79,6 +79,7 @@ footer{
     right: 20px;
     padding: 20px;
     z-index: 5;
+    pointer-events: none;
 }
 .error-message{
     opacity: 1;

@@ -21,14 +21,21 @@ function createNewListing($user, $borough, $building_type, $name, $description, 
     return $last_id;
 }
 
-function editListing($listing_id, $borough, $building_type, $name, $description, $address, $size){
+function editListing($listing_id, $borough_id, $building_type_id, $name, $description, $address, $size){
     include ("../../connection.php");
 
-    $statement = "UPDATE listings SET (borough_id, building_type_id, listing_name, description, address, size)
+    $statement = "UPDATE listings SET borough_id = :borough_id, building_type_id = :building_type_id, listing_name = :name, 
+                  description = :description, address = :address, size = :size
                   WHERE listing_id = :listing_id";
     $prepSt = $conn->prepare($statement);
 
     $prepSt->bindParam("listing_id", $listing_id, PDO::PARAM_INT);
+    $prepSt->bindParam("borough_id", $borough_id, PDO::PARAM_INT);
+    $prepSt->bindParam("building_type_id", $building_type_id, PDO::PARAM_INT);
+    $prepSt->bindParam("name", $name);
+    $prepSt->bindParam("description", $description);
+    $prepSt->bindParam("address", $address);
+    $prepSt->bindParam("size", $size);
 
     return $prepSt->execute();
 }
@@ -82,7 +89,7 @@ function saveListingRoom($listing, $room, $count){
 function updateListingRoomCount($listing_id, $room_type_id, $numberOf){
     include ("../../connection.php");
 
-    $statement = "UPDATE listingrooms SET numberOf :numberOf
+    $statement = "UPDATE listingrooms SET numberOf = :numberOf
                   WHERE listing_id = :listing_id AND room_type_id = :room_type_id";
     $prepSt = $conn->prepare($statement);
 
@@ -177,7 +184,8 @@ function getAllListings(){
     $statement = "SELECT l.listing_id AS id, listing_name, price, description, address, size
                   FROM listings l INNER JOIN listingprices lp ON l.listing_id = lp.listing_id
                   WHERE lp.date = (SELECT MAX(date) FROM listingprices WHERE listing_id = l.listing_id)
-                  AND l.dateDeleted IS NULL";
+                  AND l.dateDeleted IS NULL
+                  ORDER BY l.listing_id";
     $prepSt = $conn->prepare($statement);
 
     $prepSt->execute();
@@ -187,10 +195,13 @@ function getAllListings(){
 }
 
 function getPriceOfListing($listing_id){
-    $statement = "SELECT price FROM listingprices WHERE listing_id = :listing_id ORDER BY date DESC LIMIT 1";
+    include ("../../connection.php");
+
+    $statement = "SELECT price FROM listingprices WHERE 
+                  listing_id = :listing_id ORDER BY date DESC LIMIT 1";
     $prepSt = $conn->prepare($statement);
 
-    $prepSt->bindParam("listing_id", $listing, PDO::PARAM_INT);
+    $prepSt->bindParam("listing_id", $listing_id, PDO::PARAM_INT);
 
     $prepSt->execute();
     $result = $prepSt->fetch();

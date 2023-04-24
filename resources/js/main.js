@@ -841,8 +841,9 @@ window.onload = function(){
 
             if(testDropdown(listingBuildingTypeSelect, 0, "You must select a building type")) errors++;
 
-            if(testImage(listingPhotoField)) errors++;
-
+            if(type === "create"){
+                if(testImage(listingPhotoField)) errors++;
+            }
             let roomSelects = document.querySelectorAll(".listingRoom");
             let arrayOfRooms = new Array();
             for(let roomElement of roomSelects){
@@ -861,7 +862,10 @@ window.onload = function(){
 
             //On success
             if(errors !== 0) return;
-            formData.append("listingPhoto", listingPhotoField.files[0]);
+
+            if(listingPhotoField.value != ""){
+                formData.append("listingPhoto", listingPhotoField.files[0]);
+            }
             formData.append("listingTitle", listingTitleField.value);
             formData.append("listingDescription", listingDescriptionField.value);
             formData.append("listingAddress", listingAddressField.value);

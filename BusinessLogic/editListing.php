@@ -127,22 +127,24 @@ require("../DataAccess/listingFunctions.php");
 
 try{
     $lastInsertedId = editListing($listingId, $listingBorough, $listingBuildingType, $listingTitle, $listingDescription, $listingAddress, $listingSize);
-    $currentPrice = getPriceOfListing($listingId);
+    $currentPrice = getPriceOfListing($listingId)["price"];
     //If current price different from submitted price
-    if($currentPrice["price"] != $listingPrice){
-        saveListingPrice($listingPrice, $listingPrice);
+    if($currentPrice != $listingPrice){
+        saveListingPrice($listingId, $listingPrice);
     }
-    saveMainListingPhoto($listingId, $newFileName.".".$imageFileType);
+    if($imgUpload){
+        saveMainListingPhoto($listingId, $newFileName.".".$imageFileType);
+    }
     $roomsSubmited = array_map(function($elem){
         return $elem->roomId;
     }, $rooms);
     $listingRooms = getRoomsOfListing($listingId);
     foreach($listingRooms as $room){
         //If room in list of rooms submitted, update count
-        if(in_array($room["room_type_id"]), $roomsSubmited){
+        if(in_array($room["room_type_id"], $roomsSubmited)){
             $count = 0;
             foreach($rooms as $key => $r){
-                if($r->roomId == $room["listing_type_id"]){
+                if($r->roomId == $room["room_type_id"]){
                     $count = $r->count;
                     //Remove rooms who's value is only being changed from submitted list of rooms
                     unset($rooms[$key]);
@@ -162,13 +164,13 @@ try{
     }
 }
 catch (PDOException $e){
-    echoUnexpectedError();
+    echoUnexpectedError($e);
 }
 
 if($imgUpload){
     move_uploaded_file($_FILES["listingPhoto"]["tmp_name"], $target_file);
 }
-$result["general"] = "Successfully edited listing";
+$result["general"] = "Successfully edited listing, price before change was: ".$currentPrice;
 http_response_code(201);
 echo json_encode($result)
 ?>

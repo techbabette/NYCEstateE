@@ -65,7 +65,7 @@ try{
     else{
         softDeleteSingleRow($dataTable, $dataParam, $requestedId);
     }
-    $result["general"] = "Successfully deleted ".substr($requestedTable, 0, -1);
+    $result["general"] = "Successfully deleted ".strtolower(substr($requestedTable, 0, -1));
     http_response_code(200);
     echo json_encode($result);
 }
