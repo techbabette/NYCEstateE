@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 23, 2023 at 03:11 PM
+-- Generation Time: Apr 24, 2023 at 07:13 AM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -129,12 +129,14 @@ CREATE TABLE `linkicons` (
 --
 
 INSERT INTO `linkicons` (`link_icon_id`, `link_id`, `icon`, `active`, `dateCreated`) VALUES
-(1, 9, 'icomoon-free:facebook', 1, '2023-04-08 03:58:37'),
+(1, 9, 'icomoon-free:facebook', 0, '2023-04-08 03:58:37'),
 (2, 10, 'la:twitter', 1, '2023-04-08 03:58:37'),
 (3, 11, 'fa-file', 0, '2023-04-08 03:58:37'),
 (4, 12, 'bx:sitemap', 0, '2023-04-08 03:58:37'),
 (8, 12, 'bx:sitemap', 1, '2023-04-09 05:20:18'),
-(9, 11, 'fa-file', 1, '2023-04-21 03:34:17');
+(9, 11, 'fa-file', 0, '2023-04-21 03:34:17'),
+(10, 9, 'icomoon-free:facebook', 1, '2023-04-23 13:25:45'),
+(11, 11, 'fa-file', 1, '2023-04-24 03:56:17');
 
 -- --------------------------------------------------------
 
@@ -192,7 +194,8 @@ INSERT INTO `listingphotos` (`photo_id`, `listing_id`, `main`, `path`, `dateUplo
 (3, 4, 1, '16818274541544568656643ea67eb94c0.png', '2023-04-18 14:17:34'),
 (11, 12, 1, '1681897858933328828643fb982abdef.jpg', '2023-04-19 09:50:58'),
 (15, 16, 1, '16818980812027868961643fba617d826.jpg', '2023-04-19 09:54:41'),
-(16, 17, 1, '168217066120666745526443e325515b3.jpg', '2023-04-22 13:37:41');
+(16, 17, 1, '168217066120666745526443e325515b3.jpg', '2023-04-22 13:37:41'),
+(17, 18, 1, '168230851112256859946445fd9f54852.jpg', '2023-04-24 03:55:11');
 
 -- --------------------------------------------------------
 
@@ -215,7 +218,12 @@ INSERT INTO `listingprices` (`price_id`, `listing_id`, `price`, `date`) VALUES
 (3, 4, '2000.00', '2023-04-18 14:17:34'),
 (11, 12, '1000.00', '2023-04-19 09:50:58'),
 (15, 16, '1000.00', '2023-04-19 09:54:41'),
-(16, 17, '1000.00', '2023-04-22 13:37:41');
+(16, 17, '1000.00', '2023-04-22 13:37:41'),
+(17, 18, '1000.00', '2023-04-24 03:55:11'),
+(23, 18, '1025.00', '2023-04-24 04:24:53'),
+(24, 18, '1500.00', '2023-04-24 04:28:30'),
+(25, 18, '1700.00', '2023-04-24 04:28:39'),
+(26, 12, '1500.00', '2023-04-24 04:29:58');
 
 -- --------------------------------------------------------
 
@@ -227,17 +235,17 @@ CREATE TABLE `listingrooms` (
   `listing_room_id` int(20) NOT NULL,
   `listing_id` int(20) NOT NULL,
   `room_type_id` int(20) NOT NULL,
-  `numberOf` int(10) NOT NULL,
-  `active` tinyint(1) NOT NULL DEFAULT 1
+  `numberOf` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `listingrooms`
 --
 
-INSERT INTO `listingrooms` (`listing_room_id`, `listing_id`, `room_type_id`, `numberOf`, `active`) VALUES
-(1, 16, 2, 2, 1),
-(2, 16, 1, 1, 1);
+INSERT INTO `listingrooms` (`listing_room_id`, `listing_id`, `room_type_id`, `numberOf`) VALUES
+(1, 16, 2, 2),
+(2, 16, 1, 1),
+(3, 18, 2, 2);
 
 -- --------------------------------------------------------
 
@@ -247,7 +255,6 @@ INSERT INTO `listingrooms` (`listing_room_id`, `listing_id`, `room_type_id`, `nu
 
 CREATE TABLE `listings` (
   `listing_id` int(20) NOT NULL,
-  `user_id` int(20) NOT NULL,
   `borough_id` int(20) NOT NULL,
   `building_type_id` int(20) NOT NULL,
   `listing_name` varchar(200) NOT NULL,
@@ -262,11 +269,12 @@ CREATE TABLE `listings` (
 -- Dumping data for table `listings`
 --
 
-INSERT INTO `listings` (`listing_id`, `user_id`, `borough_id`, `building_type_id`, `listing_name`, `description`, `address`, `size`, `dateCreated`, `dateDeleted`) VALUES
-(4, 0, 1, 1, 'New listing', 'New description', 'Kings street 25', 35.00, '2023-04-22 13:24:08', NULL),
-(12, 4, 1, 1, 'Newer listing', 'This is the newest listing', 'King\'s street 20', 30.00, '2023-04-22 13:24:08', NULL),
-(16, 4, 3, 1, 'Listing with rooms', 'This listing has rooms', 'King\'s street 50', 30.00, '2023-04-22 13:24:08', NULL),
-(17, 4, 3, 2, 'Listing delete', 'This will be deleted', 'King\'s street 20', 30.00, '2023-04-22 13:37:41', '2023-04-22 21:32:22');
+INSERT INTO `listings` (`listing_id`, `borough_id`, `building_type_id`, `listing_name`, `description`, `address`, `size`, `dateCreated`, `dateDeleted`) VALUES
+(4, 1, 1, 'New listing', 'New description', 'Kings street 25', 35.00, '2023-04-22 13:24:08', NULL),
+(12, 1, 1, 'Newer listing', 'This is the newest listing', 'King\'s street 20', 30.00, '2023-04-22 13:24:08', NULL),
+(16, 3, 1, 'Listing with rooms', 'This listing has rooms', 'King\'s street 50', 30.00, '2023-04-22 13:24:08', NULL),
+(17, 3, 2, 'Listing delete', 'This will be deleted', 'King\'s street 20', 30.00, '2023-04-22 13:37:41', '2023-04-22 21:32:22'),
+(18, 3, 3, 'Listing edited', 'Listing has been edited', 'King\'s street NN', 200.00, '2023-04-24 03:55:11', NULL);
 
 -- --------------------------------------------------------
 
@@ -413,7 +421,7 @@ ALTER TABLE `links`
 --
 ALTER TABLE `listingphotos`
   ADD PRIMARY KEY (`photo_id`),
-  ADD UNIQUE KEY `listing_id` (`listing_id`);
+  ADD KEY `listing_id` (`listing_id`) USING BTREE;
 
 --
 -- Indexes for table `listingprices`
@@ -435,7 +443,6 @@ ALTER TABLE `listingrooms`
 --
 ALTER TABLE `listings`
   ADD PRIMARY KEY (`listing_id`),
-  ADD KEY `user_id` (`user_id`),
   ADD KEY `borough_id` (`borough_id`),
   ADD KEY `building_type_id` (`building_type_id`);
 
@@ -500,7 +507,7 @@ ALTER TABLE `boroughs`
 -- AUTO_INCREMENT for table `buildingtypes`
 --
 ALTER TABLE `buildingtypes`
-  MODIFY `building_type_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `building_type_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `favorites`
@@ -512,7 +519,7 @@ ALTER TABLE `favorites`
 -- AUTO_INCREMENT for table `linkicons`
 --
 ALTER TABLE `linkicons`
-  MODIFY `link_icon_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `link_icon_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `links`
@@ -524,25 +531,25 @@ ALTER TABLE `links`
 -- AUTO_INCREMENT for table `listingphotos`
 --
 ALTER TABLE `listingphotos`
-  MODIFY `photo_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `photo_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `listingprices`
 --
 ALTER TABLE `listingprices`
-  MODIFY `price_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `price_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `listingrooms`
 --
 ALTER TABLE `listingrooms`
-  MODIFY `listing_room_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `listing_room_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `listings`
 --
 ALTER TABLE `listings`
-  MODIFY `listing_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `listing_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `questions`
