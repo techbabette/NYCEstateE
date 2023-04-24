@@ -336,7 +336,7 @@ window.onload = function(){
 
             //Remove success and error
             for(let elem of elems){
-                removeError(elem);
+                removeError(elem, 1);
                 removeSuccess(elem);
             }
 
@@ -379,7 +379,7 @@ window.onload = function(){
 
             //Remove success and error
             for(let elem of elems){
-                removeError(elem);
+                removeError(elem, 1);
                 removeSuccess(elem);
             }
             if(type == "edit"){
@@ -449,7 +449,7 @@ window.onload = function(){
             let elems = new Array(boroughNameField);
 
             for(let elem of elems){
-                removeError(elem);
+                removeError(elem, 1);
                 removeSuccess(elem);
             }
 
@@ -489,7 +489,7 @@ window.onload = function(){
             let elems = new Array(buildingTypeNameField);
 
             for(let elem of elems){
-                removeError(elem);
+                removeError(elem, 1);
                 removeSuccess(elem);
             }
 
@@ -529,7 +529,7 @@ window.onload = function(){
             let elems = new Array(roomTypeNameField);
 
             for(let elem of elems){
-                removeError(elem);
+                removeError(elem, 1);
                 removeSuccess(elem);
             }
 
@@ -558,7 +558,7 @@ window.onload = function(){
             let elems = new Array(listingTitleField, listingDescriptionField, listingAddressField, listingSizeField, listingPriceField, listingBoroughSelect, listingBuildingTypeSelect, listingPhotoField);
 
             for(let elem of elems){
-                removeError(elem);
+                removeError(elem, 1);
                 removeSuccess(elem);
             }
 
@@ -609,14 +609,37 @@ window.onload = function(){
         }
         function showQuestionModal(existingId = 0){
             let modal = document.querySelector("#question-modal");
-
+            let modalTitle = document.querySelector("#question-modal-title");
+            let modalSubmitButton = document.querySelector("#question-submit");
             let answerHolder = document.querySelector("#question-answer-holder");
+            let questionNameField = document.querySelector("#question-field");
+            let questionIdField = document.querySelector("#questionId");
+
+            questionIdField.value = existingId;
 
             let type = existingId ? "edit" : "create";
 
             globalData.numberOfAnswers = 1;
 
             answerHolder.innerHTML = "";
+
+            question
+
+            if(type == "edit"){
+                modalTitle.innerText = "Edit survey question";
+                modalSubmitButton.innerText = "Edit survey question";
+                let data = {questionId : existingId};
+                submitAjax("getSpecificQuestion", function(data){
+                    let question = data["question"];
+                    let answers = data["answers"];
+                    foreach()
+                }, data);
+            }
+            else{
+                modalTitle.innerText = "Create new survey question";
+                modalSubmitButton.innerText = "Create new question";
+            }
+
 
             globalData.currModal = modal;
             openModal(modal, globalData.modalBackground);
@@ -673,7 +696,7 @@ window.onload = function(){
                     removeSuccess(listingRoomsList);
                     return;
                 }
-                removeError(listingRoomsList);
+                removeError(listingRoomsList, 1);
                 addRoom(roomId, roomText);
             });
 
@@ -848,7 +871,7 @@ window.onload = function(){
             if(testDropdown(listingBuildingTypeSelect, 0, "You must select a building type")) errors++;
 
             if(type === "create"){
-                if(testImage(listingPhotoField), "") errors++;
+                if(testImage(listingPhotoField, "")) errors++;
             }
             let roomSelects = document.querySelectorAll(".listingRoom");
             let arrayOfRooms = new Array();
@@ -1053,13 +1076,58 @@ window.onload = function(){
             let reQuestion = /^[A-Z][a-z']{1,20}(\s[A-Za-z][a-z']{0,20}){2,10}$/;
             let reAnswer = /^[A-Z][a-z']{1,20}(\s[A-Za-z][a-z']{0,20}){2,10}$/;
 
+            let type = questionIdField.value > 0 ? "edit" : "create";
+
+            let target = "createNewQuestion";
+
+            let data = {};
+
+            if(type == "edit"){
+                data.questionId = questionIdField.value;
+            }
+
             let providedAnswers = document.querySelectorAll(".questionAnswer");
 
             let errors = 0;
 
+            if(reTestText(reQuestion, questionNameField, "Question does not fit format, eg: Do you like this website")) errors++;
+
+            let arrayOfAnswers = new Array();
             for(let answer of providedAnswers){
-               errors += reTestText(reAnswer, answer, "Answer does not fit format, eg: Yes I do (at least three words)", 2);
+               if(reTestText(reAnswer, answer, "Answer does not fit format, eg: Yes I do (at least three words)", 2)){
+                errors++;
+                continue;
+               };
+               if(type == "create"){
+                arrayOfAnswers.push(answer.value);
+               }
+               else{
+                arrayOfAnswers.push({answerId : parseInt(answer.dataset.id), text : answer.value});
+               }
+            };
+
+            if(errors != 0){
+                return;
             }
+
+            let addAnswerButton = document.querySelector("#questionAddAnswer");
+            if(arrayOfAnswers.length < 2){
+                addError(addAnswerButton, "Must provide at least two answers before submitting", 1);
+                errors++;
+            }
+            else{
+                removeError(addAnswerButton, 1);
+                addSuccess(addAnswerButton);
+            }
+
+            if(errors != 0){
+                return;
+            }
+
+            data.questionName = questionNameField.value;
+            data.questionAnswers = arrayOfAnswers;
+
+            submitAjax(target, showResult, data, {closeModal : true});
         }
         function addAnswer(num, answerText, answerId = 0){
             let answerHolder = document.querySelector("#question-answer-holder");
@@ -1286,7 +1354,7 @@ function testGeneric(field, statement, errorMessage, errorHolderDistance = 1){
         addError(field, errorMessage, errorHolderDistance);
         return 1;
     }
-    removeError(field);
+    removeError(field, errorHolderDistance);
     addSuccess(field);
     return 0;
 }
@@ -1298,7 +1366,7 @@ function testNumericBounds(field, minimalValue, errorMessage, errorHolderDistanc
         addError(field, errorMessage, errorHolderDistance);
         return 1;
     }
-    removeError(field);
+    removeError(field, errorHolderDistance);
     addSuccess(field);
     return 0;
 }
@@ -1307,7 +1375,7 @@ function testDropdown(field, negativeValue, errorMessage, errorHolderDistance = 
     let value = field.value;
     //On success
     if(value != negativeValue){
-        removeError(field);
+        removeError(field, errorHolderDistance);
         addSuccess(field);
         return 0;
     }
@@ -1326,7 +1394,7 @@ function testImage(field, errorMessage, errorHolderDistance = 1){
         addError(field, errorMessage, errorHolderDistance);
         return 1;
     }
-    removeError(field);
+    removeError(field, errorHolderDistance);
     addSuccess(field);
 }
 
@@ -1335,7 +1403,7 @@ function reTestText(regex, field, errorMessage, errorHolderDistance = 1){
     let passes = regex.test(textValue);
     if(passes){
         if(errorMessage != ""){
-            removeError(field);
+            removeError(field, errorHolderDistance);
             addSuccess(field);
         }
         return 0;
@@ -1350,20 +1418,23 @@ function reTestText(regex, field, errorMessage, errorHolderDistance = 1){
 }
 
 function getNthNextElement(field, n){
+    let elem = field;
     for(let i = 0; i < n; i++){
-        field = field.nextElementSibling;
+        elem = elem.nextElementSibling;
     }
-    return field;
+    return elem;
 }
 
 function addSuccess(field){
     field.classList.add("success-outline");
 }
 
-function removeError(field){
-    let errorBox = field.nextElementSibling;
-    errorBox.innerText = "";
-    errorBox.classList.add("hidden");
+function removeError(field, errorHolderDistance = 0 ){
+    if(errorHolderDistance > 0){
+        let errorBox = getNthNextElement(field, errorHolderDistance);
+        errorBox.innerText = "";
+        errorBox.classList.add("hidden");
+    }
     field.classList.remove("error-outline");
 }
 
@@ -1374,6 +1445,7 @@ function removeSuccess(field){
 function addError(field, msg, errorHolderDistance){
     if(msg != ""){
     let errorBox = getNthNextElement(field, errorHolderDistance);
+        console.log(errorBox);
         errorBox.innerText = msg;
         errorBox.classList.remove("hidden");
     }

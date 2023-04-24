@@ -46,7 +46,7 @@ function getQuestionAnswers($question_id){
 function saveQuestion($text){
     include ("../../connection.php");
 
-    $statement = "INSERT INTO questions (text) VALUES (:text)";
+    $statement = "INSERT INTO questions (question) VALUES (:text)";
     $prepSt = $conn->prepare($statement);
 
     $prepSt->bindParam("text", $text);
@@ -58,7 +58,7 @@ function saveQuestion($text){
 function saveQuestionAnswer($question_id, $text){
     include ("../../connection.php");
 
-    $statement = "INSERT INTO answers (question_id, text) VALUES (:question_id, :text)";
+    $statement = "INSERT INTO answers (question_id, answer) VALUES (:question_id, :text)";
     $prepSt = $conn->prepare($statement);
 
     $prepSt->bindParam("question_id", $question_id, PDO::PARAM_INT);

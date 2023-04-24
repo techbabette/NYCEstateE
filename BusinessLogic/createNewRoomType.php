@@ -22,10 +22,9 @@ if(!isset($_POST["roomTypeName"]))
 $roomTypeName = $_POST["roomTypeName"];
 
 $reRoomTypeName = '/^[A-Z][a-z\']{1,50}(\s[A-Za-z][a-z\']{1,50}){0,3}$/';
-// $reDescription = '/^[A-Z][a-z\']{0,50}(\s[A-Za-z][a-z\']{0,50})*$/';
 
 if(!preg_match($reRoomTypeName, $roomTypeName)){
-    echoUnprocessableEntity("Room type name does not match format");
+    echoUnprocessableEntity("Room type name does not match format, eg Livingroom");
 }
 
 try{
