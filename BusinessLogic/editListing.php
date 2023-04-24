@@ -170,7 +170,7 @@ catch (PDOException $e){
 if($imgUpload){
     move_uploaded_file($_FILES["listingPhoto"]["tmp_name"], $target_file);
 }
-$result["general"] = "Successfully edited listing, price before change was: ".$currentPrice;
+$result["general"] = "Successfully edited listing";
 http_response_code(201);
 echo json_encode($result)
 ?>

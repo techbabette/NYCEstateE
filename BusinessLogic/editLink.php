@@ -91,14 +91,18 @@ if(!$aLIdAcceptable){
 
 //Success
 require("../DataAccess/linkFunctions.php");
+$currentLinkIcon = "";
 try{
     editLink($LinkId, $LinkTitle, $LinkHref, $AccessLevelId, $LinkLocation, $priority, $main);
     if(!empty($LinkIcon)){
-        removeAllLinkIcons($LinkId);
-        createNewLinkIcon($LinkId, $LinkIcon);
-    }
-    else{
-        removeAllLinkIcons($LinkId);
+        $currentLinkIcon = getLinkIcon($LinkId);
+        if($currentLinkIcon == ""){
+            createNewLinkIcon($LinkId, $LinkIcon);
+        }
+        if($currentLinkIcon != $LinkIcon){
+            removeAllLinkIcons($LinkId);
+            createNewLinkIcon($LinkId, $LinkIcon);
+        }
     }
     $result["general"] = "Successfully edited link";
     echo json_encode($result);

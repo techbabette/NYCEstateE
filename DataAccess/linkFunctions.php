@@ -99,6 +99,28 @@ function createNewLinkIcon($linkId, $icon){
 
     return $conn->lastInsertId();
 }
+function getLinkIcon($link_id){
+    include ("../../connection.php");
+
+    $statement = "SELECT icon FROM linkicons 
+                  WHERE link_id = :link_id AND active = 1
+                  ORDER BY dateCreated DESC 
+                  LIMIT 1";
+    $prepSt = $conn->prepare($statement);
+
+    $prepSt->bindParam("link_id", $link_id, PDO::PARAM_INT);
+
+    $prepSt->execute();
+
+    $result = $prepSt->fetch();
+
+    if($result){
+        return $result["icon"];
+    }
+    else{
+        return "";
+    }
+}
 function removeAllLinkIcons($linkId){
     include ("../../connection.php");
 
