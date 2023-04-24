@@ -80,11 +80,12 @@ try{
     if(!empty($password)){
         editUserPassword($userId, $password);
     }
-    $result["general"] = "Success";
-    http_response_code(201);
-    echo json_encode($result);
 }
 catch(PDOException $e){
     echoUnexpectedError();
 }
+
+$result["general"] = "Successfully edited user";
+http_response_code(201);
+echo json_encode($result);
 ?>

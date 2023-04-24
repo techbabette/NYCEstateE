@@ -100,7 +100,7 @@ try{
     else{
         removeAllLinkIcons($LinkId);
     }
-    $result["general"] = "Success";
+    $result["general"] = "Successfully edited link";
     echo json_encode($result);
 }
 catch(PDOException $e){

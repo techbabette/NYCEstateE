@@ -77,11 +77,12 @@ try{
     if(!empty($LinkIcon)){
         createNewLinkIcon($lastInsertedId, $LinkIcon);
     }
-    http_response_code(201);
-    $result["general"] = "Success";
-    echo json_encode($result);
 }
 catch(PDOException $e){
     echoUnexpectedError();
 }
+
+http_response_code(201);
+$result["general"] = "Successfully created new link";
+echo json_encode($result);
 ?>

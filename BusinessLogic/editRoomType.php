@@ -42,7 +42,7 @@ catch (PDOException $e){
     echoUnexpectedError();
 }
 
-$result["general"] = "Success";
+$result["general"] = "Successfully edited room type";
 http_response_code(200);
 echo json_encode($result)
 ?>

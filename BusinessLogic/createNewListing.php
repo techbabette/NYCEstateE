@@ -117,7 +117,7 @@ catch (PDOException $e){
 }
 
 move_uploaded_file($_FILES["listingPhoto"]["tmp_name"], $target_file);
-$result["general"] = "Success";
+$result["general"] = "Successfully created new listing";
 http_response_code(201);
 echo json_encode($result)
 ?>

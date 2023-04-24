@@ -29,7 +29,7 @@ require("../DataAccess/listingFunctions.php");
 
 try{
     restoreListing($id);
-    $result["general"] = "Success"; 
+    $result["general"] = "Successfully restored listing"; 
     http_response_code(200);
     echo json_encode($result);
 }

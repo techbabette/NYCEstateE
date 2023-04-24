@@ -73,7 +73,7 @@ if(isset($_POST["createNewUser"])){
         else{
             createNewUser($email, $pass, $name, $lastName);
             http_response_code(302);
-            $result["general"] = "Success";
+            $result["general"] = "Successful registration";
             echo json_encode($result);
         }
     }

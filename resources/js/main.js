@@ -302,6 +302,19 @@ window.onload = function(){
         }
         function showResult(data, args){
             generateTable();   
+            let messageHolder = document.querySelector("#error-holder");
+            let displayMessage = true;
+            if(displayMessage){
+                let message = document.createElement("span");
+                message.classList.add("error-message");
+                message.classList.add("alert");
+                message.classList.add("alert-success");
+                message.innerText = data;
+                messageHolder.append(message);
+                setTimeout(function(){
+                    hideElement(message);
+                }, 2000);
+            }
             if(args.closeModal){
                 closeCurrentModal();
             };

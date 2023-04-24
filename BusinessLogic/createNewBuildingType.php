@@ -35,7 +35,7 @@ catch (PDOException $e){
     echoUnexpectedError();
 }
 
-$result["general"] = "Success";
+$result["general"] = "Successfully created new building type";
 http_response_code(201);
 echo json_encode($result)
 ?>

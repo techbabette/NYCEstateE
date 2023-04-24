@@ -73,8 +73,6 @@ footer{
     flex-direction: column;
     gap: 20px;
 }
-#admin-info-holder{
-}
 #error-holder{
     position: absolute;
     bottom: 20px;

@@ -46,7 +46,7 @@ if(isset($_POST["attemptLogin"])){
         if($loginAttempt){
             $_SESSION["user"] = getUserInformation($loginAttempt);
             http_response_code(302);
-            $result["general"] = "Success";
+            $result["general"] = "Successful login";
             echo json_encode($result);
         }
         else{
