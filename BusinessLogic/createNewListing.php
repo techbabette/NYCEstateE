@@ -101,6 +101,9 @@ foreach($rooms as $room){
     if(!$roomExists){
         echoUnprocessableEntity("Invalid room type selected");
     }
+    if($room->count == 0){
+        echoUnprocessableEntity("Number of specific room cannot be below one");
+    }
 }
 
 require("../DataAccess/listingFunctions.php");

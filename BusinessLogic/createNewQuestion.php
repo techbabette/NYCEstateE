@@ -24,7 +24,7 @@ $questionName = $_POST["questionName"];
 $questionAnswers = $_POST["questionAnswers"];
 
 $reQuestion = '/^[A-Z][a-z\']{1,20}(\s[A-Za-z][a-z\']{0,20}){2,10}$/';
-$reAnswer = '/^[A-Z][a-z\']{1,20}(\s[A-Za-z][a-z\']{0,20}){2,10}$/';
+$reAnswer = '/^[A-Z][a-z\']{0,20}(\s[A-Za-z][a-z\']{0,20}){2,10}$/';
 
 if(!preg_match($reQuestion, $questionName)){
     echoUnprocessableEntity("Question does not match format (Between three and eleven words)");

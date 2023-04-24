@@ -129,7 +129,7 @@ window.onload = function(){
                       {title : "Links", headers : ["Title", "Access level","Link", "File location", "Location",  "Priority", "Parent", "Icon"], target : "getAllLinks", createNew : showLinkModal, edit : showLinkModal},
                       {title : "Boroughs", headers : ["Title", "Number of listings (Both active and deleted)"], target : "getAllBoroughsCount", createNew: showBoroughModal, edit: showBoroughModal},
                       {title : "Building types", headers : ["Title", "Number of listings (Both active and deleted)"], target : "getAllBuildingTypesCount", createNew: showBuildingTypeModal, edit: showBuildingTypeModal},
-                      {title : "Survey questions", headers : ["Title", "Number of answers"], target : "getAllQuestions", createNew : showQuestionModal, edit: showQuestionModal},
+                      {title : "Survey questions", headers : ["Title", "Number of times answered"], target : "getAllQuestions", createNew : showQuestionModal, edit: showQuestionModal},
                       {title : "Room types", headers : ["Title"], target : "getAllRoomTypes", createNew: showRoomTypeModal, edit: showRoomTypeModal},
                       {title : "Deleted listings", headers : ["Name", "Price","Description", "Address", "Size"], target : "getAllDeletedListings", edit: showListingModal, restore : "restoreListing"},
                     ];
@@ -612,7 +612,7 @@ window.onload = function(){
             let modalTitle = document.querySelector("#question-modal-title");
             let modalSubmitButton = document.querySelector("#question-submit");
             let answerHolder = document.querySelector("#question-answer-holder");
-            let questionNameField = document.querySelector("#question-field");
+            let questionNameField = document.querySelector("#questionName");
             let questionIdField = document.querySelector("#questionId");
 
             questionIdField.value = existingId;
@@ -621,18 +621,19 @@ window.onload = function(){
 
             globalData.numberOfAnswers = 1;
 
+            questionNameField.value = "";
             answerHolder.innerHTML = "";
-
-            question
-
             if(type == "edit"){
                 modalTitle.innerText = "Edit survey question";
                 modalSubmitButton.innerText = "Edit survey question";
                 let data = {questionId : existingId};
                 submitAjax("getSpecificQuestion", function(data){
-                    let question = data["question"];
+                    let question = data["name"];
+                    questionNameField.value = question;
                     let answers = data["answers"];
-                    foreach()
+                    for(let answer of answers){
+                        addAnswer(globalData.numberOfAnswers++, answer["answer"], answer["answer_id"]);
+                    }
                 }, data);
             }
             else{
@@ -1074,7 +1075,7 @@ window.onload = function(){
             let questionIdField = document.querySelector("#questionId");
 
             let reQuestion = /^[A-Z][a-z']{1,20}(\s[A-Za-z][a-z']{0,20}){2,10}$/;
-            let reAnswer = /^[A-Z][a-z']{1,20}(\s[A-Za-z][a-z']{0,20}){2,10}$/;
+            let reAnswer = /^[A-Z][a-z']{0,20}(\s[A-Za-z][a-z']{0,20}){2,10}$/;
 
             let type = questionIdField.value > 0 ? "edit" : "create";
 
@@ -1084,6 +1085,7 @@ window.onload = function(){
 
             if(type == "edit"){
                 data.questionId = questionIdField.value;
+                target = "editQuestion"
             }
 
             let providedAnswers = document.querySelectorAll(".questionAnswer");
@@ -1125,7 +1127,13 @@ window.onload = function(){
             }
 
             data.questionName = questionNameField.value;
-            data.questionAnswers = arrayOfAnswers;
+            if(type == "create"){
+                data.questionAnswers = arrayOfAnswers;
+            }
+            else{
+                data.newAnswers = arrayOfAnswers.filter(answer => answer.answerId === 0);
+                data.modifiedAnswers = arrayOfAnswers.filter(answer => answer.answerId != 0);
+            }
 
             submitAjax(target, showResult, data, {closeModal : true});
         }
@@ -1142,13 +1150,13 @@ window.onload = function(){
             `
             newAnswerHolder.innerHTML += html;
             answerHolder.appendChild(newAnswerHolder);
-            let removeButtons = document.querySelectorAll("removeAnswer");
+            let removeButtons = document.querySelectorAll(".removeAnswer");
 
             for(let elem of removeButtons){
                 addEventListenerOnce("click", elem, function(e){
                     e.preventDefault();
                     let parentElement = this.parentElement;
-                    parentElement.remove;
+                    parentElement.remove();
                 })
             }
         }

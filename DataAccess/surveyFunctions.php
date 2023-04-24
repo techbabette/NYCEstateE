@@ -2,7 +2,7 @@
 function getAllQuestions(){
     include ("../../connection.php");
 
-    $statement = "SELECT q.question_id, q.question, COUNT(ua.user_id) as Count FROM questions q
+    $statement = "SELECT q.question_id AS id, q.question, COUNT(ua.user_id) as Count FROM questions q
                   LEFT JOIN answers a ON a.question_id = q.question_id
                   LEFT JOIN useranswers ua ON a.answer_id = ua.answer_id
                   WHERE q.dateDeleted IS NOT NULL
@@ -19,7 +19,7 @@ function getQuestions($user_id){
     include ("../../connection.php");
 
     $statement = "SELECT q.question_id, q.question FROM questions q
-                  WHERE q.dateDeleted IS NOT NULL AND q.question_id NOT IN (SELECT question_id FROM useranswers WHERE user_id = :user_id)";
+                  WHERE q.dateDeleted IS NULL AND q.question_id NOT IN (SELECT question_id FROM useranswers WHERE user_id = :user_id)";
     $prepSt = $conn->prepare($statement);
 
     $prepSt->bindParam("user_id", $user_id, PDO::PARAM_INT);
@@ -28,6 +28,20 @@ function getQuestions($user_id){
 
     return $prepSt->fetchAll();
 }
+function getSpecificQuestion($question_id){
+    include ("../../connection.php");
+
+    $statement = "SELECT question FROM questions
+                  WHERE question_id = :question_id";
+
+    $prepSt = $conn->prepare($statement);
+
+    $prepSt->bindParam("question_id", $question_id, PDO::PARAM_INT);
+
+    $prepSt->execute();
+
+    return $prepSt->fetch();
+}
 function getQuestionAnswers($question_id){
     include ("../../connection.php");
 
@@ -35,6 +49,21 @@ function getQuestionAnswers($question_id){
                   INNER JOIN questions q ON a.question_id = q.question_id
                   WHERE q.question_id = :question_id
                   AND a.dateDeleted IS NULL";
+    $prepSt = $conn->prepare($statement);
+
+    $prepSt->bindParam("question_id", $question_id, PDO::PARAM_INT);
+
+    $prepSt->execute();
+
+    return $prepSt->fetchAll();
+}
+function getQuestionAnswerIds($question_id){
+    include ("../../connection.php");
+
+    $statement = "SELECT a.answer_id FROM answers a
+                  INNER JOIN questions q ON a.question_id = q.question_id
+                  WHERE q.question_id = :question_id
+                  AND a.dateDeleted IS NOT NULL";
     $prepSt = $conn->prepare($statement);
 
     $prepSt->bindParam("question_id", $question_id, PDO::PARAM_INT);

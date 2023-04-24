@@ -102,26 +102,16 @@ if(isset($_POST["listingRooms"])){
     $rooms = json_decode($_POST["listingRooms"]);    
 }
 
-// $roomsToDelete = array();
-// if(isset($_POST["listingRoomsDeleted"])){
-//     $roomsToDelete = json_decode($_POST["listingRooms"]);
-// }
-
 foreach($rooms as $room){
     //Optimize this by calling once to get every room_type_id, then checking the current id against the list
     $roomExists = count(getEveryRowWhereParamFromTable("roomtypes", "room_type_id", $room->roomId)) > 0;
     if(!$roomExists){
         echoUnprocessableEntity("Invalid room type selected");
     }
+    if($room->count == 0){
+        echoUnprocessableEntity("Number of specific room cannot be below one");
+    }
 }
-
-// foreach($roomsToDelete as $room){
-//     //Optimize this by calling once to get every room_type_id, then checking the current id against the list
-//     $roomExists = count(getEveryRowWhereParamFromTable("roomtypes", "room_type_id", $room->roomId)) > 0;
-//     if(!$roomExists){
-//         echoUnprocessableEntity("Invalid room type selected");
-//     }
-// }
 
 require("../DataAccess/listingFunctions.php");
 
