@@ -43,6 +43,18 @@ function getQuestionAnswers($question_id){
 
     return $conn->fetchAll();
 }
+function saveQuestion($text){
+    include ("../../connection.php");
+
+    $statement = "INSERT INTO questions (text) VALUES (:text)";
+    $prepSt = $conn->prepare($statement);
+
+    $prepSt->bindParam("text", $text);
+
+    $prepSt->execute();
+
+    return $conn->lastInsertId();
+}
 function saveQuestionAnswer($question_id, $text){
     include ("../../connection.php");
 
