@@ -1172,7 +1172,7 @@ window.onload = function(){
             submitAjax(target, showResult, data, {closeModal : true});
         }
         function addResult(text, count){
-            return `<p class="alert alert-info">${text}: ${count}</p>`
+            return `<tr><td>${text}</td><td>${count}</td></tr>`
         }
         function addAnswer(num, answerText, answerId = 0){
             let answerHolder = document.querySelector("#question-answer-holder");

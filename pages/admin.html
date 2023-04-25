@@ -142,12 +142,20 @@
           <div id="question-results-modal" class="mk-modal-content hidden">
             <form class="row mk-flex-center">
               <div class="col-12">
-                <h2 id="question-title">Question: Do you like this website?</h2>
+                <p id="question-title" class="h4">Question: Do you like this website?</p>
               </div>
-              <div id="question-results" class="col-12">
-                  <p>Very much so: 10</p>
-                  <p>Not a lot: 2</p>
-                  <p>I dislike it: 1</p>
+              <div class="col-12 table-responsive">
+                <table class="table table-primary table-responsive table-hover">
+                  <thead >
+                    <tr>
+                      <th>Answer</th>
+                      <th>Number of times selected</th>
+                    </tr>
+                  </thead>
+                  <tbody id="question-results">
+
+                  </tbody>
+                </table>
               </div>
               <div class="col-12 my-2 p-2">
                 <button id="question-cancel" class="btn btn-danger col-6 my-1 close-button" type="button">Close</button>
