@@ -129,8 +129,8 @@ window.onload = function(){
                       {title : "Links", headers : ["Title", "Access level","Link", "File location", "Location",  "Priority", "Parent", "Icon"], target : "getAllLinks", createNew : showLinkModal, edit : showLinkModal},
                       {title : "Boroughs", headers : ["Title", "Number of listings (Both active and deleted)"], target : "getAllBoroughsCount", createNew: showBoroughModal, edit: showBoroughModal},
                       {title : "Building types", headers : ["Title", "Number of listings (Both active and deleted)"], target : "getAllBuildingTypesCount", createNew: showBuildingTypeModal, edit: showBuildingTypeModal},
-                      {title : "Survey questions", headers : ["Title", "Number of times answered"], target : "getAllQuestions", createNew : showQuestionModal, edit: showQuestionModal, viewAnswers: showQuestionAnswers},
-                      {title : "Deleted survey questions", headers : ["Title", "Number of times answered"], target : "getAllDeletedQuestions", edit: showQuestionModal, restore : "restoreQuestion", viewAnswers: showQuestionAnswers},
+                      {title : "Survey questions", headers : ["Title", "Number of times answered"], target : "getAllQuestions", createNew : showQuestionModal, edit: showQuestionModal, viewAnswers: "getSpecificQuestionAnswers"},
+                      {title : "Deleted survey questions", headers : ["Title", "Number of times answered"], target : "getAllDeletedQuestions", edit: showQuestionModal, restore : "restoreQuestion", viewAnswers: "getSpecificQuestionAnswers"},
                       {title : "Room types", headers : ["Title"], target : "getAllRoomTypes", createNew: showRoomTypeModal, edit: showRoomTypeModal},
                       {title : "Deleted listings", headers : ["Name", "Price","Description", "Address", "Size"], target : "getAllDeletedListings", edit: showListingModal, restore : "restoreListing"},
                     ];
@@ -226,6 +226,7 @@ window.onload = function(){
             //if the table should show a create new button
             let createNew = tables[activeTable].createNew;
             let edit = tables[activeTable].edit;
+            let viewAnswers = tables[activeTable].viewAnswers;
             let restore = tables[activeTable].restore;
             if(createNew)
             {
@@ -252,6 +253,17 @@ window.onload = function(){
                         e.preventDefault();
                         let elemId = this.dataset.id;
                         edit(elemId);
+                    })
+                }
+            }
+            if(viewAnswers){
+                let viewAnswerButtons = document.querySelectorAll(".view-answers-button");
+                for(let button of viewAnswerButtons){
+                    addEventListenerOnce("click", button, function(e){
+                        e.preventDefault();
+                        let elemId = this.dataset.id;
+                        let data = {questionId : elemId};
+                        submitAjax(viewAnswers, showQuestionAnswers, data, {closeModal : false});
                     })
                 }
             }
@@ -649,8 +661,23 @@ window.onload = function(){
             globalData.currModal = modal;
             openModal(modal, globalData.modalBackground);
         }
-        function showQuestionAnswers(questionId){
-            console.log(questionId);
+        function showQuestionAnswers(data){
+            let modal = document.querySelector("#question-results-modal");
+
+            let questionTitleField = document.querySelector("#question-title");
+            let questionResultsField = document.querySelector("#question-results");
+
+            let questionTitle = data["name"];
+            let questionAnswers = data["answers"]; 
+
+            questionTitleField.innerText = `Question: ${questionTitle}?`;
+            questionResultsField.innerHTML = "";
+            for(let answer of questionAnswers){
+                questionResultsField.innerHTML += addResult(answer["answer"], answer["count"]);
+            }
+
+            globalData.currModal = modal;
+            openModal(modal, globalData.modalBackground);
         }
         //Setup functions
         function setUpModals(){
@@ -1143,6 +1170,9 @@ window.onload = function(){
             }
 
             submitAjax(target, showResult, data, {closeModal : true});
+        }
+        function addResult(text, count){
+            return `<p class="alert alert-info">${text}: ${count}</p>`
         }
         function addAnswer(num, answerText, answerId = 0){
             let answerHolder = document.querySelector("#question-answer-holder");

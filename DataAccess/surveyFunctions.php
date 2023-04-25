@@ -76,10 +76,11 @@ function getQuestionAnswers($question_id){
 function getQuestionAnswersCount($question_id){
     include ("../../connection.php");
 
-    $statement = "SELECT a.answer FROM answers a, COUNT(user_id)
-                  INNER JOIN questions q ON a.question_id = q.question_id 
+    $statement = "SELECT a.answer, COUNT(ua.useranswer_id) AS count
+                  FROM answers a
                   LEFT JOIN useranswers ua ON a.answer_id = ua.answer_id
-                  WHERE q.question_id = :question_id";
+                  WHERE a.question_id = :question_id
+                  GROUP BY a.answer_id";
     $prepSt = $conn->prepare($statement);
 
     $prepSt->bindParam("question_id", $question_id, PDO::PARAM_INT);
