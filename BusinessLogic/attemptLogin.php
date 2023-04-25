@@ -10,6 +10,13 @@ if (strlen($json_params) > 0 && isValidJSON($json_params)){
 }
 
 $result;
+
+if(isset($_SESSION["user"])){
+    http_response_code(403);
+    $result["error"] = "You are already logged in";
+    echo $result;
+}
+
 if(isset($_POST["attemptLogin"])){
 
     $pass = $_POST["pass"];

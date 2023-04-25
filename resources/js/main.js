@@ -124,12 +124,13 @@ window.onload = function(){
             }
         })
         let tables = [
-                      {title : "Users", headers : ["Name", "Last name","Email", "Date of creation", "Role"], target : "getUsers", edit : showUserModal},
+                      {title : "Users", headers : ["Name", "Last name","Email", "Date of creation", "Role"], target : "getAllUsers", edit : showUserModal},
                       {title : "Listings", headers : ["Name", "Price","Description", "Address", "Size"], target : "getAllListings", createNew : showListingModal, edit: showListingModal},
                       {title : "Links", headers : ["Title", "Access level","Link", "File location", "Location",  "Priority", "Parent", "Icon"], target : "getAllLinks", createNew : showLinkModal, edit : showLinkModal},
                       {title : "Boroughs", headers : ["Title", "Number of listings (Both active and deleted)"], target : "getAllBoroughsCount", createNew: showBoroughModal, edit: showBoroughModal},
                       {title : "Building types", headers : ["Title", "Number of listings (Both active and deleted)"], target : "getAllBuildingTypesCount", createNew: showBuildingTypeModal, edit: showBuildingTypeModal},
                       {title : "Survey questions", headers : ["Title", "Number of times answered"], target : "getAllQuestions", createNew : showQuestionModal, edit: showQuestionModal},
+                      {title : "Deleted survey questions", headers : ["Title", "Number of times answered"], target : "getAllDeletedQuestions", edit: showQuestionModal, restore : "restoreQuestion"},
                       {title : "Room types", headers : ["Title"], target : "getAllRoomTypes", createNew: showRoomTypeModal, edit: showRoomTypeModal},
                       {title : "Deleted listings", headers : ["Name", "Price","Description", "Address", "Size"], target : "getAllDeletedListings", edit: showListingModal, restore : "restoreListing"},
                     ];
@@ -219,7 +220,7 @@ window.onload = function(){
             }
 
             //Code for generating the "Insert new" button;
-            //if the table should show a create new buttno
+            //if the table should show a create new button
             let createNew = tables[activeTable].createNew;
             let edit = tables[activeTable].edit;
             let restore = tables[activeTable].restore;

@@ -16,19 +16,14 @@ if(isset($_SESSION["user"])){
     $result["error"] = "You are already logged in";
     echo $result;
 }
+
 if(isset($_POST["createNewUser"])){
-    $errors = 0;
-    $greska = "";
     if(
     (!isset($_POST["name"]) || empty($_POST["name"])) 
     || (!isset($_POST["lastName"]) || empty($_POST["lastName"]))
     || (!isset($_POST["password"]) || empty($_POST["password"]))
     || (!isset($_POST["email"]) || empty($_POST["email"]))){
-        $errors++;
-        $result["error"] = "All fields are required";
-        http_response_code(422);
-        echo json_encode($result);
-        die();
+        echoUnprocessableEntity("All fields are required");
     }
     $name = $_POST["name"];
     $lastName = $_POST["lastName"];
@@ -47,23 +42,18 @@ if(isset($_POST["createNewUser"])){
     
     if(!preg_match($reName, $name) || !preg_match($reName, $lastName))
     {
-        $errors++;
-        $greska .= "Name/last name does not fit criteria";
+        echoUnprocessableEntity("Name/last name does not fit criteria");
     }
     if(!preg_match($rePass1, $pass) || !preg_match($rePass2, $pass)
     || !preg_match($rePass3, $pass) || !preg_match($rePass4, $pass)
     || !preg_match($rePass5, $pass))
     {
-        $errors++;
-        $greska .= "Password does not fit criteria";
+        echoUnprocessableEntity("Password does not match format");
     }
     if(!preg_match($reEmail, $email)){
-        $errors++;
-        $greska .= "Email";
+        echoUnprocessableEntity("Invalid email");
     }
-    if($errors != 0){
-        echoUnprocessableEntity($greska);
-    }
+
     require("../DataAccess/userFunctions.php");
     try{
         $emailInUse = checkIfEmailInUse($email);

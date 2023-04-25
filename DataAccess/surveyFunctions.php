@@ -5,8 +5,24 @@ function getAllQuestions(){
     $statement = "SELECT q.question_id AS id, q.question, COUNT(ua.user_id) as Count FROM questions q
                   LEFT JOIN answers a ON a.question_id = q.question_id
                   LEFT JOIN useranswers ua ON a.answer_id = ua.answer_id
-                  WHERE q.dateDeleted IS NOT NULL
+                  WHERE q.dateDeleted IS NULL
                   GROUP BY q.question_id, q.question";
+    $prepSt = $conn->prepare($statement);
+
+    $prepSt->execute();
+
+    $result = $prepSt->fetchAll();
+
+    return $result;
+}
+function getAllDeletedQuestions(){
+    include ("../../connection.php");
+
+    $statement = "SELECT q.question_id AS id, q.question, COUNT(ua.user_id) as Count FROM questions q
+    LEFT JOIN answers a ON a.question_id = q.question_id
+    LEFT JOIN useranswers ua ON a.answer_id = ua.answer_id
+    WHERE q.dateDeleted IS NOT NULL
+    GROUP BY q.question_id, q.question";
     $prepSt = $conn->prepare($statement);
 
     $prepSt->execute();
@@ -150,6 +166,17 @@ function disableQuestion($question_id){
 
     $statement = "UPDATE questions SET dateDeleted = NOW() WHERE question_id = :question_id";
 
+    $prepSt = $conn->prepare($statement);
+
+    $prepSt->bindParam("question_id", $question_id, PDO::PARAM_INT);
+
+    return $prepSt->execute();
+}
+function restoreQuestion($question_id){
+    include ("../../connection.php");
+
+    $statement = "UPDATE questions SET dateDeleted = NULL
+                  WHERE question_id = :question_id";
     $prepSt = $conn->prepare($statement);
 
     $prepSt->bindParam("question_id", $question_id, PDO::PARAM_INT);
