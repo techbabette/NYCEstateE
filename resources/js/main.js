@@ -129,8 +129,8 @@ window.onload = function(){
                       {title : "Links", headers : ["Title", "Access level","Link", "File location", "Location",  "Priority", "Parent", "Icon"], target : "getAllLinks", createNew : showLinkModal, edit : showLinkModal},
                       {title : "Boroughs", headers : ["Title", "Number of listings (Both active and deleted)"], target : "getAllBoroughsCount", createNew: showBoroughModal, edit: showBoroughModal},
                       {title : "Building types", headers : ["Title", "Number of listings (Both active and deleted)"], target : "getAllBuildingTypesCount", createNew: showBuildingTypeModal, edit: showBuildingTypeModal},
-                      {title : "Survey questions", headers : ["Title", "Number of times answered"], target : "getAllQuestions", createNew : showQuestionModal, edit: showQuestionModal},
-                      {title : "Deleted survey questions", headers : ["Title", "Number of times answered"], target : "getAllDeletedQuestions", edit: showQuestionModal, restore : "restoreQuestion"},
+                      {title : "Survey questions", headers : ["Title", "Number of times answered"], target : "getAllQuestions", createNew : showQuestionModal, edit: showQuestionModal, viewAnswers: showQuestionAnswers},
+                      {title : "Deleted survey questions", headers : ["Title", "Number of times answered"], target : "getAllDeletedQuestions", edit: showQuestionModal, restore : "restoreQuestion", viewAnswers: showQuestionAnswers},
                       {title : "Room types", headers : ["Title"], target : "getAllRoomTypes", createNew: showRoomTypeModal, edit: showRoomTypeModal},
                       {title : "Deleted listings", headers : ["Name", "Price","Description", "Address", "Size"], target : "getAllDeletedListings", edit: showListingModal, restore : "restoreListing"},
                     ];
@@ -209,6 +209,9 @@ window.onload = function(){
                 <td>
                 <button type="button" data-id="${row["id"]}" class="btn btn-light edit-button">Edit</button>
                 `
+                if(tables[activeTable].viewAnswers){
+                    html += `<button type="button" data-table="${tables[activeTable].title}" data-id="${row["id"]}" class="btn btn-info view-answers-button">View answers</button>`
+                }
                 if(tables[activeTable].restore){
                     html += `<button type="button" data-table="${tables[activeTable].title}" data-id="${row["id"]}" class="btn btn-success restore-button">Restore</button>`
                 }
@@ -645,6 +648,9 @@ window.onload = function(){
 
             globalData.currModal = modal;
             openModal(modal, globalData.modalBackground);
+        }
+        function showQuestionAnswers(questionId){
+            console.log(questionId);
         }
         //Setup functions
         function setUpModals(){
