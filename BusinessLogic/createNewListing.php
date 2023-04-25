@@ -108,7 +108,7 @@ foreach($rooms as $room){
 
 require("../DataAccess/listingFunctions.php");
 try{
-    $lastInsertedId = createNewListing($_SESSION["user"]["user_id"], $listingBorough, $listingBuildingType, $listingTitle, $listingDescription, $listingAddress, $listingSize);
+    $lastInsertedId = createNewListing($listingBorough, $listingBuildingType, $listingTitle, $listingDescription, $listingAddress, $listingSize);
     saveListingPrice($lastInsertedId, $listingPrice);
     saveMainListingPhoto($lastInsertedId, $newFileName.".".$imageFileType);
     foreach($rooms as $room){

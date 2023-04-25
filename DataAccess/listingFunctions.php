@@ -1,18 +1,17 @@
 <?php
-function createNewListing($user, $borough, $building_type, $name, $description, $address, $size){
+function createNewListing($borough, $building_type, $name, $description, $address, $size){
     include ("../../connection.php");
 
-    $statement = "INSERT INTO listings (user_id, borough_id, building_type_id, listing_name, description, address, size) 
+    $statement = "INSERT INTO listings (borough_id, building_type_id, listing_name, description, address, size) 
                   VALUES (?, ?, ?, ?, ?, ?, ?)";
     $prepSt = $conn->prepare($statement);
     
-    $prepSt->bindParam(1, $user);
-    $prepSt->bindParam(2, $borough);
-    $prepSt->bindParam(3, $building_type);
-    $prepSt->bindParam(4, $name);
-    $prepSt->bindParam(5, $description);
-    $prepSt->bindParam(6, $address);
-    $prepSt->bindParam(7, $size);
+    $prepSt->bindParam(1, $borough);
+    $prepSt->bindParam(2, $building_type);
+    $prepSt->bindParam(3, $name);
+    $prepSt->bindParam(4, $description);
+    $prepSt->bindParam(5, $address);
+    $prepSt->bindParam(6, $size);
 
     $prepSt->execute(); 
 
