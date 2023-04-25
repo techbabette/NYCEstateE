@@ -70,8 +70,11 @@ try{
     echo json_encode($result);
 }
 catch (PDOException $e){
-    //If collation error, echoUnprocessableEntity instead
-    echoUnexpectedError();
+    //If constraint error, echoUnprocessableEntity instead
+    if($e->errorInfo[1] == 1451){
+        echoUnprocessableEntity("Cannot delete a ".strtolower(substr($requestedTable, 0, -1)." referenced in other tables"));
+    }
+    echoUnexpectedError($e);
 }
 
 ?>
