@@ -24,7 +24,7 @@ function getUserLevel($id){
     FROM users u 
     INNER JOIN roles r ON u.role_id = r.role_id
     INNER JOIN accesslevels al ON r.access_level_id = al.access_level_id
-    WHERE user_id = ?";
+    WHERE user_id = ? AND level > 0";
     $prepSt = $conn->prepare($statement);
 
     $prepSt->bindParam(1, $id, PDO::PARAM_INT);

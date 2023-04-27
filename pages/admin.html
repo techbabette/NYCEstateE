@@ -114,6 +114,23 @@
             </form>
           </div>
           <!--End of one field modal-->
+          <!--One field modal-->
+          <div id="messageType" class="mk-modal-content hidden">
+            <h5 id="messageType-title" class="text-center">Create new message</h5>
+            <form class="row mk-flex-center">
+              <div class="col-12">
+                <label for="messageTypeName">Message type name</label>
+                <input type="text" class="form-control"  name="messageTypeName" id="messageTypeName" required="required"/>
+                <span class="error-msg hidden"></span>
+              </div>
+              <div class="col-12 my-2 p-2">
+                <button id="messageType-submit" class="btn btn-success col-6 my-1" type="submit">Create new messageType</button>
+                <button id="messageType-cancel" class="btn btn-danger col-6 my-1 close-button" type="button">Cancel</button>
+              </div>
+              <input type="hidden" id="messageTypeId" name="messageTypeId" value="0"/>
+            </form>
+          </div>
+          <!--End of one field modal-->
           <!--Survey question modal-->
           <div id="question-modal" class="mk-modal-content hidden">
             <h5 id="question-modal-title" class="text-center">Create new survey question</h5>
@@ -225,7 +242,7 @@
               </div>
               <div class="col-12">
                 <label for="listingDescription">Listing description</label>
-                <input type="textarea" class="form-control"  name="listingDescription" id="listingDescription" required="required"/>
+                <textarea class="form-control"  name="listingDescription" id="listingDescription" required="required"></textarea>
                 <span class="error-msg hidden"></span>
               </div>
               <div class="col-12">

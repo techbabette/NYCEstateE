@@ -125,6 +125,8 @@ window.onload = function(){
         })
         let tables = [
                       {title : "Users", headers : ["Name", "Last name","Email", "Date of creation", "Role"], target : "getAllUsers", edit : showUserModal},
+                      {title : "Messages", headers : ["Sender", "Type","Title", "Body", "Date sent"], target : "getAllMessages", edit : showUserModal},
+                      {title : "Message types", headers : ["Title", "Number of messages"], target : "getAllMessageTypesCount", edit : showUserModal, createNew : showUserModal},
                       {title : "Listings", headers : ["Name", "Price","Description", "Address", "Size"], target : "getAllListings", createNew : showListingModal, edit: showListingModal},
                       {title : "Links", headers : ["Title", "Access level","Link", "File location", "Location",  "Priority", "Parent", "Icon"], target : "getAllLinks", createNew : showLinkModal, edit : showLinkModal},
                       {title : "Boroughs", headers : ["Title", "Number of listings (Both active and deleted)"], target : "getAllBoroughsCount", createNew: showBoroughModal, edit: showBoroughModal},
@@ -1241,6 +1243,10 @@ window.onload = function(){
             parentElement.remove();
         });
         }
+    }
+    if(currentPage === "contact.html"){
+        let messageTypeSelect = document.querySelector("#messageType");
+        readAjax("getAllMessageTypes", fillDropdown, [messageTypeSelect]);
     }
 }
 

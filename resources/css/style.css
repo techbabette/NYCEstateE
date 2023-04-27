@@ -73,6 +73,9 @@ footer{
     flex-direction: column;
     gap: 20px;
 }
+#admin-tabs-holder{
+    overflow-x: scroll;
+}
 #error-holder{
     position: absolute;
     bottom: 20px;
