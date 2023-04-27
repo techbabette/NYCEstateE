@@ -46,6 +46,14 @@ switch($requestedTable){
         $dataParam = "question_id";
         $type = "soft";
         break;
+    case "Message types" :
+        $dataTable = "messagetypes";
+        $dataParam = "message_type_id";
+        break;
+    case "Messages" :
+        $dataTable = "messages";
+        $dataParam = "message_id";
+        break;
 }
 
 if($dataTable == ""){

@@ -43,7 +43,7 @@ function getAllMessages(){
 function getSpecificMessageType($id){
     include ("../../connection.php");
 
-    $statement = "SELECT message_type_name AS title FROM boroughs
+    $statement = "SELECT message_type_name AS title FROM messagetypes
                   WHERE message_type_id = :message_type_id";
     $prepSt = $conn->prepare($statement);
 
@@ -52,5 +52,18 @@ function getSpecificMessageType($id){
     $prepSt->execute();
 
     return $prepSt->fetch();
+}
+function createNewMessage($user_id, $message_type_id, $title, $message){
+    include ("../../connection.php");
+
+    $statement = "INSERT INTO messages (user_id, message_type_id, title, message) VALUES (:user_id, :message_type_id, :title, :message)";
+    $prepSt = $conn->prepare($statement);
+
+    $prepSt->bindParam("user_id", $user_id, PDO::PARAM_INT);
+    $prepSt->bindParam("message_type_id", $message_type_id, PDO::PARAM_INT);
+    $prepSt->bindParam("title", $title);
+    $prepSt->bindParam("message", $message);
+
+    return $prepSt->execute();
 }
 ?>

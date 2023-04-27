@@ -125,8 +125,8 @@ window.onload = function(){
         })
         let tables = [
                       {title : "Users", headers : ["Name", "Last name","Email", "Date of creation", "Role"], target : "getAllUsers", edit : showUserModal},
-                      {title : "Messages", headers : ["Sender", "Type","Title", "Body", "Date sent"], target : "getAllMessages", edit : showUserModal},
-                      {title : "Message types", headers : ["Title", "Number of messages"], target : "getAllMessageTypesCount", edit : showUserModal, createNew : showUserModal},
+                      {title : "Messages", headers : ["Sender", "Type","Title", "Body", "Date sent"], target : "getAllMessages"},
+                      {title : "Message types", headers : ["Title", "Number of messages"], target : "getAllMessageTypesCount", edit : showMessageTypeModal, createNew : showMessageTypeModal},
                       {title : "Listings", headers : ["Name", "Price","Description", "Address", "Size"], target : "getAllListings", createNew : showListingModal, edit: showListingModal},
                       {title : "Links", headers : ["Title", "Access level","Link", "File location", "Location",  "Priority", "Parent", "Icon"], target : "getAllLinks", createNew : showLinkModal, edit : showLinkModal},
                       {title : "Boroughs", headers : ["Title", "Number of listings (Both active and deleted)"], target : "getAllBoroughsCount", createNew: showBoroughModal, edit: showBoroughModal},
@@ -205,12 +205,10 @@ window.onload = function(){
                     </td>
                     `
                 }
-
-                html += 
-                `
-                <td>
-                <button type="button" data-id="${row["id"]}" class="btn btn-light edit-button">Edit</button>
-                `
+                html += `<td>`
+                if(tables[activeTable].edit){
+                    html += `<button type="button" data-id="${row["id"]}" class="btn btn-light edit-button">Edit</button>`
+                }
                 if(tables[activeTable].viewAnswers){
                     html += `<button type="button" data-table="${tables[activeTable].title}" data-id="${row["id"]}" class="btn btn-info view-answers-button">View answers</button>`
                 }
@@ -277,7 +275,7 @@ window.onload = function(){
                         e.preventDefault();
                         let elemId = this.dataset.id;
                         let data = {id : elemId};
-                        submitAjax(restore, showResult, data, {closeModal : false});
+                        submitAjax(restore, showResultGenerateTable, data, {closeModal : false});
                     });
                 }
             }
@@ -316,26 +314,11 @@ window.onload = function(){
         function adminDeleteRequest(table, elementId){
             let data = {table, id : elementId};
             console.log(data);
-            submitAjax("deleteFromTable", showResult, data, {closeModal : false});
+            submitAjax("deleteFromTable", showResultGenerateTable, data, {closeModal : false});
         }
-        function showResult(data, args){
-            generateTable();   
-            let messageHolder = document.querySelector("#error-holder");
-            let displayMessage = true;
-            if(displayMessage){
-                let message = document.createElement("span");
-                message.classList.add("error-message");
-                message.classList.add("alert");
-                message.classList.add("alert-success");
-                message.innerText = data;
-                messageHolder.append(message);
-                setTimeout(function(){
-                    hideElement(message);
-                }, 2000);
-            }
-            if(args.closeModal){
-                closeCurrentModal();
-            };
+        function showResultGenerateTable(data, args){
+            generateTable();
+            showResult(data, args);
         }
         function showUserModal(existingId = 0){
             let modal = document.querySelector("#user-modal");
@@ -466,6 +449,45 @@ window.onload = function(){
 
 
             let elems = new Array(boroughNameField);
+
+            for(let elem of elems){
+                removeError(elem, 1);
+                removeSuccess(elem);
+            }
+
+            globalData.currModal = modal;
+            openModal(modal, globalData.modalBackground);
+        }
+        function showMessageTypeModal(existingId = 0){
+            let modal = document.querySelector("#messageType-modal");
+
+            let type = existingId ? "edit" : "create";
+
+            let messageTypeNameField = document.querySelector("#messageTypeName");
+
+            let messageTypeIdField = document.querySelector("#messageTypeId");
+
+            messageTypeNameField.value = "";
+            messageTypeIdField.value = existingId;
+
+            let messageTypeTitle = document.querySelector("#messageType-modal-title");
+            let messageTypeSubmitButton = document.querySelector("#messageType-submit");
+
+            if(type == "edit"){
+                let data = {id : existingId};
+                messageTypeTitle.innerText = "Edit message type";
+                messageTypeSubmitButton.innerText = "Edit message type";
+                submitAjax("getSpecificMessageType", function(data){
+                    console.log(data.title);
+                    messageTypeNameField.value = data.title;
+                }, data);
+            }
+            else{
+                messageTypeTitle.innerText = "Create new message type";
+                messageTypeSubmitButton.innerText = "Create message type";
+            }
+
+            let elems = new Array(messageTypeNameField);
 
             for(let elem of elems){
                 removeError(elem, 1);
@@ -695,6 +717,7 @@ window.onload = function(){
             setupBuildingTypeModal();
             setupRoomTypeModal();
             setupQuestionModal();
+            setupMessageTypeModal();
         }
         function setupUserModal(){
             let userRoleSelect = document.querySelector("#userRole"); 
@@ -778,6 +801,13 @@ window.onload = function(){
                 submitRoomTypeForm();
             })
         }
+        function setupMessageTypeModal(){
+            let modalSubmitButton = document.querySelector("#messageType-submit");
+            addEventListenerOnce("click", modalSubmitButton, function(e){
+                e.preventDefault();
+                submitMessageTypeForm();
+            })
+        }
         function setupQuestionModal(){
             let questionAddAnswerButton = document.querySelector("#questionAddAnswer");
             addEventListenerOnce("click", questionAddAnswerButton, function(e){
@@ -856,7 +886,7 @@ window.onload = function(){
             data.password = userPasswordField.value;
             data.roleId = userRoleField.value;
 
-            submitAjax(target, showResult, data, {closeModal : true});
+            submitAjax(target, showResultGenerateTable, data, {closeModal : true});
         }
         function submitListingForm(){
             let formData = new FormData();
@@ -890,31 +920,34 @@ window.onload = function(){
 
             //tests
 
-            if(reTestText(reTitle, listingTitleField, "Title does not match format")) errors++;
+            if(reTestText(reTitle, listingTitleField, "Title does not match format", 1)) errors++;
 
-            if(reTestText(reDescription, listingDescriptionField, "Description does not match format")) errors++;
+            if(reTestText(reDescription, listingDescriptionField, "Description does not match format", 1)) errors++;
 
-            if(reTestText(reAddress, listingAddressField, "Address does not match format")) errors++;
+            if(reTestText(reAddress, listingAddressField, "Address does not match format", 1)) errors++;
 
-            if(testGeneric(listingSizeField, listingSizeField.value < 30, "Size cannot be below 30 feet")) errors++;
+            if(testGeneric(listingSizeField, listingSizeField.value < 30, "Size cannot be below 30 feet", 1)) errors++;
 
-            if(testGeneric(listingSizeField, listingSizeField.value > 100000, "Size cannot be above 100000 feet")) errors++;
+            if(testGeneric(listingSizeField, listingSizeField.value > 100000, "Size cannot be above 100000 feet", 1)) errors++;
 
-            if(testGeneric(listingPriceField, listingPriceField.value < 1000, "Price cannot be below 1000$")) errors++;
+            if(testGeneric(listingPriceField, listingPriceField.value < 1000, "Price cannot be below 1000$", 1)) errors++;
 
-            if(testGeneric(listingPriceField, listingPriceField.value > 1000000000, "Price cannot be above 1000000000$")) errors++;
+            if(testGeneric(listingPriceField, listingPriceField.value > 1000000000, "Price cannot be above 1000000000$", 1)) errors++;
 
-            if(testDropdown(listingBoroughSelect, 0, "You must select a borough")) errors++;
+            if(testDropdown(listingBoroughSelect, 0, "You must select a borough", 1)) errors++;
 
-            if(testDropdown(listingBuildingTypeSelect, 0, "You must select a building type")) errors++;
+            if(testDropdown(listingBuildingTypeSelect, 0, "You must select a building type", 1)) errors++;
 
             if(type === "create"){
-                if(testImage(listingPhotoField, "")) errors++;
+                if(testImage(listingPhotoField, "")) {
+                    console.log("Here");
+                    errors++
+                };
             }
             let roomSelects = document.querySelectorAll(".listingRoom");
             let arrayOfRooms = new Array();
             for(let roomElement of roomSelects){
-                if(testGeneric(roomElement, roomElement.value < 1), "Number of rooms cannot be less than one", 2) {
+                if(testGeneric(roomElement, roomElement.value < 1, "Number of rooms cannot be less than one", 2)) {
                     errors++;
                     continue;
                 }
@@ -922,8 +955,6 @@ window.onload = function(){
             }
 
             let listingRooms = JSON.stringify(arrayOfRooms);
-
-            console.log(listingRooms);
 
             console.log(`Step one, errors = ${errors}`);
 
@@ -946,7 +977,7 @@ window.onload = function(){
             }
             console.log("Step two");
 
-            submitFormDataAjax(target, showResult, formData, {closeModal : true});
+            submitFormDataAjax(target, showResultGenerateTable, formData, {closeModal : true});
         }
         function submitLinkForm(){
             let LinkIdField = document.querySelector("#linkId");
@@ -985,19 +1016,19 @@ window.onload = function(){
             
             let errors = 0;
 
-            if(reTestText(reTitle, LinkTitleField, "Title does not match format")) errors++;
+            if(reTestText(reTitle, LinkTitleField, "Title does not match format", 1)) errors++;
 
-            if(reTestText(reHref, LinkHrefField, "Link href does not match format")) errors++;
+            if(reTestText(reHref, LinkHrefField, "Link href does not match format", 1)) errors++;
 
-            if(reTestText(reIcon, LinkIconField, "Link icon does not match format")) errors++;
+            if(reTestText(reIcon, LinkIconField, "Link icon does not match format", 1)) errors++;
 
-            if(testDropdown(accessLevelSelect, 0, "You must select an access level")) errors++;
+            if(testDropdown(accessLevelSelect, 0, "You must select an access level", 1)) errors++;
 
-            if(testDropdown(LinkLocationSelect, 0, "You must select a location")) errors++;
+            if(testDropdown(LinkLocationSelect, 0, "You must select a location", 1)) errors++;
 
-            if(testGeneric(LinkPriorityField, linkPriority < 1, "Link priority cannot be lower than 1")) errors++;
+            if(testGeneric(LinkPriorityField, linkPriority < 1, "Link priority cannot be lower than 1", 1)) errors++;
 
-            if(testGeneric(LinkPriorityField, linkPriority > 99, "Link priority cannot be higher than 99")) errors++;
+            if(testGeneric(LinkPriorityField, linkPriority > 99, "Link priority cannot be higher than 99", 1)) errors++;
 
             if(errors != 0){
                 return;
@@ -1011,7 +1042,7 @@ window.onload = function(){
             data.main = LinkRoot;
             data.priority = linkPriority;
 
-            submitAjax(target, showResult, data, {closeModal : true});
+            submitAjax(target, showResultGenerateTable, data, {closeModal : true});
         }
         function submitBoroughForm(){
             let boroughNameField = document.querySelector("#boroughName");
@@ -1042,8 +1073,8 @@ window.onload = function(){
 
             data.boroughName = boroughNameField.value;
 
-            submitAjax(target, showResult, data, {closeModal : true});
-            // submitAjax(target, callMultipleFunctions, data, [showResult, setupListingModal]);
+            submitAjax(target, showResultGenerateTable, data, {closeModal : true});
+            // submitAjax(target, callMultipleFunctions, data, [showResultGenerateTable, setupListingModal]);
         }
         function submitBuildingTypeForm(){
             let buildingTypeNameField = document.querySelector("#buildingTypeName");
@@ -1074,7 +1105,7 @@ window.onload = function(){
 
             data.buildingTypeName = buildingTypeNameField.value;
 
-            submitAjax(target, showResult, data, {closeModal : true});
+            submitAjax(target, showResultGenerateTable, data, {closeModal : true});
         }
         function submitRoomTypeForm(){
             let roomTypeNameField = document.querySelector("#roomTypeName");
@@ -1097,7 +1128,7 @@ window.onload = function(){
                 data.id = roomTypeId;
             }
 
-            if(reTestText(reRoomTypeName, roomTypeNameField, `Room type name does not match format, eg "The Queens"`)) errors ++;
+            if(reTestText(reRoomTypeName, roomTypeNameField, `Room type name does not match format, eg "Livingroom"`)) errors ++;
 
             if(errors != 0){
                 return;
@@ -1105,7 +1136,7 @@ window.onload = function(){
 
             data.roomTypeName = roomTypeNameField.value;
 
-            submitAjax(target, showResult, data, {closeModal : true});
+            submitAjax(target, showResultGenerateTable, data, {closeModal : true});
         }
         function submitQuestionForm(){
             let questionNameField = document.querySelector("#questionName");
@@ -1172,7 +1203,38 @@ window.onload = function(){
                 data.modifiedAnswers = arrayOfAnswers.filter(answer => answer.answerId != 0);
             }
 
-            submitAjax(target, showResult, data, {closeModal : true});
+            submitAjax(target, showResultGenerateTable, data, {closeModal : true});
+        }
+        function submitMessageTypeForm(){
+            let messageTypeNameField = document.querySelector("#messageTypeName");
+            let messageTypeIdField = document.querySelector("#messageTypeId");
+
+            let messageTypeId = messageTypeIdField.value;
+
+            let reMessageTypeName = /^[A-Z][a-z']{1,19}$/;
+
+            let errors = 0;
+
+            let type = messageTypeId > 0 ? "edit" : "create";
+
+            let target = "createNewmessageType";
+
+            let data = {};
+
+            if(type == "edit"){
+                target = "editMessageType";
+                data.id = messageTypeId;
+            }
+
+            if(reTestText(reMessageTypeName, messageTypeNameField, `Message type name has to be one capitalized word`)) errors ++;
+
+            if(errors != 0){
+                return;
+            }
+
+            data.messageTypeName = messageTypeNameField.value;
+
+            submitAjax(target, showResultGenerateTable, data, {closeModal : true});
         }
         function addResult(text, count){
             return `<tr><td>${text}</td><td>${count}</td></tr>`
@@ -1246,8 +1308,58 @@ window.onload = function(){
     }
     if(currentPage === "contact.html"){
         let messageTypeSelect = document.querySelector("#messageType");
+        let messageTitleField = document.querySelector("#messageTitle");
+        let messageBodyField = document.querySelector("#messageBody");
         readAjax("getAllMessageTypes", fillDropdown, [messageTypeSelect]);
+
+        let sendMessageButton = document.querySelector("#sendMessage");
+        sendMessageButton.addEventListener("click", function(e){
+            e.preventDefault();
+            sendMessage();
+        })
+
+        function sendMessage(){
+            let data = {};
+
+            let errors = 0;
+
+            let reTitle = /^[A-Z][a-z']{0,19}(\s[A-Za-z][a-z']{0,20}){1,4}$/;
+            let reBody = /^[A-Z][a-z']{0,19}(\s[A-Za-z][a-z']{0,20}){2,14}$/;
+
+            if(reTestText(reTitle, messageTitleField, "Message title does not match format (Between two and five words)", 1)) errors++;
+
+            if(reTestText(reBody, messageBodyField, "Message body does not match format (Between three and fifteen words)", 1)) errors++;
+
+            if(testDropdown(messageTypeSelect, 0, "You must select a message type", 1));
+
+            if(errors != 0) return;
+
+            data.message_type_id = messageTypeSelect.value;
+            data.title = messageTitleField.value;
+            data.body = messageBodyField.value;
+
+            submitAjax("createNewMessage", showResult, data);
+        }
     }
+}
+
+function showResult(data, args){
+    let messageHolder = document.querySelector("#error-holder");
+    let displayMessage = true;
+    if(displayMessage){
+        let message = document.createElement("span");
+        message.classList.add("error-message");
+        message.classList.add("alert");
+        message.classList.add("alert-success");
+        message.innerText = data;
+        messageHolder.append(message);
+        setTimeout(function(){
+            hideElement(message);
+        }, 2000);
+    }
+    if(args.closeModal){
+        closeCurrentModal();
+    };
 }
 
 function openModal(modal, modalBackground) {

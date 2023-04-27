@@ -14,7 +14,7 @@ if (strlen($json_params) > 0 && isValidJSON($json_params)){
 
 $result;
 
-if(!isset($_POST["boroughName"]) || !isset($_POST["id"]))
+if(!isset($_POST["messageTypeName"]))
 {
     echoUnprocessableEntity("All fields are required");
 }

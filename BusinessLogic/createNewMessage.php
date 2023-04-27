@@ -14,39 +14,42 @@ if (strlen($json_params) > 0 && isValidJSON($json_params)){
 
 $result;
 
-if(!isset($_POST["questionName"])
-|| !isset($_POST["questionAnswers"]))
+if(!isset($_POST["message_type_id"])
+|| !isset($_POST["title"])
+|| !isset($_POST["body"]))
 {
     echoUnprocessableEntity("All fields are required");
 }
 
-$questionName = $_POST["questionName"];
-$questionAnswers = $_POST["questionAnswers"];
+$messageType = $_POST["message_type_id"];
+$title = $_POST["title"];
+$body = $_POST["body"];
 
-$reQuestion = '/^[A-Z][a-z\']{1,20}(\s[A-Za-z][a-z\']{0,20}){2,10}$/';
-$reAnswer = '/^[A-Z][a-z\']{0,20}(\s[A-Za-z][a-z\']{0,20}){2,10}$/';
+$reTitle = '/^[A-Z][a-z\']{0,19}(\s[A-Za-z][a-z\']{0,20}){1,4}$/';
+$reBody = '/^[A-Z][a-z\']{0,19}(\s[A-Za-z][a-z\']{0,20}){2,14}$/';
 
-if(!preg_match($reQuestion, $questionName)){
-    echoUnprocessableEntity("Question does not match format (Between three and eleven words)");
+if(!preg_match($reTitle, $title)){
+    echoUnprocessableEntity("Message title does not match format (Between two and five words)");
 }
 
-foreach($questionAnswers as $answer){
-    if(!preg_match($reAnswer, $answer)){
-        echoUnprocessableEntity("Answer does not match format (Between three and eleven words)");
-    }
+if(!preg_match($reBody, $body)){
+    echoUnprocessableEntity("Message body does not match format (Between three and fifteen words)");
 }
-require("../DataAccess/surveyFunctions.php");
+
+$messageTypeExists = count(getEveryRowWhereParamFromTable("messagetypes", "message_type_id", $messageType)) > 0;
+if(!$messageTypeExists){
+    echoUnprocessableEntity("Invalid message type selected");
+}
+
+require("../DataAccess/messageFunctions.php");
 try{
-    $newQuestion = saveQuestion($questionName);
-    foreach($questionAnswers as $answer){
-        saveQuestionAnswer($newQuestion, $answer);
-    }
+    createNewMessage($_SESSION["user"]["user_id"], $messageType, $title, $body);
 }
 catch (PDOException $e){
     echoUnexpectedError();
 }
 
-$result["general"] = "Successfully created new question";
+$result["general"] = "Successfully sent message";
 http_response_code(201);
 echo json_encode($result)
 ?>

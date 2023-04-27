@@ -36,13 +36,14 @@
                         <select name="messageType" class="form-control"  id="messageType" required>
                             <option value="0">Select a message type</option>
                         </select>
+                        <span class="error-msg hidden"></span>
                     </div>
                     <div class="mb-3">
                         <label for="messageBody" class="form-label">Message body</label>
                         <textarea class="form-control"  name="messageBody" id="messageBody" required="required"></textarea>
                         <span class="error-msg hidden"></span>
                     </div>
-                    <button type="submit" id="createNewUser" name="createNewUser" class="btn btn-primary">Submit</button>
+                    <button type="submit" id="sendMessage" name="sendMessage" class="btn btn-primary">Submit</button>
                   </form>
             </div>
         </div>
