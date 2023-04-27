@@ -14,13 +14,12 @@ if (strlen($json_params) > 0 && isValidJSON($json_params)){
 
 $result;
 
-if(!isset($_POST["messageTypeName"]) || !isset($_POST["id"]))
+if(!isset($_POST["messageTypeName"]))
 {
     echoUnprocessableEntity("All fields are required");
 }
 
 $messageTypeName = $_POST["messageTypeName"];
-$messageTypeId = $_POST["id"];
 
 $reMessageTypeName = '/^[A-Z][a-z]{1,19}$/';
 
@@ -28,21 +27,15 @@ if(!preg_match($reMessageTypeName, $messageTypeName)){
     echoUnprocessableEntity("Message type name has to be one capitalized word");
 }
 
-$messageTypeExists = count(getEveryRowWhereParamFromTable("messagetypes", "message_type_id", $messageTypeId)) > 0;
-
-if(!$messageTypeExists){
-    echoUnprocessableEntity("Message type with provided id does not exist");
-}
-
 try{
-    updateTextValue("messagetypes", "message_type_name", $messageTypeName, "message_type_id", $messageTypeId);
+    insertSingleParamater("messagetypes", $messageTypeName, "message_type_name");
 }
 
 catch (PDOException $e){
     echoUnexpectedError();
 }
 
-$result["general"] = "Successfully edited message type";
-http_response_code(200);
+$result["general"] = "Successfully created new message type";
+http_response_code(201);
 echo json_encode($result)
 ?>

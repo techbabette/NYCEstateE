@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 24, 2023 at 07:13 AM
+-- Generation Time: Apr 27, 2023 at 04:57 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -53,8 +53,22 @@ CREATE TABLE `answers` (
   `answer_id` int(20) NOT NULL,
   `question_id` int(20) NOT NULL,
   `answer` varchar(255) NOT NULL,
-  `dateDeleted` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `dateDeleted` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `answers`
+--
+
+INSERT INTO `answers` (`answer_id`, `question_id`, `answer`, `dateDeleted`) VALUES
+(13, 5, 'Test answer one', NULL),
+(14, 5, 'Test answer two', '2023-04-24 11:16:00'),
+(15, 5, 'Test answer three', '2023-04-24 11:12:48'),
+(16, 5, 'Test answer four', '2023-04-24 11:15:44'),
+(17, 5, 'Test answer five', '2023-04-24 11:15:44'),
+(18, 5, 'Test answer three', NULL),
+(19, 6, 'I like it a lot', NULL),
+(20, 6, 'I dislike it', NULL);
 
 -- --------------------------------------------------------
 
@@ -135,8 +149,17 @@ INSERT INTO `linkicons` (`link_icon_id`, `link_id`, `icon`, `active`, `dateCreat
 (4, 12, 'bx:sitemap', 0, '2023-04-08 03:58:37'),
 (8, 12, 'bx:sitemap', 1, '2023-04-09 05:20:18'),
 (9, 11, 'fa-file', 0, '2023-04-21 03:34:17'),
-(10, 9, 'icomoon-free:facebook', 1, '2023-04-23 13:25:45'),
-(11, 11, 'fa-file', 1, '2023-04-24 03:56:17');
+(10, 9, 'icomoon-free:facebook', 0, '2023-04-23 13:25:45'),
+(11, 11, 'fa-file', 1, '2023-04-24 03:56:17'),
+(12, 9, 'icomoon-free:facebook', 0, '2023-04-24 08:34:50'),
+(13, 9, 'icomoon-free:facebook', 0, '2023-04-24 08:34:50'),
+(14, 9, 'icomoon-free:facebook', 0, '2023-04-24 08:37:48'),
+(15, 9, 'icomoon-free:facebook', 0, '2023-04-24 08:37:48'),
+(16, 9, 'icomoon-free:facebook', 0, '2023-04-24 08:38:54'),
+(17, 9, 'icomoon-free:facebook', 0, '2023-04-24 08:38:54'),
+(18, 9, 'icomoon-free:facebook', 0, '2023-04-24 08:40:27'),
+(19, 9, 'icomoon-free:faceboo', 0, '2023-04-24 08:42:12'),
+(20, 9, 'icomoon-free:facebook', 1, '2023-04-24 08:42:20');
 
 -- --------------------------------------------------------
 
@@ -163,14 +186,15 @@ INSERT INTO `links` (`link_id`, `access_level_id`, `link_title`, `href`, `landin
 (1, 1, 'Nyc Estates', 'index.html', 1, 'head', 1, NULL),
 (3, 1, 'Home', 'index.html', 1, 'navbar', 99, NULL),
 (4, 1, 'Listings', 'listings.html', 0, 'navbar', 97, NULL),
-(5, 4, 'Login', 'login.html', 0, 'navbar', 95, NULL),
+(5, 4, 'Login', 'login.html', 0, 'navbar', 93, NULL),
 (6, 4, 'Register', 'register.html', 0, 'navbar', 94, NULL),
 (7, 2, 'Favorites', 'favorites.html', 0, 'navbar', 96, NULL),
 (8, 3, 'Admins', 'admin.html', 0, 'navbar', 98, NULL),
 (9, 1, 'Facebook', 'https://www.facebook.com/', 0, 'footer', 1, NULL),
 (10, 1, 'Twitter', 'https://www.twitter.com/', 0, 'footer', 1, NULL),
 (11, 1, 'Documentation', 'documentation.pdf', 1, 'footer', 99, NULL),
-(12, 1, 'Sitemap', 'sitemap.xml', 1, 'footer', 1, NULL);
+(12, 1, 'Sitemap', 'sitemap.xml', 1, 'footer', 1, NULL),
+(24, 2, 'Contact', 'contact.html', 0, 'navbar', 93, NULL);
 
 -- --------------------------------------------------------
 
@@ -273,8 +297,51 @@ INSERT INTO `listings` (`listing_id`, `borough_id`, `building_type_id`, `listing
 (4, 1, 1, 'New listing', 'New description', 'Kings street 25', 35.00, '2023-04-22 13:24:08', NULL),
 (12, 1, 1, 'Newer listing', 'This is the newest listing', 'King\'s street 20', 30.00, '2023-04-22 13:24:08', NULL),
 (16, 3, 1, 'Listing with rooms', 'This listing has rooms', 'King\'s street 50', 30.00, '2023-04-22 13:24:08', NULL),
-(17, 3, 2, 'Listing delete', 'This will be deleted', 'King\'s street 20', 30.00, '2023-04-22 13:37:41', '2023-04-22 21:32:22'),
-(18, 3, 3, 'Listing edited', 'Listing has been edited', 'King\'s street NN', 200.00, '2023-04-24 03:55:11', NULL);
+(17, 3, 2, 'Listing delete', 'This will be deleted', 'King\'s street 20', 30.00, '2023-04-22 13:37:41', '2023-04-25 08:17:39'),
+(18, 3, 3, 'Listing edited', 'Listing has been edited wow', 'King\'s street NN', 200.00, '2023-04-24 03:55:11', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `messages`
+--
+
+CREATE TABLE `messages` (
+  `message_id` int(20) NOT NULL,
+  `user_id` int(20) NOT NULL,
+  `message_type_id` int(20) NOT NULL,
+  `title` varchar(50) NOT NULL,
+  `message` text NOT NULL,
+  `dateCreated` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `messages`
+--
+
+INSERT INTO `messages` (`message_id`, `user_id`, `message_type_id`, `title`, `message`, `dateCreated`) VALUES
+(5, 4, 4, 'This is the first message', 'This is the first message', '2023-04-27 14:55:35'),
+(6, 4, 4, 'Second message', 'This is the second question', '2023-04-27 14:56:16');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `messagetypes`
+--
+
+CREATE TABLE `messagetypes` (
+  `message_type_id` int(20) NOT NULL,
+  `message_type_name` varchar(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `messagetypes`
+--
+
+INSERT INTO `messagetypes` (`message_type_id`, `message_type_name`) VALUES
+(2, 'Error'),
+(3, 'Inquiry'),
+(4, 'General');
 
 -- --------------------------------------------------------
 
@@ -285,8 +352,16 @@ INSERT INTO `listings` (`listing_id`, `borough_id`, `building_type_id`, `listing
 CREATE TABLE `questions` (
   `question_id` int(20) NOT NULL,
   `question` varchar(255) NOT NULL,
-  `dateDeleted` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `dateDeleted` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `questions`
+--
+
+INSERT INTO `questions` (`question_id`, `question`, `dateDeleted`) VALUES
+(5, 'How much do you like this website', '2023-04-25 09:24:08'),
+(6, 'Do you like this website', NULL);
 
 -- --------------------------------------------------------
 
@@ -306,7 +381,8 @@ CREATE TABLE `roles` (
 
 INSERT INTO `roles` (`role_id`, `access_level_id`, `role_name`) VALUES
 (1, 2, 'Standard'),
-(2, 3, 'Admin');
+(2, 3, 'Admin'),
+(3, 4, 'Banned');
 
 -- --------------------------------------------------------
 
@@ -340,6 +416,13 @@ CREATE TABLE `useranswers` (
   `answer_id` int(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `useranswers`
+--
+
+INSERT INTO `useranswers` (`useranswer_id`, `user_id`, `answer_id`) VALUES
+(1, 4, 19);
+
 -- --------------------------------------------------------
 
 --
@@ -362,7 +445,7 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`user_id`, `email`, `password`, `name`, `lastName`, `dateCreated`, `role_id`) VALUES
 (4, 'marinakrsticrf@gmail.com', '$2y$10$uZvQ1Eu.TyUrZs/yAOuDkOE5wM/Gvg0suI7CEGD2kM0Q8U5V31Y4K', 'Marina', 'Krstic', '2023-03-16 10:25:32', 2),
-(5, 'laznaemailadresa@ict.edu.rs', '$2y$10$lTp9Xb6XiQVYZy.cg3GnX.3yw7Lc0JQGUUrgLcOy9jWJx.VJOoPCS', 'Marko', 'Krstic', '2023-03-16 10:38:08', 1);
+(5, 'laznaemailadresa@ict.edu.rs', '$2y$10$1bkDlKj.jzuq7BIhacsdYe6rqKtGLxGD1Uc6c0mX8gJJFdROiw.Vy', 'Marko', 'Krstic', '2023-03-16 10:38:08', 3);
 
 --
 -- Indexes for dumped tables
@@ -447,6 +530,20 @@ ALTER TABLE `listings`
   ADD KEY `building_type_id` (`building_type_id`);
 
 --
+-- Indexes for table `messages`
+--
+ALTER TABLE `messages`
+  ADD PRIMARY KEY (`message_id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `message_type_id` (`message_type_id`);
+
+--
+-- Indexes for table `messagetypes`
+--
+ALTER TABLE `messagetypes`
+  ADD PRIMARY KEY (`message_type_id`);
+
+--
 -- Indexes for table `questions`
 --
 ALTER TABLE `questions`
@@ -489,13 +586,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `accesslevels`
 --
 ALTER TABLE `accesslevels`
-  MODIFY `access_level_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `access_level_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `answers`
 --
 ALTER TABLE `answers`
-  MODIFY `answer_id` int(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `answer_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `boroughs`
@@ -519,13 +616,13 @@ ALTER TABLE `favorites`
 -- AUTO_INCREMENT for table `linkicons`
 --
 ALTER TABLE `linkicons`
-  MODIFY `link_icon_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `link_icon_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `links`
 --
 ALTER TABLE `links`
-  MODIFY `link_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `link_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `listingphotos`
@@ -552,16 +649,28 @@ ALTER TABLE `listings`
   MODIFY `listing_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
+-- AUTO_INCREMENT for table `messages`
+--
+ALTER TABLE `messages`
+  MODIFY `message_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT for table `messagetypes`
+--
+ALTER TABLE `messagetypes`
+  MODIFY `message_type_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
 -- AUTO_INCREMENT for table `questions`
 --
 ALTER TABLE `questions`
-  MODIFY `question_id` int(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `question_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `roles`
 --
 ALTER TABLE `roles`
-  MODIFY `role_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `role_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `roomtypes`
@@ -573,13 +682,30 @@ ALTER TABLE `roomtypes`
 -- AUTO_INCREMENT for table `useranswers`
 --
 ALTER TABLE `useranswers`
-  MODIFY `useranswer_id` int(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `useranswer_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
   MODIFY `user_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `listings`
+--
+ALTER TABLE `listings`
+  ADD CONSTRAINT `listings_ibfk_1` FOREIGN KEY (`building_type_id`) REFERENCES `buildingtypes` (`building_type_id`) ON UPDATE NO ACTION;
+
+--
+-- Constraints for table `messages`
+--
+ALTER TABLE `messages`
+  ADD CONSTRAINT `messages_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
+  ADD CONSTRAINT `messages_ibfk_2` FOREIGN KEY (`message_type_id`) REFERENCES `messagetypes` (`message_type_id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

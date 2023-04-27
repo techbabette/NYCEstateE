@@ -33,7 +33,8 @@ function getAllMessages(){
     $statement = "SELECT m.message_id AS id, email, message_type_name, title, message, m.dateCreated
                   FROM messages m 
                   INNER JOIN messagetypes mt ON m.message_type_id = mt.message_type_id
-                  INNER JOIN users u ON u.user_id = m.user_id";
+                  INNER JOIN users u ON u.user_id = m.user_id
+                  ORDER BY m.dateCreated DESC";
     $prepSt = $conn->prepare($statement);
 
     $prepSt->execute();
@@ -65,5 +66,7 @@ function createNewMessage($user_id, $message_type_id, $title, $message){
     $prepSt->bindParam("message", $message);
 
     return $prepSt->execute();
+}
+function createNewMessageType($message_type_name){
 }
 ?>
