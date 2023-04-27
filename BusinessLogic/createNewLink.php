@@ -20,7 +20,9 @@ $result;
     || (!isset($_POST["icon"]))
     || (!isset($_POST["aLevel"]))
     || (!isset($_POST["location"]) || empty($_POST["location"]))
-    || (!isset($_POST["main"])))
+    || (!isset($_POST["main"]))
+    || (!isset($_POST["priority"]))
+    )
     {
         echoUnprocessableEntity("All fields are required");
     }
@@ -31,6 +33,7 @@ $LinkIcon = $_POST["icon"];
 $AccessLevelId = $_POST["aLevel"];
 $LinkLocation = $_POST["location"];
 $main = $_POST["main"];
+$priority = $_POST["priority"];
 
 $reTitle = '/^[A-Z][a-z]{2,15}(\s[A-Za-z][a-z]{2,15}){0,2}$/';
 $reHref = '/^(https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[-a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&\/=]*))||([a-z]{3,40}\.[a-z]{2,5})$/';
@@ -46,6 +49,14 @@ if(!preg_match($reHref, $LinkHref)){
 
 if(!empty($LinkIcon) && !preg_match($reIcon, $LinkIcon)){
     echoUnprocessableEntity("Link icon does not match format");
+}
+
+if($priority < 1){
+    echoUnprocessableEntity("Link priority cannot be lower than 1");
+}
+
+if($priority > 99){
+    echoUnprocessableEntity("Link priority cannot be higher than 99");
 }
 
 require("../DataAccess/navigationLocationFunctions.php");
@@ -73,7 +84,7 @@ if(!$idAcceptable){
 //Success
 require("../DataAccess/linkFunctions.php");
 try{
-    $lastInsertedId = createNewLink($LinkTitle, $LinkHref, $AccessLevelId, $LinkLocation, $main);
+    $lastInsertedId = createNewLink($LinkTitle, $LinkHref, $AccessLevelId, $LinkLocation, $main, $priority);
     if(!empty($LinkIcon)){
         createNewLinkIcon($lastInsertedId, $LinkIcon);
     }

@@ -51,10 +51,10 @@ function getSpecificLink($linkId){
 
     return $results;
 }
-function createNewLink($title, $href, $aLevel, $location, $landing){
+function createNewLink($title, $href, $aLevel, $location, $landing, $priority){
     include ("../../connection.php");
 
-    $statement = "INSERT INTO links (link_title, href, access_level_id, location, landing) VALUES(?, ?, ?, ?, ?)";
+    $statement = "INSERT INTO links (link_title, href, access_level_id, location, landing, priority) VALUES(?, ?, ?, ?, ?, ?)";
     $prepSt = $conn->prepare($statement);
 
     $prepSt->bindParam(1, $title);
@@ -62,6 +62,7 @@ function createNewLink($title, $href, $aLevel, $location, $landing){
     $prepSt->bindParam(3, $aLevel, PDO::PARAM_INT);
     $prepSt->bindParam(4, $location);
     $prepSt->bindParam(5, $landing, PDO::PARAM_INT);
+    $prepSt->bindParam(6, $priority, PDO::PARAM_INT);
 
     $prepSt->execute();
 

@@ -423,6 +423,7 @@ window.onload = function(){
                 accessLevelSelect.value = 0;
                 LinkLocation.value = 0;
                 LinkRoot.checked = false;
+                LinkPriorityField.value = 1;
 
                 modalSubmitButton.innerText = "Create new link";
                 linkModalTitle.innerText = "Create a new link";
