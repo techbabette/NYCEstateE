@@ -1211,7 +1211,7 @@ window.onload = function(){
 
             let messageTypeId = messageTypeIdField.value;
 
-            let reMessageTypeName = /^[A-Z][a-z']{1,19}$/;
+            let reMessageTypeName = /^[A-Z][a-z]{1,19}$/;
 
             let errors = 0;
 

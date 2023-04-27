@@ -14,35 +14,35 @@ if (strlen($json_params) > 0 && isValidJSON($json_params)){
 
 $result;
 
-if(!isset($_POST["messageTypeName"]))
+if(!isset($_POST["messageTypeName"]) || !isset($_POST["id"]))
 {
     echoUnprocessableEntity("All fields are required");
 }
 
-$boroughName = $_POST["boroughName"];
-$boroughId = $_POST["id"];
+$messageTypeName = $_POST["messageTypeName"];
+$messageTypeId = $_POST["id"];
 
-$reBoroughName = '/^[A-Z][a-z\']{1,50}(\s[A-Za-z][a-z\']{1,50}){0,3}$/';
+$reMessageTypeName = '/^[A-Z][a-z]{1,19}$/';
 
-if(!preg_match($reBoroughName, $boroughName)){
+if(!preg_match($reMessageTypeName, $messageTypeName)){
     echoUnprocessableEntity("Borough name does not match format");
 }
 
-$boroughExists = count(getEveryRowWhereParamFromTable("boroughs", "borough_id", $boroughId)) > 0;
+$messageTypeExists = count(getEveryRowWhereParamFromTable("messagetypes", "message_type_id", $messageTypeId)) > 0;
 
-if(!$boroughExists){
-    echoUnprocessableEntity("Borough with provided id does not exist");
+if(!$messageTypeExists){
+    echoUnprocessableEntity("Message type with provided id does not exist");
 }
 
 try{
-    updateTextValue("boroughs", "borough_name", $boroughName, "borough_id", $boroughId);
+    updateTextValue("messagetypes", "message_type_name", $messageTypeName, "message_type_id", $messageTypeId);
 }
 
 catch (PDOException $e){
     echoUnexpectedError();
 }
 
-$result["general"] = "Successfully edited borough";
+$result["general"] = "Successfully edited message type";
 http_response_code(200);
 echo json_encode($result)
 ?>
