@@ -188,6 +188,12 @@ window.onload = function(){
             let html = "";
             let counter = 1;
             let tableResultHolder = document.querySelector("#table-result-holder");
+            if(data.length < 1){
+                html += `<p class="text-center w-100 d-block">No rows to display</p>`
+                tableResultHolder.innerHTML = "";
+                tableResultHolder.innerHTML += html;
+                return;
+            }
             currData = data;
             for(let row of data){
                 html += 
@@ -219,7 +225,6 @@ window.onload = function(){
                     html += `<button type="button" data-table="${tables[activeTable].title}" data-id="${row["id"]}" class="btn btn-danger delete-button">Delete</button>`
                 }
                 html += `</td></tr>`;
-                console.log(row);
             }
 
             //Code for generating the "Insert new" button;
@@ -237,7 +242,6 @@ window.onload = function(){
                 </tr>
                 `
             }
-            console.log(html);
             tableResultHolder.innerHTML = "";
             tableResultHolder.innerHTML += html;
             if(createNew){
