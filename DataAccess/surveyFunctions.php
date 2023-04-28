@@ -34,8 +34,9 @@ function getAllDeletedQuestions(){
 function getQuestions($user_id){
     include ("../../connection.php");
 
-    $statement = "SELECT q.question_id, q.question FROM questions q
-                  WHERE q.dateDeleted IS NULL AND q.question_id NOT IN (SELECT question_id FROM useranswers WHERE user_id = :user_id)";
+    $statement = "SELECT q.question_id as id, q.question FROM questions q
+                  WHERE q.dateDeleted IS NULL AND q.question_id NOT IN 
+                  (SELECT question_id FROM useranswers ua INNER JOIN answers a ON ua.answer_id = a.answer_id  WHERE user_id = :user_id)";
     $prepSt = $conn->prepare($statement);
 
     $prepSt->bindParam("user_id", $user_id, PDO::PARAM_INT);
@@ -129,14 +130,14 @@ function saveQuestionAnswer($question_id, $text){
 
     return $conn->lastInsertId();
 }
-function saveUserAnswer($answer_id, $user_id){
+function saveUserAnswer($user_id, $answer_id){
     include ("../../connection.php");
 
-    $statement = "INSERT INTO useranswers (question_id, answer_id) VALUES (:question_id, :answer_id)";
+    $statement = "INSERT INTO useranswers (user_id, answer_id) VALUES (:user_id, :answer_id)";
     $prepSt = $conn->prepare($statement);
 
-    $prepSt->bindParam("question_id", $question_id, PDO::PARAM_INT);
     $prepSt->bindParam("answer_id", $answer_id, PDO::PARAM_INT);
+    $prepSt->bindParam("user_id", $user_id, PDO::PARAM_INT);
 
     $prepSt->execute();
 
@@ -198,5 +199,30 @@ function restoreQuestion($question_id){
     $prepSt->bindParam("question_id", $question_id, PDO::PARAM_INT);
 
     return $prepSt->execute();
+}
+function checkIfUserAllowedToAnswer($user_id, $answer_id){
+    include ("../../connection.php");
+
+    $statement = "SELECT u.user_id FROM users u
+                  INNER JOIN useranswers ua ON u.user_id = ua.user_id
+                  INNER JOIN answers a ON ua.answer_id = a.answer_id
+                  INNER JOIN questions q ON a.question_id = q.question_id
+                  WHERE a.question_id IN (SELECT question_id FROM answers WHERE answer_id = :answer_id)
+                  AND ua.user_id = :user_id
+                  AND a.dateDeleted IS NULL
+                  AND q.dateDeleted IS NULL";
+    $prepSt = $conn->prepare($statement);
+
+    $prepSt->bindParam("user_id", $user_id, PDO::PARAM_INT);
+    $prepSt->bindParam("answer_id", $answer_id, PDO::PARAM_INT);
+
+    $prepSt->execute();
+
+    $hasRows = $prepSt->fetch();
+
+    if($hasRows){
+        return false;
+    }
+    return true;
 }
 ?>

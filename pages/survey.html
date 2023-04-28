@@ -7,7 +7,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     <link rel="stylesheet" href="../resources/css/style.css">
     <script src="../resources/js/main.js"></script>
-    <title>Contact</title>
+    <title>Survey</title>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg bg-light">
@@ -24,27 +24,29 @@
       </nav>
     <div class="container-fluid mk-page mk-solo-page">
         <div class="row d-flex w-100 justify-content-center">
-            <div class="col-6">
-                <form id="contactForm">
+            <div class="col-6" id="surveyHolder">
+                <!--One form-->
+                <!-- <form id="surveyQuestion1" class="my-2 question-form">
                     <div class="mb-3">
-                        <label for="messageTitle" class="form-label">Message title</label>
-                        <input type="text" class="form-control" name="messageTitle" id="messageTitle">
-                        <span class="error-msg hidden"></span>
+                        <p class="h2">Question: How do you like this website?</p>
                     </div>
                     <div class="mb-3">
-                        <label for="messageType">Message type</label>
-                        <select name="messageType" class="form-control"  id="messageType" required>
-                            <option value="0">Select a message type</option>
-                        </select>
-                        <span class="error-msg hidden"></span>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                            <label class="form-check-label" for="flexRadioDefault1">
+                              Default radio
+                            </label>
+                        </div>
+                          <div class="form-check">
+                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
+                            <label class="form-check-label" for="flexRadioDefault2">
+                              Default checked radio
+                            </label>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="messageBody" class="form-label">Message body</label>
-                        <textarea class="form-control"  name="messageBody" id="messageBody" required="required"></textarea>
-                        <span class="error-msg hidden"></span>
-                    </div>
-                    <button type="submit" id="sendMessage" name="sendMessage" class="btn btn-primary">Submit</button>
-                  </form>
+                    <button type="submit" id="sendMessage" name="sendMessage" class="btn btn-primary">Submit answer</button>
+                  </form> -->
+                <!--End of one form-->
             </div>
         </div>
         <div id="error-holder" class="d-flex flex-column">

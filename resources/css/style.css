@@ -84,6 +84,11 @@ footer{
     z-index: 5;
     pointer-events: none;
 }
+.question-form{
+    border: 1px solid black;
+    padding: 5%;
+    border-radius: 1%;
+}
 .error-message{
     opacity: 1;
     transition: opacity 200ms ease 0ms;

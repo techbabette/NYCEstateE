@@ -1288,16 +1288,6 @@ window.onload = function(){
             let roomHolder = document.querySelector("#room-holder");
             roomHolder.innerHTML = "";
         }
-        function addEventListenerOnce(event, element, onEvent, listenerMark = ""){
-            let listenerMarker = event + listenerMark;
-
-            if(element.classList.contains(listenerMarker)){
-                return;
-            }
-
-            element.classList.add(listenerMarker);
-            element.addEventListener(event, onEvent);
-        }
         function addRemoveParentOnClickListener(element){
             element.addEventListener("click", function(e){
             e.preventDefault();
@@ -1341,6 +1331,116 @@ window.onload = function(){
             submitAjax("createNewMessage", showResult, data);
         }
     }
+    if(currentPage === "survey.html"){
+        getQuestionsForUser();
+    }
+}
+
+function getQuestionsForUser(){
+    readAjax("getQuestionsForUser", displaySurveyQuestions);
+}
+
+function setGlobal(data, args){
+    globalData[args.name] = data;
+}
+
+function displaySurveyQuestions(data){
+    // <!--One form-->
+    // <form id="surveyQuestion1" class="my-2 question-form">
+    //     <div class="mb-3">
+    //         <p class="h2">Question: How do you like this website?</p>
+    //     </div>
+    //     <div class="mb-3">
+    //         <div class="form-check">
+    //             <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+    //             <label class="form-check-label" for="flexRadioDefault1">
+    //               Default radio
+    //             </label>
+    //         </div>
+    //           <div class="form-check">
+    //             <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
+    //             <label class="form-check-label" for="flexRadioDefault2">
+    //               Default checked radio
+    //             </label>
+    //         </div>
+    //     </div>
+    //     <button type="submit" id="sendMessage" name="sendMessage" class="btn btn-primary">Submit answer</button>
+    //   </form>
+    // <!--End of one form-->
+    let html = ``;
+    let surveyHolder = document.querySelector("#surveyHolder");
+    surveyHolder.innerHTML = "";
+    let question;
+    let answers;
+
+    if(data.length < 1){
+        html += `<p class="h2 text-center">No more questions left</p>`;
+        surveyHolder.innerHTML = html;
+        return;
+    }
+
+    for(let row of data){
+        question = row["question"];
+        answers = row["answers"];
+
+        html+= `
+        <form id="surveyQuestion${question["id"]}" class="my-2 question-form">
+        <div class="mb-3">
+            <p class="h2">Question: ${question["question"]}?</p>
+        </div>
+        <div class="mb-3">
+        `
+        for(let answer of answers){
+        html += 
+        `
+        <div class="form-check">
+            <input class="form-check-input" type="radio" value="${answer["answer_id"]}" required="required" name="questionAnswers${question["id"]}" id="answer${answer["answer_id"]}">
+            <label class="form-check-label" for="answer${answer["answer_id"]}">
+                ${answer["answer"]}
+            </label>
+        </div>
+        `
+        }
+        html += `
+        </div>
+        <button type="submit" data-id="${question["id"]}" id="submitForm${question["id"]}" name="submitForm${question["id"]}" class="btn btn-primary submit">Submit answer</button>
+        <span class="error-msg hidden"></span>
+        </form>`
+    }
+    surveyHolder.innerHTML = html;
+    let submitButtons = document.querySelectorAll(".submit");
+    for(let button of submitButtons){
+        addEventListenerOnce("click", button, function(e){
+            e.preventDefault();
+            let questionId = this.dataset.id;
+            submitQuestionAnswer(questionId);
+        })
+    }
+}
+
+function submitQuestionAnswer(questionId){
+    let answerCheckboxes = document.getElementsByName(`questionAnswers${questionId}`);
+    let selectedAnswerId = 0;
+
+    for(let checkbox of answerCheckboxes){
+        if(checkbox.checked){
+            selectedAnswerId = checkbox.value;
+            break;
+        }
+    }
+    let submitButton = document.querySelector(`#submitForm${questionId}`);
+    if(selectedAnswerId === 0){
+        addError(submitButton, "You must select an answer before submitting", 1);
+        return;
+    }
+    else{
+        removeError(submitButton, 1);
+    }
+    data = {};
+    data.answerId = selectedAnswerId;
+    args = {};
+    args.additionalFunctions = new Array(getQuestionsForUser);
+    submitAjax("submitAnswer", showResult, data, args);
 }
 
 function showResult(data, args){
@@ -1360,7 +1460,13 @@ function showResult(data, args){
     if(args.closeModal){
         closeCurrentModal();
     };
+    if(args.additionalFunctions){
+        for(let func of args.additionalFunctions){
+            func();
+        }
+    }
 }
+
 
 function openModal(modal, modalBackground) {
     showElement(modalBackground, "hidden");
@@ -1374,6 +1480,17 @@ function closeModal(modal, modalBackground) {
 function closeCurrentModal(){
     hideElement(globalData.modalBackground, "hidden");
     hideElement(globalData.currModal, "hidden");
+}
+
+function addEventListenerOnce(event, element, onEvent, listenerMark = ""){
+    let listenerMarker = event + listenerMark;
+
+    if(element.classList.contains(listenerMarker)){
+        return;
+    }
+
+    element.classList.add(listenerMarker);
+    element.addEventListener(event, onEvent);
 }
 
 function fillDropdown(data, args){
