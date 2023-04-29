@@ -101,7 +101,8 @@ footer{
     width: 100% !important;
     margin-bottom: 10px;
     padding-bottom: 2%;
-    background-color: white !important;
+    background-color: #FFFFFF;
+    background-image: radial-gradient( circle 311px at 8.6% 27.9%,  rgba(62,147,252,0.57) 12.9%, rgba(239,183,192,0.44) 91.2% );
     border: 1px solid black;
     border-radius: 2%;
 }
@@ -127,8 +128,10 @@ footer{
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: gainsboro;
+    background-color: #FFFFFF;
+    background-image: radial-gradient( circle 311px at 8.6% 27.9%,  rgba(62,147,252,0.57) 12.9%, rgba(239,183,192,0.44) 91.2% );
     color: black;
+    transition: opacity 100ms ease 20ms;
 }
 .list-group{
     border-radius: 2%;

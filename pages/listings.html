@@ -24,8 +24,54 @@
       </nav>
     <div class="container-fluid mk-page mk-solo-page">
         <div class="row d-flex w-100 justify-content-center">
-            <div class="col-5 p-2" style="background-color: greenyellow;">
-                <!--This is where the filters will go-->
+            <div class="col-3 p-2" style="background-color: white; position: static;">
+              <div class="col-12">
+                <label for="titleFilter" class="h3">Title filter</label>
+                <input type="text" class="boroughFilter d-block" name="titleFilter" id="titleFilter" value=""/>
+              </div>
+              <!--Start of borough filters-->
+              <div class="row" id="boroughFilters">
+                <h3>Borough filter</h3>
+                <div class="col-12">
+                  <input type="checkbox" class="boroughFilter" name="borough" id="The Bronx" value="The Bronx">
+                  <label for="The Bronx">The Bronx</label>
+                </div>
+                <div>
+                  <input type="checkbox" class="boroughFilter" name="borough" id="The Bronx" value="The Bronx">
+                  <label for="The Bronx">The Bronx</label>
+                </div>
+                <div>
+                  <input type="checkbox" class="boroughFilter" name="borough" id="The Bronx" value="The Bronx">
+                  <label for="The Bronx">The Bronx</label>
+                </div>
+                <div>
+                  <input type="checkbox" class="boroughFilter" name="borough" id="The Bronx" value="The Bronx">
+                  <label for="The Bronx">The Bronx</label>
+                </div>
+                <div>
+                  <input type="checkbox" class="boroughFilter" name="borough" id="The Bronx" value="The Bronx">
+                  <label for="The Bronx">The Bronx</label>
+                </div>
+              </div>
+              <!--End of borough filters-->
+              <!--Start of building type filters-->
+              <div class="row my-2" id="buildingTypeFilters">
+                <h3>Building type filter</h3>
+                <div class="col-12">
+                  <input type="checkbox" class="boroughFilter" name="borough" id="The Bronx" value="The Bronx">
+                  <label for="The Bronx">Apartment</label>
+                </div>
+                <div>
+                  <input type="checkbox" class="boroughFilter" name="borough" id="The Bronx" value="The Bronx">
+                  <label for="The Bronx">Duplex</label>
+                </div>
+                <div>
+                  <input type="checkbox" class="boroughFilter" name="borough" id="The Bronx" value="The Bronx">
+                  <label for="The Bronx">House</label>
+                </div>
+              </div>
+              <!--End of building type filters-->
+              <!--This is where the filters will go-->
             </div>
             <div class="col-7 p-2 row mk-fix justify-content-between text-center">
                 <!--This is where the listings will go-->
@@ -42,7 +88,7 @@
                     <div class="listing-img w-100 listing-img-height">
                       <img src="../resources/imgs/168217066120666745526443e325515b3.jpg" alt="" class="img-fluid mk-img-fluid">
                     </div>
-                    <div class="listing-body bg-white">
+                    <div class="listing-body">
                       <h3 class="h5 listing-title">New listing</h3>
                       <p class="listing-desc">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Mollitia ex architecto quaerat officia assumenda, veritatis dolorem tempora eos nostrum libero?</p>
                       <p class="listing-size">Size: 3000 feet</p>
@@ -68,7 +114,7 @@
                     <div class="listing-img w-100 listing-img-height">
                       <img src="../resources/imgs/168217066120666745526443e325515b3.jpg" alt="" class="img-fluid mk-img-fluid">
                     </div>
-                    <div class="listing-body bg-white">
+                    <div class="listing-body">
                       <h3 class="h5 listing-title">New listing</h3>
                       <p class="listing-desc">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Mollitia ex architecto quaerat officia assumenda, veritatis dolorem tempora eos nostrum libero?</p>
                       <p class="listing-size">Size: 3000 feet</p>
@@ -83,8 +129,8 @@
                       <li class="list-group-item">Bathrooms: 2</li>
                     </ul> 
                   </div>
-                  <div class="listing-footer">
-                    <a href="#" class="card-link listing-read-more">Read more</a>
+                  <div class="listing-footer w-100">
+                    <a href="#" class="card-link  w-100 listing-read-more text-center">Read more</a>
                   </div>
                 </div>
                 <!-- End of custom listing-->
@@ -109,8 +155,8 @@
                       <li class="list-group-item">Bathrooms: 2</li>
                     </ul> 
                   </div>
-                  <div class="listing-footer">
-                    <a href="#" class="card-link listing-read-more">Read more</a>
+                  <div class="listing-footer w-100">
+                    <a href="#" class="card-link  w-100 listing-read-more text-center">Read more</a>
                   </div>
                 </div>
                 <!-- End of custom listing-->
