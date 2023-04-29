@@ -1166,11 +1166,11 @@ window.onload = function(){
 
             let errors = 0;
 
-            if(reTestText(reQuestion, questionNameField, "Question does not fit format, eg: Do you like this website")) errors++;
+            if(reTestText(reQuestion, questionNameField, `Question does not fit format, eg: "Do you like this website"`)) errors++;
 
             let arrayOfAnswers = new Array();
             for(let answer of providedAnswers){
-               if(reTestText(reAnswer, answer, "Answer does not fit format, eg: Yes I do (at least three words)", 2)){
+               if(reTestText(reAnswer, answer, `Answer does not fit format, eg: "Yes I do" (at least three words)`, 2)){
                 errors++;
                 continue;
                };
@@ -1339,6 +1339,80 @@ window.onload = function(){
     }
     if(currentPage === "survey.html"){
         getQuestionsForUser();
+    }
+    if(currentPage === "listings.html"){
+        let data = {};
+
+        let args = {};
+
+        let boroughArgs = {checkboxHolder : document.querySelector("#boroughFilters"), checkboxName : "boroughFilter"};
+
+        let buildingTypeArgs = {checkboxHolder : document.querySelector("#buildingTypeFilters"), checkboxName : "buildingTypeFilter"};
+
+        args.listingHolder = document.querySelector("#listingHolder");
+
+        // submitAjax("getListingsForFilter", displayListings, data, args);
+
+        readAjax("getAllBoroughsWithListings", fillCheckbox, boroughArgs);
+    }
+}
+
+function fillCheckbox(data, args){
+    let checkboxHolder = args.checkboxHolder;
+    let checkboxName = args.checkboxName;
+    let html = "";
+    for(let row of data){
+    html += 
+    `
+    <div>
+        <input type="checkbox" class="${checkboxName}" name="${checkboxName}" id="${checkboxName}${row["id"]}" value="${row["id"]}">
+        <label for="${checkboxName}${row["id"]}">${row["title"]}</label>
+    </div>
+    `
+    //     <div>
+    //     <input type="checkbox" class="boroughFilter" name="borough" id="The Bronx" value="The Bronx">
+    //     <label for="The Bronx">Apartment</label>
+    //   </div>
+    }
+    checkboxHolder.innerHTML = html;
+}
+
+function displayListings(data, args){
+    // <!--Start of custom listing-->
+    // <div class="listing">
+    //   <div class="listing-main">
+    //     <div class="listing-img w-100 listing-img-height">
+    //       <img src="../resources/imgs/168217066120666745526443e325515b3.jpg" alt="" class="img-fluid mk-img-fluid">
+    //     </div>
+    //     <div class="listing-body">
+    //       <h3 class="h5 listing-title">New listing</h3>
+    //       <p class="listing-desc">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Mollitia ex architecto quaerat officia assumenda, veritatis dolorem tempora eos nostrum libero?</p>
+    //       <p class="listing-size">Size: 3000 feet</p>
+    //       <p class="listing-price">Price: 3000$</p>
+    //     </div>
+    //   </div>
+    //   <div class="listing-cover">
+    //     <p class="h5 text-center">Additional information</p>
+    //     <ul class="list-group list-group-flush w-75">
+    //       <li class="list-group-item">Bedrooms: 5</li>
+    //       <li class="list-group-item">Livingrooms: 3</li>
+    //       <li class="list-group-item">Bathrooms: 2</li>
+    //     </ul> 
+    //   </div>
+    //   <div class="listing-footer w-100">
+    //     <a href="#" class="card-link  w-100 listing-read-more text-center">Read more</a>
+    //   </div>
+    // </div>
+    // <!-- End of custom listing-->
+
+    let listingHolder = args.listingHolder;
+
+    let html = "";
+
+    listingHolder.innerHTML = "";
+
+    for(let row of data){
+        let 
     }
 }
 

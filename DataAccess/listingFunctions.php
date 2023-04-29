@@ -193,6 +193,76 @@ function getAllListings(){
     return $result;
 }
 
+function getListingsForFilter($listingTitleFilter, $listingBuildingTypeFilter, $listingBoroughFilter, $user_id){
+    include ("../../connection.php");
+
+    $statement = "SELECT l.listing_id AS id, listing_name, price, description, address, size
+                  FROM listings l 
+                  INNER JOIN listingprices lp ON l.listing_id = lp.listing_id
+                  ";
+
+    if($user_id != 0){
+        $userFavoriteFilter = true;
+        $statement .= "INNER JOIN favorites f ON l.listing_id = f.listing_id ";
+    }
+
+    $statement .= 
+    "WHERE lp.date = (SELECT MAX(date) FROM listingprices WHERE listing_id = l.listing_id)
+    AND l.dateDeleted IS NULL ";
+
+    $userFavoriteFilter = false;
+
+    $titleFilter = false;
+    $buildingTypeFilter = false;
+    $boroughFilter = false;
+
+    if($listingTitleFilter != ""){
+        $titleFilter = true;
+        $statement .= " AND l.listing_name LIKE \'%$:listingTitleFilter%\'"; 
+    }
+
+    if(count($listingBuildingTypeFilter) > 0){
+        $buildingTypeFilter = true;
+        $listingBuildingTypeFilter = implode(", ", $listingBuildingTypeFilter);
+        $statement .= "AND l.building_type_id IN (:listinBuildingTypeFilter)";
+    }
+
+    if(count($listingBoroughFilter) > 0){
+        $boroughFilter = true;
+        $listingBoroughFilter = implode(", ", $listingBoroughFilter);
+        $statement .= "AND l.borough_id IN (:listingBoroughFilter)";
+    }
+
+    if($userFavoriteFilter){
+        $statement .= "AND f.user_id = :user_id";
+    }
+
+    $statement .= " ORDER BY l.listing_id";
+
+    $prepSt = $conn->prepare($statement);
+
+    if($titleFilter){
+        $prepSt->bindParam(":listingTitleFilter", $listingTitleFilter);
+    }
+
+    if($buildingTypeFilter){
+        $prepSt->bindParam(":listinBuildingTypeFilter", $listingBuildingTypeFilter, PDO::PARAM_INT);
+    }
+
+    if($boroughFilter){
+        $prepSt->bindParam(":listingBoroughFilter", $listingBoroughFilter, PDO::PARAM_INT);
+    }
+    
+    if($userFavoriteFilter){
+        $prepSt->bindParam(":user_id", $user_id, PDO::PARAM_INT);
+    }
+
+    $prepSt->execute();
+    $result = $prepSt->fetchAll();
+
+    return $result;
+}
+
 function getPriceOfListing($listing_id){
     include ("../../connection.php");
 
