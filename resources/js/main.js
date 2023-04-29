@@ -325,6 +325,7 @@ window.onload = function(){
             showResult(data, args);
         }
         function showUserModal(existingId = 0){
+            setupUserModal();
             let modal = document.querySelector("#user-modal");
             globalData.currModal = modal;
             let type = existingId ? "edit" : "create";
@@ -582,6 +583,7 @@ window.onload = function(){
             openModal(modal, globalData.modalBackground);
         }
         function showListingModal(existingId = 0){
+            setupListingModal();
             let modal = document.querySelector("#listing-modal");
 
             let type = existingId ? "edit" : "create";
@@ -1502,7 +1504,12 @@ function fillDropdown(data, args){
     let simple = args[1];
     let value;
     let title;
-    html = "";
+    let newElement;
+    let identifier = selectElement.id;
+    let children = document.querySelectorAll(`.${identifier}`);
+    for(let child of children){
+        child.remove();
+    }
     for(let row of data){
         if(simple){
             value = row;
@@ -1520,9 +1527,16 @@ function fillDropdown(data, args){
 
         title = firstLetterCap + remainingLetters;
 
-        html += `<option value="${value}">${title}</option>`;
+        newElement = document.createElement("option");
+
+        newElement.innerText = title;
+
+        newElement.setAttribute("value", value);
+
+        newElement.classList.add(identifier);
+
+        selectElement.appendChild(newElement);
     }
-    selectElement.innerHTML += html;
 }
 
 
