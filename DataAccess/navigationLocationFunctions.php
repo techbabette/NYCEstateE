@@ -1,5 +1,5 @@
 <?php
 function getAllNavigationLocations(){
-    return array("head", "navbar", "footer");
+    return array("head", "navbar", "footer", "hidden");
 }
 ?>
