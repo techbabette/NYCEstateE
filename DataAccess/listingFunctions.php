@@ -3,7 +3,7 @@ function createNewListing($borough, $building_type, $name, $description, $addres
     include ("../../connection.php");
 
     $statement = "INSERT INTO listings (borough_id, building_type_id, listing_name, description, address, size) 
-                  VALUES (?, ?, ?, ?, ?, ?, ?)";
+                  VALUES (?, ?, ?, ?, ?, ?)";
     $prepSt = $conn->prepare($statement);
     
     $prepSt->bindParam(1, $borough);
@@ -200,7 +200,7 @@ function getListingsForFilter($listingTitleFilter, $listingBuildingTypeFilter, $
                   FROM listings l 
                   INNER JOIN listingprices lp ON l.listing_id = lp.listing_id
                   INNER JOIN boroughs b on l.borough_id = b.borough_id
-                  INNER JOIN buildingtypes bt ON l.borough_id = bt.building_type_id
+                  INNER JOIN buildingtypes bt ON l.building_type_id = bt.building_type_id
                   ";
 
     $userFavoriteFilter = false;
@@ -221,19 +221,33 @@ function getListingsForFilter($listingTitleFilter, $listingBuildingTypeFilter, $
 
     if($listingTitleFilter != ""){
         $titleFilter = true;
-        $statement .= " AND l.listing_name LIKE \'%$:listingTitleFilter%\'"; 
+        $statement .= " AND l.listing_name LIKE :listingTitleFilter"; 
     }
 
     if(count($listingBuildingTypeFilter) > 0){
         $buildingTypeFilter = true;
-        $listingBuildingTypeFilter = implode(", ", $listingBuildingTypeFilter);
-        $statement .= " AND l.building_type_id IN (:listinBuildingTypeFilter)";
+        $counter = 0;
+        $placeholders = "";
+        for($i = 0; $i < count($listingBuildingTypeFilter) - 1; $i++){
+            $tag = ":lbuildingtype".$counter++;
+            $placeholders .= $tag.", ";
+        }
+        $tag = ":lbuildingtype".$counter++;
+        $placeholders .= $tag;
+        $statement .= " AND l.building_type_id IN ($placeholders)";
     }
 
     if(count($listingBoroughFilter) > 0){
         $boroughFilter = true;
-        $listingBoroughFilter = implode(", ", $listingBoroughFilter);
-        $statement .= " AND l.borough_id IN (:listingBoroughFilter)";
+        $counter = 0;
+        $placeholders = "";
+        for($i = 0; $i < count($listingBoroughFilter) - 1; $i++){
+            $tag =":lborough".$counter++;
+            $placeholders .= $tag.", ";
+        }
+        $tag =":lborough".$counter++;
+        $placeholders .= $tag;
+        $statement .= " AND l.borough_id IN ($placeholders)";
     }
 
     if($userFavoriteFilter){
@@ -245,15 +259,22 @@ function getListingsForFilter($listingTitleFilter, $listingBuildingTypeFilter, $
     $prepSt = $conn->prepare($statement);
 
     if($titleFilter){
+        $listingTitleFilter = "%".$listingTitleFilter."%";
         $prepSt->bindParam(":listingTitleFilter", $listingTitleFilter);
     }
 
     if($buildingTypeFilter){
-        $prepSt->bindParam(":listinBuildingTypeFilter", $listingBuildingTypeFilter, PDO::PARAM_INT);
+        for($i = 0; $i < count($listingBuildingTypeFilter); $i++){
+            $tag = ':lbuildingtype'.$i;
+            $prepSt->bindValue($tag, $listingBuildingTypeFilter[$i], PDO::PARAM_INT);
+        }
     }
 
     if($boroughFilter){
-        $prepSt->bindParam(":listingBoroughFilter", $listingBoroughFilter, PDO::PARAM_INT);
+        for($i = 0; $i < count($listingBoroughFilter); $i++){
+            $tag = ':lborough'.$i;
+            $prepSt->bindValue($tag, $listingBoroughFilter[$i], PDO::PARAM_INT);
+        }
     }
     
     if($userFavoriteFilter){
@@ -261,8 +282,8 @@ function getListingsForFilter($listingTitleFilter, $listingBuildingTypeFilter, $
     }
 
     $prepSt->execute();
-    $result = $prepSt->fetchAll();
-
+    $result["general"] = $prepSt->fetchAll();
+    $result["statement"] = $statement;
     return $result;
 }
 

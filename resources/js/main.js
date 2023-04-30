@@ -754,7 +754,7 @@ window.onload = function(){
             })
 
             let addListingRoomButton = document.querySelector("#addListingRoomButton");
-            addListingRoomButton.addEventListener("click", function(e){
+            addEventListenerOnce("click", addListingRoomButton, function(e){
                 e.preventDefault();
                 let roomId = listingRoomsList.options[listingRoomsList.selectedIndex].value;
                 let roomText = listingRoomsList.options[listingRoomsList.selectedIndex].text;
@@ -1360,11 +1360,45 @@ window.onload = function(){
         //Get preexisting filters from local storage, then query for listings
 
         submitAjax("getListingsForFilter", displayListings, data, args);
+
+        let searchButton = document.querySelector("#searchListings");
+        addEventListenerOnce("click", searchButton, function(e){
+            e.preventDefault();
+            sendFiltersDisplayListings();
+        })
     }
 }
 
-function sendFiltersRecieveListings(){
-    
+function sendFiltersDisplayListings(){
+    let data = {};
+
+    let args = {};
+
+    args.listingHolder = document.querySelector("#listingHolder");
+
+    let selectedBoroughs = new Array();
+    let boroughFilters = document.querySelectorAll(".boroughFilter");
+
+    for(let borough of boroughFilters){
+        if(borough.checked){
+            selectedBoroughs.push(parseInt(borough.value));
+        }
+    }
+
+    data.boroughFilter = selectedBoroughs;
+
+    let selectedBuildingTypes = new Array();
+    let buildingTypeFilters = document.querySelectorAll(".buildingTypeFilter");
+
+    for(let buildingType of buildingTypeFilters){
+        if(buildingType.checked){
+            selectedBuildingTypes.push(parseInt(buildingType.value));
+        }
+    }
+
+    data.buildingTypeFilter = selectedBuildingTypes;
+
+    submitAjax("getListingsForFilter", displayListings, data, args);
 }
 
 function fillCheckbox(data, args){
@@ -1398,6 +1432,7 @@ function displayListings(data, args){
 
     if(data.length < 1){
         listingHolder.innerHTML = `<p class="h3">No listings found for filters provided</p>`;
+        return;
     }
 
     for(let row of data){

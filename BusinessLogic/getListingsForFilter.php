@@ -3,6 +3,15 @@ session_start();
 require("../DataAccess/generalFunctions.php");
 
 require("../DataAccess/listingFunctions.php");
+
+$json_params = file_get_contents("php://input");
+
+if (strlen($json_params) > 0 && isValidJSON($json_params)){
+    $decoded_params = json_decode($json_params, true);
+    $_POST = $decoded_params;
+}
+
+
 $result;
 
 $listingTitleFilter = "";
@@ -32,8 +41,10 @@ if($onlyFavorite && isset($_SESSION["user"])){
 }
 
 try{
-    $listings = getListingsForFilter($listingTitleFilter, $listingBuildingTypeFilter, $listingBoroughFilter, $user_id);
+    $main = getListingsForFilter($listingTitleFilter, $listingBuildingTypeFilter, $listingBoroughFilter, $user_id);
+    $listings = $main["general"];
     $result["general"] = array();
+    $result["statement"] = $main["statement"];
     foreach($listings as $listing){
         $listingWithInformation["body"] = $listing;
         $listingWithInformation["img"] = getCurrentMainListingPhoto($listing["id"])["path"];
