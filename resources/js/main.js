@@ -1615,6 +1615,22 @@ function submitQuestionAnswer(questionId){
     submitAjax("submitAnswer", showResult, data, args);
 }
 
+function showSuccess(data){
+    let messageHolder = document.querySelector("#error-holder");
+    let displayMessage = true;
+    if(displayMessage){
+        let message = document.createElement("span");
+        message.classList.add("error-message");
+        message.classList.add("alert");
+        message.classList.add("alert-success");
+        message.innerText = data;
+        messageHolder.append(message);
+        setTimeout(function(){
+            hideElement(message);
+        }, 2000);
+    }
+}
+
 function showResult(data, args){
     let messageHolder = document.querySelector("#error-holder");
     let displayMessage = true;

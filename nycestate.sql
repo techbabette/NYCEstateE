@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 27, 2023 at 04:57 PM
+-- Generation Time: Apr 30, 2023 at 04:09 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -68,7 +68,11 @@ INSERT INTO `answers` (`answer_id`, `question_id`, `answer`, `dateDeleted`) VALU
 (17, 5, 'Test answer five', '2023-04-24 11:15:44'),
 (18, 5, 'Test answer three', NULL),
 (19, 6, 'I like it a lot', NULL),
-(20, 6, 'I dislike it', NULL);
+(20, 6, 'I dislike it', NULL),
+(21, 7, 'Yes I do', NULL),
+(22, 7, 'No I don\'t', NULL),
+(23, 8, 'I think it\'s great', NULL),
+(24, 8, 'I think it\'s not that great', NULL);
 
 -- --------------------------------------------------------
 
@@ -124,6 +128,13 @@ CREATE TABLE `favorites` (
   `listing_id` int(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `favorites`
+--
+
+INSERT INTO `favorites` (`favorite_id`, `user_id`, `listing_id`) VALUES
+(1, 4, 18);
+
 -- --------------------------------------------------------
 
 --
@@ -176,7 +187,7 @@ CREATE TABLE `links` (
   `location` varchar(20) NOT NULL,
   `priority` int(2) NOT NULL DEFAULT 1,
   `parent_id` int(20) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ;
 
 --
 -- Dumping data for table `links`
@@ -194,7 +205,9 @@ INSERT INTO `links` (`link_id`, `access_level_id`, `link_title`, `href`, `landin
 (10, 1, 'Twitter', 'https://www.twitter.com/', 0, 'footer', 1, NULL),
 (11, 1, 'Documentation', 'documentation.pdf', 1, 'footer', 99, NULL),
 (12, 1, 'Sitemap', 'sitemap.xml', 1, 'footer', 1, NULL),
-(24, 2, 'Contact', 'contact.html', 0, 'navbar', 93, NULL);
+(24, 2, 'Contact', 'contact.html', 0, 'navbar', 92, NULL),
+(25, 2, 'Survey', 'survey.html', 0, 'navbar', 93, NULL),
+(26, 1, 'Listing', 'listing.html', 0, 'hidden', 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -219,7 +232,9 @@ INSERT INTO `listingphotos` (`photo_id`, `listing_id`, `main`, `path`, `dateUplo
 (11, 12, 1, '1681897858933328828643fb982abdef.jpg', '2023-04-19 09:50:58'),
 (15, 16, 1, '16818980812027868961643fba617d826.jpg', '2023-04-19 09:54:41'),
 (16, 17, 1, '168217066120666745526443e325515b3.jpg', '2023-04-22 13:37:41'),
-(17, 18, 1, '168230851112256859946445fd9f54852.jpg', '2023-04-24 03:55:11');
+(17, 18, 1, '168230851112256859946445fd9f54852.jpg', '2023-04-24 03:55:11'),
+(19, 19, 1, '1682853534473423041644e4e9e83e59.jpg', '2023-04-30 11:18:54'),
+(20, 20, 1, '1682853916284322225644e501c097bc.jpg', '2023-04-30 11:25:16');
 
 -- --------------------------------------------------------
 
@@ -247,7 +262,9 @@ INSERT INTO `listingprices` (`price_id`, `listing_id`, `price`, `date`) VALUES
 (23, 18, '1025.00', '2023-04-24 04:24:53'),
 (24, 18, '1500.00', '2023-04-24 04:28:30'),
 (25, 18, '1700.00', '2023-04-24 04:28:39'),
-(26, 12, '1500.00', '2023-04-24 04:29:58');
+(26, 12, '1500.00', '2023-04-24 04:29:58'),
+(27, 19, '1000.00', '2023-04-30 11:18:54'),
+(28, 20, '1000.00', '2023-04-30 11:25:16');
 
 -- --------------------------------------------------------
 
@@ -269,7 +286,10 @@ CREATE TABLE `listingrooms` (
 INSERT INTO `listingrooms` (`listing_room_id`, `listing_id`, `room_type_id`, `numberOf`) VALUES
 (1, 16, 2, 2),
 (2, 16, 1, 1),
-(3, 18, 2, 2);
+(3, 18, 2, 2),
+(5, 18, 3, 1),
+(6, 19, 3, 4),
+(7, 20, 2, 1);
 
 -- --------------------------------------------------------
 
@@ -297,8 +317,10 @@ INSERT INTO `listings` (`listing_id`, `borough_id`, `building_type_id`, `listing
 (4, 1, 1, 'New listing', 'New description', 'Kings street 25', 35.00, '2023-04-22 13:24:08', NULL),
 (12, 1, 1, 'Newer listing', 'This is the newest listing', 'King\'s street 20', 30.00, '2023-04-22 13:24:08', NULL),
 (16, 3, 1, 'Listing with rooms', 'This listing has rooms', 'King\'s street 50', 30.00, '2023-04-22 13:24:08', NULL),
-(17, 3, 2, 'Listing delete', 'This will be deleted', 'King\'s street 20', 30.00, '2023-04-22 13:37:41', '2023-04-25 08:17:39'),
-(18, 3, 3, 'Listing edited', 'Listing has been edited wow', 'King\'s street NN', 200.00, '2023-04-24 03:55:11', NULL);
+(17, 3, 2, 'Listing delete', 'This will be deleted', 'King\'s street 20', 30.00, '2023-04-22 13:37:41', '2023-04-30 09:38:23'),
+(18, 3, 3, 'Listing edited', 'Listing has been edited wow', 'King\'s street NN', 200.00, '2023-04-24 03:55:11', NULL),
+(19, 5, 2, 'Test listing', 'This is a great description', 'Newest address 50', 30.00, '2023-04-30 11:18:54', '2023-04-30 11:24:49'),
+(20, 5, 2, 'Newest listing', 'This is a great description', 'Newest address 50', 30.00, '2023-04-30 11:25:16', NULL);
 
 -- --------------------------------------------------------
 
@@ -360,8 +382,10 @@ CREATE TABLE `questions` (
 --
 
 INSERT INTO `questions` (`question_id`, `question`, `dateDeleted`) VALUES
-(5, 'How much do you like this website', '2023-04-25 09:24:08'),
-(6, 'Do you like this website', NULL);
+(5, 'How much do you like this website', NULL),
+(6, 'Do you like this website', NULL),
+(7, 'Do you dislike this website', NULL),
+(8, 'How do you feel about this website', NULL);
 
 -- --------------------------------------------------------
 
@@ -421,7 +445,10 @@ CREATE TABLE `useranswers` (
 --
 
 INSERT INTO `useranswers` (`useranswer_id`, `user_id`, `answer_id`) VALUES
-(1, 4, 19);
+(1, 4, 19),
+(24, 4, 24),
+(25, 4, 22),
+(26, 4, 18);
 
 -- --------------------------------------------------------
 
@@ -592,13 +619,13 @@ ALTER TABLE `accesslevels`
 -- AUTO_INCREMENT for table `answers`
 --
 ALTER TABLE `answers`
-  MODIFY `answer_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `answer_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `boroughs`
 --
 ALTER TABLE `boroughs`
-  MODIFY `borough_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `borough_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `buildingtypes`
@@ -610,7 +637,7 @@ ALTER TABLE `buildingtypes`
 -- AUTO_INCREMENT for table `favorites`
 --
 ALTER TABLE `favorites`
-  MODIFY `favorite_id` int(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `favorite_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `linkicons`
@@ -622,31 +649,31 @@ ALTER TABLE `linkicons`
 -- AUTO_INCREMENT for table `links`
 --
 ALTER TABLE `links`
-  MODIFY `link_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `link_id` int(20) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `listingphotos`
 --
 ALTER TABLE `listingphotos`
-  MODIFY `photo_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `photo_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `listingprices`
 --
 ALTER TABLE `listingprices`
-  MODIFY `price_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `price_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT for table `listingrooms`
 --
 ALTER TABLE `listingrooms`
-  MODIFY `listing_room_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `listing_room_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `listings`
 --
 ALTER TABLE `listings`
-  MODIFY `listing_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `listing_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `messages`
@@ -664,13 +691,13 @@ ALTER TABLE `messagetypes`
 -- AUTO_INCREMENT for table `questions`
 --
 ALTER TABLE `questions`
-  MODIFY `question_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `question_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `roles`
 --
 ALTER TABLE `roles`
-  MODIFY `role_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `role_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `roomtypes`
@@ -682,7 +709,7 @@ ALTER TABLE `roomtypes`
 -- AUTO_INCREMENT for table `useranswers`
 --
 ALTER TABLE `useranswers`
-  MODIFY `useranswer_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `useranswer_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `users`
@@ -695,10 +722,54 @@ ALTER TABLE `users`
 --
 
 --
+-- Constraints for table `answers`
+--
+ALTER TABLE `answers`
+  ADD CONSTRAINT `answers_ibfk_1` FOREIGN KEY (`question_id`) REFERENCES `questions` (`question_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `favorites`
+--
+ALTER TABLE `favorites`
+  ADD CONSTRAINT `favorites_ibfk_1` FOREIGN KEY (`listing_id`) REFERENCES `listings` (`listing_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `favorites_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `linkicons`
+--
+ALTER TABLE `linkicons`
+  ADD CONSTRAINT `linkicons_ibfk_1` FOREIGN KEY (`link_id`) REFERENCES `links` (`link_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `links`
+--
+ALTER TABLE `links`
+  ADD CONSTRAINT `links_ibfk_1` FOREIGN KEY (`access_level_id`) REFERENCES `accesslevels` (`access_level_id`);
+
+--
+-- Constraints for table `listingphotos`
+--
+ALTER TABLE `listingphotos`
+  ADD CONSTRAINT `listingphotos_ibfk_1` FOREIGN KEY (`listing_id`) REFERENCES `listings` (`listing_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `listingprices`
+--
+ALTER TABLE `listingprices`
+  ADD CONSTRAINT `listingprices_ibfk_1` FOREIGN KEY (`listing_id`) REFERENCES `listings` (`listing_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `listingrooms`
+--
+ALTER TABLE `listingrooms`
+  ADD CONSTRAINT `listingrooms_ibfk_1` FOREIGN KEY (`listing_id`) REFERENCES `listings` (`listing_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
 -- Constraints for table `listings`
 --
 ALTER TABLE `listings`
-  ADD CONSTRAINT `listings_ibfk_1` FOREIGN KEY (`building_type_id`) REFERENCES `buildingtypes` (`building_type_id`) ON UPDATE NO ACTION;
+  ADD CONSTRAINT `listings_ibfk_1` FOREIGN KEY (`building_type_id`) REFERENCES `buildingtypes` (`building_type_id`) ON UPDATE NO ACTION,
+  ADD CONSTRAINT `listings_ibfk_2` FOREIGN KEY (`borough_id`) REFERENCES `boroughs` (`borough_id`);
 
 --
 -- Constraints for table `messages`
@@ -706,6 +777,31 @@ ALTER TABLE `listings`
 ALTER TABLE `messages`
   ADD CONSTRAINT `messages_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
   ADD CONSTRAINT `messages_ibfk_2` FOREIGN KEY (`message_type_id`) REFERENCES `messagetypes` (`message_type_id`);
+
+--
+-- Constraints for table `roles`
+--
+ALTER TABLE `roles`
+  ADD CONSTRAINT `roles_ibfk_1` FOREIGN KEY (`access_level_id`) REFERENCES `accesslevels` (`access_level_id`);
+
+--
+-- Constraints for table `roomtypes`
+--
+ALTER TABLE `roomtypes`
+  ADD CONSTRAINT `roomtypes_ibfk_1` FOREIGN KEY (`room_type_id`) REFERENCES `listingrooms` (`room_type_id`);
+
+--
+-- Constraints for table `useranswers`
+--
+ALTER TABLE `useranswers`
+  ADD CONSTRAINT `useranswers_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
+  ADD CONSTRAINT `useranswers_ibfk_2` FOREIGN KEY (`answer_id`) REFERENCES `answers` (`answer_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `users`
+--
+ALTER TABLE `users`
+  ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `roles` (`role_id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
