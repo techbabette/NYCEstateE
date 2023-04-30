@@ -9,7 +9,7 @@ $listingTitleFilter = "";
 $listingBuildingTypeFilter = array();
 $listingBoroughFilter = array();
 $onlyFavorite = false;
-$user_id = 4;
+$user_id = 0;
 
 if(isset($_POST["titleFilter"])){
     $listingTitleFilter = $_POST["titleFilter"];
@@ -33,7 +33,13 @@ if($onlyFavorite && isset($_SESSION["user"])){
 
 try{
     $listings = getListingsForFilter($listingTitleFilter, $listingBuildingTypeFilter, $listingBoroughFilter, $user_id);
-    $result["general"] = $listings;
+    $result["general"] = array();
+    foreach($listings as $listing){
+        $listingWithInformation["body"] = $listing;
+        $listingWithInformation["img"] = getCurrentMainListingPhoto($listing["id"])["path"];
+        $listingWithInformation["rooms"] = getRoomsOfListing($listing["id"]);
+        array_push($result["general"], $listingWithInformation);
+    }
     http_response_code(200);
     echo json_encode($result);
 }

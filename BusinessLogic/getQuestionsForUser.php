@@ -17,7 +17,6 @@ require("../DataAccess/surveyFunctions.php");
 
 try{
     $questions = getQuestions($_SESSION["user"]["user_id"]);
-    $result["numOfQuestions"] = count($questions);
     $result["general"] = array();
     foreach($questions as $question){
         $questionWithAnswer["question"] = $question;

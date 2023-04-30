@@ -22,6 +22,20 @@ function getAllBuildingTypesCount(){
 
     return $prepSt->fetchAll();
 }
+function getAllBuildingTypesWithListings(){
+    include ("../../connection.php");
+
+    $statement = "SELECT bt.building_type_id AS id, type_name as title,  COUNT(l.listing_id) as Count
+                  FROM buildingtypes bt INNER JOIN listings l ON bt.building_type_id = l.building_type_id
+                  WHERE l.dateDeleted IS NULL
+                  GROUP BY bt.building_type_id, type_name
+                  ORDER BY COUNT(l.listing_id) DESC";
+    $prepSt = $conn->prepare($statement);
+
+    $prepSt->execute();
+
+    return $prepSt->fetchAll();
+}
 function getSpecificBuildingType($id){
     include ("../../connection.php");
 

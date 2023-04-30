@@ -1354,7 +1354,17 @@ window.onload = function(){
         // submitAjax("getListingsForFilter", displayListings, data, args);
 
         readAjax("getAllBoroughsWithListings", fillCheckbox, boroughArgs);
+
+        readAjax("getAllBuildingTypesWithListings", fillCheckbox, buildingTypeArgs);
+
+        //Get preexisting filters from local storage, then query for listings
+
+        submitAjax("getListingsForFilter", displayListings, data, args);
     }
+}
+
+function sendFiltersRecieveListings(){
+    
 }
 
 function fillCheckbox(data, args){
@@ -1378,6 +1388,23 @@ function fillCheckbox(data, args){
 }
 
 function displayListings(data, args){
+    console.log(data);
+
+    let listingHolder = args.listingHolder;
+
+    let html = "";
+
+    listingHolder.innerHTML = "";
+
+    if(data.length < 1){
+        listingHolder.innerHTML = `<p class="h3">No listings found for filters provided</p>`;
+    }
+
+    for(let row of data){
+        let body = row["body"];
+        let img = row["img"];
+        let rooms = row["rooms"]; 
+
     // <!--Start of custom listing-->
     // <div class="listing">
     //   <div class="listing-main">
@@ -1405,15 +1432,41 @@ function displayListings(data, args){
     // </div>
     // <!-- End of custom listing-->
 
-    let listingHolder = args.listingHolder;
-
-    let html = "";
-
-    listingHolder.innerHTML = "";
-
-    for(let row of data){
-        let 
+        html += 
+        `
+        <div class="listing">
+        <div class="listing-main">
+          <div class="listing-img w-100 listing-img-height">
+            <img src="../resources/imgs/${img}" alt="${body["listing_name"]} img" class="img-fluid mk-img-fluid">
+          </div>
+          <div class="listing-body">
+            <h3 class="h5 listing-title">${body["listing_name"]}</h3>
+            <p class="listing-desc">${body["description"]}</p>
+            <p class="listing-size">Size: ${body["size"]} feet</p>
+            <p class="listing-price">Price: ${body["price"]}$</p>
+          </div>
+        </div>
+        <div class="listing-cover">
+        <p class="h5 text-center">Additional information</p>
+        <ul class="list-group list-group-flush w-75">
+          <li class="list-group-item">Building type: ${body["Type"]}</li>
+          <li class="list-group-item">Borough: ${body["borough"]}</li>
+        `
+        for(let room of rooms){
+            html += `<li class="list-group-item">${room["room_name"]}: ${room["numberOf"]}</li>`
+        }
+        html += 
+        `
+        </ul> 
+        </div>
+        <div class="listing-footer w-100">
+        <a href="listing.html?listing_id=${body["id"]}" class="card-link  w-100 listing-read-more text-center">Read more</a>
+        </div>
+    </div>
+        `
     }
+
+    listingHolder.innerHTML = html;
 }
 
 function getQuestionsForUser(){

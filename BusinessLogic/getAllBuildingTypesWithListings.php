@@ -1,14 +1,12 @@
 <?php
 session_start();
-$requiredLevel = 3;
 require("../DataAccess/generalFunctions.php");
-checkAccessLevel($requiredLevel);
 
-require("../DataAccess/boroughFunctions.php");
+require("../DataAccess/buildingTypeFunctions.php");
 $result;
 
 try{
-    $result["general"] = getAllBoroughsCount();
+    $result["general"] = getAllBuildingTypesWithListings();
     http_response_code(200);
     echo json_encode($result);
 }

@@ -196,21 +196,24 @@ function getAllListings(){
 function getListingsForFilter($listingTitleFilter, $listingBuildingTypeFilter, $listingBoroughFilter, $user_id){
     include ("../../connection.php");
 
-    $statement = "SELECT l.listing_id AS id, listing_name, price, description, address, size
+    $statement = "SELECT l.listing_id AS id, listing_name, b.borough_name AS borough, bt.type_name AS Type, price, description, address, size
                   FROM listings l 
                   INNER JOIN listingprices lp ON l.listing_id = lp.listing_id
+                  INNER JOIN boroughs b on l.borough_id = b.borough_id
+                  INNER JOIN buildingtypes bt ON l.borough_id = bt.building_type_id
                   ";
+
+    $userFavoriteFilter = false;
 
     if($user_id != 0){
         $userFavoriteFilter = true;
-        $statement .= "INNER JOIN favorites f ON l.listing_id = f.listing_id ";
+        $statement .= " INNER JOIN favorites f ON l.listing_id = f.listing_id ";
     }
 
     $statement .= 
     "WHERE lp.date = (SELECT MAX(date) FROM listingprices WHERE listing_id = l.listing_id)
     AND l.dateDeleted IS NULL ";
 
-    $userFavoriteFilter = false;
 
     $titleFilter = false;
     $buildingTypeFilter = false;
@@ -224,17 +227,17 @@ function getListingsForFilter($listingTitleFilter, $listingBuildingTypeFilter, $
     if(count($listingBuildingTypeFilter) > 0){
         $buildingTypeFilter = true;
         $listingBuildingTypeFilter = implode(", ", $listingBuildingTypeFilter);
-        $statement .= "AND l.building_type_id IN (:listinBuildingTypeFilter)";
+        $statement .= " AND l.building_type_id IN (:listinBuildingTypeFilter)";
     }
 
     if(count($listingBoroughFilter) > 0){
         $boroughFilter = true;
         $listingBoroughFilter = implode(", ", $listingBoroughFilter);
-        $statement .= "AND l.borough_id IN (:listingBoroughFilter)";
+        $statement .= " AND l.borough_id IN (:listingBoroughFilter)";
     }
 
     if($userFavoriteFilter){
-        $statement .= "AND f.user_id = :user_id";
+        $statement .= " AND f.user_id = :user_id";
     }
 
     $statement .= " ORDER BY l.listing_id";
