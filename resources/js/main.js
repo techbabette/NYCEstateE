@@ -1398,6 +1398,10 @@ function sendFiltersDisplayListings(){
 
     data.buildingTypeFilter = selectedBuildingTypes;
 
+    let titleFilter = document.querySelector("#titleFilter");
+
+    data.titleFilter = titleFilter.value;
+
     submitAjax("getListingsForFilter", displayListings, data, args);
 }
 
