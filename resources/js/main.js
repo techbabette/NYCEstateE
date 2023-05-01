@@ -189,7 +189,7 @@ window.onload = function(){
             let counter = 1;
             let tableResultHolder = document.querySelector("#table-result-holder");
             if(data.length < 1){
-                html += `<p class="text-center w-100 d-block">No rows to display</p>`
+                html += `<p class="text-center w-100 d-block text-dark">No rows to display</p>`
                 tableResultHolder.innerHTML = "";
                 tableResultHolder.innerHTML += html;
                 return;
@@ -1707,7 +1707,7 @@ function displaySurveyQuestions(data){
         answers = row["answers"];
 
         html+= `
-        <form id="surveyQuestion${question["id"]}" class="my-2 question-form">
+        <form id="surveyQuestion${question["id"]}" class="my-2 question-form bg-dark">
         <div class="mb-3">
             <p class="h2">Question: ${question["question"]}?</p>
         </div>

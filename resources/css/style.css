@@ -145,7 +145,7 @@ body{
 input, select, option, textarea, .btn-light, td, th{
     color: var(--holder-color) !important;
 }
-.btn-danger, .btn-success, .btn-info{
+.btn-danger, .btn-success, .btn-info, .btn-primary{
     color: var(--bg-color) !important;
 }
 .deep-blue{
@@ -216,8 +216,14 @@ footer{
 .error-msg{
     color: red;
 }
+.alert-success{
+    color: var(--holder-color) !important;
+}
 .hidden{
     display: none;
+}
+.active{
+    color: var(--strong-accent) !important;
 }
 .success-outline{
     border: 2px solid green;
@@ -346,6 +352,7 @@ footer{
 }
 #singleListingHolder{
     border: 1px solid black;
+    background-color: var(--holder-color);
 }
 .mk-main-img{
     aspect-ratio: 16/9;
