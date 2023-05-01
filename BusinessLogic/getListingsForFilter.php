@@ -32,16 +32,16 @@ if(isset($_POST["boroughFilter"])){
     $listingBoroughFilter = $_POST["boroughFilter"];
 }
 
-if(isset($_POST["onlyFavorite"])){
+if(isset($_POST["onlyFavorite"]) && isset($_SESSION["user"])){
     $onlyFavorite = true;
 }
 
-if($onlyFavorite && isset($_SESSION["user"])){
+if(isset($_SESSION["user"])){
     $user_id = $_SESSION["user"]["user_id"];
 }
 
 try{
-    $main = getListingsForFilter($listingTitleFilter, $listingBuildingTypeFilter, $listingBoroughFilter, $user_id);
+    $main = getListingsForFilter($listingTitleFilter, $listingBuildingTypeFilter, $listingBoroughFilter, $user_id, $onlyFavorite);
     $listings = $main["general"];
     $result["general"] = array();
     $result["statement"] = $main["statement"];

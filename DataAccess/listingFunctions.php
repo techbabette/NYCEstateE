@@ -193,27 +193,33 @@ function getAllListings(){
     return $result;
 }
 
-function getListingsForFilter($listingTitleFilter, $listingBuildingTypeFilter, $listingBoroughFilter, $user_id){
+function getListingsForFilter($listingTitleFilter, $listingBuildingTypeFilter, $listingBoroughFilter, $user_id, $userFavoriteFilter){
     include ("../../connection.php");
 
-    $statement = "SELECT l.listing_id AS id, listing_name, b.borough_name AS borough, bt.type_name AS Type, price, description, address, size
-                  FROM listings l 
-                  INNER JOIN listingprices lp ON l.listing_id = lp.listing_id
-                  INNER JOIN boroughs b on l.borough_id = b.borough_id
-                  INNER JOIN buildingtypes bt ON l.building_type_id = bt.building_type_id
-                  ";
-
-    $userFavoriteFilter = false;
-
     if($user_id != 0){
-        $userFavoriteFilter = true;
-        $statement .= " INNER JOIN favorites f ON l.listing_id = f.listing_id ";
+        $statement = "SELECT l.listing_id AS id, listing_name, b.borough_name AS borough, bt.type_name AS Type, price, description, address, size,
+        (
+        SELECT COUNT(*) AS list FROM favorites WHERE user_id = :user_id AND listing_id = l.listing_id
+        ) AS favorite
+        FROM listings l 
+        INNER JOIN listingprices lp ON l.listing_id = lp.listing_id
+        INNER JOIN boroughs b on l.borough_id = b.borough_id
+        INNER JOIN buildingtypes bt ON l.building_type_id = bt.building_type_id
+        LEFT JOIN favorites f ON l.listing_id = f.listing_id
+        ";
+    }
+    else{
+        $statement = "SELECT l.listing_id AS id, listing_name, b.borough_name AS borough, bt.type_name AS Type, price, description, address, size, 0 AS favorite
+        FROM listings l 
+        INNER JOIN listingprices lp ON l.listing_id = lp.listing_id
+        INNER JOIN boroughs b on l.borough_id = b.borough_id
+        INNER JOIN buildingtypes bt ON l.building_type_id = bt.building_type_id
+        ";
     }
 
     $statement .= 
     "WHERE lp.date = (SELECT MAX(date) FROM listingprices WHERE listing_id = l.listing_id)
     AND l.dateDeleted IS NULL ";
-
 
     $titleFilter = false;
     $buildingTypeFilter = false;
@@ -250,7 +256,7 @@ function getListingsForFilter($listingTitleFilter, $listingBuildingTypeFilter, $
         $statement .= " AND l.borough_id IN ($placeholders)";
     }
 
-    if($userFavoriteFilter){
+    if($userFavoriteFilter && $user_id != 0){
         $statement .= " AND f.user_id = :user_id";
     }
 
@@ -277,7 +283,7 @@ function getListingsForFilter($listingTitleFilter, $listingBuildingTypeFilter, $
         }
     }
     
-    if($userFavoriteFilter){
+    if($user_id != 0){
         $prepSt->bindParam(":user_id", $user_id, PDO::PARAM_INT);
     }
 

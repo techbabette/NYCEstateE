@@ -1997,7 +1997,7 @@ function readAjax(url, resultFunction, args = {}){
             }
             else{
                 let data = JSON.parse(request.responseText);
-                if(isset(args.errorFunction)){
+                if(args.errorFunction){
                     args.errorFunction(data["error"]);
                     return;
                 }
@@ -2029,7 +2029,7 @@ function submitAjax(url, resultFunction, data, args = {}){
             }
             else{
                 let data = JSON.parse(request.responseText);
-                if(isset(args.errorFunction)){
+                if(args.errorFunction){
                     args.errorFunction(data["error"]);
                     return;
                 }
@@ -2064,7 +2064,7 @@ function submitFormDataAjax(url, resultFunction, data, args = {}){
             }
             else{
                 let data = JSON.parse(request.responseText);
-                if(isset(args.errorFunction)){
+                if(args.errorFunction){
                     args.errorFunction(data["error"]);
                     return;
                 }
