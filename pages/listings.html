@@ -23,155 +23,36 @@
         </div>
       </nav>
     <div class="container-fluid mk-page mk-solo-page">
-        <div class="row d-flex w-100 justify-content-center">
-            <div class="col-md-3 col-12 p-2 " style="position: static;">
+        <div class="row w-100 justify-content-center">
+            <div class="col-md-3 col-12 p-2 mx-auto" style="position: static;">
               <!--class="d-flex flex-column align-items-center text-center" for form on mobile-->
-              <form action="" class="text-dark" method="post">
+              <form action="" class="text-dark d-flex flex-column mx-auto" id="searchForm" method="post">
               <div>
-                <label for="titleFilter" class="h3 text-dark">Title filter</label>
+                <label for="titleFilter" class="h3 text-dark text-center w-100">Title filter</label>
                 <input type="text" class="boroughFilter d-block" name="titleFilter" id="titleFilter" value=""/>
               </div>
               <!--Start of borough filters-->
-              <div class="row">
                 <h3 class="text-dark">Borough filter</h3>
+                </br>
                 <div id="boroughFilters">
-                  <div>
-                    <input type="checkbox" class="boroughFilter" name="borough" id="The Bronx" value="The Bronx">
-                    <label for="The Bronx">The Bronx</label>
-                  </div>
-                  <div>
-                    <input type="checkbox" class="boroughFilter" name="borough" id="The Bronx" value="The Bronx">
-                    <label for="The Bronx">The Bronx</label>
-                  </div>
-                  <div>
-                    <input type="checkbox" class="boroughFilter" name="borough" id="The Bronx" value="The Bronx">
-                    <label for="The Bronx">The Bronx</label>
-                  </div>
-                  <div>
-                    <input type="checkbox" class="boroughFilter" name="borough" id="The Bronx" value="The Bronx">
-                    <label for="The Bronx">The Bronx</label>
-                  </div>
-                  <div>
-                    <input type="checkbox" class="boroughFilter" name="borough" id="The Bronx" value="The Bronx">
-                    <label for="The Bronx">The Bronx</label>
-                  </div>
+
                 </div>
-              </div>
               <!--End of borough filters-->
               <!--Start of building type filters-->
-              <div class="row my-2">
                 <h3 class="text-dark">Building type filter</h3>
+                </br>
                 <div id="buildingTypeFilters">
-                  <div>
-                    <input type="checkbox" class="boroughFilter" name="borough" id="The Bronx" value="The Bronx">
-                    <label for="The Bronx">Apartment</label>
-                  </div>
-                  <div>
-                    <input type="checkbox" class="boroughFilter" name="borough" id="The Bronx" value="The Bronx">
-                    <label for="The Bronx">Duplex</label>
-                  </div>
-                  <div>
-                    <input type="checkbox" class="boroughFilter" name="borough" id="The Bronx" value="The Bronx">
-                    <label for="The Bronx">House</label>
-                  </div>
-                </div>
+
                 </div>
               <!--End of building type filters-->
               <div>
                 <button type="submit" id="searchListings" class="btn btn-success">Search</button>
-                <button type="reset" class="btn btn-danger">Reset</button>
+                <!-- <button type="reset" class="btn btn-danger">Reset</button> -->
               </div>
             </form>
               <!--This is where the filters will go-->
             </div>
-            <div class="col-7 p-2 row mk-fix justify-content-between text-center" id="listingHolder">
-                <!--This is where the listings will go-->
-                <!-- Start of one listing-->
-                  <!-- <ul class="list-group list-group-flush">
-                    <li class="list-group-item">Cras justo odio</li>
-                    <li class="list-group-item">Dapibus ac facilisis in</li>
-                    <li class="list-group-item">Vestibulum at eros</li>
-                  </ul> -->
-                <!--End of one listing -->
-                <!--Start of custom listing-->
-                <div class="listing">
-                  <div class="listing-main">
-                    <div class="listing-img w-100 listing-img-height">
-                      <img src="../resources/imgs/168217066120666745526443e325515b3.jpg" alt="" class="img-fluid mk-img-fluid">
-                    </div>
-                    <div class="listing-body">
-                      <h3 class="h5 listing-title">New listing</h3>
-                      <p class="listing-desc">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Mollitia ex architecto quaerat officia assumenda, veritatis dolorem tempora eos nostrum libero?</p>
-                      <p class="listing-size">Size: 3000 feet</p>
-                      <p class="listing-price">Price: 3000$</p>
-                    </div>
-                  </div>
-                  <div class="listing-cover">
-                    <p class="h5 text-center">Additional information</p>
-                    <ul class="list-group list-group-flush w-75">
-                      <li class="list-group-item">Bedrooms: 5</li>
-                      <li class="list-group-item">Livingrooms: 3</li>
-                      <li class="list-group-item">Bathrooms: 2</li>
-                    </ul> 
-                  </div>
-                  <div class="listing-footer w-100">
-                    <a href="#" class="card-link  w-100 listing-read-more text-center">Read more</a>
-                  </div>
-                </div>
-                <!-- End of custom listing-->
-                <!--Start of custom listing-->
-                <div class="listing">
-                  <div class="listing-main">
-                    <div class="listing-img w-100 listing-img-height">
-                      <img src="../resources/imgs/168217066120666745526443e325515b3.jpg" alt="" class="img-fluid mk-img-fluid">
-                    </div>
-                    <div class="listing-body">
-                      <h3 class="h5 listing-title">New listing</h3>
-                      <p class="listing-desc">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Mollitia ex architecto quaerat officia assumenda, veritatis dolorem tempora eos nostrum libero?</p>
-                      <p class="listing-size">Size: 3000 feet</p>
-                      <p class="listing-price">Price: 3000$</p>
-                    </div>
-                  </div>
-                  <div class="listing-cover">
-                    <p class="h5 text-center">Additional information</p>
-                    <ul class="list-group list-group-flush w-75">
-                      <li class="list-group-item">Bedrooms: 5</li>
-                      <li class="list-group-item">Livingrooms: 3</li>
-                      <li class="list-group-item">Bathrooms: 2</li>
-                    </ul> 
-                  </div>
-                  <div class="listing-footer w-100">
-                    <a href="#" class="card-link  w-100 listing-read-more text-center">Read more</a>
-                  </div>
-                </div>
-                <!-- End of custom listing-->
-                <!--Start of custom listing-->
-                <div class="listing">
-                  <div class="listing-main">
-                    <div class="listing-img w-100 listing-img-height">
-                      <img src="../resources/imgs/16818272701146517873643ea5c63c059.png" alt="" class="img-fluid mk-img-fluid">
-                    </div>
-                    <div class="listing-body">
-                      <h3 class="h5 listing-title">New listing</h3>
-                      <p class="listing-desc">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Mollitia ex architecto quaerat officia assumenda, veritatis dolorem tempora eos nostrum libero?</p>
-                      <p class="listing-size">Size: 3000 feet</p>
-                      <p class="listing-price">Price: 3000$</p>
-                    </div>
-                  </div>
-                  <div class="listing-cover">
-                    <p class="h5 text-center">Additional information</p>
-                    <ul class="list-group list-group-flush w-75">
-                      <li class="list-group-item">Building type: Apartment</li>
-                      <li class="list-group-item">Bedrooms: 5</li>
-                      <li class="list-group-item">Livingrooms: 3</li>
-                      <li class="list-group-item">Bathrooms: 2</li>
-                    </ul> 
-                  </div>
-                  <div class="listing-footer w-100">
-                    <a href="#" class="card-link  w-100 listing-read-more text-center">Read more</a>
-                  </div>
-                </div>
-                <!-- End of custom listing-->
+            <div class="col-md-7 col-12 p-2 row mk-fix justify-content-between text-center" id="listingHolder">
             </div>
         </div>
         <div id="error-holder" class="d-flex flex-column">

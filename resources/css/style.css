@@ -24,7 +24,7 @@ input[type="checkbox"]:checked > span{
 .custom-check{
     position: relative;
     padding-left: 25px;
-    display: inline;
+    display: inline !important;
 }
 .custom-check input{
     position: absolute;
@@ -219,8 +219,8 @@ footer .row{
 footer{
     height: 15vh;
 }
-.error-msg{
-    color: red;
+.error-message{
+    color: red !important;
 }
 .alert-success{
     color: var(--holder-color) !important;
@@ -270,8 +270,9 @@ footer{
     transition: opacity 200ms ease 0ms;
 }
 #buildingTypeFilters, #boroughFilters{
-    display: flex;
+    display: inline-flex;
     flex-direction: column;
+    flex-basis: auto;
 }
 .listing{
     position: relative;
@@ -340,7 +341,7 @@ footer{
     scale: 1.10;
   }
   .mk-favorite-icon{
-    font-size: 50px;
+    font-size: 40px;
 }
 .listing-img{
     position: relative;
@@ -370,6 +371,10 @@ footer{
     opacity: 0 !important;
     transition: opacity 1800ms ease 0ms;
 }
+#searchForm{
+    width: 70%;
+    align-items: center;
+}
 @media screen and (min-width: 992px) {
     .navbar{
         height: 8vh;
@@ -386,5 +391,12 @@ footer{
         min-width: 30vw;
         min-height: 20vh;
         border-radius: 5%;
+    }
+    #searchForm{
+        width: 100%;
+        align-items: baseline;
+    }
+    .mk-favorite-icon{
+        font-size: 50px;
     }
 }
