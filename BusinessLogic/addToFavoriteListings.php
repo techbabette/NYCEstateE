@@ -21,6 +21,13 @@ $userId = $_SESSION["user"]["user_id"];
 $listingId = $_POST["listingId"];
 
 require("../DataAccess/favoriteFunctions.php");
+
+$alreadyFavorite = checkIfAlreadyFavorite($userId, $listingId);
+
+if($alreadyFavorite){
+    echoUnprocessableEntity("Cannot favorite listing more than once");
+}
+
 try{
     saveUserFavorite($userId, $listingId);
     $result["general"] = "Successfully added listing to favorites";

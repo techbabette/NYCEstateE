@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 30, 2023 at 04:09 PM
+-- Generation Time: May 01, 2023 at 09:06 AM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -133,7 +133,7 @@ CREATE TABLE `favorites` (
 --
 
 INSERT INTO `favorites` (`favorite_id`, `user_id`, `listing_id`) VALUES
-(1, 4, 18);
+(5, 4, 18);
 
 -- --------------------------------------------------------
 
@@ -508,6 +508,7 @@ ALTER TABLE `buildingtypes`
 --
 ALTER TABLE `favorites`
   ADD PRIMARY KEY (`favorite_id`),
+  ADD UNIQUE KEY `favorites` (`user_id`,`listing_id`),
   ADD KEY `user_id` (`user_id`),
   ADD KEY `listing_id` (`listing_id`);
 
@@ -637,7 +638,7 @@ ALTER TABLE `buildingtypes`
 -- AUTO_INCREMENT for table `favorites`
 --
 ALTER TABLE `favorites`
-  MODIFY `favorite_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `favorite_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `linkicons`
