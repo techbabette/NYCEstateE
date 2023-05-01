@@ -142,6 +142,30 @@ footer{
     bottom: 5px;
     z-index: 3;
 }
+.listing-padding{
+    padding: 2%;
+}
+.mk-favorite-icon-holder{
+    position: absolute;
+    top: 20px;
+    right: 10px;
+    background-color: white;
+    padding: 4px;
+    color: red !important;
+    border-radius : 50%;
+  }
+  .mk-favorite-icon-holder:hover{
+    color: red !important;
+  }
+  .mk-favorite-icon-holder:hover{
+    scale: 1.10;
+  }
+  .mk-favorite-icon{
+    font-size: 50px;
+}
+.listing-img{
+    position: relative;
+}
 .listing-body{
     padding: 2%;
     min-height: 15vh;
@@ -149,6 +173,14 @@ footer{
 .mk-img-fluid{
     width: 100%;
     aspect-ratio: 20/9;
+}
+#singleListingHolder{
+    border: 1px solid black;
+}
+.mk-main-img{
+    aspect-ratio: 16/9;
+    border: 2px solid black;
+    border-radius: 2%;
 }
 
 .hide{

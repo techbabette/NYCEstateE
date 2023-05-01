@@ -1367,6 +1367,40 @@ window.onload = function(){
             sendFiltersDisplayListings();
         })
     }
+    if(currentPage === "listing.html"){
+        console.log("Listing!");
+        let queryString = window.location.search;
+
+        let urlParams = new URLSearchParams(queryString);
+
+        let id = urlParams.get("listing_id");
+
+        console.log(id);
+
+        if(id === null) redirect(["listings.html", false]);
+
+        data = {};
+
+        data.listing_id = id;
+
+        args = {};
+
+        args.errorFunction = showListingNotFound;
+
+        submitAjax("getSpecificListingForDisplay", showSingleListing, data, args);
+    }
+}
+
+function showSingleListing(){
+    let listingHolder = document.querySelector("#singleListingHolder");
+
+
+}
+
+function showListingNotFound(data){
+    errorHandler(data);
+    let listingHolder = document.querySelector("#singleListingHolder");
+    listingHolder.innerHTML =  `<p class="h3">Listing not found</p>`;
 }
 
 function sendFiltersDisplayListings(){
@@ -1477,6 +1511,9 @@ function displayListings(data, args){
         <div class="listing-main">
           <div class="listing-img w-100 listing-img-height">
             <img src="../resources/imgs/${img}" alt="${body["listing_name"]} img" class="img-fluid mk-img-fluid">
+            <a href="#" data-id="4" class="mk-favorite-icon-holder">
+                <span class="iconify mk-favorite-icon" data-icon="mdi:cards-heart-outline">Heart</span>
+            </a>
           </div>
           <div class="listing-body">
             <h3 class="h5 listing-title">${body["listing_name"]}</h3>
@@ -1940,14 +1977,14 @@ function redirect(args){
     window.location.assign("https://" + newLink);
 }
 
-function readAjax(url, resultFunction, args = []){
+function readAjax(url, resultFunction, args = {}){
     let request = createRequest();
     request.onreadystatechange = function(){
         if(request.readyState == 4){
             if(request.status >= 200 && request.status < 300){
                 console.log(request.responseText);
                 let data = JSON.parse(request.responseText);
-                if(args != []){
+                if(args != {}){
                     resultFunction(data.general, args);
                 }
                 else{
@@ -1959,8 +1996,11 @@ function readAjax(url, resultFunction, args = []){
                 redirect(args);
             }
             else{
-                console.log(request.responseText);
                 let data = JSON.parse(request.responseText);
+                if(isset(args.errorFunction)){
+                    args.errorFunction(data["error"]);
+                    return;
+                }
                 errorHandler(data["error"]);
                 console.log(data["error"]);
             }
@@ -1970,14 +2010,14 @@ function readAjax(url, resultFunction, args = []){
     request.send();
 }
 
-function submitAjax(url, resultFunction, data, args = []){
+function submitAjax(url, resultFunction, data, args = {}){
     let request = createRequest();
     request.onreadystatechange = function(){
         if(request.readyState == 4){
             if(request.status >= 200 && request.status < 300){
                 console.log(request.responseText);
                 let data = JSON.parse(request.responseText);
-                if(args != []){
+                if(args != {}){
                     resultFunction(data.general, args);
                 }
                 else{
@@ -1989,6 +2029,10 @@ function submitAjax(url, resultFunction, data, args = []){
             }
             else{
                 let data = JSON.parse(request.responseText);
+                if(isset(args.errorFunction)){
+                    args.errorFunction(data["error"]);
+                    return;
+                }
                 errorHandler(data["error"]);
                 console.log(data["error"]);
             }
@@ -2001,14 +2045,14 @@ function submitAjax(url, resultFunction, data, args = []){
     request.send(JSON.stringify(data));
 }
 
-function submitFormDataAjax(url, resultFunction, data, args = []){
+function submitFormDataAjax(url, resultFunction, data, args = {}){
     let request = createRequest();
     request.onreadystatechange = function(){
         if(request.readyState == 4){
             if(request.status >= 200 && request.status < 300){
                 console.log(request.responseText);
                 let data = JSON.parse(request.responseText);
-                if(args != []){
+                if(args != {}){
                     resultFunction(data.general, args);
                 }
                 else{
@@ -2020,6 +2064,10 @@ function submitFormDataAjax(url, resultFunction, data, args = []){
             }
             else{
                 let data = JSON.parse(request.responseText);
+                if(isset(args.errorFunction)){
+                    args.errorFunction(data["error"]);
+                    return;
+                }
                 errorHandler(data["error"]);
                 console.log(data["error"]);
             }
