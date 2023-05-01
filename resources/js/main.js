@@ -154,7 +154,8 @@ window.onload = function(){
         //To every button, add an event listener
         let adminTabs = document.querySelectorAll(".admin-tab");
         for(let tab of adminTabs){
-            tab.addEventListener("click", function(){
+            tab.addEventListener("click", function(e){
+                e.preventDefault();
                 activeTable = this.dataset.id;
                 generateTable(this.dataset.id);
                 applyCurrentTab(this.dataset.id);
@@ -213,16 +214,16 @@ window.onload = function(){
                 }
                 html += `<td>`
                 if(tables[activeTable].edit){
-                    html += `<button type="button" data-id="${row["id"]}" class="btn btn-light edit-button">Edit</button>`
+                    html += `<a href="#" data-id="${row["id"]}" class="btn btn-light edit-button">Edit</button>`
                 }
                 if(tables[activeTable].viewAnswers){
-                    html += `<button type="button" data-table="${tables[activeTable].title}" data-id="${row["id"]}" class="btn btn-info view-answers-button">View answers</button>`
+                    html += `<a href="#" data-table="${tables[activeTable].title}" data-id="${row["id"]}" class="btn btn-info view-answers-button">View answers</a>`
                 }
                 if(tables[activeTable].restore){
-                    html += `<button type="button" data-table="${tables[activeTable].title}" data-id="${row["id"]}" class="btn btn-success restore-button">Restore</button>`
+                    html += `<a href="#"  data-table="${tables[activeTable].title}" data-id="${row["id"]}" class="btn btn-success restore-button">Restore</a>`
                 }
                 else{
-                    html += `<button type="button" data-table="${tables[activeTable].title}" data-id="${row["id"]}" class="btn btn-danger delete-button">Delete</button>`
+                    html += `<a href="#" data-table="${tables[activeTable].title}" data-id="${row["id"]}" class="btn btn-danger delete-button">Delete</a>`
                 }
                 html += `</td></tr>`;
             }
@@ -238,7 +239,7 @@ window.onload = function(){
                 html += 
                 `
                 <tr>
-                <button type="button" class="btn btn-success new-button">Insert new</button>
+                <a href="#" type="button" class="btn btn-success new-button">Insert new</a>
                 </tr>
                 `
             }
@@ -246,7 +247,8 @@ window.onload = function(){
             tableResultHolder.innerHTML += html;
             if(createNew){
                 let newButton = document.querySelector(".new-button");
-                newButton.addEventListener("click", function(){
+                newButton.addEventListener("click", function(e){
+                    e.preventDefault();
                     createNew();
                 })
             }
@@ -1253,7 +1255,7 @@ window.onload = function(){
             `
             <label for="answer${num}" class="d-block">Answer ${num}</label>
             <input type="text" value="${answerText}" class="form-control d-inline questionAnswer w-50" data-id="${answerId}" name="answer${num}" id="answer${num}">
-            <button class="btn btn-danger d-inline removeAnswer">Remove</button>
+            <a href="#" class="btn btn-danger d-inline removeAnswer">Remove</a>
             <span class="error-msg hidden d-block"></span>
             `
             newAnswerHolder.innerHTML += html;
@@ -1281,7 +1283,7 @@ window.onload = function(){
             html += 
             `<label for="room${roomId}" class="d-block">${roomText}</label>
             <input type="number" value="${count}" min="1" class="form-control d-inline listingRoom w-50" data-id="${roomId}" name="listingRoom${roomId}" id="room${roomId}">
-            <button class="btn btn-danger d-inline removeRoom" id="removeButton${roomId}">Remove</button>
+            <a href="#" class="btn btn-danger d-inline removeRoom" id="removeButton${roomId}">Remove</a>
             <span class="error-msg hidden d-block"></span>`
             newRoomHolder.innerHTML += html;
             roomHolder.appendChild(newRoomHolder);
@@ -1915,7 +1917,8 @@ function generateNavbar(response){
           </li>
         `;
         let logoutButton = document.querySelector("#logoutButton");
-        logoutButton.addEventListener("click", function(){
+        logoutButton.addEventListener("click", function(e){
+            e.preventDefault();
             readAjax("logout", redirect, ["login.html", false]);
         })
     }

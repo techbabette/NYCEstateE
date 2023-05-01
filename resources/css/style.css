@@ -145,7 +145,13 @@ body{
 input, select, option, textarea, .btn-light, td, th{
     color: var(--holder-color) !important;
 }
+.btn-light:hover{
+    color: var(--holder-color) !important;
+}
 .btn-danger, .btn-success, .btn-info, .btn-primary{
+    color: var(--bg-color) !important;
+}
+.btn-danger:hover, .btn-success:hover, .btn-info:hover, .btn-primary:hover{
     color: var(--bg-color) !important;
 }
 .deep-blue{
