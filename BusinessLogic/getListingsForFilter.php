@@ -41,10 +41,8 @@ if(isset($_SESSION["user"])){
 }
 
 try{
-    $main = getListingsForFilter($listingTitleFilter, $listingBuildingTypeFilter, $listingBoroughFilter, $user_id, $onlyFavorite);
-    $listings = $main["general"];
+    $listings = getListingsForFilter($listingTitleFilter, $listingBuildingTypeFilter, $listingBoroughFilter, $user_id, $onlyFavorite);
     $result["general"] = array();
-    $result["statement"] = $main["statement"];
     foreach($listings as $listing){
         $listingWithInformation["body"] = $listing;
         $listingWithInformation["img"] = getCurrentMainListingPhoto($listing["id"])["path"];
@@ -55,5 +53,5 @@ try{
     echo json_encode($result);
 }
 catch (PDOException $e){
-    echoUnexpectedError($e);
+    echoUnexpectedError();
 }

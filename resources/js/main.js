@@ -1429,7 +1429,7 @@ window.onload = function(){
 
         args.errorFunction = showListingNotFound;
 
-        submitAjax("getSpecificListingForDisplay", showSingleListing, data, args);
+        submitAjax("getSpecificDetailedListing", showSingleListing, data, args);
     }
     if(currentPage === "index.html"){
         let boroughSelect = document.querySelector("#landing-input");
@@ -1450,9 +1450,138 @@ window.onload = function(){
     }
 }
 
-function showSingleListing(){
+function showSingleListing(data){
     let listingHolder = document.querySelector("#singleListingHolder");
 
+    let body = data["body"];
+    let img = data["img"];
+    let rooms = data["rooms"];
+    let number = data["number"];
+    let favorite = data["body"]["favorite"] > 0;
+
+    html = "";
+
+//     <div class="col-12 col-md-4">
+//     <div class="listing-img w-100">
+//       <img src="../resources/imgs/168217066120666745526443e325515b3.jpg" alt="" class="img-fluid mk-main-img"/>
+//         <a href="#" data-id="4" class="mk-favorite-icon-holder">
+//           <span class="iconify mk-favorite-icon" data-icon="mdi:cards-heart-outline">Heart</span>
+//         </a>
+//     </div>
+//   </div>
+//   <div class="col-12 col-md-8" id="listingHolder">
+//     <div class="listing-body">
+//       <h3 class="">Listing title</h3>
+//       <p class="">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Tempore velit magni necessitatibus voluptates minus nostrum sunt vel, beatae delectus eligendi.</p>
+//       <p>Borough: Queens</p>
+//       <p>Building type: Duplex</p>
+//       <p>Size: 3000 feet</p>
+//     </div>
+// <div class="d-flex justify-content-between">
+    //   <div class="listing-rooms listing-padding">
+    //     <h3>Listing rooms</h3>
+    //     <p class="d-inline">Livingroom: 5</p>
+    //     <p class="d-inline">Bedroom: 5</p>
+    //     <p class="d-inline">Bathroom: 5</p>
+    //   </div>
+//       <div class="contact listing-padding">
+//         <a href="#" class="btn btn-success">Copy phone number</a>
+//         <p>Price: 3000$</p>
+//       </div>
+//     </div>
+//   </div>
+
+    html += 
+    `
+    <div class="col-12 col-md-4">
+    <div class="listing-img w-100 listing-img-height">
+      <img src="../resources/imgs/${img}" alt="${body["listing_name"]} img" class="img-fluid mk-main-img"/>
+    <a href="#" data-id="${body["id"]}" class="mk-favorite-icon-holder">
+        <span class="iconify mk-favorite-icon" data-icon="${favorite ? "mdi:cards-heart": "mdi:cards-heart-outline"}">Heart</span>
+    </a>
+    </div>
+    </div>
+    <div class="col-12 col-md-8" id="listingHolder">
+    <div class="listing-body">
+      <h3 class="">${body["listing_name"]}</h3>
+      <p class="">${body["description"]}</p>
+      <a href="listings.html?boroughid=${body["borough_id"]}">Borough: ${body["borough"]}</a>
+      </br>
+      <a href="listings.html?buildingtypeid=${body["type_id"]}">Building type: Duplex</a>
+      <p>Size: ${body["size"]} feet</p>
+    </div>
+    <div class="d-flex justify-content-between">
+    ` 
+    if(rooms.length > 0){
+        html += 
+        `
+        <div class="listing-rooms listing-padding">
+        <h3>Rooms:</h3>
+        `
+        for(let room of rooms){
+            html+=
+            `
+            <p class="d-inline">${room["room_name"]}: ${room["numberOf"]}</p>
+            `
+        }
+        html += 
+        `
+        </div>
+        `
+    }
+    html += 
+    `
+    <div class="contact listing-padding">
+    <a href="#" class="btn soft-blue" id="copy-number-button" data-number="${number}">Copy phone number</a>
+    <p>Price: ${body["price"]}</p>
+  </div>
+</div>
+</div>
+    `
+    
+    listingHolder.innerHTML = html;
+
+    addFavoriteFunctionality();
+
+    let copyNumberButton = document.querySelector("#copy-number-button");
+
+    addEventListenerOnce("click", copyNumberButton, function(e){
+        e.preventDefault();
+        let num = this.dataset.number;
+        navigator.clipboard.writeText(num);
+        showSuccess("Successfully copied phone number " + num);
+    })
+
+    console.log(data);
+}
+
+function addFavoriteFunctionality(){
+    let favoriteButtons = document.querySelectorAll(".mk-favorite-icon-holder");
+    for(let button of favoriteButtons){
+        addEventListenerOnce("click", button, function(e){
+            e.preventDefault();
+            let idOfListing = this.dataset.id;
+            let iconHolder = this.firstElementChild;
+            let newIcon = iconHolder.dataset.icon === "mdi:cards-heart" ? "mdi:cards-heart-outline" : "mdi:cards-heart";
+
+            let data = {};
+
+            data.listingId = idOfListing;
+
+            args = {};
+
+            args.additionalFunctions = new Array(flipListingFavoriteIcon)
+
+            args.additionalFunctionArgs = {idOfListing};
+
+            if(newIcon === "mdi:cards-heart"){
+                submitAjax("addToFavoriteListings", showResult, data, args);
+            }
+            else{
+                submitAjax("removeFromFavoriteListings", showResult, data, args);
+            }
+        })
+    }
 }
 
 function showListingNotFound(data){
@@ -1621,32 +1750,8 @@ function displayListings(data, args){
     }
 
     listingHolder.innerHTML = html;
-    let favoriteButtons = document.querySelectorAll(".mk-favorite-icon-holder");
-    for(let button of favoriteButtons){
-        addEventListenerOnce("click", button, function(e){
-            e.preventDefault();
-            let idOfListing = this.dataset.id;
-            let iconHolder = this.firstElementChild;
-            let newIcon = iconHolder.dataset.icon === "mdi:cards-heart" ? "mdi:cards-heart-outline" : "mdi:cards-heart";
 
-            let data = {};
-
-            data.listingId = idOfListing;
-
-            args = {};
-
-            args.additionalFunctions = new Array(flipListingFavoriteIcon)
-
-            args.additionalFunctionArgs = {idOfListing};
-
-            if(newIcon === "mdi:cards-heart"){
-                submitAjax("addToFavoriteListings", showResult, data, args);
-            }
-            else{
-                submitAjax("removeFromFavoriteListings", showResult, data, args);
-            }
-        })
-    }
+    addFavoriteFunctionality();
 }
 
 function flipListingFavoriteIcon(args){

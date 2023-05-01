@@ -193,6 +193,50 @@ function getAllListings(){
     return $result;
 }
 
+function getDetailedListing($listing_id, $user_id){
+    include ("../../connection.php");
+
+    if($user_id != 0){
+        $statement = "SELECT l.listing_id AS id, listing_name, b.borough_name AS borough, b.borough_id AS borough_id, bt.building_type_id AS type_id, bt.type_name AS Type, price, description, address, size,
+        (
+        SELECT COUNT(*) AS list FROM favorites WHERE user_id = :user_id AND listing_id = l.listing_id
+        ) AS favorite
+        FROM listings l 
+        INNER JOIN listingprices lp ON l.listing_id = lp.listing_id
+        INNER JOIN boroughs b on l.borough_id = b.borough_id
+        INNER JOIN buildingtypes bt ON l.building_type_id = bt.building_type_id
+        LEFT JOIN favorites f ON l.listing_id = f.listing_id
+        ";
+    }
+    else{
+        $statement = "SELECT l.listing_id AS id, listing_name, b.borough_name AS borough, bt.type_name AS Type, price, description, address, size, 0 AS favorite
+        FROM listings l 
+        INNER JOIN listingprices lp ON l.listing_id = lp.listing_id
+        INNER JOIN boroughs b on l.borough_id = b.borough_id
+        INNER JOIN buildingtypes bt ON l.building_type_id = bt.building_type_id
+        ";
+    }
+
+    $statement .= 
+    "WHERE lp.date = (SELECT MAX(date) FROM listingprices WHERE listing_id = l.listing_id)
+    AND l.dateDeleted IS NULL 
+    AND l.listing_id = :listing_id";
+
+    $prepSt = $conn->prepare($statement);
+
+    if($user_id != 0){
+        $prepSt->bindParam(":user_id", $user_id, PDO::PARAM_INT);
+    }
+
+    $prepSt->bindParam(":listing_id", $listing_id, PDO::PARAM_INT);
+
+    $prepSt->execute();
+
+    $result = $prepSt->fetch();
+
+    return $result;
+}
+
 function getListingsForFilter($listingTitleFilter, $listingBuildingTypeFilter, $listingBoroughFilter, $user_id, $userFavoriteFilter){
     include ("../../connection.php");
 
@@ -288,8 +332,7 @@ function getListingsForFilter($listingTitleFilter, $listingBuildingTypeFilter, $
     }
 
     $prepSt->execute();
-    $result["general"] = $prepSt->fetchAll();
-    $result["statement"] = $statement;
+    $result = $prepSt->fetchAll();
     return $result;
 }
 

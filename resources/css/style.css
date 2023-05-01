@@ -362,7 +362,9 @@ footer{
     background-color: var(--holder-color);
 }
 .mk-main-img{
-    aspect-ratio: 16/9;
+    max-width: 100%;
+    width: 100%;
+    aspect-ratio: 16/9 !important;
     border: 2px solid black;
     border-radius: 2%;
 }
