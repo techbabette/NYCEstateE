@@ -1351,7 +1351,36 @@ window.onload = function(){
 
         args.listingHolder = document.querySelector("#listingHolder");
 
-        // submitAjax("getListingsForFilter", displayListings, data, args);
+        let queryString = window.location.search;
+
+        let urlParams = new URLSearchParams(queryString);
+
+        let boroughid = urlParams.get("boroughid");
+
+        let buildingTypeid = urlParams.get("buildingtypeid");
+
+        if(boroughid != null){
+            let id = Number(boroughid);
+            let boroughFilter = [id];
+            saveToLocalStorage(boroughFilter, "boroughFilter");
+        }
+
+        if(buildingTypeid != null){
+            let buildingFilter = [Number(buildingTypeid)];
+            saveToLocalStorage(buildingFilter, "buildingTypeFilter");
+        }
+
+        let readBoroughs = readFromLocalStorage("boroughFilter");
+
+        if(readBoroughs){
+            data.boroughFilter = readBoroughs;
+        }
+
+        let readBuildingType = readFromLocalStorage("buildingTypeFilter");
+
+        if(readBuildingType){
+            data.buildingTypeFilter = readBuildingType;
+        }
 
         readAjax("getAllBoroughsWithListings", fillCheckbox, boroughArgs);
 
@@ -1400,6 +1429,23 @@ window.onload = function(){
 
         submitAjax("getSpecificListingForDisplay", showSingleListing, data, args);
     }
+    if(currentPage === "index.html"){
+        let boroughSelect = document.querySelector("#landing-input");
+        readAjax("getAllBoroughsWithListings", fillDropdown, [boroughSelect]);
+
+        let searchButton = document.querySelector("#landing-search");
+        addEventListenerOnce("click", searchButton, function(e){
+            e.preventDefault();
+            let selectedId = boroughSelect.value;
+
+            if(selectedId == 0){
+                redirect(["listings.html"], false);
+            }
+            else{
+                redirect([`listings.html?boroughid=${selectedId}`, false]);
+            }
+        })
+    }
 }
 
 function showSingleListing(){
@@ -1440,6 +1486,10 @@ function sendFiltersDisplayListings(){
         }
     }
 
+    saveToLocalStorage(selectedBoroughs, "boroughFilter");
+
+    saveToLocalStorage(selectedBuildingTypes, "buildingTypeFilter");
+
     data.buildingTypeFilter = selectedBuildingTypes;
 
     let titleFilter = document.querySelector("#titleFilter");
@@ -1449,15 +1499,28 @@ function sendFiltersDisplayListings(){
     submitAjax("getListingsForFilter", displayListings, data, args);
 }
 
+function saveToLocalStorage(data, name){
+    localStorage.setItem(name, JSON.stringify(data));
+}
+
+function readFromLocalStorage(name){
+    return JSON.parse(localStorage.getItem(name));
+}
+
 function fillCheckbox(data, args){
     let checkboxHolder = args.checkboxHolder;
     let checkboxName = args.checkboxName;
+    let localStoragePresence = readFromLocalStorage(args.checkboxName);
     let html = "";
+    let checked = "";
     for(let row of data){
+    if(localStoragePresence){
+        checked = localStoragePresence.includes(row["id"]) ? `checked="checked"` : "";
+    }
     html += 
     `
     <span class="custom-check">
-        <input type="checkbox" class="${checkboxName}" name="${checkboxName}" id="${checkboxName}${row["id"]}" value="${row["id"]}">
+        <input type="checkbox" ${checked} class="${checkboxName}" name="${checkboxName}" id="${checkboxName}${row["id"]}" value="${row["id"]}">
         <label class="text-dark" for="${checkboxName}${row["id"]}">${row["title"]}</label>
         <span class="custom-check-target"></span>
     </span>
@@ -1792,6 +1855,9 @@ function fillDropdown(data, args){
         else{
             value = row.id;
             title = row.title;
+            if(row.Count){
+                title += ` (${row.Count})`;
+            }
         }
         let firstLetter = title.charAt(0);
 
