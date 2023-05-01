@@ -151,7 +151,7 @@ input, select, option, textarea, .btn-light, td, th{
 .btn-danger, .btn-success, .btn-info, .btn-primary{
     color: var(--bg-color) !important;
 }
-.btn-danger:hover, .btn-success:hover, .btn-info:hover, .btn-primary:hover{
+.btn-danger:hover, .btn-success:hover, .btn-info:hover, .btn-primary:hover, .soft-blue{
     color: var(--bg-color) !important;
 }
 .deep-blue{
