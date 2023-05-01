@@ -1,5 +1,35 @@
+:root{
+    --bg-color: #FFFFFF;
+   --holder-color: #1F271B;
+   --accent-color: #DCC7BE;
+   --strong-accent: #CBB9A8;
+   --light-action: #47a7e2;
+   --action-color: #067BC2;
+   --active-action: #00008F;
+   --search-color :#FF3864;
+   --search-active :#E00031;
+}
+a, #text-logo{
+    color: var(--accent-color) !important;
+}
+h1,h2,p,a:hover,.h4:hover, #text-logo:hover, input, *{
+    color: var(--strong-accent) !important;
+}
+.mk-icon{
+    color: var(--strong-accent);
+}
+.mk-text-center{
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+}
+.text-dark{
+    color: var(--holder-color) !important;
+}
 body{
     overflow-x:hidden;
+    background-color: var(--bg-color) !important;
   }
 .navbar{
     min-height: 8vh;
@@ -27,8 +57,94 @@ body{
     align-items: center;
     text-align: center;
 }
+#landing-input-holder{
+    position: relative;
+    margin-bottom: 6vh;
+}
+#landing-input{
+    width: 75%;
+    position: absolute;
+    left: 0px;
+}
+#landing-search{
+    width: 25%;
+    position: absolute;
+    left: 75%;
+    text-align: center;
+}
+#landing-search:hover{
+    background-color: var(--active-action) !important;
+    color: var(--bg-color) !important;
+}
+#landing-search-icon{
+    position: absolute;
+    left: 10px;
+    z-index: 1;
+    font-size: 1.25em;
+    height: 5vh;
+    display: flex;
+    align-items: center;
+}
+#landing-page{
+    padding: 0px;
+    background-image: url("../imgs/main.jpg");
+    background-size: cover;
+    background-position: center;
+  }
+#search-holder{
+    width: 80%;
+    margin: 0% auto;
+    min-height: 8vh;
+    display: flex;
+    position: relative;
+    gap: 10px;
+    align-items: center;
+}
+#search-header{
+    font-size: 1.5em;
+}
+input, select, option, textarea, .btn-light, td, th{
+    color: var(--holder-color) !important;
+}
+.btn-danger, .btn-success, .btn-info{
+    color: var(--bg-color) !important;
+}
+.deep-blue{
+    background-color: var(--active-action) !important;
+}
+.deep-blue:hover{
+    color: var(--bg-color) !important;
+}
+.soft-blue{
+    background-color: var(--light-action) !important;
+}
+.soft-blue:hover{
+    background-color: var(--active-action) !important;
+    color: var(--bg-color) !important;
+}
+.mk-button{
+    background-color: var(--action-color) !important;
+    text-decoration: none;
+    color: var(--bg-color) !important;
+    height: 5vh;
+}
 .mk-fix{
     --bs-gutter-x: 0;
+}
+.mk-introduction{
+    width: 100vw;
+    height: 15vh;
+    background-color: var(--holder-color);
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 0px;
+}
+.search-input{
+    text-align: left;
+    padding: 3px;
+    padding-left: 30px !important;
+    height: 5vh;
 }
 .mk-modal {
     position: fixed;
@@ -79,9 +195,15 @@ footer{
 #admin-tabs-holder{
     overflow-x: scroll;
 }
+#whole-admin-table{
+    background-color: var(--strong-accent);
+}
+.admin-tab{
+    color: var(--bg-color) !important;
+}
 #error-holder{
     position: fixed;
-    bottom: 20px;
+    bottom: 40px;
     right: 20px;
     padding: 20px;
     z-index: 5;
@@ -101,8 +223,9 @@ footer{
     width: 100% !important;
     margin-bottom: 10px;
     padding-bottom: 2%;
-    background-color: #FFFFFF;
-    background-image: radial-gradient( circle 311px at 8.6% 27.9%,  rgba(62,147,252,0.57) 12.9%, rgba(239,183,192,0.44) 91.2% );
+    color: black !important;
+    /* background-image: radial-gradient( circle 311px at 8.6% 27.9%,  rgba(62,147,252,0.57) 12.9%, rgba(239,183,192,0.44) 91.2% ); */
+    background-color: var(--holder-color);
     border: 1px solid black;
     border-radius: 2%;
 }
@@ -129,7 +252,7 @@ footer{
     align-items: center;
     justify-content: center;
     background-color: #FFFFFF;
-    background-image: radial-gradient( circle 311px at 8.6% 27.9%,  rgba(62,147,252,0.57) 12.9%, rgba(239,183,192,0.44) 91.2% );
+    /* background-image: radial-gradient( circle 311px at 8.6% 27.9%,  rgba(62,147,252,0.57) 12.9%, rgba(239,183,192,0.44) 91.2% ); */
     color: black;
     transition: opacity 100ms ease 20ms;
 }
@@ -201,5 +324,11 @@ footer{
     }
     .listing{
         width: 45% !important;
+    }
+    .mk-introduction{
+        width: 30vw;
+        min-width: 30vw;
+        min-height: 20vh;
+        border-radius: 5%;
     }
 }

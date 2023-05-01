@@ -10,7 +10,7 @@
     <title>NYCEstate</title>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg bg-light">
+    <nav class="navbar navbar-expand-lg bg-dark">
         <div class="container-fluid">
           <a class="navbar-brand" id="headerHolder" href="#">Navbar</a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -46,7 +46,25 @@
         </div>
       </nav>
       <!--Content-->
-      <div class="container-fluid mk-page mk-solo-page">
+      <div class="container-fluid mk-page mk-solo-page" id="landing-page">
+        <div class="row d-flex w-100">
+        <form  class="mk-introduction d-flex flex-column justify-content-center mx-auto" id="landing-form" action="pages/listings.html" method="get">
+          <h2 id="search-header">Find your next NYC property</h2>
+          <div id="search-holder">
+            <div id="landing-input-holder" class="w-100">
+            </div>
+              <div id="landing-search-icon">
+                <i class="mk-icon fa-solid fa-magnifying-glass"></i>
+              </div>
+              <!-- <input class="search-input" type="text" list="boroughs" name="borough" id="landing-input" placeholder="Brooklyn" aria-autocomplete="list"/> -->
+              <select name="messageType" class="search-input"  id="landing-input" required>
+                  <option value="0">All boroughs</option>
+              </select>
+              <span class="error-msg hidden"></span>
+              <a href="" id="landing-search" class="mk-button mk-text-center">Search</a>
+          </div>
+        </form>
+        </div>
         <div id="error-holder" class="d-flex flex-column">
         </div>
       </div>

@@ -148,7 +148,7 @@ window.onload = function(){
             let id = table;
             let currTable = tables[id];
             if(table == activeTable) active = true;
-            html += `<a href="#" data-id="${table}" class="btn ${active ? "btn-primary" : "btn-info"} admin-tab">${currTable["title"]}</a>`;
+            html += `<a href="#" data-id="${table}" class="btn ${active ? "deep-blue" : "soft-blue"} admin-tab">${currTable["title"]}</a>`;
         }
         tabHolder.innerHTML = html;
         //To every button, add an event listener
@@ -175,12 +175,12 @@ window.onload = function(){
             activeTable = tableId;
             for(let tab of adminTabs){
                 if(tab.dataset.id != tableId){
-                    tab.classList.remove("btn-primary");
-                    tab.classList.add("btn-info");
+                    tab.classList.remove("deep-blue");
+                    tab.classList.add("soft-blue");
                 }
                 else{
-                    tab.classList.add("btn-primary");
-                    tab.classList.remove("btn-info");
+                    tab.classList.add("deep-blue");
+                    tab.classList.remove("soft-blue");
                 }
             }
         }
@@ -1458,7 +1458,7 @@ function fillCheckbox(data, args){
     `
     <div>
         <input type="checkbox" class="${checkboxName}" name="${checkboxName}" id="${checkboxName}${row["id"]}" value="${row["id"]}">
-        <label for="${checkboxName}${row["id"]}">${row["title"]}</label>
+        <label class="text-dark" for="${checkboxName}${row["id"]}">${row["title"]}</label>
     </div>
     `
     //     <div>
