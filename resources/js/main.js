@@ -1577,9 +1577,10 @@ function flipListingFavoriteIcon(args){
     let favoriteButtons = document.querySelectorAll(".mk-favorite-icon-holder");
     let listingId = args.idOfListing;
     for(let button of favoriteButtons){
-        if(this.dataset.id == listingId){
-            let iconHolder = this.firstElementChild;
-            iconHolder.dataset.icon === "mdi:cards-heart" ? "mdi:cards-heart-outline" : "mdi:cards-heart";
+        if(button.dataset.id == listingId){
+            let iconHolder = button.firstElementChild;
+            iconHolder.dataset.icon = iconHolder.dataset.icon === "mdi:cards-heart" ? "mdi:cards-heart-outline" : "mdi:cards-heart";
+            console.log("Here");
         }
     }
 }

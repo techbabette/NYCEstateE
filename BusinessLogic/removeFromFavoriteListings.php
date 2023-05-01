@@ -22,8 +22,8 @@ $listingId = $_POST["listingId"];
 
 require("../DataAccess/favoriteFunctions.php");
 try{
-    saveUserFavorite($userId, $listingId);
-    $result["general"] = "Successfully added listing to favorites";
+    deleteUserFavorite($userId, $listingId);
+    $result["general"] = "Successfully removed listing from favorites";
     http_response_code(200);
     echo json_encode($result);
 }

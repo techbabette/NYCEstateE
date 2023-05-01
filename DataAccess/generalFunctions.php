@@ -11,9 +11,9 @@ function echoUnexpectedError($e = "An unexpected error occured"){
     echo json_encode($result);
     die();
 }
-function echoNoPermission(){
-    $result["error"] = "You are not permitted this action";
-    http_response_code(404);
+function echoNoPermission($e = "You are not permitted this action"){
+    $result["error"] = $e;
+    http_response_code(403);
     echo json_encode($result);
     die();
 }
@@ -41,15 +41,15 @@ function getUserLevel($id){
         return $result;
     }
 }
-function checkAccessLevel($requiredLevel){
+function checkAccessLevel($requiredLevel, $e = "You are not permitted this action"){
     // If user not logged in, die
     if(!isset($_SESSION["user"])){
-        echoNoPermission();
+        echoNoPermission($e);
     }
 
     //If user's access level is too low, die
     if(getUserLevel($_SESSION["user"]["user_id"])["level"] < $requiredLevel){
-        echoNoPermission();
+        echoNoPermission($e);
     }
 }
 function isValidJSON($str) {
