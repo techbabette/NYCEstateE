@@ -1456,10 +1456,11 @@ function fillCheckbox(data, args){
     for(let row of data){
     html += 
     `
-    <div>
+    <span class="custom-check">
         <input type="checkbox" class="${checkboxName}" name="${checkboxName}" id="${checkboxName}${row["id"]}" value="${row["id"]}">
         <label class="text-dark" for="${checkboxName}${row["id"]}">${row["title"]}</label>
-    </div>
+        <span class="custom-check-target"></span>
+    </span>
     `
     //     <div>
     //     <input type="checkbox" class="boroughFilter" name="borough" id="The Bronx" value="The Bronx">

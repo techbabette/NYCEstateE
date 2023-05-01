@@ -18,6 +18,43 @@ h1,h2,p,a:hover,.h4:hover, #text-logo:hover, input, *{
 .mk-icon{
     color: var(--strong-accent);
 }
+input[type="checkbox"]:checked > span{
+    background-color: var(--strong-accent);
+}
+.custom-check{
+    position: relative;
+    padding-left: 25px;
+    display: inline;
+}
+.custom-check input{
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+.custom-check-target{
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 20px;
+    width: 20px;
+    border: 1px solid #eee;
+}
+.custom-check input:checked ~ .custom-check-target {
+    background-color: var(--active-action);
+}
+.custom-check:hover  input ~ .custom-check-target{
+    background-color: var(--action-color);
+}
+.custom-check-target:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+.custom-check input:checked ~ .custom-check-target:after {
+    display: block;
+}
 .mk-text-center{
     display: flex;
     text-align: center;
@@ -217,6 +254,10 @@ footer{
 .error-message{
     opacity: 1;
     transition: opacity 200ms ease 0ms;
+}
+#buildingTypeFilters, #boroughFilters{
+    display: flex;
+    flex-direction: column;
 }
 .listing{
     position: relative;
