@@ -375,6 +375,9 @@ footer{
     width: 70%;
     align-items: center;
 }
+.text-center-on-mobile{
+    text-align: center;
+}
 @media screen and (min-width: 992px) {
     .navbar{
         height: 8vh;
@@ -398,5 +401,8 @@ footer{
     }
     .mk-favorite-icon{
         font-size: 50px;
+    }
+    .text-center-on-mobile{
+        text-align: left;
     }
 }
