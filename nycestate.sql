@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 01, 2023 at 09:06 AM
+-- Generation Time: May 01, 2023 at 09:27 AM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -133,6 +133,7 @@ CREATE TABLE `favorites` (
 --
 
 INSERT INTO `favorites` (`favorite_id`, `user_id`, `listing_id`) VALUES
+(22, 4, 16),
 (5, 4, 18);
 
 -- --------------------------------------------------------
@@ -638,7 +639,7 @@ ALTER TABLE `buildingtypes`
 -- AUTO_INCREMENT for table `favorites`
 --
 ALTER TABLE `favorites`
-  MODIFY `favorite_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `favorite_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `linkicons`
@@ -763,13 +764,14 @@ ALTER TABLE `listingprices`
 -- Constraints for table `listingrooms`
 --
 ALTER TABLE `listingrooms`
-  ADD CONSTRAINT `listingrooms_ibfk_1` FOREIGN KEY (`listing_id`) REFERENCES `listings` (`listing_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `listingrooms_ibfk_1` FOREIGN KEY (`listing_id`) REFERENCES `listings` (`listing_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `listingrooms_roomDelete` FOREIGN KEY (`room_type_id`) REFERENCES `roomtypes` (`room_type_id`);
 
 --
 -- Constraints for table `listings`
 --
 ALTER TABLE `listings`
-  ADD CONSTRAINT `listings_ibfk_1` FOREIGN KEY (`building_type_id`) REFERENCES `buildingtypes` (`building_type_id`) ON UPDATE NO ACTION,
+  ADD CONSTRAINT `listings_ibfk_1` FOREIGN KEY (`building_type_id`) REFERENCES `buildingtypes` (`building_type_id`),
   ADD CONSTRAINT `listings_ibfk_2` FOREIGN KEY (`borough_id`) REFERENCES `boroughs` (`borough_id`);
 
 --
@@ -784,12 +786,6 @@ ALTER TABLE `messages`
 --
 ALTER TABLE `roles`
   ADD CONSTRAINT `roles_ibfk_1` FOREIGN KEY (`access_level_id`) REFERENCES `accesslevels` (`access_level_id`);
-
---
--- Constraints for table `roomtypes`
---
-ALTER TABLE `roomtypes`
-  ADD CONSTRAINT `roomtypes_ibfk_1` FOREIGN KEY (`room_type_id`) REFERENCES `listingrooms` (`room_type_id`);
 
 --
 -- Constraints for table `useranswers`
