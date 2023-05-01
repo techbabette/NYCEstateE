@@ -1478,6 +1478,8 @@ function displayListings(data, args){
         let img = row["img"];
         let rooms = row["rooms"]; 
 
+        let favorite = body["favorite"] > 0;
+
     // <!--Start of custom listing-->
     // <div class="listing">
     //   <div class="listing-main">
@@ -1508,12 +1510,12 @@ function displayListings(data, args){
         html += 
         `
         <div class="listing">
+        <a href="#" data-id="${body["id"]}" class="mk-favorite-icon-holder">
+            <span class="iconify mk-favorite-icon" data-icon="${favorite ? "mdi:cards-heart": "mdi:cards-heart-outline"}">Heart</span>
+        </a>
         <div class="listing-main">
           <div class="listing-img w-100 listing-img-height">
             <img src="../resources/imgs/${img}" alt="${body["listing_name"]} img" class="img-fluid mk-img-fluid">
-            <a href="#" data-id="4" class="mk-favorite-icon-holder">
-                <span class="iconify mk-favorite-icon" data-icon="mdi:cards-heart-outline">Heart</span>
-            </a>
           </div>
           <div class="listing-body">
             <h3 class="h5 listing-title">${body["listing_name"]}</h3>
@@ -1543,6 +1545,43 @@ function displayListings(data, args){
     }
 
     listingHolder.innerHTML = html;
+    let favoriteButtons = document.querySelectorAll(".mk-favorite-icon-holder");
+    for(let button of favoriteButtons){
+        addEventListenerOnce("click", button, function(e){
+            e.preventDefault();
+            let idOfListing = this.dataset.id;
+            let iconHolder = this.firstElementChild;
+            let newIcon = iconHolder.dataset.icon === "mdi:cards-heart" ? "mdi:cards-heart-outline" : "mdi:cards-heart";
+
+            let data = {};
+
+            data.listingId = idOfListing;
+
+            args = {};
+
+            args.additionalFunctions = new Array(flipListingFavoriteIcon)
+
+            args.additionalFunctionArgs = {idOfListing};
+
+            if(newIcon === "mdi:cards-heart"){
+                submitAjax("addToFavoriteListings", showResult, data, args);
+            }
+            else{
+                submitAjax("removeFromFavoriteListings", showResult, data, args);
+            }
+        })
+    }
+}
+
+function flipListingFavoriteIcon(args){
+    let favoriteButtons = document.querySelectorAll(".mk-favorite-icon-holder");
+    let listingId = args.idOfListing;
+    for(let button of favoriteButtons){
+        if(this.dataset.id == listingId){
+            let iconHolder = this.firstElementChild;
+            iconHolder.dataset.icon === "mdi:cards-heart" ? "mdi:cards-heart-outline" : "mdi:cards-heart";
+        }
+    }
 }
 
 function getQuestionsForUser(){
@@ -1687,6 +1726,10 @@ function showResult(data, args){
     };
     if(args.additionalFunctions){
         for(let func of args.additionalFunctions){
+            if(args.additionalFunctionArgs){
+                func(args.additionalFunctionArgs);
+                continue;
+            }
             func();
         }
     }

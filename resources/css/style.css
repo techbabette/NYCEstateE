@@ -153,6 +153,7 @@ footer{
     padding: 4px;
     color: red !important;
     border-radius : 50%;
+    z-index: 5;
   }
   .mk-favorite-icon-holder:hover{
     color: red !important;
@@ -168,7 +169,10 @@ footer{
 }
 .listing-body{
     padding: 2%;
-    min-height: 15vh;
+}
+.listing-desc{
+    min-height: 2rem;
+    margin-bottom: 0%;
 }
 .mk-img-fluid{
     width: 100%;
