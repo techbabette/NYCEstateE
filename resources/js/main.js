@@ -1367,6 +1367,17 @@ window.onload = function(){
             sendFiltersDisplayListings();
         })
     }
+    if(currentPage === "favorites.html"){
+        let data = {};
+
+        let args = {};
+
+        data.onlyFavorite = true;
+
+        args.listingHolder = document.querySelector("#listingHolder");
+
+        submitAjax("getListingsForFilter", displayListings, data, args);
+    }
     if(currentPage === "listing.html"){
         console.log("Listing!");
         let queryString = window.location.search;
@@ -1393,7 +1404,6 @@ window.onload = function(){
 
 function showSingleListing(){
     let listingHolder = document.querySelector("#singleListingHolder");
-
 
 }
 
