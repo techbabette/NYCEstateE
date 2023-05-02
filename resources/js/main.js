@@ -753,7 +753,7 @@ window.onload = function(){
             let previewHolder = document.querySelector("#main-photo-preview");
             fileReader.onload = function (e) {previewHolder.src = this.result;}
             let listingPhotoField = document.querySelector("#listingPhoto");
-            listingPhotoField.addEventListener("change", function(){
+            addEventListenerOnce("change", listingPhotoField, function(e){
                 fileReader.readAsDataURL(listingPhotoField.files[0]);
             })
 
@@ -1313,7 +1313,7 @@ window.onload = function(){
         readAjax("getAllMessageTypes", fillDropdown, [messageTypeSelect]);
 
         let sendMessageButton = document.querySelector("#sendMessage");
-        sendMessageButton.addEventListener("click", function(e){
+        addEventListenerOnce("click", sendMessageButton, function(e){
             e.preventDefault();
             sendMessage();
         })
