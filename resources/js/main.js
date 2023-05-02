@@ -196,7 +196,6 @@ window.onload = function(){
                 html += `<p class="text-center w-100 d-block text-dark">No rows to display</p>`
                 tableResultHolder.innerHTML = "";
                 tableResultHolder.innerHTML += html;
-                return;
             }
             currData = data;
             for(let row of data){
