@@ -1416,6 +1416,8 @@ window.onload = function(){
 
         args.listingHolder = document.querySelector("#listingHolder");
 
+        args.noListingsMessage = "No listings saved as favorite"
+
         submitAjax("getListingsForFilter", displayListings, data, args);
     }
     if(currentPage === "listing.html"){
@@ -1542,7 +1544,7 @@ function showSingleListing(data){
     `
     <div class="contact listing-padding">
     <a href="#" class="btn soft-blue" id="copy-number-button" data-number="${number}">Copy phone number</a>
-    <p>Price: ${body["price"]}</p>
+    <p>Price: ${body["price"]}$</p>
   </div>
 </div>
 </div>
@@ -1692,7 +1694,11 @@ function displayListings(data, args){
     listingHolder.innerHTML = "";
 
     if(data.length < 1){
-        listingHolder.innerHTML = `<p class="h3">No listings found for filters provided</p>`;
+        let errorText = "No listings found for filters provided";
+        if(args.noListingsMessage){
+            errorText = args.noListingsMessage;
+        }
+        listingHolder.innerHTML = `<p class="h3">${errorText}</p>`;
         return;
     }
 
