@@ -237,7 +237,7 @@ function getDetailedListing($listing_id, $user_id){
     return $result;
 }
 
-function getListingsForFilter($listingTitleFilter, $listingBuildingTypeFilter, $listingBoroughFilter, $user_id, $userFavoriteFilter){
+function getListingsForFilter($listingTitleFilter, $listingBuildingTypeFilter, $listingBoroughFilter, $user_id, $userFavoriteFilter, $sortType){
     include ("../../connection.php");
 
     if($user_id != 0){
@@ -304,7 +304,11 @@ function getListingsForFilter($listingTitleFilter, $listingBuildingTypeFilter, $
         $statement .= " AND f.user_id = :user_id";
     }
 
-    $statement .= " ORDER BY l.listing_id";
+    $sort = "";
+
+    $sortTypes = array(0 => "l.listing_id DESC", 1 => "price ASC", 2 => "price DESC", 3 => "size ASC", 4 => "size DESC");
+
+    $statement .= " ORDER BY ".$sortTypes[$sortType];
 
     $prepSt = $conn->prepare($statement);
 

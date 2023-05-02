@@ -19,6 +19,7 @@ $listingBuildingTypeFilter = array();
 $listingBoroughFilter = array();
 $onlyFavorite = false;
 $user_id = 0;
+$sortType = 0;
 
 if(isset($_POST["titleFilter"])){
     $listingTitleFilter = $_POST["titleFilter"];
@@ -36,12 +37,18 @@ if(isset($_POST["onlyFavorite"]) && isset($_SESSION["user"])){
     $onlyFavorite = true;
 }
 
+if(isset($_POST["sortType"])){
+    $sortType = $_POST["sortType"];
+}
+
+
 if(isset($_SESSION["user"])){
     $user_id = $_SESSION["user"]["user_id"];
 }
 
+
 try{
-    $listings = getListingsForFilter($listingTitleFilter, $listingBuildingTypeFilter, $listingBoroughFilter, $user_id, $onlyFavorite);
+    $listings = getListingsForFilter($listingTitleFilter, $listingBuildingTypeFilter, $listingBoroughFilter, $user_id, $onlyFavorite, $sortType);
     $result["general"] = array();
     foreach($listings as $listing){
         $listingWithInformation["body"] = $listing;

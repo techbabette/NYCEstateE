@@ -1616,12 +1616,18 @@ function sendFiltersDisplayListings(){
             selectedBuildingTypes.push(parseInt(buildingType.value));
         }
     }
+    
+    let selectedSort = document.querySelector("#listingsSort").value;
+
+    saveToLocalStorage(selectedSort, "selectedSort");
 
     saveToLocalStorage(selectedBoroughs, "boroughFilter");
 
     saveToLocalStorage(selectedBuildingTypes, "buildingTypeFilter");
 
     data.buildingTypeFilter = selectedBuildingTypes;
+
+    data.sortType = selectedSort;
 
     let titleFilter = document.querySelector("#titleFilter");
 
