@@ -18,6 +18,13 @@ h1,h2,p,a:hover,.h4:hover, #text-logo:hover, input, *{
 .mk-icon{
     color: var(--strong-accent);
 }
+.navbar-toggler{
+    background-color: var(--light-action);
+    color: var(--bg-color);
+}
+.navbar-toggler:hover{
+    background-color: var(--active-action);
+}
 input[type="checkbox"]:checked > span{
     background-color: var(--strong-accent);
 }
