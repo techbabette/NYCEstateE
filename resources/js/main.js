@@ -1384,6 +1384,13 @@ window.onload = function(){
             data.buildingTypeFilter = readBuildingType;
         }
 
+        let selectedSort = readFromLocalStorage("selectedSort");
+
+        if(selectedSort){
+            data.sortType = parseInt(selectedSort);
+            document.querySelector("#listingsSort").value = selectedSort;
+        }
+
         readAjax("getAllBoroughsWithListings", fillCheckbox, boroughArgs);
 
         readAjax("getAllBuildingTypesWithListings", fillCheckbox, buildingTypeArgs);
@@ -1617,7 +1624,7 @@ function sendFiltersDisplayListings(){
         }
     }
     
-    let selectedSort = document.querySelector("#listingsSort").value;
+    let selectedSort = parseInt(document.querySelector("#listingsSort").value);
 
     saveToLocalStorage(selectedSort, "selectedSort");
 
