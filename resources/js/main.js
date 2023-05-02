@@ -8,7 +8,6 @@ let globalData = {};
 let success;
 if (currentPage == "" || currentPage == "index.html") mainPage = true;
 if (!mainPage) ajaxPath = "../BusinessLogic/";
-
 window.onload = function(){
     if(currentPage == "") {
         currentPage == "index.html";
@@ -130,14 +129,14 @@ window.onload = function(){
                       {title : "Users", headers : ["Name", "Last name","Email", "Date of creation", "Role"], target : "getAllUsers", edit : showUserModal},
                       {title : "Messages", headers : ["Sender", "Type","Title", "Body", "Date sent"], target : "getAllMessages"},
                       {title : "Message types", headers : ["Title", "Number of messages"], target : "getAllMessageTypesCount", edit : showMessageTypeModal, createNew : showMessageTypeModal},
-                      {title : "Listings", headers : ["Name", "Price","Description", "Address", "Size"], target : "getAllListings", createNew : showListingModal, edit: showListingModal},
+                      {title : "Listings", headers : ["Name", "Price","Description", "Borough", "Building type", "Address", "Size"], target : "getAllListings", createNew : showListingModal, edit: showListingModal},
                       {title : "Links", headers : ["Title", "Access level","Link", "File location", "Location",  "Priority", "Parent", "Icon"], target : "getAllLinks", createNew : showLinkModal, edit : showLinkModal},
                       {title : "Boroughs", headers : ["Title", "Number of listings (Both active and deleted)"], target : "getAllBoroughsCount", createNew: showBoroughModal, edit: showBoroughModal},
                       {title : "Building types", headers : ["Title", "Number of listings (Both active and deleted)"], target : "getAllBuildingTypesCount", createNew: showBuildingTypeModal, edit: showBuildingTypeModal},
                       {title : "Survey questions", headers : ["Title", "Number of times answered"], target : "getAllQuestions", createNew : showQuestionModal, edit: showQuestionModal, viewAnswers: "getSpecificQuestionAnswers"},
                       {title : "Deleted survey questions", headers : ["Title", "Number of times answered"], target : "getAllDeletedQuestions", edit: showQuestionModal, restore : "restoreQuestion", viewAnswers: "getSpecificQuestionAnswers"},
                       {title : "Room types", headers : ["Title"], target : "getAllRoomTypes", createNew: showRoomTypeModal, edit: showRoomTypeModal},
-                      {title : "Deleted listings", headers : ["Name", "Price","Description", "Address", "Size"], target : "getAllDeletedListings", edit: showListingModal, restore : "restoreListing"},
+                      {title : "Deleted listings", headers : ["Name", "Price","Description", "Borough", "Building type", "Address", "Size"], target : "getAllDeletedListings", edit: showListingModal, restore : "restoreListing"},
                     ];
         let table = document.querySelector("#element-table");
         let activeTable = 0;
@@ -2226,7 +2225,11 @@ function addError(field, msg, errorHolderDistance){
 function redirect(args){
     let newLocation = args[0];
     let landing = args[1];
-    let newLink = window.location.hostname + (landing ? `/${newLocation}` : `/pages/${newLocation}`); 
+    let additionalText = ""
+    if(window.location.hostname === "localhost"){
+        additionalText = "/nycestatee";
+    }
+    let newLink = window.location.hostname + additionalText + (landing ? `/${newLocation}` : `/pages/${newLocation}`); 
     window.location.assign("https://" + newLink);
 }
 
