@@ -1,6 +1,6 @@
 <?php
 session_start();
-$requiredLevel = 3;
+$requiredLevel = 2;
 require("../DataAccess/generalFunctions.php");
 
 checkAccessLevel($requiredLevel);

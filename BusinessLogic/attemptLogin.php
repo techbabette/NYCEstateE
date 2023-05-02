@@ -13,8 +13,7 @@ $result;
 
 if(isset($_SESSION["user"])){
     http_response_code(403);
-    $result["error"] = "You are already logged in";
-    echo $result;
+    echoNoPermission("You are already logged in");
 }
 
 if(isset($_POST["attemptLogin"])){
@@ -58,6 +57,7 @@ if(isset($_POST["attemptLogin"])){
         }
         else{
             http_response_code(401);
+            $result["loginAttempt"] = $loginAttempt;
             $result["error"] = ("Incorrect email/password");
             echo json_encode($result);
             die();
