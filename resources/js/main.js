@@ -10,6 +10,9 @@ if (currentPage == "" || currentPage == "index.html") mainPage = true;
 if (!mainPage) ajaxPath = "../BusinessLogic/";
 
 window.onload = function(){
+    if(currentPage == "") {
+        currentPage == "index.html";
+    }
     data = {currentPage};
 
     //Send current page to check if allwwed
@@ -400,7 +403,7 @@ window.onload = function(){
                     LinkIconField.value = firstRow.icon ? firstRow.icon : "";
                     accessLevelSelect.value = firstRow.access_level_id;
                     LinkLocation.value = firstRow.location;
-                    LinkRoot.checked = firstRow.landing;
+                    LinkRoot.checked = firstRow.landing > 0;
                     LinkPriorityField.value = firstRow.priority;
                 }, data);
 
@@ -1659,7 +1662,10 @@ function fillCheckbox(data, args){
     let checked = "";
     for(let row of data){
     if(localStoragePresence){
-        checked = localStoragePresence.includes(row["id"]) ? `checked="checked"` : "";
+        checked = "";
+        for(let elem of localStoragePresence){
+            if(elem == row["id"]) checked = `checked="checked"`;
+        }
     }
     html += 
     `
@@ -2215,7 +2221,7 @@ function addError(field, msg, errorHolderDistance){
 function redirect(args){
     let newLocation = args[0];
     let landing = args[1];
-    let newLink = window.location.hostname + "/nycestatee" + (landing ? `/${newLocation}` : `/pages/${newLocation}`); 
+    let newLink = window.location.hostname + (landing ? `/${newLocation}` : `/pages/${newLocation}`); 
     window.location.assign("https://" + newLink);
 }
 
@@ -2323,7 +2329,7 @@ function submitFormDataAjax(url, resultFunction, data, args = {}){
 
 function generateUrl(object, redirect = ""){
     let url = "";
-    if(object.landing){
+    if(object.landing == 1){
        url += mainPage? '' : '../';
     }
     else{
