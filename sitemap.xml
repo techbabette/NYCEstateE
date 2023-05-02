@@ -54,4 +54,10 @@
       <changefreq>yearly</changefreq>
       <priority>0.60</priority>
    </url>
+    <url>
+      <loc>https://techbabette.github.io/library-site/pages/author.html</loc>
+      <lastmod>02-05-2023</lastmod>
+      <changefreq>yearly</changefreq>
+      <priority>0.55</priority>
+   </url>
 </urlset> 

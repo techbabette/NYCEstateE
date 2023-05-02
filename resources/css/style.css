@@ -376,6 +376,9 @@ footer{
     border: 2px solid black;
     border-radius: 2%;
 }
+.portrait{
+    aspect-ratio: 9/16 !important;
+}
 
 .hide{
     opacity: 0 !important;
