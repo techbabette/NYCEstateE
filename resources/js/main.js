@@ -2220,7 +2220,7 @@ function addError(field, msg, errorHolderDistance){
 function redirect(args){
     let newLocation = args[0];
     let landing = args[1];
-    let newLink = window.location.hostname + (landing ? `/${newLocation}` : `/pages/${newLocation}`); 
+    let newLink = window.location.hostname + "/nycestatee" + (landing ? `/${newLocation}` : `/pages/${newLocation}`); 
     window.location.assign("https://" + newLink);
 }
 
