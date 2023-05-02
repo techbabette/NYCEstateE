@@ -734,7 +734,7 @@ window.onload = function(){
             readAjax("getAllRoles", fillDropdown, [userRoleSelect]);
 
             let modalSubmitButton = document.querySelector("#user-submit");
-            modalSubmitButton.addEventListener("click", function(e){
+            addEventListenerOnce("click", modalSubmitButton, function(e){
                 e.preventDefault();
                 submitUserForm();
             })
