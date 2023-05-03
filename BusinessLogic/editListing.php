@@ -108,8 +108,11 @@ foreach($rooms as $room){
     if(!$roomExists){
         echoUnprocessableEntity("Invalid room type selected");
     }
-    if($room->count == 0){
-        echoUnprocessableEntity("Number of specific room cannot be below one");
+    if($room->count < 1){
+        echoUnprocessableEntity("Number of any room cannot be below one");
+    }
+    if($room->count > 99){
+        echoUnprocessableEntity("Number of any room cannot be above 99");
     }
 }
 
