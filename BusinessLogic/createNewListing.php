@@ -101,12 +101,16 @@ foreach($rooms as $room){
     if(!$roomExists){
         echoUnprocessableEntity("Invalid room type selected");
     }
-    if($room->count == 0){
-        echoUnprocessableEntity("Number of specific room cannot be below one");
+    if($room->count < 1){
+        echoUnprocessableEntity("Number of any room cannot be below one");
+    }
+    if($room->count > 99){
+        echoUnprocessableEntity("Number of any room cannot be above 99");
     }
 }
 
 require("../DataAccess/listingFunctions.php");
+require("../DataAccess/imageFunctions.php");
 try{
     $lastInsertedId = createNewListing($listingBorough, $listingBuildingType, $listingTitle, $listingDescription, $listingAddress, $listingSize);
     saveListingPrice($lastInsertedId, $listingPrice);
@@ -119,7 +123,8 @@ catch (PDOException $e){
     echoUnexpectedError();
 }
 
-move_uploaded_file($_FILES["listingPhoto"]["tmp_name"], $target_file);
+// move_uploaded_file($_FILES["listingPhoto"]["tmp_name"], $target_file);
+saveAdjustedPhotoToDisk($_FILES["listingPhoto"], $target_file, 640, 360);
 $result["general"] = "Successfully created new listing";
 http_response_code(201);
 echo json_encode($result)
