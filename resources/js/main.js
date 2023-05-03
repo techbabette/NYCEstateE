@@ -929,11 +929,11 @@ window.onload = function(){
 
             //tests
 
-            if(reTestText(reTitle, listingTitleField, "Title does not match format", 1)) errors++;
+            if(reTestText(reTitle, listingTitleField, `Title does not match format, eg "Great new listing"`, 1)) errors++;
 
-            if(reTestText(reDescription, listingDescriptionField, "Description does not match format", 1)) errors++;
+            if(reTestText(reDescription, listingDescriptionField, `Description does not match format, only words are allowed in descriptions`, 1)) errors++;
 
-            if(reTestText(reAddress, listingAddressField, "Address does not match format", 1)) errors++;
+            if(reTestText(reAddress, listingAddressField, `Address does not match format, eg "First Street 20"`, 1)) errors++;
 
             if(testGeneric(listingSizeField, listingSizeField.value < 30, "Size cannot be below 30 feet", 1)) errors++;
 
