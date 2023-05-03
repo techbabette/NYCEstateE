@@ -117,7 +117,7 @@ foreach($rooms as $room){
 }
 
 require("../DataAccess/listingFunctions.php");
-
+require("../DataAccess/imageFunctions.php");
 try{
     $lastInsertedId = editListing($listingId, $listingBorough, $listingBuildingType, $listingTitle, $listingDescription, $listingAddress, $listingSize);
     $currentPrice = getPriceOfListing($listingId)["price"];
@@ -161,7 +161,7 @@ catch (PDOException $e){
 }
 
 if($imgUpload){
-    move_uploaded_file($_FILES["listingPhoto"]["tmp_name"], $target_file);
+    saveAdjustedPhotoToDisk($_FILES["listingPhoto"], $target_file, 640, 360);
 }
 $result["general"] = "Successfully edited listing";
 http_response_code(201);
