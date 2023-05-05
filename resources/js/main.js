@@ -2241,7 +2241,7 @@ function readAjax(url, resultFunction, args = {}){
                     resultFunction(data.general, args);
                     if(args.additionalFunctions){
                         let additionalArgs = args.additionalFunctionArgs ? true : false;
-                        for(let func of additionalFunctions){
+                        for(let func of args.additionalFunctions){
                             if(additionalArgs){
                                 func(args.additionalFunctionArgs);
                                 continue;
@@ -2284,7 +2284,7 @@ function submitAjax(url, resultFunction, data, args = {}){
                     resultFunction(data.general, args);
                     if(args.additionalFunctions){
                         let additionalArgs = args.additionalFunctionArgs ? true : false;
-                        for(let func of additionalFunctions){
+                        for(let func of args.additionalFunctions){
                             if(additionalArgs){
                                 func(args.additionalFunctionArgs);
                                 continue;
@@ -2329,7 +2329,7 @@ function submitFormDataAjax(url, resultFunction, data, args = {}){
                     resultFunction(data.general, args);
                     if(args.additionalFunctions){
                         let additionalArgs = args.additionalFunctionArgs ? true : false;
-                        for(let func of additionalFunctions){
+                        for(let func of args.additionalFunctions){
                             if(additionalArgs){
                                 func(args.additionalFunctionArgs);
                                 continue;
