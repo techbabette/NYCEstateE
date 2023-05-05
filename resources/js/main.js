@@ -1106,7 +1106,7 @@ window.onload = function(){
                 data.id = buildingTypeId;
             }
 
-            if(reTestText(reBuildingTypeName, buildingTypeNameField, `Building type name does not match format, eg "The Queens"`)) errors ++;
+            if(reTestText(reBuildingTypeName, buildingTypeNameField, `Building type name does not match format, eg "House"`)) errors ++;
 
             if(errors != 0){
                 return;
@@ -1325,9 +1325,9 @@ window.onload = function(){
             let reTitle = /^[A-Z][a-z']{0,19}(\s[A-Za-z][a-z']{0,20}){1,4}$/;
             let reBody = /^[A-Z][a-z']{0,19}(\s[A-Za-z][a-z']{0,20}){2,14}$/;
 
-            if(reTestText(reTitle, messageTitleField, "Message title does not match format (Between two and five words)", 1)) errors++;
+            if(reTestText(reTitle, messageTitleField, "Message title does not match format (Between two and five words, no punctuation)", 1)) errors++;
 
-            if(reTestText(reBody, messageBodyField, "Message body does not match format (Between three and fifteen words)", 1)) errors++;
+            if(reTestText(reBody, messageBodyField, "Message body does not match format (Between three and fifteen words, no punctuation)", 1)) errors++;
 
             if(testDropdown(messageTypeSelect, 0, "You must select a message type", 1));
 
