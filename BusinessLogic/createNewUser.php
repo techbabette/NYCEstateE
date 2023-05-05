@@ -59,7 +59,7 @@ try{
     $emailInUse = checkIfEmailInUse($email);
     if($emailInUse){
         http_response_code(409);
-        $result["general"] = "Email already in use";
+        $result["error"] = "Email already in use";
         echo json_encode($result);
         die();
     }
