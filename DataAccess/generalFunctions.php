@@ -17,6 +17,12 @@ function echoUnexpectedError($e = "An unexpected error occured"){
     echo json_encode($result);
     die();
 }
+function echoUnauthorized($e = "You have to log in first"){
+    $result["error"] = $e;
+    http_response_code(401);
+    echo json_encode($result);
+    die();
+}
 function echoNoPermission($e = "You are not permitted this action"){
     $result["error"] = $e;
     http_response_code(403);
@@ -48,12 +54,12 @@ function getUserLevel($id){
     }
 }
 function checkAccessLevel($requiredLevel, $e = "You are not permitted this action"){
-    // If user not logged in, die
+    //If user not logged in, die and return 401
     if(!isset($_SESSION["user"])){
-        echoNoPermission($e);
+        echoUnauthorized($e);
     }
 
-    //If user's access level is too low, die
+    //If user's access level is too low, die and return 403
     if(getUserLevel($_SESSION["user"]["user_id"])["level"] < $requiredLevel){
         echoNoPermission($e);
     }
