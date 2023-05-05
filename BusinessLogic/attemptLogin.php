@@ -12,11 +12,17 @@ if (strlen($json_params) > 0 && isValidJSON($json_params)){
 $result;
 
 if(isset($_SESSION["user"])){
-    http_response_code(403);
     echoNoPermission("You are already logged in");
 }
 
 if(isset($_POST["attemptLogin"])){
+
+    if(!isset($_POST["pass"])
+    || !isset($_POST["email"])
+    )
+    {
+        echoUnprocessableEntity("All fields are required");
+    }
 
     $pass = $_POST["pass"];
     $email = $_POST["email"];
@@ -41,8 +47,9 @@ if(isset($_POST["attemptLogin"])){
     }
 
     if($errors != 0){
-        http_response_code(403);
-        echo json_encode("Incorrect email/password");
+        http_response_code(401);
+        $result["error"] = "Incorrect email/password";
+        echo json_encode($result);
         die();
     }
 

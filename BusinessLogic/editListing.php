@@ -125,8 +125,13 @@ try{
     if($currentPrice != $listingPrice){
         saveListingPrice($listingId, $listingPrice);
     }
+    //If new image submitted
     if($imgUpload){
-        saveMainListingPhoto($listingId, $newFileName.".".$imageFileType);
+        //If successfully saved new image to disk, save it in the database
+        $imgUploadSuccess = saveAdjustedPhotoToDisk($_FILES["listingPhoto"], $target_file, 640, 360);
+        if($imgUploadSuccess){
+            saveMainListingPhoto($listingId, $newFileName.".".$imageFileType);
+        }
     }
     $roomsSubmited = array_map(function($elem){
         return $elem->roomId;
@@ -157,11 +162,7 @@ try{
     }
 }
 catch (PDOException $e){
-    echoUnexpectedError($e);
-}
-
-if($imgUpload){
-    saveAdjustedPhotoToDisk($_FILES["listingPhoto"], $target_file, 640, 360);
+    echoUnexpectedError();
 }
 $result["general"] = "Successfully edited listing";
 http_response_code(201);
