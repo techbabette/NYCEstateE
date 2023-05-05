@@ -17,7 +17,7 @@ if
 || !isset($_POST["listingBuildingType"])
 )
 {
-    echoUnprocessableEntity("All fields are required");
+    echoImproperRequest("All fields are required");
 }
 
 $listingTitle = $_POST["listingTitle"];

@@ -23,7 +23,7 @@ if
 || (!isset($_POST["password"]))
 )
 {
-    echoUnprocessableEntity("All fields are required");
+    echoImproperRequest("All fields are required");
 }
 
 $userId = $_POST["userId"];

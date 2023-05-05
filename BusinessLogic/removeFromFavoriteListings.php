@@ -14,7 +14,7 @@ if (strlen($json_params) > 0 && isValidJSON($json_params)){
 }
 
 if(!isset($_POST["listingId"])){
-    echoUnprocessableEntity("All fields are required");
+    echoImproperRequest("All fields are required");
 }
 
 $userId = $_SESSION["user"]["user_id"];

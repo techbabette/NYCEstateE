@@ -23,7 +23,7 @@ if(isset($_POST["createNewUser"])){
     || (!isset($_POST["lastName"]) || empty($_POST["lastName"]))
     || (!isset($_POST["password"]) || empty($_POST["password"]))
     || (!isset($_POST["email"]) || empty($_POST["email"]))){
-        echoUnprocessableEntity("All fields are required");
+        echoImproperRequest("All fields are required");
     }
     $name = $_POST["name"];
     $lastName = $_POST["lastName"];

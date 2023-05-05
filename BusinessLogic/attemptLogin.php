@@ -21,7 +21,7 @@ if(isset($_POST["attemptLogin"])){
     || !isset($_POST["email"])
     )
     {
-        echoUnprocessableEntity("All fields are required");
+        echoImproperRequest("All fields are required");
     }
 
     $pass = $_POST["pass"];

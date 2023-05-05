@@ -14,7 +14,7 @@ if (strlen($json_params) > 0 && isValidJSON($json_params)){
 $result;
 
 if(!isset($_POST["answerId"])){
-    echoUnprocessableEntity("All fields are required");
+    echoImproperRequest("All fields are required");
 }
 
 $answerId = $_POST["answerId"];

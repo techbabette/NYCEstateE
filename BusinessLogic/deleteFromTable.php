@@ -7,6 +7,13 @@ checkAccessLevel($requiredLevel);
 $data = json_decode(file_get_contents('php://input'), true);
 $_POST = $data;
 
+if(!isset($_POST["table"])
+|| !isset($_POST["id"])
+)
+{
+    echoImproperRequest("All fields are required");
+}
+
 $requestedTable = $_POST["table"];
 $requestedId = $_POST["id"];
 

@@ -25,7 +25,7 @@ if
 || (!isset($_POST["priority"])))
 )
 {
-    echoUnprocessableEntity("All fields are required");
+    echoImproperRequest("All fields are required");
 }
 
 $LinkId = $_POST["linkId"];

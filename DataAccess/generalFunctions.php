@@ -5,6 +5,12 @@ function echoUnprocessableEntity($message, $input = ""){
     echo json_encode($result);
     die();
 }
+function echoImproperRequest($message = "All fields are required"){
+    $result["error"] = $message;
+    http_response_code(400);
+    echo json_encode($result);
+    die();
+}
 function echoUnexpectedError($e = "An unexpected error occured"){
     $result["error"] = $e;
     http_response_code(500);

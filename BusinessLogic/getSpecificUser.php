@@ -14,10 +14,7 @@ if (strlen($json_params) > 0 && isValidJSON($json_params)){
 $result;
 
 if(!isset($_POST["id"])){
-    $result["error"] = "Must provide a valid user id";
-    http_response_code(422);
-    echo json_encode($result);
-    die();
+    echoImproperRequest("Must provide a valid user id");
 }
 
 $id = $_POST["id"];

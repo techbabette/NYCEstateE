@@ -24,7 +24,7 @@ $result;
     || (!isset($_POST["priority"]))
     )
     {
-        echoUnprocessableEntity("All fields are required");
+        echoImproperRequest("All fields are required");
     }
 
 $LinkTitle = $_POST["title"];

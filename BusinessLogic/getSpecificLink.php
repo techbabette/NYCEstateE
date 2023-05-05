@@ -14,7 +14,7 @@ if (strlen($json_params) > 0 && isValidJSON($json_params)){
 $result;
 
 if(!isset($_POST["id"])){
-    echoUnprocessableEntity("Must provide a valid link id");
+    echoImproperRequest("Must provide a valid link id");
 }
 
 $id = $_POST["id"];

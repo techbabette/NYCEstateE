@@ -13,7 +13,7 @@ if (strlen($json_params) > 0 && isValidJSON($json_params)){
 $result;
 
 if(!isset($_POST["listing_id"])){
-    echoUnprocessableEntity("All fields are required");
+    echoImproperRequest("All fields are required");
 }
 
 $listing_id = $_POST["listing_id"];
