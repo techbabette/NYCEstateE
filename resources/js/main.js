@@ -15,7 +15,7 @@ window.onload = function(){
     data = {currentPage};
 
     //Send current page to check if allwwed
-    submitAjax("getLinks", generateNavbar, data, { newLocation : "index.html", landing : true});
+    submitAjax("getLinks", generateNavbar, data, { newLocation : "index.html", landing : true, redirectOnNotAllowed : true});
 
     if(currentPage == "register.html"){
         let registrationForm = document.querySelector("#registrationForm");
@@ -2234,39 +2234,7 @@ function readAjax(url, resultFunction, args = {}){
     let request = createRequest();
     request.onreadystatechange = function(){
         if(request.readyState == 4){
-            if(request.status >= 200 && request.status < 300){
-                console.log(request.responseText);
-                let data = JSON.parse(request.responseText);
-                if(args != {}){
-                    resultFunction(data.general, args);
-                    if(args.additionalFunctions){
-                        let additionalArgs = args.additionalFunctionArgs ? true : false;
-                        for(let func of args.additionalFunctions){
-                            if(additionalArgs){
-                                func(args.additionalFunctionArgs);
-                                continue;
-                            }
-                            func();
-                        }
-                    }
-                }
-                else{
-                    console.log(data.general);
-                    resultFunction(data.general);
-                }
-            }
-            else if((request.status >= 300 && request.status < 400) || (request.status == 401 || request.status == 403)){
-                redirect(args);
-            }
-            else{
-                let data = JSON.parse(request.responseText);
-                if(args.errorFunction){
-                    args.errorFunction(data["error"]);
-                    return;
-                }
-                errorHandler(data["error"]);
-                console.log(data["error"]);
-            }
+            handleServerResponse(resultFunction, args, request);
         }
     }
     request.open("GET", ajaxPath+url+".php");
@@ -2277,38 +2245,7 @@ function submitAjax(url, resultFunction, data, args = {}){
     let request = createRequest();
     request.onreadystatechange = function(){
         if(request.readyState == 4){
-            if(request.status >= 200 && request.status < 300){
-                console.log(request.responseText);
-                let data = JSON.parse(request.responseText);
-                if(args != {}){
-                    resultFunction(data.general, args);
-                    if(args.additionalFunctions){
-                        let additionalArgs = args.additionalFunctionArgs ? true : false;
-                        for(let func of args.additionalFunctions){
-                            if(additionalArgs){
-                                func(args.additionalFunctionArgs);
-                                continue;
-                            }
-                            func();
-                        }
-                    }
-                }
-                else{
-                    resultFunction(data.general);
-                }
-            }
-            else if((request.status >= 300 && request.status < 400) || (request.status == 401 || request.status == 403)){
-                redirect(args);
-            }
-            else{
-                let data = JSON.parse(request.responseText);
-                if(args.errorFunction){
-                    args.errorFunction(data["error"]);
-                    return;
-                }
-                errorHandler(data["error"]);
-                console.log(data["error"]);
-            }
+            handleServerResponse(resultFunction, args, request);
         }
     }
 
@@ -2322,45 +2259,52 @@ function submitFormDataAjax(url, resultFunction, data, args = {}){
     let request = createRequest();
     request.onreadystatechange = function(){
         if(request.readyState == 4){
-            if(request.status >= 200 && request.status < 300){
-                console.log(request.responseText);
-                let data = JSON.parse(request.responseText);
-                if(args != {}){
-                    resultFunction(data.general, args);
-                    if(args.additionalFunctions){
-                        let additionalArgs = args.additionalFunctionArgs ? true : false;
-                        for(let func of args.additionalFunctions){
-                            if(additionalArgs){
-                                func(args.additionalFunctionArgs);
-                                continue;
-                            }
-                            func();
-                        }
-                    }
-                }
-                else{
-                    resultFunction(data.general);
-                }
-            }
-            else if((request.status >= 300 && request.status < 400) || (request.status == 401 || request.status == 403)){
-                redirect(args);
-            }
-            else{
-                let data = JSON.parse(request.responseText);
-                if(args.errorFunction){
-                    args.errorFunction(data["error"]);
-                    return;
-                }
-                errorHandler(data["error"]);
-                console.log(data["error"]);
-            }
+            handleServerResponse(resultFunction, args, request);
         }
     }
-
     request.open("POST", ajaxPath+url+".php");
     console.log(data);
     request.send(data);
 }
+
+function handleServerResponse(resultFunction, args, request){
+    if(request.status >= 200 && request.status < 300){
+        console.log(request.responseText);
+        let data = JSON.parse(request.responseText);
+        if(args != {}){
+            resultFunction(data.general, args);
+            if(args.additionalFunctions){
+                let additionalArgs = args.additionalFunctionArgs ? true : false;
+                for(let func of args.additionalFunctions){
+                    if(additionalArgs){
+                        func(args.additionalFunctionArgs);
+                        continue;
+                    }
+                    func();
+                }
+            }
+        }
+        else{
+            resultFunction(data.general);
+        }
+    }
+    else if(request.status >= 300 && request.status < 400){
+        redirect(args);
+    }
+    else if(args.redirectOnNotAllowed && (request.status === 401 || request.status === 403)){
+        redirect(args);
+    }
+    else{
+        let data = JSON.parse(request.responseText);
+        if(args.errorFunction){
+            args.errorFunction(data["error"]);
+            return;
+        }
+        errorHandler(data["error"]);
+        console.log(data["error"]);
+    }
+}
+
 
 function generateUrl(object, redirect = ""){
     let url = "";
