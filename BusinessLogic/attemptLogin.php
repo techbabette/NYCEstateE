@@ -15,67 +15,53 @@ if(isset($_SESSION["user"])){
     echoNoPermission("You are already logged in");
 }
 
-if(isset($_POST["attemptLogin"])){
+if(!isset($_POST["pass"])
+|| !isset($_POST["email"])
+)
+{
+    echoImproperRequest("All fields are required");
+}
 
-    if(!isset($_POST["pass"])
-    || !isset($_POST["email"])
-    )
-    {
-        echoImproperRequest("All fields are required");
-    }
+$pass = $_POST["pass"];
+$email = $_POST["email"];
 
-    $pass = $_POST["pass"];
-    $email = $_POST["email"];
+$rePass1 = '/[A-Z]/'; 
+$rePass2 = '/[a-z]/'; 
+$rePass3 = '/[0-9]/'; 
+$rePass4 = '/[!\?\.]/'; 
+$rePass5 = '/^[A-Za-z0-9!\?\.]{7,30}$/';
 
-    $rePass1 = '/[A-Z]/'; 
-    $rePass2 = '/[a-z]/'; 
-    $rePass3 = '/[0-9]/'; 
-    $rePass4 = '/[!\?\.]/'; 
-    $rePass5 = '/^[A-Za-z0-9!\?\.]{7,30}$/';
+$errors = 0;
 
-    $errors = 0;
+if(!preg_match($rePass1, $pass) || !preg_match($rePass2, $pass)
+|| !preg_match($rePass3, $pass) || !preg_match($rePass4, $pass)
+|| !preg_match($rePass5, $pass))
+{
+    $errors++;
+}
 
-    if(!preg_match($rePass1, $pass) || !preg_match($rePass2, $pass)
-    || !preg_match($rePass3, $pass) || !preg_match($rePass4, $pass)
-    || !preg_match($rePass5, $pass))
-    {
-        $errors++;
-    }
+if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
+    $errors++;
+}
 
-    if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
-        $errors++;
-    }
+if($errors != 0){
+    echoUnauthorized("Incorrect email/password");
+}
 
-    if($errors != 0){
-        http_response_code(401);
-        $result["error"] = "Incorrect email/password";
+require("../DataAccess/userFunctions.php");
+try{
+    $loginAttempt = attemptLogin($email, $pass);
+    if($loginAttempt){
+        $_SESSION["user"] = getUserInformation($loginAttempt);
+        http_response_code(200);
+        $result["general"] = "Successful login";
         echo json_encode($result);
-        die();
     }
-
-    require("../DataAccess/userFunctions.php");
-    try{
-        $loginAttempt = attemptLogin($email, $pass);
-        if($loginAttempt){
-            $_SESSION["user"] = getUserInformation($loginAttempt);
-            http_response_code(200);
-            $result["general"] = "Successful login";
-            echo json_encode($result);
-        }
-        else{
-            http_response_code(401);
-            $result["loginAttempt"] = $loginAttempt;
-            $result["error"] = ("Incorrect email/password");
-            echo json_encode($result);
-            die();
-        }
-    }
-    catch(PDOException $e){
-        echoUnexpectedError();
+    else{
+        echoUnauthorized("Incorrect email/password");
     }
 }
-else{
-    http_response_code(404);
-    echo "Error 404: Page not found";
+catch(PDOException $e){
+    echoUnexpectedError();
 }
 ?>
