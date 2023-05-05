@@ -58,13 +58,17 @@ if(isset($_POST["createNewUser"])){
     try{
         $emailInUse = checkIfEmailInUse($email);
         if($emailInUse){
-            echoUnprocessableEntity("Email already in use");
+            http_response_code(409);
+            $result["general"] = "Email already in use"
+            echo json_encode($result);
+            die();
         }
         else{
             createNewUser($email, $pass, $name, $lastName);
-            http_response_code(302);
+            http_response_code(201);
             $result["general"] = "Successful registration";
             echo json_encode($result);
+            die();
         }
     }
     catch(PDOException $e){

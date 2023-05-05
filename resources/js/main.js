@@ -15,7 +15,7 @@ window.onload = function(){
     data = {currentPage};
 
     //Send current page to check if allwwed
-    submitAjax("getLinks", generateNavbar, data, ["index.html", true]);
+    submitAjax("getLinks", generateNavbar, data, { newLocation : "index.html", landing : true});
 
     if(currentPage == "register.html"){
         let registrationForm = document.querySelector("#registrationForm");
@@ -73,7 +73,7 @@ window.onload = function(){
             let data = {"createNewUser" : true, "email" : email, "name" : name, "lastName" : lastName, "password" : password};
 
             if(errors == 0){
-                submitAjax("createNewUser", redirect, data, ["login.html", false]);
+                submitAjax("createNewUser", redirectSuccess, data, {newLocation : "login.html", "landing" : false});
             }
         })
     }
@@ -110,7 +110,7 @@ window.onload = function(){
             let data = {"attemptLogin" : true, "email" : email, "pass" : password};
 
             if(errors == 0){
-                submitAjax("attemptLogin", redirect, data, ["index.html", true]);
+                submitAjax("attemptLogin", redirectSuccess, data, { newLocation : "index.html", landing : true});
             }
             else{
                 errorHandler("Incorrect email/password");
@@ -1429,7 +1429,7 @@ window.onload = function(){
 
         console.log(id);
 
-        if(id === null) redirect(["listings.html", false]);
+        if(!id) redirect({ newLocation : "listings.html", landing : false});
 
         data = {};
 
@@ -1451,10 +1451,10 @@ window.onload = function(){
             let selectedId = boroughSelect.value;
 
             if(selectedId == 0){
-                redirect(["listings.html"], false);
+                redirect({newLocation : "listings.html", landing : false});
             }
             else{
-                redirect([`listings.html?boroughid=${selectedId}`, false]);
+                redirect({ newLocation : `listings.html?boroughid=${selectedId}`, landing : false});
             }
         })
     }
@@ -1929,15 +1929,6 @@ function showResult(data, args){
     if(args.closeModal){
         closeCurrentModal();
     };
-    if(args.additionalFunctions){
-        for(let func of args.additionalFunctions){
-            if(args.additionalFunctionArgs){
-                func(args.additionalFunctionArgs);
-                continue;
-            }
-            func();
-        }
-    }
 }
 
 
@@ -2047,7 +2038,7 @@ function generateNavbar(response){
         let logoutButton = document.querySelector("#logoutButton");
         logoutButton.addEventListener("click", function(e){
             e.preventDefault();
-            readAjax("logout", redirect, ["login.html", false]);
+            readAjax("logout", redirectSuccess, { newLocation : "login.html", landing : false});
         })
     }
 
@@ -2223,14 +2214,20 @@ function addError(field, msg, errorHolderDistance){
 }
 
 function redirect(args){
-    let newLocation = args[0];
-    let landing = args[1];
+    let newLocation = args.newLocation;
+    let landing = args.landing;
     let additionalText = ""
     if(window.location.hostname === "localhost"){
         additionalText = "/nycestatee";
     }
+
     let newLink = window.location.hostname + additionalText + (landing ? `/${newLocation}` : `/pages/${newLocation}`); 
     window.location.assign("https://" + newLink);
+}
+
+//Wrapper for the redirect function
+function redirectSuccess(data, args){
+    redirect(args);
 }
 
 function readAjax(url, resultFunction, args = {}){
@@ -2242,13 +2239,23 @@ function readAjax(url, resultFunction, args = {}){
                 let data = JSON.parse(request.responseText);
                 if(args != {}){
                     resultFunction(data.general, args);
+                    if(args.additionalFunctions){
+                        let additionalArgs = args.additionalFunctionArgs ? true : false;
+                        for(let func of additionalFunctions){
+                            if(additionalArgs){
+                                func(args.additionalFunctionArgs);
+                                continue;
+                            }
+                            func();
+                        }
+                    }
                 }
                 else{
                     console.log(data.general);
                     resultFunction(data.general);
                 }
             }
-            else if(request.status >= 300 && request.status < 400){
+            else if((request.status >= 300 && request.status < 400) || (request.status == 401 || request.status == 403)){
                 redirect(args);
             }
             else{
@@ -2275,12 +2282,22 @@ function submitAjax(url, resultFunction, data, args = {}){
                 let data = JSON.parse(request.responseText);
                 if(args != {}){
                     resultFunction(data.general, args);
+                    if(args.additionalFunctions){
+                        let additionalArgs = args.additionalFunctionArgs ? true : false;
+                        for(let func of additionalFunctions){
+                            if(additionalArgs){
+                                func(args.additionalFunctionArgs);
+                                continue;
+                            }
+                            func();
+                        }
+                    }
                 }
                 else{
                     resultFunction(data.general);
                 }
             }
-            else if(request.status >= 300 && request.status < 400){
+            else if((request.status >= 300 && request.status < 400) || (request.status == 401 || request.status == 403)){
                 redirect(args);
             }
             else{
@@ -2310,12 +2327,22 @@ function submitFormDataAjax(url, resultFunction, data, args = {}){
                 let data = JSON.parse(request.responseText);
                 if(args != {}){
                     resultFunction(data.general, args);
+                    if(args.additionalFunctions){
+                        let additionalArgs = args.additionalFunctionArgs ? true : false;
+                        for(let func of additionalFunctions){
+                            if(additionalArgs){
+                                func(args.additionalFunctionArgs);
+                                continue;
+                            }
+                            func();
+                        }
+                    }
                 }
                 else{
                     resultFunction(data.general);
                 }
             }
-            else if(request.status >= 300 && request.status < 400){
+            else if((request.status >= 300 && request.status < 400) || (request.status == 401 || request.status == 403)){
                 redirect(args);
             }
             else{
