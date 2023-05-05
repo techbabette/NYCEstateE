@@ -10,6 +10,7 @@ if(isset($_SESSION["user"])){
 }
 else{
     http_response_code(404);
-    echo ("Error 404: Page not found");
+    $result["error"] = "Error 404: Page not found";
+    echo json_encode($result);
 }
 ?>

@@ -17,7 +17,7 @@ $result;
 if(!isset($_POST["questionName"])
 || !isset($_POST["questionAnswers"]))
 {
-    echoUnprocessableEntity("All fields are required");
+    echoImproperRequest("All fields are required");
 }
 
 $questionName = $_POST["questionName"];

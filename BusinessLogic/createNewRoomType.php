@@ -16,7 +16,7 @@ $result;
 
 if(!isset($_POST["roomTypeName"]))
 {
-    echoUnprocessableEntity("All fields are required");
+    echoImproperRequest("All fields are required");
 }
 
 $roomTypeName = $_POST["roomTypeName"];

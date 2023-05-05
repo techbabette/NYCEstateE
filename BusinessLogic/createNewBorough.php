@@ -16,7 +16,7 @@ $result;
 
 if(!isset($_POST["boroughName"]))
 {
-    echoUnprocessableEntity("All fields are required");
+    echoImproperRequest("All fields are required");
 }
 
 $boroughName = $_POST["boroughName"];

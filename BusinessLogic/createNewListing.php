@@ -20,7 +20,7 @@ if
 || !isset($_POST["listingBuildingType"])
 )
 {
-    echoUnprocessableEntity("All fields are required");
+    echoImproperRequest("All fields are required");
 }
 
 $listingTitle = $_POST["listingTitle"];
@@ -112,9 +112,17 @@ foreach($rooms as $room){
 require("../DataAccess/listingFunctions.php");
 require("../DataAccess/imageFunctions.php");
 try{
+    //First attempt to save main image of the listing to disk
+    $imgUploadSuccess = saveAdjustedPhotoToDisk($_FILES["listingPhoto"], $target_file, 640, 360);
+    //If saving the image locally fails, stop execution
+    if(!$imgUploadSuccess){
+        echoUnexpectedError();
+    }
+    /*If saving the image locally does not fail, continue
+      and save image location in the database*/
     $lastInsertedId = createNewListing($listingBorough, $listingBuildingType, $listingTitle, $listingDescription, $listingAddress, $listingSize);
-    saveListingPrice($lastInsertedId, $listingPrice);
     saveMainListingPhoto($lastInsertedId, $newFileName.".".$imageFileType);
+    saveListingPrice($lastInsertedId, $listingPrice);
     foreach($rooms as $room){
         saveListingRoom($lastInsertedId, $room->roomId, $room->count);
     }
@@ -124,7 +132,6 @@ catch (PDOException $e){
 }
 
 // move_uploaded_file($_FILES["listingPhoto"]["tmp_name"], $target_file);
-saveAdjustedPhotoToDisk($_FILES["listingPhoto"], $target_file, 640, 360);
 $result["general"] = "Successfully created new listing";
 http_response_code(201);
 echo json_encode($result)

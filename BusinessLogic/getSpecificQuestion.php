@@ -14,7 +14,7 @@ if (strlen($json_params) > 0 && isValidJSON($json_params)){
 $result;
 
 if(!isset($_POST["questionId"])){
-    echoUnprocessableEntity("Must provide a valid question id");
+    echoImproperRequest("Must provide a valid question id");
 }
 
 $questionId = $_POST["questionId"];

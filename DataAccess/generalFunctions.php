@@ -5,9 +5,21 @@ function echoUnprocessableEntity($message, $input = ""){
     echo json_encode($result);
     die();
 }
+function echoImproperRequest($message = "All fields are required"){
+    $result["error"] = $message;
+    http_response_code(400);
+    echo json_encode($result);
+    die();
+}
 function echoUnexpectedError($e = "An unexpected error occured"){
     $result["error"] = $e;
     http_response_code(500);
+    echo json_encode($result);
+    die();
+}
+function echoUnauthorized($e = "You have to log in first"){
+    $result["error"] = $e;
+    http_response_code(401);
     echo json_encode($result);
     die();
 }
@@ -42,12 +54,12 @@ function getUserLevel($id){
     }
 }
 function checkAccessLevel($requiredLevel, $e = "You are not permitted this action"){
-    // If user not logged in, die
+    //If user not logged in, die and return 401
     if(!isset($_SESSION["user"])){
-        echoNoPermission($e);
+        echoUnauthorized($e);
     }
 
-    //If user's access level is too low, die
+    //If user's access level is too low, die and return 403
     if(getUserLevel($_SESSION["user"]["user_id"])["level"] < $requiredLevel){
         echoNoPermission($e);
     }

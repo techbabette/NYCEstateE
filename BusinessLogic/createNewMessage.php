@@ -18,7 +18,7 @@ if(!isset($_POST["message_type_id"])
 || !isset($_POST["title"])
 || !isset($_POST["body"]))
 {
-    echoUnprocessableEntity("All fields are required");
+    echoImproperRequest("All fields are required");
 }
 
 $messageType = $_POST["message_type_id"];

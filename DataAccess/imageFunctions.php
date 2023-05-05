@@ -32,9 +32,9 @@ function saveAdjustedPhotoToDisk($image, $targetFile, $maxW, $maxH){
     //Merge the resized image onto the background image, positioning it to the center in case of smaller width
     imagecopymerge($newDst, $dst, ($maxW - $new_width) / 2, 0, 0, 0, $new_width, $new_height, 100);
     //Save the new image as a jpeg
-    imagejpeg($newDst, $targetFile);
+    $result = imagejpeg($newDst, $targetFile);
     //Destory the source image
     imagedestroy($src);
-    return true;
+    return $result;
 }
 ?>

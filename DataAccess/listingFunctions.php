@@ -360,10 +360,13 @@ function getPriceOfListing($listing_id){
 function getAllDeletedListings(){
     include ("../../connection.php");
 
-    $statement = "SELECT l.listing_id AS id, listing_name, price, description, address, size
+    $statement = "SELECT l.listing_id AS id, listing_name, price, description, b.borough_name, bt.type_name, address, size
                   FROM listings l INNER JOIN listingprices lp ON l.listing_id = lp.listing_id
+                  INNER JOIN boroughs b on l.borough_id = b.borough_id
+                  INNER JOIN buildingtypes bt ON l.building_type_id = bt.building_type_id 
                   WHERE lp.date = (SELECT MAX(date) FROM listingprices WHERE listing_id = l.listing_id)
-                  AND l.dateDeleted IS NOT NULL";
+                  AND l.dateDeleted IS NOT NULL
+                  ORDER BY l.listing_id";
     $prepSt = $conn->prepare($statement);
 
     $prepSt->execute();

@@ -38,10 +38,18 @@ try{
     if($allowed){
         http_response_code(200);
         echo json_encode($result);
+        die();
     }
-    //If page is not available to user, redirect
+    //If page is not available to user, echo 401 or 403
     else{
-        http_response_code(308);
+        if($loggedIn){
+            //Echo 403
+            echoNoPermission("You are not permitted to view this page");
+        }
+        else{
+            //Echo 401
+            echoUnauthorized();
+        }
     }
 }
 catch (PDOException $e){

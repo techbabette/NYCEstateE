@@ -15,16 +15,16 @@ $result;
 
     if
     (
-    (!isset($_POST["title"]) || empty($_POST["title"])) 
-    || (!isset($_POST["href"]) || empty($_POST["href"]))
+    (!isset($_POST["title"])) 
+    || (!isset($_POST["href"]))
     || (!isset($_POST["icon"]))
     || (!isset($_POST["aLevel"]))
-    || (!isset($_POST["location"]) || empty($_POST["location"]))
+    || (!isset($_POST["location"]))
     || (!isset($_POST["main"]))
     || (!isset($_POST["priority"]))
     )
     {
-        echoUnprocessableEntity("All fields are required");
+        echoImproperRequest("All fields are required");
     }
 
 $LinkTitle = $_POST["title"];
