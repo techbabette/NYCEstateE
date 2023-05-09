@@ -30,13 +30,13 @@ function echoNoPermission($e = "You are not permitted this action"){
     die();
 }
 function echoNotFound($e = "Not found"){
-    $result["error"] = "Listing not found";
+    $result["error"] = $e;
     http_response_code(404);
     echo json_encode($result);
     die(); 
 }
 function echoGone($e = "No longer exists"){
-    $result["error"] = "Listing no longer active";
+    $result["error"] = $e;
     http_response_code(410);
     echo json_encode($result);
     die(); 
