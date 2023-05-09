@@ -29,7 +29,13 @@ require("../DataAccess/listingFunctions.php");
 require("../DataAccess/informationFunctions.php");
 
 try{
-    $listing = getDetailedListing($listing_id, $user_id);;
+    $listing = getDetailedListing($listing_id, $user_id);
+    if(!$listing){
+        echoNotFound("Listing not found"); 
+    }
+    if(!$listing["active"]){
+        echoGone("Listing no longer active");
+    }
     $result["general"]["body"] = $listing;
     $result["general"]["img"] = getCurrentMainListingPhoto($listing_id)["path"];
     $result["general"]["rooms"] = getRoomsOfListing($listing_id);

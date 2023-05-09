@@ -29,6 +29,18 @@ function echoNoPermission($e = "You are not permitted this action"){
     echo json_encode($result);
     die();
 }
+function echoNotFound($e = "Not found"){
+    $result["error"] = "Listing not found";
+    http_response_code(404);
+    echo json_encode($result);
+    die(); 
+}
+function echoGone($e = "No longer exists"){
+    $result["error"] = "Listing no longer active";
+    http_response_code(410);
+    echo json_encode($result);
+    die(); 
+}
 function getUserLevel($id){
     include ("../../connection.php");
 

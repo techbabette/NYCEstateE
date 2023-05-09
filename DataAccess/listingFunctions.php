@@ -202,7 +202,7 @@ function getDetailedListing($listing_id, $user_id){
         $statement = "SELECT l.listing_id AS id, listing_name, b.borough_name AS borough, b.borough_id AS borough_id, bt.building_type_id AS type_id, bt.type_name AS Type, price, description, address, size,
         (
         SELECT COUNT(*) AS list FROM favorites WHERE user_id = :user_id AND listing_id = l.listing_id
-        ) AS favorite
+        ) AS favorite, IF(l.dateDeleted IS NULL, true, false) AS active
         FROM listings l 
         INNER JOIN listingprices lp ON l.listing_id = lp.listing_id
         INNER JOIN boroughs b on l.borough_id = b.borough_id
@@ -211,7 +211,8 @@ function getDetailedListing($listing_id, $user_id){
         ";
     }
     else{
-        $statement = "SELECT l.listing_id AS id, listing_name, b.borough_name AS borough, bt.type_name AS Type, price, description, address, size, 0 AS favorite
+        $statement = "SELECT l.listing_id AS id, listing_name, b.borough_name AS borough, bt.type_name AS Type, price, description, address, size, 0 AS favorite,
+        IF(l.dateDeleted IS NULL, true, false) AS active
         FROM listings l 
         INNER JOIN listingprices lp ON l.listing_id = lp.listing_id
         INNER JOIN boroughs b on l.borough_id = b.borough_id
@@ -221,7 +222,6 @@ function getDetailedListing($listing_id, $user_id){
 
     $statement .= 
     "WHERE lp.date = (SELECT MAX(date) FROM listingprices WHERE listing_id = l.listing_id)
-    AND l.dateDeleted IS NULL 
     AND l.listing_id = :listing_id";
 
     $prepSt = $conn->prepare($statement);

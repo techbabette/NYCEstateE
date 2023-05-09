@@ -1420,7 +1420,6 @@ window.onload = function(){
         submitAjax("getListingsForFilter", displayListings, data, args);
     }
     if(currentPage === "listing.html"){
-        console.log("Listing!");
         let queryString = window.location.search;
 
         let urlParams = new URLSearchParams(queryString);
@@ -1597,7 +1596,7 @@ function addFavoriteFunctionality(){
 function showListingNotFound(data){
     errorHandler(data);
     let listingHolder = document.querySelector("#singleListingHolder");
-    listingHolder.innerHTML =  `<p class="h3">Listing not found</p>`;
+    listingHolder.innerHTML =  `<p class="h3">${data}</p>`;
 }
 
 function sendFiltersDisplayListings(){
