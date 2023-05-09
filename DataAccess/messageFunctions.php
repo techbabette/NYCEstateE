@@ -12,11 +12,6 @@ function getAllMessageTypes(){
 function getAllMessageTypesCount(){
     include ("../../connection.php");
 
-    // $statement = "SELECT b.borough_id AS id, borough_name as title, COUNT(l.listing_id) as Count
-    //               FROM boroughs b LEFT JOIN listings l ON b.borough_id = l.borough_id
-    //               GROUP BY b.borough_id, borough_name
-    //               ORDER BY COUNT(l.listing_id) DESC";
-
     $statement = "SELECT mt.message_type_id AS id, message_type_name AS title, COUNT(m.message_id) AS Count
                   FROM messagetypes mt LEFT JOIN messages m on mt.message_type_id = m.message_type_id 
                   GROUP BY mt.message_type_id, message_type_name

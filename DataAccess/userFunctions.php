@@ -1,5 +1,4 @@
 <?php
-error_reporting(0);
 function encryptPassword($password){
     return password_hash($password, PASSWORD_DEFAULT);
 }
@@ -73,6 +72,10 @@ function attemptLogin($email, $password){
     $prepSt->execute();
 
     $user = $prepSt->fetch();
+
+    if(!$user){
+        return 0;
+    }
 
     $userId = $user["user_id"];
 
