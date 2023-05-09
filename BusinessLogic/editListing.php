@@ -165,6 +165,6 @@ catch (PDOException $e){
     echoUnexpectedError();
 }
 $result["general"] = "Successfully edited listing";
-http_response_code(201);
+http_response_code(200);
 echo json_encode($result)
 ?>

@@ -104,6 +104,7 @@ try{
             createNewLinkIcon($LinkId, $LinkIcon);
         }
     }
+    http_response_code(200);
     $result["general"] = "Successfully edited link";
     echo json_encode($result);
 }

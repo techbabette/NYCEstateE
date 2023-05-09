@@ -22,7 +22,6 @@ if(!isset($_POST["boroughName"]))
 $boroughName = $_POST["boroughName"];
 
 $reBoroughName = '/^[A-Z][a-z\']{1,50}(\s[A-Za-z][a-z\']{1,50}){0,3}$/';
-// $reDescription = '/^[A-Z][a-z\']{0,50}(\s[A-Za-z][a-z\']{0,50})*$/';
 
 if(!preg_match($reBoroughName, $boroughName)){
     echoUnprocessableEntity("Borough name does not match format");

@@ -34,31 +34,28 @@ if(!preg_match($reQuestion, $questionName)){
 }
 
 $newAnswers = array();
-$insertAnswers = false;
 if(isset($_POST["newAnswers"])){
     $newAnswers = $_POST["newAnswers"];
-    $insertAnswers = true;
 }
 
-$modifiedAnswers = array();
+$remainingAnswers = array();
 if(isset($_POST["modifiedAnswers"])){
-    $modifiedAnswers = $_POST["modifiedAnswers"];
-    $modifyAnswers = true;
+    $remainingAnswers = $_POST["modifiedAnswers"];
 }
 
-if($insertAnswers){
-    foreach($newAnswers as $answer){
-        if(!preg_match($reAnswer, $answer["text"])){
-            echoUnprocessableEntity("Answer does not match format (Between three and eleven words)");
-        }
+if(count($newAnswers) + count($remainingAnswers) < 2){
+    echoUnprocessableEntity("Question must have at least two answers active at once");
+}
+
+foreach($newAnswers as $answer){
+    if(!preg_match($reAnswer, $answer["text"])){
+        echoUnprocessableEntity("Answer does not match format (Between three and eleven words)");
     }
 }
 
-if($modifyAnswers){
-    foreach($modifiedAnswers as $answer){
-        if(!preg_match($reAnswer, $answer["text"])){
-            echoUnprocessableEntity("Answer does not match format (Between three and eleven words)");
-        }
+foreach($remainingAnswers as $answer){
+    if(!preg_match($reAnswer, $answer["text"])){
+        echoUnprocessableEntity("Answer does not match format (Between three and eleven words)");
     }
 }
 
@@ -70,7 +67,7 @@ try{
     $remainingAnswerIds = array_map(function($elem)
     {
         return $elem["answerId"];
-    }, $modifiedAnswers);
+    }, $remainingAnswers);
     //For every answer found in database
     foreach($existingAnswers as $answer){
         //If not among the list of remaining answer ids, disable question 
@@ -82,10 +79,10 @@ try{
          disable current answer and create new one (so no text is overriden) */
         else{
             $text = "";
-            foreach($modifiedAnswers as $key => $mA){
+            foreach($remainingAnswers as $key => $mA){
                 if($mA["answerId"] == $answer["answer_id"]){
                     $text = $mA["text"];
-                    unset($modifiedAnswers[$key]);
+                    unset($remainingAnswers[$key]);
                 }
             }
             //If new text is different from database text, disable current answer and create new one
@@ -105,6 +102,6 @@ catch (PDOException $e){
 }
 
 $result["general"] = "Successfully edited question";
-http_response_code(201);
+http_response_code(200);
 echo json_encode($result)
 ?>

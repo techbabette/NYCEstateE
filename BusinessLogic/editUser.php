@@ -86,6 +86,6 @@ catch(PDOException $e){
 }
 
 $result["general"] = "Successfully edited user";
-http_response_code(201);
+http_response_code(200);
 echo json_encode($result);
 ?>
