@@ -353,7 +353,7 @@ window.onload = function(){
                 let data = {id : existingId};
                 userIdField.value = existingId;
                 submitAjax("getSpecificUser", function(data){
-                    let firstRow = data[0];
+                    let firstRow = data;
 
                     userNameField.value = firstRow.name;
                     userLastNameField.value = firstRow.lastName;
@@ -394,7 +394,7 @@ window.onload = function(){
             if(type == "edit"){
                 let data = {id : existingId};
                 submitAjax("getSpecificLink", function(data){
-                    let firstRow = data[0];
+                    let firstRow = data;
 
                     linkTitleField.value = firstRow.title;
                     LinkHrefField.value = firstRow.href;

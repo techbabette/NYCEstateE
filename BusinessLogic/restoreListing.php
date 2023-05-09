@@ -31,7 +31,7 @@ try{
     restoreListing($id);
 }
 catch (PDOException $e){
-    echoUnexpectedError($e);
+    echoUnexpectedError();
 }
 
 $result["general"] = "Successfully restored listing"; 

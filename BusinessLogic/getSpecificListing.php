@@ -23,6 +23,9 @@ require("../DataAccess/listingFunctions.php");
 
 try{
     $listing["main"] = getSpecificListing($id);
+    if(!$listing["main"]){
+        echoNotFound();
+    }
     $listing["photo"] = getCurrentMainListingPhoto($id);
     $listing["rooms"] = getRoomsOfListing($id);
     $result["general"] = $listing;

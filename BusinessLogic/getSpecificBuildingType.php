@@ -22,7 +22,11 @@ $id = $_POST["id"];
 require("../DataAccess/buildingTypeFunctions.php");
 
 try{
-    $result["general"] = getSpecificBuildingType($id);
+    $buildingType = getSpecificBuildingType($id);
+    if(!$buildingType){
+        echoNotFound();
+    }
+    $result["general"] = $buildingType;
     http_response_code(200);
     echo json_encode($result);
 }

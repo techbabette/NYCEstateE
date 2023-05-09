@@ -22,7 +22,11 @@ $id = $_POST["id"];
 require("../DataAccess/roomTypeFunctions.php");
 
 try{
-    $result["general"] = getSpecificRoomType($id);
+    $roomType = getSpecificRoomType($id);
+    if(!$roomType){
+        echoNotFound();
+    }
+    $result["general"] = $roomType;
     http_response_code(200);
     echo json_encode($result);
 }

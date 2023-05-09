@@ -22,7 +22,11 @@ $id = $_POST["id"];
 require("../DataAccess/boroughFunctions.php");
 
 try{
-    $result["general"] = getSpecificBorough($id);
+    $borough = getSpecificBorough($id);
+    if(!$borough){
+        echoNotFound();
+    }
+    $result["general"] = $borough;
     http_response_code(200);
     echo json_encode($result);
 }

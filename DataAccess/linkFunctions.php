@@ -47,7 +47,7 @@ function getSpecificLink($linkId){
     $prepSt->bindParam("link_id", $linkId);
 
     $prepSt->execute();
-    $results = $prepSt->fetchAll();
+    $results = $prepSt->fetch();
 
     return $results;
 }

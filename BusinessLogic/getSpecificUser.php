@@ -22,7 +22,11 @@ $id = $_POST["id"];
 require("../DataAccess/userFunctions.php");
 
 try{
-    $result["general"] = getSpecificUser($id);
+    $user = getSpecificUser($id);
+    if(!$user){
+        echoNotFound();
+    }
+    $result["general"] = $user;
     http_response_code(200);
     echo json_encode($result);
 }

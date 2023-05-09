@@ -22,7 +22,11 @@ $id = $_POST["id"];
 require("../DataAccess/messageFunctions.php");
 
 try{
-    $result["general"] = getSpecificMessageType($id);
+    $messageType = getSpecificMessageType($id);
+    if(!$messageType){
+        echoNotFound();
+    }
+    $result["general"] = $messageType;
     http_response_code(200);
     echo json_encode($result);
 }

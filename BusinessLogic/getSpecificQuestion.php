@@ -22,7 +22,11 @@ $questionId = $_POST["questionId"];
 require("../DataAccess/surveyFunctions.php");
 
 try{
-    $question["name"] = getSpecificQuestion($questionId)["question"];
+    $questionExists = getSpecificQuestion($questionId);
+    if(!$questionExists){
+        echoNotFound();
+    }
+    $question["name"] = $questionExists["question"];
     $question["answers"] = getQuestionAnswers($questionId);
     $result["general"] = $question;
     http_response_code(200);

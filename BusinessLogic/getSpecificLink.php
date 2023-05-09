@@ -22,7 +22,11 @@ $id = $_POST["id"];
 require("../DataAccess/linkFunctions.php");
 
 try{
-    $result["general"] = getSpecificLink($id);
+    $link = getSpecificLink($id);
+    if(!$link){
+        echoNotFound();
+    }
+    $result["general"] = $link;
     http_response_code(200);
     echo json_encode($result);
 }

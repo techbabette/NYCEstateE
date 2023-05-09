@@ -129,7 +129,7 @@ function getSpecificUser($userId){
 
     $prepSt->execute();
 
-    return $prepSt->fetchAll();
+    return $prepSt->fetch();
 }
 
 function getAllUserRoles(){

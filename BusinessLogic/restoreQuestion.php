@@ -2,7 +2,7 @@
 session_start();
 $requiredLevel = 3;
 require("../DataAccess/generalFunctions.php");
-// checkAccessLevel($requiredLevel);
+checkAccessLevel($requiredLevel);
 
 $json_params = file_get_contents("php://input");
 
@@ -31,7 +31,7 @@ try{
     restoreQuestion($id);
 }
 catch (PDOException $e){
-    echoUnexpectedError($e);
+    echoUnexpectedError();
 }
 
 $result["general"] = "Successfully restored question"; 
