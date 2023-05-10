@@ -51,15 +51,17 @@ if($errors != 0){
 require("../DataAccess/userFunctions.php");
 try{
     $loginAttempt = attemptLogin($email, $pass);
-    if($loginAttempt){
-        $_SESSION["user"] = getUserInformation($loginAttempt);
-        http_response_code(200);
-        $result["general"] = "Successful login";
-        echo json_encode($result);
-    }
-    else{
+    if(!$loginAttempt){
         echoUnauthorized("Incorrect email/password");
     }
+    $user = getUserInformation($loginAttempt);
+    if(!$user["level"] > 0){
+        echoUnauthorized("User banned");
+    }
+    http_response_code(200);
+    $_SESSION["user"]["user_id"] = $loginAttempt;
+    $result["general"] = "Successful login";
+    echo json_encode($result);
 }
 catch(PDOException $e){
     echoUnexpectedError();
