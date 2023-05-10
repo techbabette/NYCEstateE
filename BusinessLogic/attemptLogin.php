@@ -12,7 +12,7 @@ if (strlen($json_params) > 0 && isValidJSON($json_params)){
 $result;
 
 //This check would not exist in a stateless design 
-//So it should not exist here (Groundwork for switching to JWT over sessions)
+//So it should not exist here (Groundwork for switching to JWT)
 /* if(isset($_SESSION["user"])){
         echoNoPermission("You are already logged in");
     }
