@@ -59,7 +59,7 @@ try{
     }
     $user = getUserInformation($loginAttempt);
     if(!$user["level"] > 0){
-        echoUnauthorized("User banned");
+        echoNoPermission("User banned");
     }
     http_response_code(200);
     $_SESSION["user"]["user_id"] = $loginAttempt;
