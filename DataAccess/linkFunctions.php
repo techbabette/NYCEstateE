@@ -25,7 +25,7 @@ function getLinks($accessLevel, $loggedIn){
 function getAllLinks(){
     include ("../../connection.php");
 
-    $statement = "SELECT l.link_id AS id, link_title, level_title, href, IF(landing, \"Root\", \"Pages\"), location, priority, IFNULL((SELECT link_title FROM links WHERE link_id = l.parent_id),\"None\") AS Parent, 
+    $statement = "SELECT l.link_id AS id, link_title, level_title, href, IF(landing, \"Root\", \"Pages\") as flocation, location, priority, IFNULL((SELECT link_title FROM links WHERE link_id = l.parent_id),\"None\") AS Parent, 
                   IFNULL((SELECT icon FROM linkicons WHERE link_id = l.link_id AND active = 1), \"None\") AS icon 
                   FROM links l
                   INNER JOIN accesslevels a ON l.access_level_id = a.access_level_id

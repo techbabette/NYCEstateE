@@ -126,17 +126,56 @@ window.onload = function(){
             }
         })
         let tables = [
-                      {title : "Users", headers : ["Name", "Last name","Email", "Date of creation", "Role"], target : "getAllUsers", edit : showUserModal},
-                      {title : "Messages", headers : ["Sender", "Type","Title", "Body", "Date sent"], target : "getAllMessages"},
-                      {title : "Message types", headers : ["Title", "Number of messages"], target : "getAllMessageTypesCount", edit : showMessageTypeModal, createNew : showMessageTypeModal},
-                      {title : "Listings", headers : ["Name", "Price","Description", "Borough", "Building type", "Address", "Size"], target : "getAllListings", createNew : showListingModal, edit: showListingModal},
-                      {title : "Links", headers : ["Title", "Access level","Link", "File location", "Location",  "Priority", "Parent", "Icon"], target : "getAllLinks", createNew : showLinkModal, edit : showLinkModal},
-                      {title : "Boroughs", headers : ["Title", "Number of listings (Both active and deleted)"], target : "getAllBoroughsCount", createNew: showBoroughModal, edit: showBoroughModal},
-                      {title : "Building types", headers : ["Title", "Number of listings (Both active and deleted)"], target : "getAllBuildingTypesCount", createNew: showBuildingTypeModal, edit: showBuildingTypeModal},
-                      {title : "Survey questions", headers : ["Title", "Number of times answered"], target : "getAllQuestions", createNew : showQuestionModal, edit: showQuestionModal, viewAnswers: "getSpecificQuestionAnswers"},
-                      {title : "Deleted survey questions", headers : ["Title", "Number of times answered"], target : "getAllDeletedQuestions", edit: showQuestionModal, restore : "restoreQuestion", viewAnswers: "getSpecificQuestionAnswers"},
-                      {title : "Room types", headers : ["Title"], target : "getAllRoomTypes", createNew: showRoomTypeModal, edit: showRoomTypeModal},
-                      {title : "Deleted listings", headers : ["Name", "Price","Description", "Borough", "Building type", "Address", "Size"], target : "getAllDeletedListings", edit: showListingModal, restore : "restoreListing"},
+                    {title : "Users", headers : 
+                    [
+                    {Name : "Name", Key : "name"}, {Name : "Last name", Key : "lastName"},{ Name : "Email", Key : "email"}, 
+                    { Name : "Date of creation", Key : "dateCreated"}, 
+                    { Name : "Role", Key : "role_name"}
+                    ], target : "getAllUsers", edit : showUserModal},
+                    {title : "Messages", headers : 
+                    [
+                    {Name : "Sender", Key : "email"}, {Name : "Type", Key : "message_type_name"},{Name : "Title", Key : "title"}, 
+                    {Name : "Body", Key : "message"}, {Name :"Date sent", Key : "dateCreated"}
+                    ], target : "getAllMessages"},
+                    {title : "Message types", headers : 
+                    [
+                    {Name : "Title", Key : "title"}, {Name : "Number of messages", Key : "Count"}
+                    ], target : "getAllMessageTypesCount", edit : showMessageTypeModal, createNew : showMessageTypeModal},
+                    {title : "Listings", headers : 
+                    [
+                    {Name : "Name", Key : "listing_name"}, {Name : "Price", Key : "price", Suffix : "$"},{Name :"Description", Key : "description"}, 
+                    {Name : "Borough", Key : "borough_name"}, {Name :"Building type", Key : "type_name"}, {Name : "Address", Key : "address"}, {Name :"Size", Key : "size", Suffix : " feet"}
+                    ], target : "getAllListings", createNew : showListingModal, edit: showListingModal},
+                    {title : "Links", headers : 
+                    [
+                    {Name : "Title", Key : "link_title"}, {Name : "Access level", Key : "level_title"},{Name : "Link", Key : "href"}, 
+                    {Name : "File location", Key : "flocation"}, {Name :"Location", Key : "location"}, {Name : "Priority", Key : "priority"}, {Name : "Icon", Key : "icon"}
+                    ], target : "getAllLinks", createNew : showLinkModal, edit : showLinkModal},
+                    {title : "Boroughs", headers : 
+                    [
+                    {Name : "Title", Key : "title"}, {Name : "Number of listings (Both active and deleted)", Key : "Count"}
+                    ], target : "getAllBoroughsCount", createNew: showBoroughModal, edit: showBoroughModal},
+                    {title : "Building types", headers : 
+                    [
+                    {Name : "Title", Key : "title"}, {Name : "Number of listings (Both active and deleted)", Key : "Count"}
+                    ], target : "getAllBuildingTypesCount", createNew: showBuildingTypeModal, edit: showBuildingTypeModal},
+                    {title : "Survey questions", headers : 
+                    [
+                    {Name : "Title", Key : "question"}, {Name : "Number of times answered", Key : "Count"}
+                    ], target : "getAllQuestions", createNew : showQuestionModal, edit: showQuestionModal, viewAnswers: "getSpecificQuestionAnswers"},
+                    {title : "Deleted survey questions", headers : 
+                    [
+                    {Name : "Title", Key : "question"}, {Name : "Number of times answered", Key : "Count"}
+                    ], target : "getAllDeletedQuestions", edit: showQuestionModal, restore : "restoreQuestion", viewAnswers: "getSpecificQuestionAnswers"},
+                    {title : "Room types", headers : 
+                    [
+                    {Name : "Title", Key : "title"}
+                    ], target : "getAllRoomTypes", createNew: showRoomTypeModal, edit: showRoomTypeModal},
+                    {title : "Deleted listings", headers : 
+                    [
+                    {Name : "Name", Key : "listing_name"}, {Name : "Price", Key : "price", Suffix : "$"},{Name :"Description", Key : "description"}, 
+                    {Name : "Borough", Key : "borough_name"}, {Name :"Building type", Key : "type_name"}, {Name : "Address", Key : "address"}, {Name :"Size", Key : "size", Suffix : " feet"}
+                    ], target : "getAllDeletedListings", edit: showListingModal, restore : "restoreListing"},
                     ];
         let table = document.querySelector("#element-table");
         let activeTable = 0;
@@ -191,6 +230,7 @@ window.onload = function(){
             let html = "";
             let counter = 1;
             let tableResultHolder = document.querySelector("#table-result-holder");
+            let headers = tables[activeTable].headers;
             if(data.length < 1){
                 html += `<p class="text-center w-100 d-block text-dark">No rows to display</p>`
                 tableResultHolder.innerHTML = "";
@@ -205,11 +245,11 @@ window.onload = function(){
                 ${counter++}
                 </td>
                 `
-                for(let i = 1; i < Object.keys(row).length / 2; i++){
+                for(let header of headers){
                     html += 
                     `
                     <td>
-                    ${row[i]}
+                    ${row[header.Key] + (header.Suffix ? header.Suffix : "")}
                     </td>
                     `
                 }
@@ -307,7 +347,7 @@ window.onload = function(){
             for(let header of headers){
                 html += `
               <th>
-                ${header}
+                ${header.Name}
               </th>`
             }
             html += 
