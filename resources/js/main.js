@@ -118,7 +118,6 @@ window.onload = function(){
         })
     }
     if(currentPage === "admin.html"){
-        let currData;
         let sortType = -1;
         globalData.modalBackground = document.querySelector(".mk-modal");
         window.addEventListener("click", function(e){
@@ -203,7 +202,6 @@ window.onload = function(){
                     {Name :"Size", Key : "size", Suffix : " feet", Sort : {Desc : 12, Asc : 13}}
                     ], target : "getAllDeletedListings", edit: showListingModal, restore : "restoreListing"},
                     ];
-        let table = document.querySelector("#element-table");
         let activeTable = 0;
         let savedTable = readFromLocalStorage("activeAdminTable");
         if(savedTable){
@@ -228,9 +226,11 @@ window.onload = function(){
             tab.addEventListener("click", function(e){
                 e.preventDefault();
                 activeTable = this.dataset.id;
+                //Clear selected sort type before switching tabs
+                //Correct sorting will be preselected during header generation
+                //If any is to be preselected
+                sortType = -1;
                 saveToLocalStorage(activeTable, "activeAdminTable");
-                localStorage.removeItem("selectedAdminHeader");
-                localStorage.removeItem("selecteAdminHeaderPosition");
                 generateTable(this.dataset.id);
                 applyCurrentTab(this.dataset.id);
             })
@@ -240,8 +240,7 @@ window.onload = function(){
         setUpModals();
         //Generates the structure of a table
         function generateTable(){
-            let tableId = activeTable;
-            generateHeaderTableRow(table, tableId)
+            generateHeaderTableRow(activeTable)
             //Makas an AJAX request and fills table with resulting information
             updateTable();
         }
@@ -254,10 +253,10 @@ window.onload = function(){
             }
             readAjax(target, fillTable, params);
         }
-        function applyCurrentTab(tableId){
-            activeTable = tableId;
+        function applyCurrentTab(){
+            activeTable;
             for(let tab of adminTabs){
-                if(tab.dataset.id != tableId){
+                if(tab.dataset.id != activeTable){
                     tab.classList.remove("deep-blue");
                     tab.classList.add("soft-blue");
                 }
@@ -271,7 +270,8 @@ window.onload = function(){
             let html = "";
             let counter = 1;
             let tableResultHolder = document.querySelector("#table-result-holder");
-            let headers = tables[activeTable].headers;
+            let currentTable = tables[activeTable];
+            let headers = currentTable.headers;
             if(data.length < 1){
                 html += `<p class="text-center w-100 d-block text-dark">No rows to display</p>`
                 tableResultHolder.innerHTML = "";
@@ -295,27 +295,27 @@ window.onload = function(){
                     `
                 }
                 html += `<td>`
-                if(tables[activeTable].edit){
+                if(currentTable.edit){
                     html += `<a href="#" data-id="${row["id"]}" class="btn btn-light edit-button">Edit</button>`
                 }
-                if(tables[activeTable].viewAnswers){
-                    html += `<a href="#" data-table="${tables[activeTable].title}" data-id="${row["id"]}" class="btn btn-info view-answers-button">View answers</a>`
+                if(currentTable.viewAnswers){
+                    html += `<a href="#" data-table="${currentTable.title}" data-id="${row["id"]}" class="btn btn-info view-answers-button">View answers</a>`
                 }
-                if(tables[activeTable].restore){
-                    html += `<a href="#"  data-table="${tables[activeTable].title}" data-id="${row["id"]}" class="btn btn-success restore-button">Restore</a>`
+                if(currentTable.restore){
+                    html += `<a href="#"  data-table="${currentTable.title}" data-id="${row["id"]}" class="btn btn-success restore-button">Restore</a>`
                 }
                 else{
-                    html += `<a href="#" data-table="${tables[activeTable].title}" data-id="${row["id"]}" class="btn btn-danger delete-button">Delete</a>`
+                    html += `<a href="#" data-table="${currentTable.title}" data-id="${row["id"]}" class="btn btn-danger delete-button">Delete</a>`
                 }
                 html += `</td></tr>`;
             }
 
             //Code for generating the "Insert new" button;
             //if the table should show a create new button
-            let createNew = tables[activeTable].createNew;
-            let edit = tables[activeTable].edit;
-            let viewAnswers = tables[activeTable].viewAnswers;
-            let restore = tables[activeTable].restore;
+            let createNew = currentTable.createNew;
+            let edit = currentTable.edit;
+            let viewAnswers = currentTable.viewAnswers;
+            let restore = currentTable.restore;
             if(createNew)
             {
                 html += 
@@ -376,9 +376,10 @@ window.onload = function(){
                 })
             }
         }
-        function generateHeaderTableRow(table, tableId){
+        function generateHeaderTableRow(){
             let headerTableRow = document.querySelector("#header-table-row");
-            let headers = tables[tableId].headers;
+            let currentTable = tables[activeTable];
+            let headers = currentTable.headers;
             let html = "";
             html += 
             `
@@ -406,15 +407,17 @@ window.onload = function(){
             headerTableRow.innerHTML = html;
             let sortButtons = document.querySelectorAll(".sortButton");
 
-            let selectedHeader = readFromLocalStorage("selectedAdminHeader");
-            let selectedPosition = readFromLocalStorage("selecteAdminHeaderPosition");
+            let selectedHeader = readFromLocalStorage("selectedAdminHeaderFor" + currentTable.title.replaceAll(" ", "_"));
+            let selectedPosition = readFromLocalStorage("selecteAdminHeaderPositionFor" + currentTable.title.replaceAll(" ", "_"));
+
+            let preselectSort = selectedHeader != null && selectedPosition != null;
 
             for(let button of sortButtons){
-                if(selectedHeader && selectedPosition){
+                if(preselectSort){
                     let bHeader = button.dataset.header;
 
                     if(bHeader == selectedHeader){
-                        //Preselect this header
+                        //Preselect saved header
                         let newIcon = "";
                         let currentState = -1;
                         if(selectedPosition == "Asc"){
@@ -427,7 +430,7 @@ window.onload = function(){
                         }
                         button.dataset.state = currentState;
                         button.innerHTML = button.innerHTML + newIcon;
-                        sortType = tables[tableId].headers[bHeader].Sort[selectedPosition];
+                        sortType = headers[bHeader].Sort[selectedPosition];
                         removeAllOtherSorts(bHeader);
                     }
                 }
@@ -436,11 +439,10 @@ window.onload = function(){
                     let header = parseInt(this.dataset.header);
                     let currentState = parseInt(this.dataset.state);
                     let direction = "";
-                    let removeIcon = true;
                     let newIcon = "";
+                    //Flip the state of the element on click
                     switch(currentState){
                         case -1:
-                            removeIcon = false;
                         case 1:
                             currentState = 0;
                             direction = "Asc";
@@ -453,16 +455,21 @@ window.onload = function(){
                             break;
                     }
                     this.dataset.state = currentState;
-                    sortType = tables[tableId].headers[header].Sort[direction];
+
                     let currentText = this.innerHTML;
-                    if(removeIcon){
-                        currentText = currentText.replace(/(↑)|(↓)/, "");
-                    }
+                    currentText = currentText.replace(/(↑)|(↓)/, "");
                     currentText += newIcon;
                     this.innerHTML = currentText;
+
+                    //Remove sort representation on all other sortable fields in the table
                     removeAllOtherSorts(header);
-                    saveToLocalStorage(header, "selectedAdminHeader");
-                    saveToLocalStorage(direction, "selecteAdminHeaderPosition");
+                    //Save the header that the user is currently sorting by for this table
+                    saveToLocalStorage(header, "selectedAdminHeaderFor" + currentTable.title.replaceAll(" ", "_"));
+                    //Save the position that the user is currently sorting by (Desc/Asc) for this table
+                    saveToLocalStorage(direction, "selecteAdminHeaderPositionFor" + currentTable.title.replaceAll(" ", "_"));
+                    //Save the newly selected sort value
+                    sortType = headers[header].Sort[direction];
+                    //Make a call with the new data
                     updateTable();
                 })
             }
