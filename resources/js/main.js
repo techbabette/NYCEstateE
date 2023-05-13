@@ -133,7 +133,7 @@ window.onload = function(){
                     {Name : "Email", Key : "email", Sort : {Desc : 8, Asc : 9}}, 
                     {Name : "Date of creation", Key : "dateCreated", Sort : {Desc : 4, Asc : 5}}, 
                     {Name : "Role", Key : "role_name", Sort : {Desc : 6, Asc : 7}}
-                    ], target : "getAllUsers", edit : showUserModal},
+                    ], target : "getAllUsers", edit : showUserModal, defaultSort : {Header : "Date of creation", Position : "Desc" }},
                     {title : "Messages", headers : 
                     [
                     {Name : "Sender", Key : "email", Sort : {Desc : 0, Asc : 1}},
@@ -141,12 +141,12 @@ window.onload = function(){
                     {Name : "Title", Key : "title", Sort : {Desc : 4, Asc : 5}}, 
                     {Name : "Body", Key : "message", Sort : {Desc : 6, Asc : 7}},
                     {Name :"Date sent", Key : "dateCreated", Sort : {Desc : 8, Asc : 9}}
-                    ], target : "getAllMessages"},
+                    ], target : "getAllMessages", defaultSort : {Header : 4, Position : "Desc"}},
                     {title : "Message types", headers : 
                     [
                     {Name : "Title", Key : "title", Sort : {Desc : 0, Asc : 1}},
                     {Name : "Number of messages", Key : "Count", Sort : {Desc : 2, Asc : 3}}
-                    ], target : "getAllMessageTypesCount", edit : showMessageTypeModal, createNew : showMessageTypeModal},
+                    ], target : "getAllMessageTypesCount", edit : showMessageTypeModal, createNew : showMessageTypeModal, defaultSort : {Header : 1, Position : "Desc"}},
                     {title : "Listings", headers : 
                     [
                     {Name : "Name", Key : "listing_name", Sort : {Desc : 0, Asc : 1} }, 
@@ -156,7 +156,7 @@ window.onload = function(){
                     {Name :"Building type", Key : "type_name", Sort : {Desc : 8, Asc : 9}},
                     {Name : "Address", Key : "address", Sort : {Desc : 10, Asc : 11}}, 
                     {Name :"Size", Key : "size", Suffix : " feet", Sort : {Desc : 12, Asc : 13}}
-                    ], target : "getAllListings", createNew : showListingModal, edit: showListingModal},
+                    ], target : "getAllListings", createNew : showListingModal, edit: showListingModal, defaultSort : {Header : 0, Position : "Desc"}},
                     {title : "Links", headers : 
                     [
                     {Name : "Title", Key : "link_title", Sort : {Desc : 0, Asc : 1}}, 
@@ -166,31 +166,31 @@ window.onload = function(){
                     {Name :"Location", Key : "location", Sort : {Desc : 8, Asc : 9}},
                     {Name : "Priority", Key : "priority", Sort : {Desc : 10, Asc : 11}},
                     {Name : "Icon", Key : "icon", Sort : {Desc : 14, Asc : 15}}
-                    ], target : "getAllLinks", createNew : showLinkModal, edit : showLinkModal},
+                    ], target : "getAllLinks", createNew : showLinkModal, edit : showLinkModal, defaultSort : {Header : 5, Position : "Desc"}},
                     {title : "Boroughs", headers : 
                     [
                     {Name : "Title", Key : "title", Sort : {Desc : 0, Asc : 1}}, 
                     {Name : "Number of listings (Both active and deleted)", Key : "Count", Sort : {Desc : 2, Asc : 3}}
-                    ], target : "getAllBoroughsCount", createNew: showBoroughModal, edit: showBoroughModal},
+                    ], target : "getAllBoroughsCount", createNew: showBoroughModal, edit: showBoroughModal, defaultSort : {Header : 1, Position : "Desc"}},
                     {title : "Building types", headers : 
                     [
                     {Name : "Title", Key : "title", Sort : {Desc : 0, Asc : 1}}, 
                     {Name : "Number of listings (Both active and deleted)", Key : "Count", Sort : {Desc : 2, Asc : 3}}
-                    ], target : "getAllBuildingTypesCount", createNew: showBuildingTypeModal, edit: showBuildingTypeModal},
+                    ], target : "getAllBuildingTypesCount", createNew: showBuildingTypeModal, edit: showBuildingTypeModal, defaultSort : {Header : 1, Position : "Desc"}},
                     {title : "Survey questions", headers : 
                     [
                     {Name : "Title", Key : "question", Sort : {Desc : 0, Asc : 1}}, 
                     {Name : "Number of times answered", Key : "Count", Sort : {Desc : 2, Asc : 3}}
-                    ], target : "getAllQuestions", createNew : showQuestionModal, edit: showQuestionModal, viewAnswers: "getSpecificQuestionAnswers"},
+                    ], target : "getAllQuestions", createNew : showQuestionModal, edit: showQuestionModal, viewAnswers: "getSpecificQuestionAnswers", defaultSort : {Header : 1, Position : "Desc"}},
                     {title : "Deleted survey questions", headers : 
                     [
                     {Name : "Title", Key : "question", Sort : {Desc : 0, Asc : 1}}, 
                     {Name : "Number of times answered", Key : "Count", Sort : {Desc : 2, Asc : 3}}
-                    ], target : "getAllDeletedQuestions", edit: showQuestionModal, restore : "restoreQuestion", viewAnswers: "getSpecificQuestionAnswers"},
+                    ], target : "getAllDeletedQuestions", edit: showQuestionModal, restore : "restoreQuestion", viewAnswers: "getSpecificQuestionAnswers", defaultSort : {Header : 1, Position : "Desc"}},
                     {title : "Room types", headers : 
                     [
                     {Name : "Title", Key : "title", Sort : {Desc : 0, Asc : 1}}
-                    ], target : "getAllRoomTypes", createNew: showRoomTypeModal, edit: showRoomTypeModal},
+                    ], target : "getAllRoomTypes", createNew: showRoomTypeModal, edit: showRoomTypeModal, defaultSort : {Header : "Title", Position : "Desc"}},
                     {title : "Deleted listings", headers : 
                     [
                     {Name : "Name", Key : "listing_name", Sort : {Desc : 0, Asc : 1} }, 
@@ -200,7 +200,7 @@ window.onload = function(){
                     {Name :"Building type", Key : "type_name", Sort : {Desc : 8, Asc : 9}},
                     {Name : "Address", Key : "address", Sort : {Desc : 10, Asc : 11}}, 
                     {Name :"Size", Key : "size", Suffix : " feet", Sort : {Desc : 12, Asc : 13}}
-                    ], target : "getAllDeletedListings", edit: showListingModal, restore : "restoreListing"},
+                    ], target : "getAllDeletedListings", edit: showListingModal, restore : "restoreListing", defaultSort : {Header : "Name", Position : "Desc"}},
                     ];
         let activeTable = 0;
         let savedTable = readFromLocalStorage("activeAdminTable");
@@ -407,31 +407,41 @@ window.onload = function(){
             headerTableRow.innerHTML = html;
             let sortButtons = document.querySelectorAll(".sortButton");
 
-            let selectedHeader = readFromLocalStorage("selectedAdminHeaderFor" + currentTable.title.replaceAll(" ", "_"));
-            let selectedPosition = readFromLocalStorage("selecteAdminHeaderPositionFor" + currentTable.title.replaceAll(" ", "_"));
+            let selectedHeaderId = readFromLocalStorage("selectedAdminHeaderFor" + currentTable.title.replaceAll(" ", "_"));
+            let selectedHeaderPosition = readFromLocalStorage("selecteAdminHeaderPositionFor" + currentTable.title.replaceAll(" ", "_"));
 
-            let preselectSort = selectedHeader != null && selectedPosition != null;
+            let preselectSort = selectedHeaderId != null && selectedHeaderPosition != null;
+
+            let defaultSort = currentTable.defaultSort;
+
+            //If supposed to preselect to default value
+            if(!preselectSort && defaultSort){
+                //This is faster if defaultSort has index instead of name, harder to use/read
+                if(typeof defaultSort.Header === "string"){
+                    let headerTableElement = headers.filter(el => el.Name == defaultSort.Header)[0];
+                    selectedHeaderId = headers.indexOf(headerTableElement);
+                }
+                else{
+                    selectedHeaderId = defaultSort.Header;
+                }
+
+                selectedHeaderPosition = defaultSort.Position;
+
+                //If no id found, do not select a default
+                if(typeof parseInt(selectedHeaderId) !== "number"){
+                    defaultSort = false;
+                    console.warn("Invalid header passed as an argument for defaultSort");
+                }
+            }
+
+            let supposedToSort = preselectSort || defaultSort;
 
             for(let button of sortButtons){
-                if(preselectSort){
+                if(supposedToSort){
                     let bHeader = button.dataset.header;
-
-                    if(bHeader == selectedHeader){
-                        //Preselect saved header
-                        let newIcon = "";
-                        let currentState = -1;
-                        if(selectedPosition == "Asc"){
-                            newIcon = "	&uarr;";
-                            currentState = 0;
-                        }
-                        else if(selectedPosition == "Desc"){
-                            newIcon = "	&darr;";
-                            currentState = 1;
-                        }
-                        button.dataset.state = currentState;
-                        button.innerHTML = button.innerHTML + newIcon;
-                        sortType = headers[bHeader].Sort[selectedPosition];
-                        removeAllOtherSorts(bHeader);
+                    if(bHeader == selectedHeaderId){
+                        //Preselect saved/default header
+                        preselectSortHeader(button, selectedHeaderPosition, selectedHeaderId);
                     }
                 }
                 addEventListenerOnce("click", button, function(e){
@@ -472,6 +482,23 @@ window.onload = function(){
                     //Make a call with the new data
                     updateTable();
                 })
+            }
+            function preselectSortHeader(button, selectedPosition, selectedHeader){
+                let newIcon = "";
+                let currentState = -1;
+                if(selectedPosition == "Asc"){
+                    newIcon = "	&uarr;";
+                    currentState = 0;
+                }
+                else if(selectedPosition == "Desc"){
+                    newIcon = "	&darr;";
+                    currentState = 1;
+                }
+                button.dataset.state = currentState;
+                button.innerHTML = button.innerHTML + newIcon;
+                sortType = headers[selectedHeader].Sort[selectedPosition];
+                // console.log(selectedPosition);
+                removeAllOtherSorts(selectedHeader);
             }
         }
         function removeAllOtherSorts(currentHeader){
