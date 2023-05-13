@@ -129,20 +129,24 @@ window.onload = function(){
         let tables = [
                     {title : "Users", headers : 
                     [
-                    {Name : "Name", Key : "name", Sort : {Desc : 0, Asc : 1}}, {Name : "Last name", Key : "lastName", Sort : {Desc : 2, Asc : 3}},
+                    {Name : "Name", Key : "name", Sort : {Desc : 0, Asc : 1}},
+                    {Name : "Last name", Key : "lastName", Sort : {Desc : 2, Asc : 3}},
                     {Name : "Email", Key : "email", Sort : {Desc : 8, Asc : 9}}, 
                     {Name : "Date of creation", Key : "dateCreated", Sort : {Desc : 4, Asc : 5}}, 
                     {Name : "Role", Key : "role_name", Sort : {Desc : 6, Asc : 7}}
                     ], target : "getAllUsers", edit : showUserModal},
                     {title : "Messages", headers : 
                     [
-                    {Name : "Sender", Key : "email", Sort : {Desc : 0, Asc : 1}}, {Name : "Type", Key : "message_type_name", Sort : {Desc : 2, Asc : 3}},
+                    {Name : "Sender", Key : "email", Sort : {Desc : 0, Asc : 1}},
+                    {Name : "Type", Key : "message_type_name", Sort : {Desc : 2, Asc : 3}},
                     {Name : "Title", Key : "title", Sort : {Desc : 4, Asc : 5}}, 
-                    {Name : "Body", Key : "message", Sort : {Desc : 6, Asc : 7}}, {Name :"Date sent", Key : "dateCreated", Sort : {Desc : 8, Asc : 9}}
+                    {Name : "Body", Key : "message", Sort : {Desc : 6, Asc : 7}},
+                    {Name :"Date sent", Key : "dateCreated", Sort : {Desc : 8, Asc : 9}}
                     ], target : "getAllMessages"},
                     {title : "Message types", headers : 
                     [
-                    {Name : "Title", Key : "title", Sort : {Desc : 0, Asc : 1}}, {Name : "Number of messages", Key : "Count", Sort : {Desc : 2, Asc : 3}}
+                    {Name : "Title", Key : "title", Sort : {Desc : 0, Asc : 1}},
+                    {Name : "Number of messages", Key : "Count", Sort : {Desc : 2, Asc : 3}}
                     ], target : "getAllMessageTypesCount", edit : showMessageTypeModal, createNew : showMessageTypeModal},
                     {title : "Listings", headers : 
                     [
@@ -156,28 +160,37 @@ window.onload = function(){
                     ], target : "getAllListings", createNew : showListingModal, edit: showListingModal},
                     {title : "Links", headers : 
                     [
-                    {Name : "Title", Key : "link_title"}, {Name : "Access level", Key : "level_title"},{Name : "Link", Key : "href"}, 
-                    {Name : "File location", Key : "flocation"}, {Name :"Location", Key : "location"}, {Name : "Priority", Key : "priority"}, {Name : "Icon", Key : "icon"}
+                    {Name : "Title", Key : "link_title", Sort : {Desc : 0, Asc : 1}}, 
+                    {Name : "Access level", Key : "level_title", Sort : {Desc : 2, Asc : 3}},
+                    {Name : "Link", Key : "href", Sort : {Desc : 4, Asc : 5}}, 
+                    {Name : "File location", Key : "flocation", Sort : {Desc : 6, Asc : 7}},
+                    {Name :"Location", Key : "location", Sort : {Desc : 8, Asc : 9}},
+                    {Name : "Priority", Key : "priority", Sort : {Desc : 10, Asc : 11}},
+                    {Name : "Icon", Key : "icon", Sort : {Desc : 14, Asc : 15}}
                     ], target : "getAllLinks", createNew : showLinkModal, edit : showLinkModal},
                     {title : "Boroughs", headers : 
                     [
-                    {Name : "Title", Key : "title", Sort : {Desc : 0, Asc : 1}}, {Name : "Number of listings (Both active and deleted)", Key : "Count"}
+                    {Name : "Title", Key : "title", Sort : {Desc : 0, Asc : 1}}, 
+                    {Name : "Number of listings (Both active and deleted)", Key : "Count", Sort : {Desc : 2, Asc : 3}}
                     ], target : "getAllBoroughsCount", createNew: showBoroughModal, edit: showBoroughModal},
                     {title : "Building types", headers : 
                     [
-                    {Name : "Title", Key : "title", Sort : {Desc : 0, Asc : 1}}, {Name : "Number of listings (Both active and deleted)", Key : "Count"}
+                    {Name : "Title", Key : "title", Sort : {Desc : 0, Asc : 1}}, 
+                    {Name : "Number of listings (Both active and deleted)", Key : "Count", Sort : {Desc : 2, Asc : 3}}
                     ], target : "getAllBuildingTypesCount", createNew: showBuildingTypeModal, edit: showBuildingTypeModal},
                     {title : "Survey questions", headers : 
                     [
-                    {Name : "Title", Key : "question"}, {Name : "Number of times answered", Key : "Count"}
+                    {Name : "Title", Key : "question", Sort : {Desc : 0, Asc : 1}}, 
+                    {Name : "Number of times answered", Key : "Count", Sort : {Desc : 2, Asc : 3}}
                     ], target : "getAllQuestions", createNew : showQuestionModal, edit: showQuestionModal, viewAnswers: "getSpecificQuestionAnswers"},
                     {title : "Deleted survey questions", headers : 
                     [
-                    {Name : "Title", Key : "question"}, {Name : "Number of times answered", Key : "Count"}
+                    {Name : "Title", Key : "question", Sort : {Desc : 0, Asc : 1}}, 
+                    {Name : "Number of times answered", Key : "Count", Sort : {Desc : 2, Asc : 3}}
                     ], target : "getAllDeletedQuestions", edit: showQuestionModal, restore : "restoreQuestion", viewAnswers: "getSpecificQuestionAnswers"},
                     {title : "Room types", headers : 
                     [
-                    {Name : "Title", Key : "title"}
+                    {Name : "Title", Key : "title", Sort : {Desc : 0, Asc : 1}}
                     ], target : "getAllRoomTypes", createNew: showRoomTypeModal, edit: showRoomTypeModal},
                     {title : "Deleted listings", headers : 
                     [

@@ -1,12 +1,27 @@
 <?php
-function getAllQuestions(){
+function getAllQuestions($sort, $deleted){
     include ("../../connection.php");
 
     $statement = "SELECT q.question_id AS id, q.question, COUNT(ua.user_id) as Count FROM questions q
                   LEFT JOIN answers a ON a.question_id = q.question_id
                   LEFT JOIN useranswers ua ON a.answer_id = ua.answer_id
-                  WHERE q.dateDeleted IS NULL
-                  GROUP BY q.question_id, q.question";
+                  WHERE q.dateDeleted";
+
+    $deletedStub = $deleted ? " IS NOT NULL" : " IS NULL";
+
+    $statement.= $deletedStub;
+
+    $statement.=" GROUP BY q.question_id, q.question";
+
+    $orderByStub = " ORDER BY ";
+
+    if($sort == 0) $orderByStub.= " q.question DESC";
+    if($sort == 1) $orderByStub.= " q.question ASC";
+
+    if($sort == 2) $orderByStub.= " COUNT(ua.user_id) DESC";
+    if($sort == 3) $orderByStub.= " COUNT(ua.user_id) ASC";
+
+    $statement.=$orderByStub;
     $prepSt = $conn->prepare($statement);
 
     $prepSt->execute();

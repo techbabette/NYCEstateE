@@ -9,13 +9,21 @@ function getAllBoroughs(){
 
     return $prepSt->fetchAll();
 }
-function getAllBoroughsCount(){
+function getAllBoroughsCount($sort){
     include ("../../connection.php");
 
     $statement = "SELECT b.borough_id AS id, borough_name as title, COUNT(l.listing_id) as Count
                   FROM boroughs b LEFT JOIN listings l ON b.borough_id = l.borough_id
-                  GROUP BY b.borough_id, borough_name
-                  ORDER BY COUNT(l.listing_id) DESC";
+                  GROUP BY b.borough_id, borough_name";
+    $orderByStub = " ORDER BY ";
+
+    if($sort == 0) $orderByStub.= " borough_name DESC";
+    if($sort == 1) $orderByStub.= " borough_name ASC";
+
+    if($sort == 2) $orderByStub.= " COUNT(l.listing_id) DESC";
+    if($sort == 3) $orderByStub.= " COUNT(l.listing_id) ASC";
+
+    $statement.=$orderByStub;
     $prepSt = $conn->prepare($statement);
 
     $prepSt->execute();
