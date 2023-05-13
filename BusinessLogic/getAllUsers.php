@@ -6,18 +6,7 @@ require("../DataAccess/generalFunctions.php");
 require("../DataAccess/userFunctions.php");
 $result;
 
-$sort = 5;
-
-// $json_params = file_get_contents("php://input");
-
-// if (strlen($json_params) > 0 && isValidJSON($json_params)){
-//     $decoded_params = json_decode($json_params, true);
-//     $_POST = $decoded_params;
-// }
-
-// if(isset($_POST["sort"]) || isset($_GET["sort"])){
-//     $sort = $_POST["sort"] ? $_POST["sort"] : $_GET["sort"];
-// }
+$sort = -1;
 
 if(isset($_GET["sort"])){
     $sort = $_GET["sort"];

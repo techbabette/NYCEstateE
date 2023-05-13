@@ -136,8 +136,8 @@ window.onload = function(){
                     ], target : "getAllUsers", edit : showUserModal},
                     {title : "Messages", headers : 
                     [
-                    {Name : "Sender", Key : "email"}, {Name : "Type", Key : "message_type_name"},{Name : "Title", Key : "title"}, 
-                    {Name : "Body", Key : "message"}, {Name :"Date sent", Key : "dateCreated"}
+                    {Name : "Sender", Key : "email", Sort : {Desc : 0, Asc : 1}}, {Name : "Type", Key : "message_type_name", Sort : {Desc : 2, Asc : 3}},{Name : "Title", Key : "title", Sort : {Desc : 4, Asc : 5}}, 
+                    {Name : "Body", Key : "message", Sort : {Desc : 6, Asc : 7}}, {Name :"Date sent", Key : "dateCreated", Sort : {Desc : 8, Asc : 9}}
                     ], target : "getAllMessages"},
                     {title : "Message types", headers : 
                     [

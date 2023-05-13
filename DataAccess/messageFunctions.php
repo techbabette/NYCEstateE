@@ -22,14 +22,34 @@ function getAllMessageTypesCount(){
 
     return $prepSt->fetchAll();
 }
-function getAllMessages(){
+function getAllMessages($sort = -1){
     include ("../../connection.php");
 
     $statement = "SELECT m.message_id AS id, email, message_type_name, title, message, m.dateCreated
                   FROM messages m 
                   INNER JOIN messagetypes mt ON m.message_type_id = mt.message_type_id
-                  INNER JOIN users u ON u.user_id = m.user_id
-                  ORDER BY m.dateCreated DESC";
+                  INNER JOIN users u ON u.user_id = m.user_id";
+    $orderByStub = " ORDER BY";
+
+    if($sort == 0) $orderByStub.= " email DESC";
+    if($sort == 1) $orderByStub.= " email ASC";
+
+    if($sort == 2) $orderByStub.= " message_type_name DESC";
+    if($sort == 3) $orderByStub.= " message_type_name ASC";
+
+    if($sort == 4) $orderByStub.= " title DESC";
+    if($sort == 5) $orderByStub.= " title ASC";
+
+    if($sort == 6) $orderByStub.= " message DESC";
+    if($sort == 7) $orderByStub.= " message ASC";
+
+    if($sort == 8) $orderByStub.= " m.dateCreated DESC";
+    if($sort == 9) $orderByStub.= " m.dateCreated ASC";
+
+    if($sort == -1) $orderByStub.= " m.dateCreated DESC";
+
+    $statement.=$orderByStub;
+
     $prepSt = $conn->prepare($statement);
 
     $prepSt->execute();
