@@ -119,6 +119,7 @@ window.onload = function(){
     }
     if(currentPage === "admin.html"){
         let currData;
+        let sortType = -1;
         globalData.modalBackground = document.querySelector(".mk-modal");
         window.addEventListener("click", function(e){
             if(e.target === globalData.modalBackground){
@@ -128,9 +129,10 @@ window.onload = function(){
         let tables = [
                     {title : "Users", headers : 
                     [
-                    {Name : "Name", Key : "name"}, {Name : "Last name", Key : "lastName"},{ Name : "Email", Key : "email"}, 
-                    { Name : "Date of creation", Key : "dateCreated"}, 
-                    { Name : "Role", Key : "role_name"}
+                    {Name : "Name", Key : "name", Sort : {Desc : 0, Asc : 1}}, {Name : "Last name", Key : "lastName", Sort : {Desc : 2, Asc : 3}},
+                    {Name : "Email", Key : "email", Sort : {Desc : 8, Asc : 9}}, 
+                    {Name : "Date of creation", Key : "dateCreated", Sort : {Desc : 4, Asc : 5}}, 
+                    {Name : "Role", Key : "role_name", Sort : {Desc : 6, Asc : 7}}
                     ], target : "getAllUsers", edit : showUserModal},
                     {title : "Messages", headers : 
                     [
@@ -211,7 +213,16 @@ window.onload = function(){
             generateHeaderTableRow(table, tableId)
             let target = tables[tableId].target;
             //Makas an AJAX request and fills table with resulting information
-            readAjax(target, fillTable);
+            readAjax(target, fillTable, {});
+        }
+        function updateTable(){
+            let tableId = activeTable;
+            let target = tables[tableId].target;
+            let params = {};
+            if(sortType != -1){
+                params.sort = sortType;
+            }
+            readAjax(target, fillTable, params);
         }
         function applyCurrentTab(tableId){
             activeTable = tableId;
@@ -344,11 +355,17 @@ window.onload = function(){
             <th>
             #
             </th>`
+            let headerCount = 0;
             for(let header of headers){
+                let sortHtml = "";
+                if(header.Sort){
+                    sortHtml = `data-state=-1 data-header="${headerCount}" class="clickable sortButton"`;
+                }
                 html += `
-              <th>
+              <th ${sortHtml}>
                 ${header.Name}
               </th>`
+              headerCount++;
             }
             html += 
             `
@@ -357,10 +374,55 @@ window.onload = function(){
             </th>
             `
             headerTableRow.innerHTML = html;
+            let sortButtons = document.querySelectorAll(".sortButton");
+            for(let button of sortButtons){
+                addEventListenerOnce("click", button, function(e){
+                    e.preventDefault();
+                    let header = parseInt(this.dataset.header);
+                    let currentState = parseInt(this.dataset.state);
+                    let direction = "";
+                    let removeIcon = true;
+                    let newIcon = "";
+                    switch(currentState){
+                        case -1:
+                            removeIcon = false;
+                        case 1:
+                            currentState = 0;
+                            direction = "Asc";
+                            newIcon = "	&uarr;";
+                            break;
+                        case 0:
+                            currentState = 1;
+                            direction = "Desc";
+                            newIcon = "	&darr;";
+                            break;
+                    }
+                    this.dataset.state = currentState;
+                    sortType = tables[tableId].headers[header].Sort[direction];
+                    let currentText = this.innerHTML;
+                    if(removeIcon){
+                        currentText = currentText.replace(/(↑)|(↓)/, "");
+                    }
+                    currentText += newIcon;
+                    this.innerHTML = currentText;
+                    removeAllOtherSorts(header);
+                    updateTable();
+                })
+            }
+        }
+        function removeAllOtherSorts(currentHeader){
+            let sortButtons = document.querySelectorAll(".sortButton");
+            for(let button of sortButtons){
+                if(button.dataset.state == -1) continue;
+                if(button.dataset.header != currentHeader){
+                    console.log(button);
+                    button.dataset.state = -1;
+                    button.innerHTML = button.innerHTML.replace(/(↑)|(↓)/, "");
+                }
+            }
         }
         function adminDeleteRequest(table, elementId){
             let data = {table, id : elementId};
-            console.log(data);
             submitAjax("deleteFromTable", showResultGenerateTable, data, {closeModal : false});
         }
         function showResultGenerateTable(data, args){
@@ -485,7 +547,6 @@ window.onload = function(){
                 boroughTitle.innerText = "Edit borough";
                 boroughSubmitButton.innerText = "Edit borough";
                 submitAjax("getSpecificBorough", function(data){
-                    console.log(data.title);
                     boroughNameField.value = data.title;
                 }, data);
             }
@@ -526,7 +587,6 @@ window.onload = function(){
                 messageTypeTitle.innerText = "Edit message type";
                 messageTypeSubmitButton.innerText = "Edit message type";
                 submitAjax("getSpecificMessageType", function(data){
-                    console.log(data.title);
                     messageTypeNameField.value = data.title;
                 }, data);
             }
@@ -659,7 +719,6 @@ window.onload = function(){
             if(type == "edit"){
                 let data = {id : existingId};
                 submitAjax("getSpecificListing", function(data){
-                    console.log(data);
                     let core = data.main;
                     let photo = data.photo;
                     let rooms = data.rooms;
@@ -770,7 +829,7 @@ window.onload = function(){
         }
         function setupUserModal(){
             let userRoleSelect = document.querySelector("#userRole"); 
-            readAjax("getAllRoles", fillDropdown, [userRoleSelect]);
+            readAjax("getAllRoles", fillDropdown, {}, [userRoleSelect]);
 
             let modalSubmitButton = document.querySelector("#user-submit");
             addEventListenerOnce("click", modalSubmitButton, function(e){
@@ -783,9 +842,9 @@ window.onload = function(){
             let listingBuildingType = document.querySelector("#listingBuildingType");
             let listingRoomsList = document.querySelector("#listingRoomsList");
 
-            readAjax("getAllBoroughs", fillDropdown, [boroughSelect]);
-            readAjax("getAllBuildingTypes", fillDropdown, [listingBuildingType]);
-            readAjax("getAllRoomTypes", fillDropdown, [listingRoomsList]);
+            readAjax("getAllBoroughs", fillDropdown, {}, [boroughSelect]);
+            readAjax("getAllBuildingTypes", fillDropdown, {}, [listingBuildingType]);
+            readAjax("getAllRoomTypes", fillDropdown, {}, [listingRoomsList]);
             
 
             let fileReader = new FileReader();
@@ -818,10 +877,10 @@ window.onload = function(){
         }
         function setupLinkModal(){
             let accessLevelSelect = document.querySelector("#LinkReqLevel");
-            readAjax("getAllAccessLevels", fillDropdown, [accessLevelSelect]);
+            readAjax("getAllAccessLevels", fillDropdown, {}, [accessLevelSelect]);
 
             let locationSelect = document.querySelector("#LinkLocation");
-            readAjax("getAllNavigationLocations", fillDropdown, [locationSelect, true]);
+            readAjax("getAllNavigationLocations", fillDropdown, {}, [locationSelect, true]);
 
             let modalSubmitButton = document.querySelector("#link-submit");
             addEventListenerOnce("click", modalSubmitButton, function(e){
@@ -989,7 +1048,6 @@ window.onload = function(){
 
             if(type === "create"){
                 if(testImage(listingPhotoField, "")) {
-                    console.log("Here");
                     errors++
                 };
             }
@@ -1349,7 +1407,7 @@ window.onload = function(){
         let messageTypeSelect = document.querySelector("#messageType");
         let messageTitleField = document.querySelector("#messageTitle");
         let messageBodyField = document.querySelector("#messageBody");
-        readAjax("getAllMessageTypes", fillDropdown, [messageTypeSelect]);
+        readAjax("getAllMessageTypes", fillDropdown, {}, [messageTypeSelect]);
 
         let sendMessageButton = document.querySelector("#sendMessage");
         addEventListenerOnce("click", sendMessageButton, function(e){
@@ -1432,9 +1490,9 @@ window.onload = function(){
             document.querySelector("#listingsSort").value = selectedSort;
         }
 
-        readAjax("getAllBoroughsWithListings", fillCheckbox, boroughArgs);
+        readAjax("getAllBoroughsWithListings", fillCheckbox, {}, boroughArgs);
 
-        readAjax("getAllBuildingTypesWithListings", fillCheckbox, buildingTypeArgs);
+        readAjax("getAllBuildingTypesWithListings", fillCheckbox, {}, buildingTypeArgs);
 
         //Get preexisting filters from local storage, then query for listings
 
@@ -1482,7 +1540,7 @@ window.onload = function(){
     }
     if(currentPage === "index.html"){
         let boroughSelect = document.querySelector("#landing-input");
-        readAjax("getAllBoroughsWithListings", fillDropdown, [boroughSelect]);
+        readAjax("getAllBoroughsWithListings", fillDropdown, {}, [boroughSelect]);
 
         let searchButton = document.querySelector("#landing-search");
         addEventListenerOnce("click", searchButton, function(e){
@@ -1823,13 +1881,12 @@ function flipListingFavoriteIcon(args){
         if(button.dataset.id == listingId){
             let iconHolder = button.firstElementChild;
             iconHolder.dataset.icon = iconHolder.dataset.icon === "mdi:cards-heart" ? "mdi:cards-heart-outline" : "mdi:cards-heart";
-            console.log("Here");
         }
     }
 }
 
 function getQuestionsForUser(){
-    readAjax("getQuestionsForUser", displaySurveyQuestions);
+    readAjax("getQuestionsForUser", displaySurveyQuestions, {});
 }
 
 function setGlobal(data, args){
@@ -2077,7 +2134,7 @@ function generateNavbar(response){
         let logoutButton = document.querySelector("#logoutButton");
         logoutButton.addEventListener("click", function(e){
             e.preventDefault();
-            readAjax("logout", redirectSuccess, { newLocation : "login.html", landing : false});
+            readAjax("logout", redirectSuccess, {}, { newLocation : "login.html", landing : false});
         })
     }
 
@@ -2269,15 +2326,15 @@ function redirectSuccess(data, args){
     redirect(args);
 }
 
-function readAjax(url, resultFunction, args = {}){
+function readAjax(url, resultFunction, params, args = {}){
     let request = createRequest();
     request.onreadystatechange = function(){
         if(request.readyState == 4){
             handleServerResponse(resultFunction, args, request);
         }
     }
-    request.open("GET", ajaxPath+url+".php");
-    request.send();
+    request.open("GET", ajaxPath+url+".php?" + new URLSearchParams(params));
+    request.send(JSON.stringify(params));
 }
 
 function submitAjax(url, resultFunction, data, args = {}){
@@ -2308,7 +2365,7 @@ function submitFormDataAjax(url, resultFunction, data, args = {}){
 
 function handleServerResponse(resultFunction, args, request){
     if(request.status >= 200 && request.status < 300){
-        console.log(request.responseText);
+        // console.log(request.responseText);
         let data = JSON.parse(request.responseText);
         if(args != {}){
             resultFunction(data.general, args);
