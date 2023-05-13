@@ -141,7 +141,7 @@ window.onload = function(){
                     ], target : "getAllMessages"},
                     {title : "Message types", headers : 
                     [
-                    {Name : "Title", Key : "title"}, {Name : "Number of messages", Key : "Count"}
+                    {Name : "Title", Key : "title", Sort : {Desc : 0, Asc : 1}}, {Name : "Number of messages", Key : "Count", Sort : {Desc : 2, Asc : 3}}
                     ], target : "getAllMessageTypesCount", edit : showMessageTypeModal, createNew : showMessageTypeModal},
                     {title : "Listings", headers : 
                     [

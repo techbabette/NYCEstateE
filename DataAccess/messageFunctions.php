@@ -9,20 +9,29 @@ function getAllMessageTypes(){
 
     return $prepSt->fetchAll();
 }
-function getAllMessageTypesCount(){
+function getAllMessageTypesCount($sort){
     include ("../../connection.php");
 
     $statement = "SELECT mt.message_type_id AS id, message_type_name AS title, COUNT(m.message_id) AS Count
                   FROM messagetypes mt LEFT JOIN messages m on mt.message_type_id = m.message_type_id 
-                  GROUP BY mt.message_type_id, message_type_name
-                  ORDER BY COUNT(m.message_id) DESC";
+                  GROUP BY mt.message_type_id, message_type_name";
+    $orderByStub = " ORDER BY";
+
+    if($sort == 0) $orderByStub.= " message_type_name DESC";
+    if($sort == 1) $orderByStub.= " message_type_name ASC";
+
+    if($sort == 2) $orderByStub.= " COUNT(m.message_id) DESC";
+    if($sort == 3) $orderByStub.= " COUNT(m.message_id) ASC";
+
+    $statement.=$orderByStub;
+
     $prepSt = $conn->prepare($statement);
 
     $prepSt->execute();
 
     return $prepSt->fetchAll();
 }
-function getAllMessages($sort = -1){
+function getAllMessages($sort){
     include ("../../connection.php");
 
     $statement = "SELECT m.message_id AS id, email, message_type_name, title, message, m.dateCreated
