@@ -205,6 +205,10 @@ window.onload = function(){
                     ];
         let table = document.querySelector("#element-table");
         let activeTable = 0;
+        let savedTable = readFromLocalStorage("activeAdminTable");
+        if(savedTable){
+            activeTable = parseInt(savedTable);
+        }
         let html = "";
         let tabHolder = document.querySelector("#admin-tabs-holder");
         let active;
@@ -224,6 +228,7 @@ window.onload = function(){
             tab.addEventListener("click", function(e){
                 e.preventDefault();
                 activeTable = this.dataset.id;
+                saveToLocalStorage(activeTable, "activeAdminTable");
                 generateTable(this.dataset.id);
                 applyCurrentTab(this.dataset.id);
             })
