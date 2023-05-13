@@ -229,6 +229,8 @@ window.onload = function(){
                 e.preventDefault();
                 activeTable = this.dataset.id;
                 saveToLocalStorage(activeTable, "activeAdminTable");
+                localStorage.removeItem("selectedAdminHeader");
+                localStorage.removeItem("selecteAdminHeaderPosition");
                 generateTable(this.dataset.id);
                 applyCurrentTab(this.dataset.id);
             })
@@ -240,9 +242,8 @@ window.onload = function(){
         function generateTable(){
             let tableId = activeTable;
             generateHeaderTableRow(table, tableId)
-            let target = tables[tableId].target;
             //Makas an AJAX request and fills table with resulting information
-            readAjax(target, fillTable, {});
+            updateTable();
         }
         function updateTable(){
             let tableId = activeTable;
@@ -404,7 +405,32 @@ window.onload = function(){
             `
             headerTableRow.innerHTML = html;
             let sortButtons = document.querySelectorAll(".sortButton");
+
+            let selectedHeader = readFromLocalStorage("selectedAdminHeader");
+            let selectedPosition = readFromLocalStorage("selecteAdminHeaderPosition");
+
             for(let button of sortButtons){
+                if(selectedHeader && selectedPosition){
+                    let bHeader = button.dataset.header;
+
+                    if(bHeader == selectedHeader){
+                        //Preselect this header
+                        let newIcon = "";
+                        let currentState = -1;
+                        if(selectedPosition == "Asc"){
+                            newIcon = "	&uarr;";
+                            currentState = 0;
+                        }
+                        else if(selectedPosition == "Desc"){
+                            newIcon = "	&darr;";
+                            currentState = 1;
+                        }
+                        button.dataset.state = currentState;
+                        button.innerHTML = button.innerHTML + newIcon;
+                        sortType = tables[tableId].headers[bHeader].Sort[selectedPosition];
+                        removeAllOtherSorts(bHeader);
+                    }
+                }
                 addEventListenerOnce("click", button, function(e){
                     e.preventDefault();
                     let header = parseInt(this.dataset.header);
@@ -435,6 +461,8 @@ window.onload = function(){
                     currentText += newIcon;
                     this.innerHTML = currentText;
                     removeAllOtherSorts(header);
+                    saveToLocalStorage(header, "selectedAdminHeader");
+                    saveToLocalStorage(direction, "selecteAdminHeaderPosition");
                     updateTable();
                 })
             }
