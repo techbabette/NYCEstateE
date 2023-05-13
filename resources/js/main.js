@@ -136,7 +136,8 @@ window.onload = function(){
                     ], target : "getAllUsers", edit : showUserModal},
                     {title : "Messages", headers : 
                     [
-                    {Name : "Sender", Key : "email", Sort : {Desc : 0, Asc : 1}}, {Name : "Type", Key : "message_type_name", Sort : {Desc : 2, Asc : 3}},{Name : "Title", Key : "title", Sort : {Desc : 4, Asc : 5}}, 
+                    {Name : "Sender", Key : "email", Sort : {Desc : 0, Asc : 1}}, {Name : "Type", Key : "message_type_name", Sort : {Desc : 2, Asc : 3}},
+                    {Name : "Title", Key : "title", Sort : {Desc : 4, Asc : 5}}, 
                     {Name : "Body", Key : "message", Sort : {Desc : 6, Asc : 7}}, {Name :"Date sent", Key : "dateCreated", Sort : {Desc : 8, Asc : 9}}
                     ], target : "getAllMessages"},
                     {title : "Message types", headers : 
@@ -145,8 +146,13 @@ window.onload = function(){
                     ], target : "getAllMessageTypesCount", edit : showMessageTypeModal, createNew : showMessageTypeModal},
                     {title : "Listings", headers : 
                     [
-                    {Name : "Name", Key : "listing_name"}, {Name : "Price", Key : "price", Suffix : "$"},{Name :"Description", Key : "description"}, 
-                    {Name : "Borough", Key : "borough_name"}, {Name :"Building type", Key : "type_name"}, {Name : "Address", Key : "address"}, {Name :"Size", Key : "size", Suffix : " feet"}
+                    {Name : "Name", Key : "listing_name", Sort : {Desc : 0, Asc : 1} }, 
+                    {Name : "Price", Key : "price", Suffix : "$", Sort : {Desc : 2, Asc : 3}},
+                    {Name :"Description", Key : "description", Sort : {Desc : 4, Asc : 5}}, 
+                    {Name : "Borough", Key : "borough_name", Sort : {Desc : 6, Asc : 7}}, 
+                    {Name :"Building type", Key : "type_name", Sort : {Desc : 8, Asc : 9}},
+                    {Name : "Address", Key : "address", Sort : {Desc : 10, Asc : 11}}, 
+                    {Name :"Size", Key : "size", Suffix : " feet", Sort : {Desc : 12, Asc : 13}}
                     ], target : "getAllListings", createNew : showListingModal, edit: showListingModal},
                     {title : "Links", headers : 
                     [
@@ -155,11 +161,11 @@ window.onload = function(){
                     ], target : "getAllLinks", createNew : showLinkModal, edit : showLinkModal},
                     {title : "Boroughs", headers : 
                     [
-                    {Name : "Title", Key : "title"}, {Name : "Number of listings (Both active and deleted)", Key : "Count"}
+                    {Name : "Title", Key : "title", Sort : {Desc : 0, Asc : 1}}, {Name : "Number of listings (Both active and deleted)", Key : "Count"}
                     ], target : "getAllBoroughsCount", createNew: showBoroughModal, edit: showBoroughModal},
                     {title : "Building types", headers : 
                     [
-                    {Name : "Title", Key : "title"}, {Name : "Number of listings (Both active and deleted)", Key : "Count"}
+                    {Name : "Title", Key : "title", Sort : {Desc : 0, Asc : 1}}, {Name : "Number of listings (Both active and deleted)", Key : "Count"}
                     ], target : "getAllBuildingTypesCount", createNew: showBuildingTypeModal, edit: showBuildingTypeModal},
                     {title : "Survey questions", headers : 
                     [
@@ -175,8 +181,13 @@ window.onload = function(){
                     ], target : "getAllRoomTypes", createNew: showRoomTypeModal, edit: showRoomTypeModal},
                     {title : "Deleted listings", headers : 
                     [
-                    {Name : "Name", Key : "listing_name"}, {Name : "Price", Key : "price", Suffix : "$"},{Name :"Description", Key : "description"}, 
-                    {Name : "Borough", Key : "borough_name"}, {Name :"Building type", Key : "type_name"}, {Name : "Address", Key : "address"}, {Name :"Size", Key : "size", Suffix : " feet"}
+                    {Name : "Name", Key : "listing_name", Sort : {Desc : 0, Asc : 1} }, 
+                    {Name : "Price", Key : "price", Suffix : "$", Sort : {Desc : 2, Asc : 3}},
+                    {Name :"Description", Key : "description", Sort : {Desc : 4, Asc : 5}}, 
+                    {Name : "Borough", Key : "borough_name", Sort : {Desc : 6, Asc : 7}}, 
+                    {Name :"Building type", Key : "type_name", Sort : {Desc : 8, Asc : 9}},
+                    {Name : "Address", Key : "address", Sort : {Desc : 10, Asc : 11}}, 
+                    {Name :"Size", Key : "size", Suffix : " feet", Sort : {Desc : 12, Asc : 13}}
                     ], target : "getAllDeletedListings", edit: showListingModal, restore : "restoreListing"},
                     ];
         let table = document.querySelector("#element-table");
