@@ -415,7 +415,6 @@ window.onload = function(){
             for(let button of sortButtons){
                 if(button.dataset.state == -1) continue;
                 if(button.dataset.header != currentHeader){
-                    console.log(button);
                     button.dataset.state = -1;
                     button.innerHTML = button.innerHTML.replace(/(↑)|(↓)/, "");
                 }

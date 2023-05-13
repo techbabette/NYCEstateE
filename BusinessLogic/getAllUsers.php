@@ -2,7 +2,7 @@
 session_start();
 $requiredLevel = 3;
 require("../DataAccess/generalFunctions.php");
-// checkAccessLevel($requiredLevel);
+checkAccessLevel($requiredLevel);
 require("../DataAccess/userFunctions.php");
 $result;
 
