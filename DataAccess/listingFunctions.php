@@ -177,7 +177,7 @@ function getSpecificListing($listing){
     return $result;
 }
 
-function getAllListings(){
+function getAllListings($sort, $deleted){
     include ("../../connection.php");
 
     $statement = "SELECT l.listing_id AS id, listing_name, price, description, b.borough_name, bt.type_name, address, size
@@ -185,8 +185,37 @@ function getAllListings(){
                   INNER JOIN boroughs b on l.borough_id = b.borough_id
                   INNER JOIN buildingtypes bt ON l.building_type_id = bt.building_type_id 
                   WHERE lp.date = (SELECT MAX(date) FROM listingprices WHERE listing_id = l.listing_id)
-                  AND l.dateDeleted IS NULL
-                  ORDER BY l.listing_id";
+                  AND l.dateDeleted ";
+    
+    $deletedStub = $deleted  ? "IS NOT NULL " : "IS NULL";
+    $statement.=$deletedStub;
+
+    $orderByStub = " ORDER BY";
+
+    if($sort == 0) $orderByStub.= " listing_name DESC";
+    if($sort == 1) $orderByStub.= " listing_name ASC";
+
+    if($sort == 2) $orderByStub.= " price DESC";
+    if($sort == 3) $orderByStub.= " price ASC";
+
+    if($sort == 4) $orderByStub.= " description DESC";
+    if($sort == 5) $orderByStub.= " description ASC";
+
+    if($sort == 6) $orderByStub.= " b.borough_name DESC";
+    if($sort == 7) $orderByStub.= " b.borough_name ASC";
+
+    if($sort == 8) $orderByStub.= " bt.type_name DESC";
+    if($sort == 9) $orderByStub.= " bt.type_name ASC";
+
+    if($sort == 10) $orderByStub.= " address DESC";
+    if($sort == 11) $orderByStub.= " address ASC";
+
+    if($sort == 12) $orderByStub.= " size DESC";
+    if($sort == 13) $orderByStub.= " size ASC";
+
+    $statement.=$orderByStub;
+
+
     $prepSt = $conn->prepare($statement);
 
     $prepSt->execute();

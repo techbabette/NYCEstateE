@@ -22,15 +22,41 @@ function getLinks($accessLevel, $loggedIn){
 
     return $results;
 }
-function getAllLinks(){
+function getAllLinks($sort){
     include ("../../connection.php");
 
-    $statement = "SELECT l.link_id AS id, link_title, level_title, href, IF(landing, \"Root\", \"Pages\"), location, priority, IFNULL((SELECT link_title FROM links WHERE link_id = l.parent_id),\"None\") AS Parent, 
+    $statement = "SELECT l.link_id AS id, link_title, level_title, href, IF(landing, \"Root\", \"Pages\") as flocation, location, priority, IFNULL((SELECT link_title FROM links WHERE link_id = l.parent_id),\"None\") AS Parent, 
                   IFNULL((SELECT icon FROM linkicons WHERE link_id = l.link_id AND active = 1), \"None\") AS icon 
                   FROM links l
                   INNER JOIN accesslevels a ON l.access_level_id = a.access_level_id
-                  ORDER BY location DESC, priority DESC 
                   ";
+    $orderByStub = "ORDER BY ";
+
+    if($sort == 0) $orderByStub.= " link_title DESC";
+    if($sort == 1) $orderByStub.= " link_title ASC";
+
+    if($sort == 2) $orderByStub.= " level_title DESC";
+    if($sort == 3) $orderByStub.= " level_title ASC";
+
+    if($sort == 4) $orderByStub.= " href DESC";
+    if($sort == 5) $orderByStub.= " href ASC";
+
+    if($sort == 6) $orderByStub.= " flocation DESC";
+    if($sort == 7) $orderByStub.= " flocation ASC";
+
+    if($sort == 8) $orderByStub.= " location DESC";
+    if($sort == 9) $orderByStub.= " location ASC";
+
+    if($sort == 10) $orderByStub.= " priority DESC";
+    if($sort == 11) $orderByStub.= " priority ASC";
+
+    if($sort == 12) $orderByStub.= " Parent DESC";
+    if($sort == 13) $orderByStub.= " Parent ASC";
+
+    if($sort == 14) $orderByStub.= " icon DESC";
+    if($sort == 15) $orderByStub.= " icon ASC";
+
+    $statement .= $orderByStub;
     $prepSt = $conn->prepare($statement);
 
     $prepSt->execute();

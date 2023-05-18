@@ -118,7 +118,7 @@ window.onload = function(){
         })
     }
     if(currentPage === "admin.html"){
-        let currData;
+        let sortType = -1;
         globalData.modalBackground = document.querySelector(".mk-modal");
         window.addEventListener("click", function(e){
             if(e.target === globalData.modalBackground){
@@ -126,20 +126,87 @@ window.onload = function(){
             }
         })
         let tables = [
-                      {title : "Users", headers : ["Name", "Last name","Email", "Date of creation", "Role"], target : "getAllUsers", edit : showUserModal},
-                      {title : "Messages", headers : ["Sender", "Type","Title", "Body", "Date sent"], target : "getAllMessages"},
-                      {title : "Message types", headers : ["Title", "Number of messages"], target : "getAllMessageTypesCount", edit : showMessageTypeModal, createNew : showMessageTypeModal},
-                      {title : "Listings", headers : ["Name", "Price","Description", "Borough", "Building type", "Address", "Size"], target : "getAllListings", createNew : showListingModal, edit: showListingModal},
-                      {title : "Links", headers : ["Title", "Access level","Link", "File location", "Location",  "Priority", "Parent", "Icon"], target : "getAllLinks", createNew : showLinkModal, edit : showLinkModal},
-                      {title : "Boroughs", headers : ["Title", "Number of listings (Both active and deleted)"], target : "getAllBoroughsCount", createNew: showBoroughModal, edit: showBoroughModal},
-                      {title : "Building types", headers : ["Title", "Number of listings (Both active and deleted)"], target : "getAllBuildingTypesCount", createNew: showBuildingTypeModal, edit: showBuildingTypeModal},
-                      {title : "Survey questions", headers : ["Title", "Number of times answered"], target : "getAllQuestions", createNew : showQuestionModal, edit: showQuestionModal, viewAnswers: "getSpecificQuestionAnswers"},
-                      {title : "Deleted survey questions", headers : ["Title", "Number of times answered"], target : "getAllDeletedQuestions", edit: showQuestionModal, restore : "restoreQuestion", viewAnswers: "getSpecificQuestionAnswers"},
-                      {title : "Room types", headers : ["Title"], target : "getAllRoomTypes", createNew: showRoomTypeModal, edit: showRoomTypeModal},
-                      {title : "Deleted listings", headers : ["Name", "Price","Description", "Borough", "Building type", "Address", "Size"], target : "getAllDeletedListings", edit: showListingModal, restore : "restoreListing"},
+                    {title : "Users", headers : 
+                    [
+                    {Name : "Name", Key : "name", Sort : {Desc : 0, Asc : 1}},
+                    {Name : "Last name", Key : "lastName", Sort : {Desc : 2, Asc : 3}},
+                    {Name : "Email", Key : "email", Sort : {Desc : 8, Asc : 9}}, 
+                    {Name : "Date of creation", Key : "dateCreated", Sort : {Desc : 4, Asc : 5}}, 
+                    {Name : "Role", Key : "role_name", Sort : {Desc : 6, Asc : 7}}
+                    ], target : "getAllUsers", edit : showUserModal, defaultSort : {Header : "Date of creation", Position : "Desc" }},
+                    {title : "Messages", headers : 
+                    [
+                    {Name : "Sender", Key : "email", Sort : {Desc : 0, Asc : 1}},
+                    {Name : "Type", Key : "message_type_name", Sort : {Desc : 2, Asc : 3}},
+                    {Name : "Title", Key : "title", Sort : {Desc : 4, Asc : 5}}, 
+                    {Name : "Body", Key : "message", Sort : {Desc : 6, Asc : 7}},
+                    {Name :"Date sent", Key : "dateCreated", Sort : {Desc : 8, Asc : 9}}
+                    ], target : "getAllMessages", defaultSort : {Header : 4, Position : "Desc"}},
+                    {title : "Message types", headers : 
+                    [
+                    {Name : "Title", Key : "title", Sort : {Desc : 0, Asc : 1}},
+                    {Name : "Number of messages", Key : "Count", Sort : {Desc : 2, Asc : 3}}
+                    ], target : "getAllMessageTypesCount", edit : showMessageTypeModal, createNew : showMessageTypeModal, defaultSort : {Header : 1, Position : "Desc"}},
+                    {title : "Listings", headers : 
+                    [
+                    {Name : "Name", Key : "listing_name", Sort : {Desc : 0, Asc : 1} }, 
+                    {Name : "Price", Key : "price", Suffix : "$", Sort : {Desc : 2, Asc : 3}},
+                    {Name :"Description", Key : "description", Sort : {Desc : 4, Asc : 5}}, 
+                    {Name : "Borough", Key : "borough_name", Sort : {Desc : 6, Asc : 7}}, 
+                    {Name :"Building type", Key : "type_name", Sort : {Desc : 8, Asc : 9}},
+                    {Name : "Address", Key : "address", Sort : {Desc : 10, Asc : 11}}, 
+                    {Name :"Size", Key : "size", Suffix : " feet", Sort : {Desc : 12, Asc : 13}}
+                    ], target : "getAllListings", createNew : showListingModal, edit: showListingModal, defaultSort : {Header : 0, Position : "Desc"}},
+                    {title : "Links", headers : 
+                    [
+                    {Name : "Title", Key : "link_title", Sort : {Desc : 0, Asc : 1}}, 
+                    {Name : "Access level", Key : "level_title", Sort : {Desc : 2, Asc : 3}},
+                    {Name : "Link", Key : "href", Sort : {Desc : 4, Asc : 5}}, 
+                    {Name : "File location", Key : "flocation", Sort : {Desc : 6, Asc : 7}},
+                    {Name :"Location", Key : "location", Sort : {Desc : 8, Asc : 9}},
+                    {Name : "Priority", Key : "priority", Sort : {Desc : 10, Asc : 11}},
+                    {Name : "Icon", Key : "icon", Sort : {Desc : 14, Asc : 15}}
+                    ], target : "getAllLinks", createNew : showLinkModal, edit : showLinkModal, defaultSort : {Header : 5, Position : "Desc"}},
+                    {title : "Boroughs", headers : 
+                    [
+                    {Name : "Title", Key : "title", Sort : {Desc : 0, Asc : 1}}, 
+                    {Name : "Number of listings (Both active and deleted)", Key : "Count", Sort : {Desc : 2, Asc : 3}}
+                    ], target : "getAllBoroughsCount", createNew: showBoroughModal, edit: showBoroughModal, defaultSort : {Header : 1, Position : "Desc"}},
+                    {title : "Building types", headers : 
+                    [
+                    {Name : "Title", Key : "title", Sort : {Desc : 0, Asc : 1}}, 
+                    {Name : "Number of listings (Both active and deleted)", Key : "Count", Sort : {Desc : 2, Asc : 3}}
+                    ], target : "getAllBuildingTypesCount", createNew: showBuildingTypeModal, edit: showBuildingTypeModal, defaultSort : {Header : 1, Position : "Desc"}},
+                    {title : "Survey questions", headers : 
+                    [
+                    {Name : "Title", Key : "question", Sort : {Desc : 0, Asc : 1}}, 
+                    {Name : "Number of times answered", Key : "Count", Sort : {Desc : 2, Asc : 3}}
+                    ], target : "getAllQuestions", createNew : showQuestionModal, edit: showQuestionModal, viewAnswers: "getSpecificQuestionAnswers", defaultSort : {Header : 1, Position : "Desc"}},
+                    {title : "Deleted survey questions", headers : 
+                    [
+                    {Name : "Title", Key : "question", Sort : {Desc : 0, Asc : 1}}, 
+                    {Name : "Number of times answered", Key : "Count", Sort : {Desc : 2, Asc : 3}}
+                    ], target : "getAllDeletedQuestions", edit: showQuestionModal, restore : "restoreQuestion", viewAnswers: "getSpecificQuestionAnswers", defaultSort : {Header : 1, Position : "Desc"}},
+                    {title : "Room types", headers : 
+                    [
+                    {Name : "Title", Key : "title", Sort : {Desc : 0, Asc : 1}}
+                    ], target : "getAllRoomTypes", createNew: showRoomTypeModal, edit: showRoomTypeModal, defaultSort : {Header : "Title", Position : "Desc"}},
+                    {title : "Deleted listings", headers : 
+                    [
+                    {Name : "Name", Key : "listing_name", Sort : {Desc : 0, Asc : 1} }, 
+                    {Name : "Price", Key : "price", Suffix : "$", Sort : {Desc : 2, Asc : 3}},
+                    {Name :"Description", Key : "description", Sort : {Desc : 4, Asc : 5}}, 
+                    {Name : "Borough", Key : "borough_name", Sort : {Desc : 6, Asc : 7}}, 
+                    {Name :"Building type", Key : "type_name", Sort : {Desc : 8, Asc : 9}},
+                    {Name : "Address", Key : "address", Sort : {Desc : 10, Asc : 11}}, 
+                    {Name :"Size", Key : "size", Suffix : " feet", Sort : {Desc : 12, Asc : 13}}
+                    ], target : "getAllDeletedListings", edit: showListingModal, restore : "restoreListing", defaultSort : {Header : "Name", Position : "Desc"}},
                     ];
-        let table = document.querySelector("#element-table");
         let activeTable = 0;
+        let savedTable = readFromLocalStorage("activeAdminTable");
+        if(savedTable){
+            activeTable = parseInt(savedTable);
+        }
         let html = "";
         let tabHolder = document.querySelector("#admin-tabs-holder");
         let active;
@@ -159,6 +226,11 @@ window.onload = function(){
             tab.addEventListener("click", function(e){
                 e.preventDefault();
                 activeTable = this.dataset.id;
+                //Clear selected sort type before switching tabs
+                //Correct sorting will be preselected during header generation
+                //If any is to be preselected
+                sortType = -1;
+                saveToLocalStorage(activeTable, "activeAdminTable");
                 generateTable(this.dataset.id);
                 applyCurrentTab(this.dataset.id);
             })
@@ -168,16 +240,23 @@ window.onload = function(){
         setUpModals();
         //Generates the structure of a table
         function generateTable(){
-            let tableId = activeTable;
-            generateHeaderTableRow(table, tableId)
-            let target = tables[tableId].target;
+            generateHeaderTableRow(activeTable)
             //Makas an AJAX request and fills table with resulting information
-            readAjax(target, fillTable);
+            updateTable();
         }
-        function applyCurrentTab(tableId){
-            activeTable = tableId;
+        function updateTable(){
+            let tableId = activeTable;
+            let target = tables[tableId].target;
+            let params = {};
+            if(sortType != -1){
+                params.sort = sortType;
+            }
+            readAjax(target, fillTable, params);
+        }
+        function applyCurrentTab(){
+            activeTable;
             for(let tab of adminTabs){
-                if(tab.dataset.id != tableId){
+                if(tab.dataset.id != activeTable){
                     tab.classList.remove("deep-blue");
                     tab.classList.add("soft-blue");
                 }
@@ -191,6 +270,8 @@ window.onload = function(){
             let html = "";
             let counter = 1;
             let tableResultHolder = document.querySelector("#table-result-holder");
+            let currentTable = tables[activeTable];
+            let headers = currentTable.headers;
             if(data.length < 1){
                 html += `<p class="text-center w-100 d-block text-dark">No rows to display</p>`
                 tableResultHolder.innerHTML = "";
@@ -205,36 +286,36 @@ window.onload = function(){
                 ${counter++}
                 </td>
                 `
-                for(let i = 1; i < Object.keys(row).length / 2; i++){
+                for(let header of headers){
                     html += 
                     `
                     <td>
-                    ${row[i]}
+                    ${row[header.Key] + (header.Suffix ? header.Suffix : "")}
                     </td>
                     `
                 }
                 html += `<td>`
-                if(tables[activeTable].edit){
+                if(currentTable.edit){
                     html += `<a href="#" data-id="${row["id"]}" class="btn btn-light edit-button">Edit</button>`
                 }
-                if(tables[activeTable].viewAnswers){
-                    html += `<a href="#" data-table="${tables[activeTable].title}" data-id="${row["id"]}" class="btn btn-info view-answers-button">View answers</a>`
+                if(currentTable.viewAnswers){
+                    html += `<a href="#" data-table="${currentTable.title}" data-id="${row["id"]}" class="btn btn-info view-answers-button">View answers</a>`
                 }
-                if(tables[activeTable].restore){
-                    html += `<a href="#"  data-table="${tables[activeTable].title}" data-id="${row["id"]}" class="btn btn-success restore-button">Restore</a>`
+                if(currentTable.restore){
+                    html += `<a href="#"  data-table="${currentTable.title}" data-id="${row["id"]}" class="btn btn-success restore-button">Restore</a>`
                 }
                 else{
-                    html += `<a href="#" data-table="${tables[activeTable].title}" data-id="${row["id"]}" class="btn btn-danger delete-button">Delete</a>`
+                    html += `<a href="#" data-table="${currentTable.title}" data-id="${row["id"]}" class="btn btn-danger delete-button">Delete</a>`
                 }
                 html += `</td></tr>`;
             }
 
             //Code for generating the "Insert new" button;
             //if the table should show a create new button
-            let createNew = tables[activeTable].createNew;
-            let edit = tables[activeTable].edit;
-            let viewAnswers = tables[activeTable].viewAnswers;
-            let restore = tables[activeTable].restore;
+            let createNew = currentTable.createNew;
+            let edit = currentTable.edit;
+            let viewAnswers = currentTable.viewAnswers;
+            let restore = currentTable.restore;
             if(createNew)
             {
                 html += 
@@ -295,20 +376,27 @@ window.onload = function(){
                 })
             }
         }
-        function generateHeaderTableRow(table, tableId){
+        function generateHeaderTableRow(){
             let headerTableRow = document.querySelector("#header-table-row");
-            let headers = tables[tableId].headers;
+            let currentTable = tables[activeTable];
+            let headers = currentTable.headers;
             let html = "";
             html += 
             `
             <th>
             #
             </th>`
+            let headerCount = 0;
             for(let header of headers){
+                let sortHtml = "";
+                if(header.Sort){
+                    sortHtml = `data-state=-1 data-header="${headerCount}" class="clickable sortButton"`;
+                }
                 html += `
-              <th>
-                ${header}
+              <th ${sortHtml}>
+                ${header.Name}
               </th>`
+              headerCount++;
             }
             html += 
             `
@@ -317,10 +405,114 @@ window.onload = function(){
             </th>
             `
             headerTableRow.innerHTML = html;
+            let sortButtons = document.querySelectorAll(".sortButton");
+
+            let selectedHeaderId = readFromLocalStorage("selectedAdminHeaderFor" + currentTable.title.replaceAll(" ", "_"));
+            let selectedHeaderPosition = readFromLocalStorage("selecteAdminHeaderPositionFor" + currentTable.title.replaceAll(" ", "_"));
+
+            let preselectSort = selectedHeaderId != null && selectedHeaderPosition != null;
+
+            let defaultSort = currentTable.defaultSort;
+
+            //If supposed to preselect to default value
+            if(!preselectSort && defaultSort){
+                //This is faster if defaultSort has index instead of name, harder to use/read
+                if(typeof defaultSort.Header === "string"){
+                    let headerTableElement = headers.filter(el => el.Name == defaultSort.Header)[0];
+                    selectedHeaderId = headers.indexOf(headerTableElement);
+                }
+                else{
+                    selectedHeaderId = defaultSort.Header;
+                }
+
+                selectedHeaderPosition = defaultSort.Position;
+
+                //If no id found, do not select a default
+                if(typeof parseInt(selectedHeaderId) !== "number"){
+                    defaultSort = false;
+                    console.warn("Invalid header passed as an argument for defaultSort");
+                }
+            }
+
+            let supposedToSort = preselectSort || defaultSort;
+
+            for(let button of sortButtons){
+                if(supposedToSort){
+                    let bHeader = button.dataset.header;
+                    if(bHeader == selectedHeaderId){
+                        //Preselect saved/default header
+                        preselectSortHeader(button, selectedHeaderPosition, selectedHeaderId);
+                    }
+                }
+                addEventListenerOnce("click", button, function(e){
+                    e.preventDefault();
+                    let header = parseInt(this.dataset.header);
+                    let currentState = parseInt(this.dataset.state);
+                    let direction = "";
+                    let newIcon = "";
+                    //Flip the state of the element on click
+                    switch(currentState){
+                        case -1:
+                        case 1:
+                            currentState = 0;
+                            direction = "Asc";
+                            newIcon = "	&uarr;";
+                            break;
+                        case 0:
+                            currentState = 1;
+                            direction = "Desc";
+                            newIcon = "	&darr;";
+                            break;
+                    }
+                    this.dataset.state = currentState;
+
+                    let currentText = this.innerHTML;
+                    currentText = currentText.replace(/(↑)|(↓)/, "");
+                    currentText += newIcon;
+                    this.innerHTML = currentText;
+
+                    //Remove sort representation on all other sortable fields in the table
+                    removeAllOtherSorts(header);
+                    //Save the header that the user is currently sorting by for this table
+                    saveToLocalStorage(header, "selectedAdminHeaderFor" + currentTable.title.replaceAll(" ", "_"));
+                    //Save the position that the user is currently sorting by (Desc/Asc) for this table
+                    saveToLocalStorage(direction, "selecteAdminHeaderPositionFor" + currentTable.title.replaceAll(" ", "_"));
+                    //Save the newly selected sort value
+                    sortType = headers[header].Sort[direction];
+                    //Make a call with the new data
+                    updateTable();
+                })
+            }
+            function preselectSortHeader(button, selectedPosition, selectedHeader){
+                let newIcon = "";
+                let currentState = -1;
+                if(selectedPosition == "Asc"){
+                    newIcon = "	&uarr;";
+                    currentState = 0;
+                }
+                else if(selectedPosition == "Desc"){
+                    newIcon = "	&darr;";
+                    currentState = 1;
+                }
+                button.dataset.state = currentState;
+                button.innerHTML = button.innerHTML + newIcon;
+                sortType = headers[selectedHeader].Sort[selectedPosition];
+                // console.log(selectedPosition);
+                removeAllOtherSorts(selectedHeader);
+            }
+        }
+        function removeAllOtherSorts(currentHeader){
+            let sortButtons = document.querySelectorAll(".sortButton");
+            for(let button of sortButtons){
+                if(button.dataset.state == -1) continue;
+                if(button.dataset.header != currentHeader){
+                    button.dataset.state = -1;
+                    button.innerHTML = button.innerHTML.replace(/(↑)|(↓)/, "");
+                }
+            }
         }
         function adminDeleteRequest(table, elementId){
             let data = {table, id : elementId};
-            console.log(data);
             submitAjax("deleteFromTable", showResultGenerateTable, data, {closeModal : false});
         }
         function showResultGenerateTable(data, args){
@@ -445,7 +637,6 @@ window.onload = function(){
                 boroughTitle.innerText = "Edit borough";
                 boroughSubmitButton.innerText = "Edit borough";
                 submitAjax("getSpecificBorough", function(data){
-                    console.log(data.title);
                     boroughNameField.value = data.title;
                 }, data);
             }
@@ -486,7 +677,6 @@ window.onload = function(){
                 messageTypeTitle.innerText = "Edit message type";
                 messageTypeSubmitButton.innerText = "Edit message type";
                 submitAjax("getSpecificMessageType", function(data){
-                    console.log(data.title);
                     messageTypeNameField.value = data.title;
                 }, data);
             }
@@ -619,7 +809,6 @@ window.onload = function(){
             if(type == "edit"){
                 let data = {id : existingId};
                 submitAjax("getSpecificListing", function(data){
-                    console.log(data);
                     let core = data.main;
                     let photo = data.photo;
                     let rooms = data.rooms;
@@ -730,7 +919,7 @@ window.onload = function(){
         }
         function setupUserModal(){
             let userRoleSelect = document.querySelector("#userRole"); 
-            readAjax("getAllRoles", fillDropdown, [userRoleSelect]);
+            readAjax("getAllRoles", fillDropdown, {}, [userRoleSelect]);
 
             let modalSubmitButton = document.querySelector("#user-submit");
             addEventListenerOnce("click", modalSubmitButton, function(e){
@@ -743,9 +932,9 @@ window.onload = function(){
             let listingBuildingType = document.querySelector("#listingBuildingType");
             let listingRoomsList = document.querySelector("#listingRoomsList");
 
-            readAjax("getAllBoroughs", fillDropdown, [boroughSelect]);
-            readAjax("getAllBuildingTypes", fillDropdown, [listingBuildingType]);
-            readAjax("getAllRoomTypes", fillDropdown, [listingRoomsList]);
+            readAjax("getAllBoroughs", fillDropdown, {}, [boroughSelect]);
+            readAjax("getAllBuildingTypes", fillDropdown, {}, [listingBuildingType]);
+            readAjax("getAllRoomTypes", fillDropdown, {}, [listingRoomsList]);
             
 
             let fileReader = new FileReader();
@@ -778,10 +967,10 @@ window.onload = function(){
         }
         function setupLinkModal(){
             let accessLevelSelect = document.querySelector("#LinkReqLevel");
-            readAjax("getAllAccessLevels", fillDropdown, [accessLevelSelect]);
+            readAjax("getAllAccessLevels", fillDropdown, {}, [accessLevelSelect]);
 
             let locationSelect = document.querySelector("#LinkLocation");
-            readAjax("getAllNavigationLocations", fillDropdown, [locationSelect, true]);
+            readAjax("getAllNavigationLocations", fillDropdown, {}, [locationSelect, true]);
 
             let modalSubmitButton = document.querySelector("#link-submit");
             addEventListenerOnce("click", modalSubmitButton, function(e){
@@ -949,7 +1138,6 @@ window.onload = function(){
 
             if(type === "create"){
                 if(testImage(listingPhotoField, "")) {
-                    console.log("Here");
                     errors++
                 };
             }
@@ -1309,7 +1497,7 @@ window.onload = function(){
         let messageTypeSelect = document.querySelector("#messageType");
         let messageTitleField = document.querySelector("#messageTitle");
         let messageBodyField = document.querySelector("#messageBody");
-        readAjax("getAllMessageTypes", fillDropdown, [messageTypeSelect]);
+        readAjax("getAllMessageTypes", fillDropdown, {}, [messageTypeSelect]);
 
         let sendMessageButton = document.querySelector("#sendMessage");
         addEventListenerOnce("click", sendMessageButton, function(e){
@@ -1392,9 +1580,9 @@ window.onload = function(){
             document.querySelector("#listingsSort").value = selectedSort;
         }
 
-        readAjax("getAllBoroughsWithListings", fillCheckbox, boroughArgs);
+        readAjax("getAllBoroughsWithListings", fillCheckbox, {}, boroughArgs);
 
-        readAjax("getAllBuildingTypesWithListings", fillCheckbox, buildingTypeArgs);
+        readAjax("getAllBuildingTypesWithListings", fillCheckbox, {}, buildingTypeArgs);
 
         //Get preexisting filters from local storage, then query for listings
 
@@ -1442,7 +1630,7 @@ window.onload = function(){
     }
     if(currentPage === "index.html"){
         let boroughSelect = document.querySelector("#landing-input");
-        readAjax("getAllBoroughsWithListings", fillDropdown, [boroughSelect]);
+        readAjax("getAllBoroughsWithListings", fillDropdown, {}, [boroughSelect]);
 
         let searchButton = document.querySelector("#landing-search");
         addEventListenerOnce("click", searchButton, function(e){
@@ -1783,13 +1971,12 @@ function flipListingFavoriteIcon(args){
         if(button.dataset.id == listingId){
             let iconHolder = button.firstElementChild;
             iconHolder.dataset.icon = iconHolder.dataset.icon === "mdi:cards-heart" ? "mdi:cards-heart-outline" : "mdi:cards-heart";
-            console.log("Here");
         }
     }
 }
 
 function getQuestionsForUser(){
-    readAjax("getQuestionsForUser", displaySurveyQuestions);
+    readAjax("getQuestionsForUser", displaySurveyQuestions, {});
 }
 
 function setGlobal(data, args){
@@ -2037,7 +2224,7 @@ function generateNavbar(response){
         let logoutButton = document.querySelector("#logoutButton");
         logoutButton.addEventListener("click", function(e){
             e.preventDefault();
-            readAjax("logout", redirectSuccess, { newLocation : "login.html", landing : false});
+            readAjax("logout", redirectSuccess, {}, { newLocation : "login.html", landing : false});
         })
     }
 
@@ -2229,15 +2416,15 @@ function redirectSuccess(data, args){
     redirect(args);
 }
 
-function readAjax(url, resultFunction, args = {}){
+function readAjax(url, resultFunction, params, args = {}){
     let request = createRequest();
     request.onreadystatechange = function(){
         if(request.readyState == 4){
             handleServerResponse(resultFunction, args, request);
         }
     }
-    request.open("GET", ajaxPath+url+".php");
-    request.send();
+    request.open("GET", ajaxPath+url+".php?" + new URLSearchParams(params));
+    request.send(JSON.stringify(params));
 }
 
 function submitAjax(url, resultFunction, data, args = {}){
@@ -2268,7 +2455,7 @@ function submitFormDataAjax(url, resultFunction, data, args = {}){
 
 function handleServerResponse(resultFunction, args, request){
     if(request.status >= 200 && request.status < 300){
-        console.log(request.responseText);
+        // console.log(request.responseText);
         let data = JSON.parse(request.responseText);
         if(args != {}){
             resultFunction(data.general, args);

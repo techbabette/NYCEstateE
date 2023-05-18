@@ -107,13 +107,34 @@ function getUserInformation($id){
     return $result;
 }
 
-function getAllUsers(){
+function getAllUsers($sort = -1){
     include ("../../connection.php");
 
     $statement = "SELECT user_id AS id, name, lastName, email, dateCreated, role_name
                   FROM users u
-                  INNER JOIN roles r on u.role_id = r.role_id
-                  ORDER BY r.role_id DESC";
+                  INNER JOIN roles r on u.role_id = r.role_id";
+    $orderByStub = " ORDER BY";
+
+
+    if($sort == 0) $orderByStub.= " name DESC";
+    if($sort == 1) $orderByStub.= " name ASC";
+
+    if($sort == 2) $orderByStub.= " lastName DESC";
+    if($sort == 3) $orderByStub.= " lastName ASC";
+
+    if($sort == 4) $orderByStub.= " dateCreated DESC";
+    if($sort == 5) $orderByStub.= " dateCreated ASC";
+
+    if($sort == 6) $orderByStub.= " role_name DESC";
+    if($sort == 7) $orderByStub.= " role_name ASC";
+
+    if($sort == 8) $orderByStub.= " email DESC";
+    if($sort == 9) $orderByStub.= " email ASC";
+
+    if($sort == -1) $orderByStub.= " r.role_id DESC";
+
+    $statement .= $orderByStub;
+
     $prepSt = $conn->prepare($statement);
 
     $prepSt->execute();

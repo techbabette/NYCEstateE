@@ -1,8 +1,15 @@
 <?php
-function getAllRoomTypes(){
+function getAllRoomTypes($sort){
     include ("../../connection.php");
 
-    $statement = "SELECT room_type_id AS id, room_name as title FROM roomtypes ORDER BY room_name";
+    $statement = "SELECT room_type_id AS id, room_name as title FROM roomtypes";
+    $orderByStub = " ORDER BY ";
+    
+    if($sort == 0) $orderByStub.= " room_name DESC";
+    if($sort == 1) $orderByStub.= " room_name ASC";
+
+    $statement.=$orderByStub;
+
     $prepSt = $conn->prepare($statement);
 
     $prepSt->execute();

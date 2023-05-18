@@ -8,8 +8,14 @@ checkAccessLevel($requiredLevel);
 require("../DataAccess/messageFunctions.php");
 $result;
 
+$sort = 2;
+
+if(isset($_GET["sort"])){
+    $sort = $_GET["sort"];
+}
+
 try{
-    $result["general"] = getAllMessageTypesCount();
+    $result["general"] = getAllMessageTypesCount($sort);
     http_response_code(200);
     echo json_encode($result);
 }
