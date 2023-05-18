@@ -20,7 +20,7 @@ function saveAdjustedPhotoToDisk($image, $targetFile, $maxW, $maxH){
         $new_width = $width*$ratio;
         $new_height = $height*$ratio;
     }
-    $src = imagecreatefromjpeg($file_name);
+    $src = imagecreatefromstring((file_get_contents($file_name)));
     $dst = imagecreatetruecolor($new_width, $new_height);
     //Copy image onto image of rescaled size, ie make the image resized
     imagecopyresampled($dst, $src, 0, 0, 0, 0,  $new_width, $new_height, $width, $height);
