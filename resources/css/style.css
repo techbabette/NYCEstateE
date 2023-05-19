@@ -255,12 +255,14 @@ footer{
 }
 #admin-tabs-holder{
     overflow-x: scroll;
+    gap: 2px !important;
 }
 #whole-admin-table{
     background-color: var(--strong-accent);
 }
 .admin-tab{
     color: var(--bg-color) !important;
+    border-radius: 15px 2px 2px 2px;
 }
 #error-holder{
     position: fixed;
