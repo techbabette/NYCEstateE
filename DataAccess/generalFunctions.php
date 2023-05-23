@@ -163,7 +163,7 @@ function getEveryRowWhereParamFromTable($table, $param, $value){
     return $prepSt->fetchAll();
 }
 function addLineToFile($line, $file){
-    $fileToAddTo = fopen("../resources/data/".$file.".txt", "a");
+    $fileToAddTo = fopen("../data/".$file.".txt", "a");
 
     fwrite($fileToAddTo, $line);
 

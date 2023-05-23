@@ -37,7 +37,7 @@ try{
     //If page is in list of pages available to user
     if($allowed){
         //Get data for new string
-        $currDate = date("h:i:sa");
+        $currDate = time();
         $user = $loggedIn ? $_SESSION["user"]["user_id"] : "/";
         $page = $currentPage;
 
