@@ -36,6 +36,19 @@ try{
     }
     //If page is in list of pages available to user
     if($allowed){
+        //Get data for new string
+        $currDate = date("h:i:sa");
+        $user = $loggedIn ? $_SESSION["user"]["user_id"] : "/";
+        $page = $currentPage;
+
+        //Form new string
+        $arrayOfData = array($user, $page, $currDate);
+        $newLine = implode("::", $arrayOfData)."\n";
+
+        //Add new string to activity log
+        addLineToFile($newLine, "activity");
+
+        //Return all links available to user
         http_response_code(200);
         echo json_encode($result);
         die();
