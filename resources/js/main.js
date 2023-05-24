@@ -140,12 +140,17 @@ window.onload = function(){
                     [
                     {Name : "Page name", Key : "name", Sort : {Desc : 2, Asc : 3}},
                     {Name : "Percentage of visits", Key : "number", Sort : {Desc : 0, Asc : 1}, Suffix : "%"}
-                    ], target : "activities/getPageVisitsPercent", defaultSort : {Header: 1, Position : "Desc"}},
+                    ], target : "activities/getPageVisitsPercent", defaultSort : {Header: 1, Position : "Desc"}, delete : false},
                     {title : "Page visits last 24h", headers :
                     [
                     {Name : "Page name", Key : "name", Sort : {Desc : 2, Asc : 3}},
                     {Name : "Number of visits", Key : "number", Sort : {Desc : 0, Asc : 1}}
-                    ], target : "activities/getPageVisitsLastDay", defaultSort : {Header: 1, Position : "Desc"}},
+                    ], target : "activities/getPageVisitsLastDay", defaultSort : {Header: 1, Position : "Desc"}, delete : false},
+                    {title : "Login activity", headers :
+                    [
+                    {Name : "Time period", Key : "name"},
+                    {Name : "Number of users logged in", Key : "number"}
+                    ], target : "activities/getSuccessfulLoginsNum", delete : false},
                     {title : "Users", headers : 
                     [
                     {Name : "Name", Key : "name", Sort : {Desc : 0, Asc : 1}},
@@ -153,7 +158,7 @@ window.onload = function(){
                     {Name : "Email", Key : "email", Sort : {Desc : 8, Asc : 9}}, 
                     {Name : "Date of creation", Key : "dateCreated", Sort : {Desc : 4, Asc : 5}}, 
                     {Name : "Role", Key : "role_name", Sort : {Desc : 6, Asc : 7}}
-                    ], target : "users/getAllUsers", edit : showUserModal, defaultSort : {Header : "Date of creation", Position : "Desc" }},
+                    ], target : "users/getAllUsers", edit : showUserModal, delete : true, defaultSort : {Header : "Date of creation", Position : "Desc", delete : true }},
                     {title : "Messages", headers : 
                     [
                     {Name : "Sender", Key : "email", Sort : {Desc : 0, Asc : 1}},
@@ -161,12 +166,12 @@ window.onload = function(){
                     {Name : "Title", Key : "title", Sort : {Desc : 4, Asc : 5}}, 
                     {Name : "Body", Key : "message", Sort : {Desc : 6, Asc : 7}},
                     {Name :"Date sent", Key : "dateCreated", Sort : {Desc : 8, Asc : 9}}
-                    ], target : "messages/getAllMessages", defaultSort : {Header : 4, Position : "Desc"}},
+                    ], target : "messages/getAllMessages", defaultSort : {Header : 4, Position : "Desc"}, delete : true},
                     {title : "Message types", headers : 
                     [
                     {Name : "Title", Key : "title", Sort : {Desc : 0, Asc : 1}},
                     {Name : "Number of messages", Key : "Count", Sort : {Desc : 2, Asc : 3}}
-                    ], target : "messagetypes/getAllMessageTypesCount", edit : showMessageTypeModal, createNew : showMessageTypeModal, defaultSort : {Header : 1, Position : "Desc"}},
+                    ], target : "messagetypes/getAllMessageTypesCount", edit : showMessageTypeModal, createNew : showMessageTypeModal, delete : true, defaultSort : {Header : 1, Position : "Desc"}},
                     {title : "Listings", headers : 
                     [
                     {Name : "Name", Key : "listing_name", Sort : {Desc : 0, Asc : 1} }, 
@@ -176,7 +181,7 @@ window.onload = function(){
                     {Name :"Building type", Key : "type_name", Sort : {Desc : 8, Asc : 9}},
                     {Name : "Address", Key : "address", Sort : {Desc : 10, Asc : 11}}, 
                     {Name :"Size", Key : "size", Suffix : " feet", Sort : {Desc : 12, Asc : 13}}
-                    ], target : "listings/getAllListings", createNew : showListingModal, edit: showListingModal, defaultSort : {Header : 0, Position : "Desc"}},
+                    ], target : "listings/getAllListings", createNew : showListingModal, edit: showListingModal, delete : true, defaultSort : {Header : 0, Position : "Desc"}},
                     {title : "Links", headers : 
                     [
                     {Name : "Title", Key : "link_title", Sort : {Desc : 0, Asc : 1}}, 
@@ -186,22 +191,22 @@ window.onload = function(){
                     {Name :"Location", Key : "location", Sort : {Desc : 8, Asc : 9}},
                     {Name : "Priority", Key : "priority", Sort : {Desc : 10, Asc : 11}},
                     {Name : "Icon", Key : "icon", Sort : {Desc : 14, Asc : 15}}
-                    ], target : "links/getAllLinks", createNew : showLinkModal, edit : showLinkModal, defaultSort : {Header : 5, Position : "Desc"}},
+                    ], target : "links/getAllLinks", createNew : showLinkModal, edit : showLinkModal, delete : true, defaultSort : {Header : 5, Position : "Desc"}},
                     {title : "Boroughs", headers : 
                     [
                     {Name : "Title", Key : "title", Sort : {Desc : 0, Asc : 1}}, 
                     {Name : "Number of listings (Both active and deleted)", Key : "Count", Sort : {Desc : 2, Asc : 3}}
-                    ], target : "boroughs/getAllBoroughsCount", createNew: showBoroughModal, edit: showBoroughModal, defaultSort : {Header : 1, Position : "Desc"}},
+                    ], target : "boroughs/getAllBoroughsCount", createNew: showBoroughModal, edit: showBoroughModal, delete : true, defaultSort : {Header : 1, Position : "Desc"}},
                     {title : "Building types", headers : 
                     [
                     {Name : "Title", Key : "title", Sort : {Desc : 0, Asc : 1}}, 
                     {Name : "Number of listings (Both active and deleted)", Key : "Count", Sort : {Desc : 2, Asc : 3}}
-                    ], target : "buildingtypes/getAllBuildingTypesCount", createNew: showBuildingTypeModal, edit: showBuildingTypeModal, defaultSort : {Header : 1, Position : "Desc"}},
+                    ], target : "buildingtypes/getAllBuildingTypesCount", createNew: showBuildingTypeModal, edit: showBuildingTypeModal, delete : true, defaultSort : {Header : 1, Position : "Desc"}},
                     {title : "Survey questions", headers : 
                     [
                     {Name : "Title", Key : "question", Sort : {Desc : 0, Asc : 1}}, 
                     {Name : "Number of times answered", Key : "Count", Sort : {Desc : 2, Asc : 3}}
-                    ], target : "questions/getAllQuestions", createNew : showQuestionModal, edit: showQuestionModal, viewAnswers: "questions/getSpecificQuestionAnswers", defaultSort : {Header : 1, Position : "Desc"}},
+                    ], target : "questions/getAllQuestions", createNew : showQuestionModal, edit: showQuestionModal, delete : true, viewAnswers: "questions/getSpecificQuestionAnswers", defaultSort : {Header : 1, Position : "Desc"}},
                     {title : "Deleted survey questions", headers : 
                     [
                     {Name : "Title", Key : "question", Sort : {Desc : 0, Asc : 1}}, 
@@ -210,7 +215,7 @@ window.onload = function(){
                     {title : "Room types", headers : 
                     [
                     {Name : "Title", Key : "title", Sort : {Desc : 0, Asc : 1}}
-                    ], target : "roomtypes/getAllRoomTypes", createNew: showRoomTypeModal, edit: showRoomTypeModal, defaultSort : {Header : "Title", Position : "Desc"}},
+                    ], target : "roomtypes/getAllRoomTypes", createNew: showRoomTypeModal, edit: showRoomTypeModal, delete : true, defaultSort : {Header : "Title", Position : "Desc"}},
                     {title : "Deleted listings", headers : 
                     [
                     {Name : "Name", Key : "listing_name", Sort : {Desc : 0, Asc : 1} }, 
@@ -314,6 +319,9 @@ window.onload = function(){
                     </td>
                     `
                 }
+                if(!(currentTable.delete || currentTable.edit || currentTable.restore || currentTable.viewAnswers)){
+                    continue;
+                }
                 html += `<td>`
                 if(currentTable.edit){
                     html += `<a href="#" data-id="${row["id"]}" class="btn btn-light edit-button">Edit</button>`
@@ -324,7 +332,7 @@ window.onload = function(){
                 if(currentTable.restore){
                     html += `<a href="#"  data-table="${currentTable.title}" data-id="${row["id"]}" class="btn btn-success restore-button">Restore</a>`
                 }
-                else{
+                else if(currentTable.delete){
                     html += `<a href="#" data-table="${currentTable.title}" data-id="${row["id"]}" class="btn btn-danger delete-button">Delete</a>`
                 }
                 html += `</td></tr>`;
@@ -418,12 +426,14 @@ window.onload = function(){
               </th>`
               headerCount++;
             }
-            html += 
-            `
-            <th>
-            Options
-            </th>
-            `
+            if((currentTable.delete || currentTable.edit || currentTable.restore || currentTable.viewAnswers)){
+                html += 
+                `
+                <th>
+                Options
+                </th>
+                `
+            }
             headerTableRow.innerHTML = html;
             let sortButtons = document.querySelectorAll(".sortButton");
 

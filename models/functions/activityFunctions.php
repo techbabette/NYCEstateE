@@ -72,4 +72,31 @@ function getPageVisits($timeLimit, $convertToPercentage, $sortType){
 
     return $resultArray;
 }
+function getLogins(){
+    $lines = file("../../data/successfulLogins.txt", FILE_IGNORE_NEW_LINES);
+
+    $arrayOfUsers = array();
+
+    $currTime = time();
+    $numberOfLogins = 0;
+
+    for($i = count($lines) - 1; $i >= 0; $i--){
+        $line = $lines[$i];
+        $data = explode("::", $line);
+
+        $user = $data[0];
+        $timeOfVisit = $data[1];
+
+        if($currTime - 86400 > $timeOfVisit) break;
+
+        if(in_array($user, $arrayOfUsers)) continue;
+
+        array_push($arrayOfUsers, $user);
+        $numberOfLogins++;
+    }
+    $returnArray["name"] = "Number of logins in the last 24h";
+    $returnArray["number"] = $numberOfLogins;
+    $returnArray = array($returnArray);
+    return $returnArray;
+}
 ?>
