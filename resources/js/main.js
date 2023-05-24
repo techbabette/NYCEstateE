@@ -2,7 +2,7 @@
 // let lastOfUrl = url[url.length - 1];
 // let currentPage = lastOfUrl.split("?")[0].toLowerCase().replace(/[^A-Za-z0-9\.]/gi, "");
 let mainPage = false;
-let ajaxPath = "BusinessLogic/";
+let ajaxPath = "models/";
 let data;
 let globalData = {};
 let success;
@@ -24,7 +24,7 @@ window.onload = function(){
     data = {currentPage};
 
     //Send current page to check if allwwed
-    submitAjax("getLinks", generateNavbar, data, { newLocation : "index.php?page=index.html", landing : true, redirectOnNotAllowed : true});
+    submitAjax("links/getLinks", generateNavbar, data, { newLocation : "index.php?page=index.html", landing : true, redirectOnNotAllowed : true});
     
 
     if(currentPage == "register.html"){
@@ -83,7 +83,7 @@ window.onload = function(){
             let data = {"createNewUser" : true, "email" : email, "name" : name, "lastName" : lastName, "password" : password};
 
             if(errors == 0){
-                submitAjax("createNewUser", redirectSuccess, data, {newLocation : "login.html", "landing" : false});
+                submitAjax("users/createNewUser", redirectSuccess, data, {newLocation : "login.html", "landing" : false});
             }
         })
     }
@@ -120,7 +120,7 @@ window.onload = function(){
             let data = {"attemptLogin" : true, "email" : email, "pass" : password};
 
             if(errors == 0){
-                submitAjax("attemptLogin", redirectSuccess, data, { newLocation : "index.html", landing : true});
+                submitAjax("users/attemptLogin", redirectSuccess, data, { newLocation : "index.html", landing : true});
             }
             else{
                 errorHandler("Incorrect email/password");
@@ -143,7 +143,7 @@ window.onload = function(){
                     {Name : "Email", Key : "email", Sort : {Desc : 8, Asc : 9}}, 
                     {Name : "Date of creation", Key : "dateCreated", Sort : {Desc : 4, Asc : 5}}, 
                     {Name : "Role", Key : "role_name", Sort : {Desc : 6, Asc : 7}}
-                    ], target : "getAllUsers", edit : showUserModal, defaultSort : {Header : "Date of creation", Position : "Desc" }},
+                    ], target : "users/getAllUsers", edit : showUserModal, defaultSort : {Header : "Date of creation", Position : "Desc" }},
                     {title : "Messages", headers : 
                     [
                     {Name : "Sender", Key : "email", Sort : {Desc : 0, Asc : 1}},
@@ -151,12 +151,12 @@ window.onload = function(){
                     {Name : "Title", Key : "title", Sort : {Desc : 4, Asc : 5}}, 
                     {Name : "Body", Key : "message", Sort : {Desc : 6, Asc : 7}},
                     {Name :"Date sent", Key : "dateCreated", Sort : {Desc : 8, Asc : 9}}
-                    ], target : "getAllMessages", defaultSort : {Header : 4, Position : "Desc"}},
+                    ], target : "messages/getAllMessages", defaultSort : {Header : 4, Position : "Desc"}},
                     {title : "Message types", headers : 
                     [
                     {Name : "Title", Key : "title", Sort : {Desc : 0, Asc : 1}},
                     {Name : "Number of messages", Key : "Count", Sort : {Desc : 2, Asc : 3}}
-                    ], target : "getAllMessageTypesCount", edit : showMessageTypeModal, createNew : showMessageTypeModal, defaultSort : {Header : 1, Position : "Desc"}},
+                    ], target : "messagetypes/getAllMessageTypesCount", edit : showMessageTypeModal, createNew : showMessageTypeModal, defaultSort : {Header : 1, Position : "Desc"}},
                     {title : "Listings", headers : 
                     [
                     {Name : "Name", Key : "listing_name", Sort : {Desc : 0, Asc : 1} }, 
@@ -166,7 +166,7 @@ window.onload = function(){
                     {Name :"Building type", Key : "type_name", Sort : {Desc : 8, Asc : 9}},
                     {Name : "Address", Key : "address", Sort : {Desc : 10, Asc : 11}}, 
                     {Name :"Size", Key : "size", Suffix : " feet", Sort : {Desc : 12, Asc : 13}}
-                    ], target : "getAllListings", createNew : showListingModal, edit: showListingModal, defaultSort : {Header : 0, Position : "Desc"}},
+                    ], target : "listings/getAllListings", createNew : showListingModal, edit: showListingModal, defaultSort : {Header : 0, Position : "Desc"}},
                     {title : "Links", headers : 
                     [
                     {Name : "Title", Key : "link_title", Sort : {Desc : 0, Asc : 1}}, 
@@ -176,31 +176,31 @@ window.onload = function(){
                     {Name :"Location", Key : "location", Sort : {Desc : 8, Asc : 9}},
                     {Name : "Priority", Key : "priority", Sort : {Desc : 10, Asc : 11}},
                     {Name : "Icon", Key : "icon", Sort : {Desc : 14, Asc : 15}}
-                    ], target : "getAllLinks", createNew : showLinkModal, edit : showLinkModal, defaultSort : {Header : 5, Position : "Desc"}},
+                    ], target : "links/getAllLinks", createNew : showLinkModal, edit : showLinkModal, defaultSort : {Header : 5, Position : "Desc"}},
                     {title : "Boroughs", headers : 
                     [
                     {Name : "Title", Key : "title", Sort : {Desc : 0, Asc : 1}}, 
                     {Name : "Number of listings (Both active and deleted)", Key : "Count", Sort : {Desc : 2, Asc : 3}}
-                    ], target : "getAllBoroughsCount", createNew: showBoroughModal, edit: showBoroughModal, defaultSort : {Header : 1, Position : "Desc"}},
+                    ], target : "boroughs/getAllBoroughsCount", createNew: showBoroughModal, edit: showBoroughModal, defaultSort : {Header : 1, Position : "Desc"}},
                     {title : "Building types", headers : 
                     [
                     {Name : "Title", Key : "title", Sort : {Desc : 0, Asc : 1}}, 
                     {Name : "Number of listings (Both active and deleted)", Key : "Count", Sort : {Desc : 2, Asc : 3}}
-                    ], target : "getAllBuildingTypesCount", createNew: showBuildingTypeModal, edit: showBuildingTypeModal, defaultSort : {Header : 1, Position : "Desc"}},
+                    ], target : "buildingtypes/getAllBuildingTypesCount", createNew: showBuildingTypeModal, edit: showBuildingTypeModal, defaultSort : {Header : 1, Position : "Desc"}},
                     {title : "Survey questions", headers : 
                     [
                     {Name : "Title", Key : "question", Sort : {Desc : 0, Asc : 1}}, 
                     {Name : "Number of times answered", Key : "Count", Sort : {Desc : 2, Asc : 3}}
-                    ], target : "getAllQuestions", createNew : showQuestionModal, edit: showQuestionModal, viewAnswers: "getSpecificQuestionAnswers", defaultSort : {Header : 1, Position : "Desc"}},
+                    ], target : "questions/getAllQuestions", createNew : showQuestionModal, edit: showQuestionModal, viewAnswers: "questions/getSpecificQuestionAnswers", defaultSort : {Header : 1, Position : "Desc"}},
                     {title : "Deleted survey questions", headers : 
                     [
                     {Name : "Title", Key : "question", Sort : {Desc : 0, Asc : 1}}, 
                     {Name : "Number of times answered", Key : "Count", Sort : {Desc : 2, Asc : 3}}
-                    ], target : "getAllDeletedQuestions", edit: showQuestionModal, restore : "restoreQuestion", viewAnswers: "getSpecificQuestionAnswers", defaultSort : {Header : 1, Position : "Desc"}},
+                    ], target : "questions/getAllDeletedQuestions", edit: showQuestionModal, restore : "questions/restoreQuestion", viewAnswers: "questions/getSpecificQuestionAnswers", defaultSort : {Header : 1, Position : "Desc"}},
                     {title : "Room types", headers : 
                     [
                     {Name : "Title", Key : "title", Sort : {Desc : 0, Asc : 1}}
-                    ], target : "getAllRoomTypes", createNew: showRoomTypeModal, edit: showRoomTypeModal, defaultSort : {Header : "Title", Position : "Desc"}},
+                    ], target : "roomtypes/getAllRoomTypes", createNew: showRoomTypeModal, edit: showRoomTypeModal, defaultSort : {Header : "Title", Position : "Desc"}},
                     {title : "Deleted listings", headers : 
                     [
                     {Name : "Name", Key : "listing_name", Sort : {Desc : 0, Asc : 1} }, 
@@ -210,7 +210,7 @@ window.onload = function(){
                     {Name :"Building type", Key : "type_name", Sort : {Desc : 8, Asc : 9}},
                     {Name : "Address", Key : "address", Sort : {Desc : 10, Asc : 11}}, 
                     {Name :"Size", Key : "size", Suffix : " feet", Sort : {Desc : 12, Asc : 13}}
-                    ], target : "getAllDeletedListings", edit: showListingModal, restore : "restoreListing", defaultSort : {Header : "Name", Position : "Desc"}},
+                    ], target : "listings/getAllDeletedListings", edit: showListingModal, restore : "listings/restoreListing", defaultSort : {Header : "Name", Position : "Desc"}},
                     ];
         let activeTable = 0;
         let savedTable = readFromLocalStorage("activeAdminTable");
@@ -523,7 +523,7 @@ window.onload = function(){
         }
         function adminDeleteRequest(table, elementId){
             let data = {table, id : elementId};
-            submitAjax("deleteFromTable", showResultGenerateTable, data, {closeModal : false});
+            submitAjax("models/deleteFromTable", showResultGenerateTable, data, {closeModal : false});
         }
         function showResultGenerateTable(data, args){
             generateTable();
@@ -554,7 +554,7 @@ window.onload = function(){
             if(type == "edit"){
                 let data = {id : existingId};
                 userIdField.value = existingId;
-                submitAjax("getSpecificUser", function(data){
+                submitAjax("users/getSpecificUser", function(data){
                     let firstRow = data;
 
                     userNameField.value = firstRow.name;
@@ -595,7 +595,7 @@ window.onload = function(){
             }
             if(type == "edit"){
                 let data = {id : existingId};
-                submitAjax("getSpecificLink", function(data){
+                submitAjax("links/getSpecificLink", function(data){
                     let firstRow = data;
 
                     linkTitleField.value = firstRow.title;
@@ -646,7 +646,7 @@ window.onload = function(){
                 let data = {id : existingId};
                 boroughTitle.innerText = "Edit borough";
                 boroughSubmitButton.innerText = "Edit borough";
-                submitAjax("getSpecificBorough", function(data){
+                submitAjax("boroughs/getSpecificBorough", function(data){
                     boroughNameField.value = data.title;
                 }, data);
             }
@@ -686,7 +686,7 @@ window.onload = function(){
                 let data = {id : existingId};
                 messageTypeTitle.innerText = "Edit message type";
                 messageTypeSubmitButton.innerText = "Edit message type";
-                submitAjax("getSpecificMessageType", function(data){
+                submitAjax("messagetypes/getSpecificMessageType", function(data){
                     messageTypeNameField.value = data.title;
                 }, data);
             }
@@ -724,7 +724,7 @@ window.onload = function(){
                 let data = {id : existingId};
                 buildingTypeTitle.innerText = "Edit building type";
                 buildingTypeSubmitButton.innerText = "Edit building type";
-                submitAjax("getSpecificBuildingType", function(data){
+                submitAjax("buildingtypes/getSpecificBuildingType", function(data){
                     buildingTypeNameField.value = data.title;
                 }, data);
             }
@@ -764,7 +764,7 @@ window.onload = function(){
                 let data = {id : existingId};
                 roomTypeTitle.innerText = "Edit room type";
                 roomTypeSubmitButton.innerText = "Edit room type";
-                submitAjax("getSpecificRoomType", function(data){
+                submitAjax("roomtypes/getSpecificRoomType", function(data){
                     roomTypeNameField.value = data.title;
                 }, data);
             }
@@ -818,7 +818,7 @@ window.onload = function(){
 
             if(type == "edit"){
                 let data = {id : existingId};
-                submitAjax("getSpecificListing", function(data){
+                submitAjax("listings/getSpecificListing", function(data){
                     let core = data.main;
                     let photo = data.photo;
                     let rooms = data.rooms;
@@ -876,7 +876,7 @@ window.onload = function(){
                 modalTitle.innerText = "Edit survey question";
                 modalSubmitButton.innerText = "Edit survey question";
                 let data = {questionId : existingId};
-                submitAjax("getSpecificQuestion", function(data){
+                submitAjax("questions/getSpecificQuestion", function(data){
                     let question = data["name"];
                     questionNameField.value = question;
                     let answers = data["answers"];
@@ -929,7 +929,7 @@ window.onload = function(){
         }
         function setupUserModal(){
             let userRoleSelect = document.querySelector("#userRole"); 
-            readAjax("getAllRoles", fillDropdown, {}, [userRoleSelect]);
+            readAjax("roles/getAllRoles", fillDropdown, {}, [userRoleSelect]);
 
             let modalSubmitButton = document.querySelector("#user-submit");
             addEventListenerOnce("click", modalSubmitButton, function(e){
@@ -942,9 +942,9 @@ window.onload = function(){
             let listingBuildingType = document.querySelector("#listingBuildingType");
             let listingRoomsList = document.querySelector("#listingRoomsList");
 
-            readAjax("getAllBoroughs", fillDropdown, {}, [boroughSelect]);
-            readAjax("getAllBuildingTypes", fillDropdown, {}, [listingBuildingType]);
-            readAjax("getAllRoomTypes", fillDropdown, {}, [listingRoomsList]);
+            readAjax("boroughs/getAllBoroughs", fillDropdown, {}, [boroughSelect]);
+            readAjax("buildingtypes/getAllBuildingTypes", fillDropdown, {}, [listingBuildingType]);
+            readAjax("roomtypes/getAllRoomTypes", fillDropdown, {}, [listingRoomsList]);
             
 
             let fileReader = new FileReader();
@@ -977,10 +977,10 @@ window.onload = function(){
         }
         function setupLinkModal(){
             let accessLevelSelect = document.querySelector("#LinkReqLevel");
-            readAjax("getAllAccessLevels", fillDropdown, {}, [accessLevelSelect]);
+            readAjax("accesslevels/getAllAccessLevels", fillDropdown, {}, [accessLevelSelect]);
 
             let locationSelect = document.querySelector("#LinkLocation");
-            readAjax("getAllNavigationLocations", fillDropdown, {}, [locationSelect, true]);
+            readAjax("links/getAllNavigationLocations", fillDropdown, {}, [locationSelect, true]);
 
             let modalSubmitButton = document.querySelector("#link-submit");
             addEventListenerOnce("click", modalSubmitButton, function(e){
@@ -1507,7 +1507,7 @@ window.onload = function(){
         let messageTypeSelect = document.querySelector("#messageType");
         let messageTitleField = document.querySelector("#messageTitle");
         let messageBodyField = document.querySelector("#messageBody");
-        readAjax("getAllMessageTypes", fillDropdown, {}, [messageTypeSelect]);
+        readAjax("messagetypes/getAllMessageTypes", fillDropdown, {}, [messageTypeSelect]);
 
         let sendMessageButton = document.querySelector("#sendMessage");
         addEventListenerOnce("click", sendMessageButton, function(e){
@@ -1535,7 +1535,7 @@ window.onload = function(){
             data.title = messageTitleField.value;
             data.body = messageBodyField.value;
 
-            submitAjax("createNewMessage", showResult, data);
+            submitAjax("messages/createNewMessage", showResult, data);
         }
     }
     if(currentPage === "survey.html"){
@@ -1590,13 +1590,13 @@ window.onload = function(){
             document.querySelector("#listingsSort").value = selectedSort;
         }
 
-        readAjax("getAllBoroughsWithListings", fillCheckbox, {}, boroughArgs);
+        readAjax("boroughs/getAllBoroughsWithListings", fillCheckbox, {}, boroughArgs);
 
-        readAjax("getAllBuildingTypesWithListings", fillCheckbox, {}, buildingTypeArgs);
+        readAjax("buildingtypes/getAllBuildingTypesWithListings", fillCheckbox, {}, buildingTypeArgs);
 
         //Get preexisting filters from local storage, then query for listings
 
-        submitAjax("getListingsForFilter", displayListings, data, args);
+        submitAjax("listings/getListingsForFilter", displayListings, data, args);
 
         let searchButton = document.querySelector("#searchListings");
         addEventListenerOnce("click", searchButton, function(e){
@@ -1615,7 +1615,7 @@ window.onload = function(){
 
         args.noListingsMessage = "No listings saved as favorite"
 
-        submitAjax("getListingsForFilter", displayListings, data, args);
+        submitAjax("listings/getListingsForFilter", displayListings, data, args);
     }
     if(currentPage === "listing.html"){
         let queryString = window.location.search;
@@ -1636,11 +1636,11 @@ window.onload = function(){
 
         args.errorFunction = showListingNotFound;
 
-        submitAjax("getSpecificDetailedListing", showSingleListing, data, args);
+        submitAjax("listings/getSpecificDetailedListing", showSingleListing, data, args);
     }
     if(currentPage === "index.html"){
         let boroughSelect = document.querySelector("#landing-input");
-        readAjax("getAllBoroughsWithListings", fillDropdown, {}, [boroughSelect]);
+        readAjax("boroughs/getAllBoroughsWithListings", fillDropdown, {}, [boroughSelect]);
 
         let searchButton = document.querySelector("#landing-search");
         addEventListenerOnce("click", searchButton, function(e){
@@ -1782,10 +1782,10 @@ function addFavoriteFunctionality(){
             args.additionalFunctionArgs = {idOfListing};
 
             if(newIcon === "mdi:cards-heart"){
-                submitAjax("addToFavoriteListings", showResult, data, args);
+                submitAjax("favorites/addToFavoriteListings", showResult, data, args);
             }
             else{
-                submitAjax("removeFromFavoriteListings", showResult, data, args);
+                submitAjax("favorites/removeFromFavoriteListings", showResult, data, args);
             }
         })
     }
@@ -1840,7 +1840,7 @@ function sendFiltersDisplayListings(){
 
     data.titleFilter = titleFilter.value;
 
-    submitAjax("getListingsForFilter", displayListings, data, args);
+    submitAjax("listings/getListingsForFilter", displayListings, data, args);
 }
 
 function saveToLocalStorage(data, name){
@@ -1986,7 +1986,7 @@ function flipListingFavoriteIcon(args){
 }
 
 function getQuestionsForUser(){
-    readAjax("getQuestionsForUser", displaySurveyQuestions, {});
+    readAjax("questions/getQuestionsForUser", displaySurveyQuestions, {});
 }
 
 function setGlobal(data, args){
@@ -2089,7 +2089,7 @@ function submitQuestionAnswer(questionId){
     data.answerId = selectedAnswerId;
     args = {};
     args.additionalFunctions = new Array(getQuestionsForUser);
-    submitAjax("submitAnswer", showResult, data, args);
+    submitAjax("questions/submitAnswer", showResult, data, args);
 }
 
 function showSuccess(data){
@@ -2234,7 +2234,7 @@ function generateNavbar(response){
         let logoutButton = document.querySelector("#logoutButton");
         logoutButton.addEventListener("click", function(e){
             e.preventDefault();
-            readAjax("logout", redirectSuccess, {}, { newLocation : "login.html", landing : false});
+            readAjax("users/logout", redirectSuccess, {}, { newLocation : "login.html", landing : false});
         })
     }
 

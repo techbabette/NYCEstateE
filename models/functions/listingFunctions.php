@@ -272,7 +272,7 @@ function getListingsForFilter($listingTitleFilter, $listingBuildingTypeFilter, $
     include ("../../../connection.php");
 
     if($user_id != 0){
-        $statement = "SELECT l.listing_id AS id, listing_name, b.borough_name AS borough, bt.type_name AS Type, price, description, address, size,
+        $statement = "SELECT DISTINCT l.listing_id AS id, listing_name, b.borough_name AS borough, bt.type_name AS Type, price, description, address, size,
         (
         SELECT COUNT(*) AS list FROM favorites WHERE user_id = :user_id AND listing_id = l.listing_id
         ) AS favorite
@@ -284,7 +284,7 @@ function getListingsForFilter($listingTitleFilter, $listingBuildingTypeFilter, $
         ";
     }
     else{
-        $statement = "SELECT l.listing_id AS id, listing_name, b.borough_name AS borough, bt.type_name AS Type, price, description, address, size, 0 AS favorite
+        $statement = "SELECT DISTINCT l.listing_id AS id, listing_name, b.borough_name AS borough, bt.type_name AS Type, price, description, address, size, 0 AS favorite
         FROM listings l 
         INNER JOIN listingprices lp ON l.listing_id = lp.listing_id
         INNER JOIN boroughs b on l.borough_id = b.borough_id
