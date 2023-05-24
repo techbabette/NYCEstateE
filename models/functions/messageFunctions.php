@@ -1,6 +1,6 @@
 <?php
 function getAllMessageTypes(){
-    include ("../../connection.php");
+    include ("../../../connection.php");
 
     $statement = "SELECT message_type_id AS id, message_type_name as title FROM messagetypes ORDER BY message_type_id";
     $prepSt = $conn->prepare($statement);
@@ -10,7 +10,7 @@ function getAllMessageTypes(){
     return $prepSt->fetchAll();
 }
 function getAllMessageTypesCount($sort){
-    include ("../../connection.php");
+    include ("../../../connection.php");
 
     $statement = "SELECT mt.message_type_id AS id, message_type_name AS title, COUNT(m.message_id) AS Count
                   FROM messagetypes mt LEFT JOIN messages m on mt.message_type_id = m.message_type_id 
@@ -32,7 +32,7 @@ function getAllMessageTypesCount($sort){
     return $prepSt->fetchAll();
 }
 function getAllMessages($sort){
-    include ("../../connection.php");
+    include ("../../../connection.php");
 
     $statement = "SELECT m.message_id AS id, email, message_type_name, title, message, m.dateCreated
                   FROM messages m 
@@ -66,7 +66,7 @@ function getAllMessages($sort){
     return $prepSt->fetchAll();
 }
 function getSpecificMessageType($id){
-    include ("../../connection.php");
+    include ("../../../connection.php");
 
     $statement = "SELECT message_type_name AS title FROM messagetypes
                   WHERE message_type_id = :message_type_id";
@@ -79,7 +79,7 @@ function getSpecificMessageType($id){
     return $prepSt->fetch();
 }
 function createNewMessage($user_id, $message_type_id, $title, $message){
-    include ("../../connection.php");
+    include ("../../../connection.php");
 
     $statement = "INSERT INTO messages (user_id, message_type_id, title, message) VALUES (:user_id, :message_type_id, :title, :message)";
     $prepSt = $conn->prepare($statement);

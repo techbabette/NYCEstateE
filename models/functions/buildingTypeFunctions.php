@@ -1,6 +1,6 @@
 <?php
 function getAllBuildingTypes(){
-    include ("../../connection.php");
+    include ("../../../connection.php");
 
     $statement = "SELECT building_type_id AS id, type_name as title FROM buildingtypes ORDER BY type_name";
     $prepSt = $conn->prepare($statement);
@@ -10,7 +10,7 @@ function getAllBuildingTypes(){
     return $prepSt->fetchAll();
 }
 function getAllBuildingTypesCount($sort){
-    include ("../../connection.php");
+    include ("../../../connection.php");
 
     $statement = "SELECT bt.building_type_id AS id, type_name as title,  COUNT(l.listing_id) as Count
                   FROM buildingtypes bt LEFT JOIN listings l ON bt.building_type_id = l.building_type_id
@@ -32,7 +32,7 @@ function getAllBuildingTypesCount($sort){
     return $prepSt->fetchAll();
 }
 function getAllBuildingTypesWithListings(){
-    include ("../../connection.php");
+    include ("../../../connection.php");
 
     $statement = "SELECT bt.building_type_id AS id, type_name as title,  COUNT(l.listing_id) as Count
                   FROM buildingtypes bt INNER JOIN listings l ON bt.building_type_id = l.building_type_id
@@ -46,7 +46,7 @@ function getAllBuildingTypesWithListings(){
     return $prepSt->fetchAll();
 }
 function getSpecificBuildingType($id){
-    include ("../../connection.php");
+    include ("../../../connection.php");
 
     $statement = "SELECT type_name AS title FROM buildingtypes
                   WHERE building_type_id = :building_type_id";

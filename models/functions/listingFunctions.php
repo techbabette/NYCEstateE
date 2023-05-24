@@ -1,6 +1,6 @@
 <?php
 function createNewListing($borough, $building_type, $name, $description, $address, $size){
-    include ("../../connection.php");
+    include ("../../../connection.php");
 
     $statement = "INSERT INTO listings (borough_id, building_type_id, listing_name, description, address, size) 
                   VALUES (?, ?, ?, ?, ?, ?)";
@@ -21,7 +21,7 @@ function createNewListing($borough, $building_type, $name, $description, $addres
 }
 
 function editListing($listing_id, $borough_id, $building_type_id, $name, $description, $address, $size){
-    include ("../../connection.php");
+    include ("../../../connection.php");
 
     $statement = "UPDATE listings SET borough_id = :borough_id, building_type_id = :building_type_id, listing_name = :name, 
                   description = :description, address = :address, size = :size
@@ -40,7 +40,7 @@ function editListing($listing_id, $borough_id, $building_type_id, $name, $descri
 }
 
 function saveListingPrice($listing, $price){
-    include ("../../connection.php");
+    include ("../../../connection.php");
 
     $statement = "INSERT INTO listingprices (listing_id, price) VALUES (?, ?)";
     $prepSt = $conn->prepare($statement);
@@ -54,7 +54,7 @@ function saveListingPrice($listing, $price){
 }
 
 function saveMainListingPhoto($listing, $path){
-    include ("../../connection.php");
+    include ("../../../connection.php");
 
     $main = true;
 
@@ -71,7 +71,7 @@ function saveMainListingPhoto($listing, $path){
 }
 
 function saveListingRoom($listing, $room, $count){
-    include ("../../connection.php");
+    include ("../../../connection.php");
 
     $statement = "INSERT INTO listingrooms (listing_id, room_type_id, numberOf) VALUES (?, ?, ?)";
     $prepSt = $conn->prepare($statement);
@@ -86,7 +86,7 @@ function saveListingRoom($listing, $room, $count){
 }
 
 function updateListingRoomCount($listing_id, $room_type_id, $numberOf){
-    include ("../../connection.php");
+    include ("../../../connection.php");
 
     $statement = "UPDATE listingrooms SET numberOf = :numberOf
                   WHERE listing_id = :listing_id AND room_type_id = :room_type_id";
@@ -100,7 +100,7 @@ function updateListingRoomCount($listing_id, $room_type_id, $numberOf){
 }
 
 function removeListingRoom($listing_id, $room_type_id){
-    include ("../../connection.php");
+    include ("../../../connection.php");
 
     $statement = "DELETE FROM listingrooms
                   WHERE listing_id = :listing_id AND room_type_id = :room_type_id";
@@ -113,7 +113,7 @@ function removeListingRoom($listing_id, $room_type_id){
 }
 
 function updateMainListingPhoto($listing, $path){
-    include ("../../connection.php");
+    include ("../../../connection.php");
 
     $statement = "UPDATE listingphotos SET path = ? WHERE listing_id = ? AND main = true";
     $prepSt = $conn->prepare($statement);
@@ -127,7 +127,7 @@ function updateMainListingPhoto($listing, $path){
 }
 
 function getCurrentMainListingPhoto($listing){
-    include ("../../connection.php");
+    include ("../../../connection.php");
 
     $statement = "SELECT path FROM listingphotos 
                   WHERE main = 1 AND listing_id = :listing_id
@@ -144,7 +144,7 @@ function getCurrentMainListingPhoto($listing){
 }
 
 function getRoomsOfListing($listing){
-    include ("../../connection.php");
+    include ("../../../connection.php");
 
     $statement = "SELECT rt.room_name, rt.room_type_id, lr.numberOf 
                   FROM roomtypes rt 
@@ -162,7 +162,7 @@ function getRoomsOfListing($listing){
 }
 
 function getSpecificListing($listing){
-    include ("../../connection.php");
+    include ("../../../connection.php");
 
     $statement = "SELECT listing_name, description, (SELECT price FROM listingprices WHERE listing_id = :listing_id ORDER BY date DESC LIMIT 1) as price, size, address, borough_id, building_type_id
                   FROM listings li
@@ -178,7 +178,7 @@ function getSpecificListing($listing){
 }
 
 function getAllListings($sort, $deleted){
-    include ("../../connection.php");
+    include ("../../../connection.php");
 
     $statement = "SELECT l.listing_id AS id, listing_name, price, description, b.borough_name, bt.type_name, address, size
                   FROM listings l INNER JOIN listingprices lp ON l.listing_id = lp.listing_id
@@ -225,7 +225,7 @@ function getAllListings($sort, $deleted){
 }
 
 function getDetailedListing($listing_id, $user_id){
-    include ("../../connection.php");
+    include ("../../../connection.php");
 
     if($user_id != 0){
         $statement = "SELECT l.listing_id AS id, listing_name, b.borough_name AS borough, b.borough_id AS borough_id, bt.building_type_id AS type_id, bt.type_name AS Type, price, description, address, size,
@@ -269,7 +269,7 @@ function getDetailedListing($listing_id, $user_id){
 }
 
 function getListingsForFilter($listingTitleFilter, $listingBuildingTypeFilter, $listingBoroughFilter, $user_id, $userFavoriteFilter, $sortType){
-    include ("../../connection.php");
+    include ("../../../connection.php");
 
     if($user_id != 0){
         $statement = "SELECT l.listing_id AS id, listing_name, b.borough_name AS borough, bt.type_name AS Type, price, description, address, size,
@@ -372,7 +372,7 @@ function getListingsForFilter($listingTitleFilter, $listingBuildingTypeFilter, $
 }
 
 function getPriceOfListing($listing_id){
-    include ("../../connection.php");
+    include ("../../../connection.php");
 
     $statement = "SELECT price FROM listingprices WHERE 
                   listing_id = :listing_id ORDER BY date DESC LIMIT 1";
@@ -387,7 +387,7 @@ function getPriceOfListing($listing_id){
 }
 
 function getAllDeletedListings(){
-    include ("../../connection.php");
+    include ("../../../connection.php");
 
     $statement = "SELECT l.listing_id AS id, listing_name, price, description, b.borough_name, bt.type_name, address, size
                   FROM listings l INNER JOIN listingprices lp ON l.listing_id = lp.listing_id
@@ -405,7 +405,7 @@ function getAllDeletedListings(){
 }
 
 function restoreListing($id){
-    include ("../../connection.php");
+    include ("../../../connection.php");
 
     $statement = "UPDATE listings SET dateDeleted = NULL
                   WHERE listing_id = :listing_id";

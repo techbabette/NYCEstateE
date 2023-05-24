@@ -1,6 +1,6 @@
 <?php
 function getAllRoomTypes($sort){
-    include ("../../connection.php");
+    include ("../../../connection.php");
 
     $statement = "SELECT room_type_id AS id, room_name as title FROM roomtypes";
     $orderByStub = " ORDER BY ";
@@ -17,7 +17,7 @@ function getAllRoomTypes($sort){
     return $prepSt->fetchAll();
 }
 function getSpecificRoomType($id){
-    include ("../../connection.php");
+    include ("../../../connection.php");
 
     $statement = "SELECT room_name AS title FROM roomtypes
                   WHERE room_type_id = :room_type_id";

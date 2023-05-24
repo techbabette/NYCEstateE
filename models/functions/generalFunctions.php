@@ -42,7 +42,7 @@ function echoGone($e = "No longer exists"){
     die(); 
 }
 function getUserLevel($id){
-    include ("../../connection.php");
+    include ("../../../connection.php");
 
     $statement = "SELECT user_id, level 
     FROM users u 
@@ -81,7 +81,7 @@ function isValidJSON($str) {
     return json_last_error() == JSON_ERROR_NONE;
 }
 function updateTextValue($table,$toChange, $toChangeValue, $paramater, $paramaterValue){
-    include ("../../connection.php");
+    include ("../../../connection.php");
 
     $statement = "UPDATE $table SET $toChange = ?
                   WHERE $paramater = ?";
@@ -94,7 +94,7 @@ function updateTextValue($table,$toChange, $toChangeValue, $paramater, $paramate
 }
 
 function deleteSingleRow($table, $paramater, $paramaterValue){
-    include ("../../connection.php");
+    include ("../../../connection.php");
 
     $statement = "DELETE FROM $table WHERE $paramater = ?";
     $prepSt = $conn->prepare($statement);
@@ -106,7 +106,7 @@ function deleteSingleRow($table, $paramater, $paramaterValue){
 }
 
 function softDeleteSingleRow($table, $parameter, $parameterValue){
-    include ("../../connection.php");
+    include ("../../../connection.php");
 
     $statement = "UPDATE $table SET dateDeleted = NOW() WHERE $parameter = ?";
     $prepSt = $conn->prepare($statement);
@@ -118,7 +118,7 @@ function softDeleteSingleRow($table, $parameter, $parameterValue){
 
 
 function insertSingleParamater($table, $paramater, $paramaterName){
-    include ("../../connection.php");
+    include ("../../../connection.php");
 
     $statement = "INSERT INTO $table ($paramaterName) 
     VALUES (?)";
@@ -132,7 +132,7 @@ function insertSingleParamater($table, $paramater, $paramaterName){
 }
 
 function getEverythingFromTable($table){
-    include ("../../connection.php");
+    include ("../../../connection.php");
 
     $statement = "SELECT * FROM $table";
     $prepSt = $conn->prepare($statement);
@@ -142,7 +142,7 @@ function getEverythingFromTable($table){
     return $prepSt->fetchAll();
 }
 function getEveryParamFromTable($table, $param){
-    include ("../../connection.php");
+    include ("../../../connection.php");
 
     $statement = "SELECT $param FROM $table";
     $prepSt = $conn->prepare($statement);
@@ -152,7 +152,7 @@ function getEveryParamFromTable($table, $param){
     return $prepSt->fetchAll();
 }
 function getEveryRowWhereParamFromTable($table, $param, $value){
-    include ("../../connection.php");
+    include ("../../../connection.php");
 
     $statement = "SELECT $param FROM $table WHERE $param = ?";
     $prepSt = $conn->prepare($statement);
@@ -163,7 +163,7 @@ function getEveryRowWhereParamFromTable($table, $param, $value){
     return $prepSt->fetchAll();
 }
 function addLineToFile($line, $file){
-    $fileToAddTo = fopen("../data/".$file.".txt", "a");
+    $fileToAddTo = fopen("../../data/".$file.".txt", "a");
 
     fwrite($fileToAddTo, $line);
 

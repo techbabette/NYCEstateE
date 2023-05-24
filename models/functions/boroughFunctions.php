@@ -1,6 +1,6 @@
 <?php
 function getAllBoroughs(){
-    include ("../../connection.php");
+    include ("../../../connection.php");
 
     $statement = "SELECT borough_id AS id, borough_name as title FROM boroughs ORDER BY borough_name";
     $prepSt = $conn->prepare($statement);
@@ -10,7 +10,7 @@ function getAllBoroughs(){
     return $prepSt->fetchAll();
 }
 function getAllBoroughsCount($sort){
-    include ("../../connection.php");
+    include ("../../../connection.php");
 
     $statement = "SELECT b.borough_id AS id, borough_name as title, COUNT(l.listing_id) as Count
                   FROM boroughs b LEFT JOIN listings l ON b.borough_id = l.borough_id
@@ -31,7 +31,7 @@ function getAllBoroughsCount($sort){
     return $prepSt->fetchAll();
 }
 function getAllBoroughsWithListings(){
-    include ("../../connection.php");
+    include ("../../../connection.php");
 
     $statement = "SELECT b.borough_id AS id, borough_name as title, COUNT(l.listing_id) as Count
                   FROM boroughs b INNER JOIN listings l ON b.borough_id = l.borough_id
@@ -45,7 +45,7 @@ function getAllBoroughsWithListings(){
     return $prepSt->fetchAll();
 }
 function getSpecificBorough($id){
-    include ("../../connection.php");
+    include ("../../../connection.php");
 
     $statement = "SELECT borough_name AS title FROM boroughs
                   WHERE borough_id = :borough_id";
