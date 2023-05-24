@@ -57,6 +57,11 @@ try{
     if(!$loginAttempt){
         echoUnauthorized("Incorrect email/password");
     }
+    if($loginAttempt == -1){
+        $time = time();
+        addLineToFile($email."::".$time."\n", "failedLoginAttempts");
+        echoUnauthorized("Incorrect email/password");
+    }
     $user = getUserInformation($loginAttempt);
     if(!$user["level"] > 0){
         echoNoPermission("User banned");

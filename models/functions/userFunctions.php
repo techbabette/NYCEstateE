@@ -85,7 +85,7 @@ function attemptLogin($email, $password){
         return $userId;
     }
     else{
-        return 0;
+        return -1;
     }
 }
 
