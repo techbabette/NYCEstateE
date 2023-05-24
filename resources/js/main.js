@@ -136,6 +136,16 @@ window.onload = function(){
             }
         })
         let tables = [
+                    {title : "Page visits", headers :
+                    [
+                    {Name : "Page name", Key : "name", Sort : {Desc : 2, Asc : 3}},
+                    {Name : "Percentage of visits", Key : "number", Sort : {Desc : 0, Asc : 1}, Suffix : "%"}
+                    ], target : "activities/getPageVisitsPercent", defaultSort : {Header: 1, Position : "Desc"}},
+                    {title : "Page visits last 24h", headers :
+                    [
+                    {Name : "Page name", Key : "name", Sort : {Desc : 2, Asc : 3}},
+                    {Name : "Number of visits", Key : "number", Sort : {Desc : 0, Asc : 1}}
+                    ], target : "activities/getPageVisitsLastDay", defaultSort : {Header: 1, Position : "Desc"}},
                     {title : "Users", headers : 
                     [
                     {Name : "Name", Key : "name", Sort : {Desc : 0, Asc : 1}},
