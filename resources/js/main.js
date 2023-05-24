@@ -1,21 +1,31 @@
-let url = window.location.href.split("/");
-let lastOfUrl = url[url.length - 1];
-let currentPage = lastOfUrl.split("?")[0].toLowerCase().replace(/[^A-Za-z0-9\.]/gi, "");
+// let url = window.location.href.split("/");
+// let lastOfUrl = url[url.length - 1];
+// let currentPage = lastOfUrl.split("?")[0].toLowerCase().replace(/[^A-Za-z0-9\.]/gi, "");
 let mainPage = false;
 let ajaxPath = "BusinessLogic/";
 let data;
 let globalData = {};
 let success;
-if (currentPage == "" || currentPage == "index.html") mainPage = true;
+let queryString = window.location.search;
+
+let urlParams = new URLSearchParams(queryString);
+
+let currentPage = urlParams.get("page");
+
+if(!currentPage){
+    currentPage = "index.html"
+}
+
+console.log(currentPage);
+
+mainPage = true;
 if (!mainPage) ajaxPath = "../BusinessLogic/";
 window.onload = function(){
-    if(currentPage == "") {
-        currentPage == "index.html";
-    }
     data = {currentPage};
 
     //Send current page to check if allwwed
-    submitAjax("getLinks", generateNavbar, data, { newLocation : "index.html", landing : true, redirectOnNotAllowed : true});
+    submitAjax("getLinks", generateNavbar, data, { newLocation : "index.php?page=index.html", landing : true, redirectOnNotAllowed : true});
+    
 
     if(currentPage == "register.html"){
         let registrationForm = document.querySelector("#registrationForm");
@@ -819,7 +829,7 @@ window.onload = function(){
                     listingPriceField.value = core.price;
                     listingBoroughSelect.value = core.borough_id;
                     listingBuildingTypeSelect.value = core.building_type_id; 
-                    listingImagePreview.src = `../resources/imgs/${photo.path}`;
+                    listingImagePreview.src = `./resources/imgs/${photo.path}`;
                     
                     globalData.startingRooms = new Array();
                     for(let room of rooms){
@@ -1692,7 +1702,7 @@ function showSingleListing(data){
     `
     <div class="col-12 col-md-4">
     <div class="listing-img w-100 listing-img-height">
-      <img src="../resources/imgs/${img}" alt="${body["listing_name"]} img" class="img-fluid mk-main-img"/>
+      <img src="./resources/imgs/${img}" alt="${body["listing_name"]} img" class="img-fluid mk-main-img"/>
     <a href="#" data-id="${body["id"]}" class="mk-favorite-icon-holder">
         <span class="iconify mk-favorite-icon" data-icon="${favorite ? "mdi:cards-heart": "mdi:cards-heart-outline"}">Heart</span>
     </a>
@@ -1930,7 +1940,7 @@ function displayListings(data, args){
         </a>
         <div class="listing-main">
           <div class="listing-img w-100 listing-img-height">
-            <img src="../resources/imgs/${img}" alt="${body["listing_name"]} img" class="img-fluid mk-img-fluid">
+            <img src="./resources/imgs/${img}" alt="${body["listing_name"]} img" class="img-fluid mk-img-fluid">
           </div>
           <div class="listing-body">
             <h3 class="h5 listing-title">${body["listing_name"]}</h3>
@@ -2202,7 +2212,7 @@ function generateNavbar(response){
     let navbarElements = data.filter(el => el.location == "navbar");
     let footerElements = data.filter(el => el.location == "footer");
 
-    url = generateUrl(headerElement, "pages/");
+    url = generateUrl(headerElement, "index.php?page=");
 
     headerHolder.href = url;
     headerHolder.text = headerElement.link_title;
@@ -2211,7 +2221,7 @@ function generateNavbar(response){
     footerHeaderHolder.text = headerElement.link_title;
 
     for(let navbarElement of navbarElements){
-        navbarHolder.innerHTML += generateLinkElement(navbarElement, "pages/");
+        navbarHolder.innerHTML += generateLinkElement(navbarElement, "index.php?page=");
     }
 
     if(accessLevel > 1){
@@ -2401,13 +2411,13 @@ function addError(field, msg, errorHolderDistance){
 
 function redirect(args){
     let newLocation = args.newLocation;
-    let landing = args.landing;
     let additionalText = ""
     if(window.location.hostname === "localhost"){
         additionalText = "/nycestatee";
     }
 
-    let newLink = window.location.hostname + additionalText + (landing ? `/${newLocation}` : `/pages/${newLocation}`); 
+    // let newLink = window.location.hostname + additionalText + (landing ? `/${newLocation}` : `/pages/${newLocation}`); 
+    let newLink = window.location.hostname + additionalText + (`/index.php?page=${newLocation}`); 
     window.location.assign("https://" + newLink);
 }
 
