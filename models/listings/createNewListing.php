@@ -1,7 +1,7 @@
 <?php
 session_start();
 $requiredLevel = 3;
-require("../DataAccess/generalFunctions.php");
+require("../functions/generalFunctions.php");
 checkAccessLevel($requiredLevel);
 
 $result;
@@ -109,8 +109,8 @@ foreach($rooms as $room){
     }
 }
 
-require("../DataAccess/listingFunctions.php");
-require("../DataAccess/imageFunctions.php");
+require("../functions/listingFunctions.php");
+require("../functions/imageFunctions.php");
 try{
     //First attempt to save main image of the listing to disk
     $imgUploadSuccess = saveAdjustedPhotoToDisk($_FILES["listingPhoto"], $target_file, 640, 360);

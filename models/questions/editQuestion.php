@@ -1,7 +1,7 @@
 <?php
 session_start();
 $requiredLevel = 3;
-require("../DataAccess/generalFunctions.php");
+require("../functions/generalFunctions.php");
 checkAccessLevel($requiredLevel);
 
 
@@ -59,7 +59,7 @@ foreach($remainingAnswers as $answer){
     }
 }
 
-require("../DataAccess/surveyFunctions.php");
+require("../functions/surveyFunctions.php");
 try{
     //Change question text
     editQuestion($questionId, $questionName);

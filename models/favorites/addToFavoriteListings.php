@@ -1,7 +1,7 @@
 <?php
 session_start();
 $requiredLevel = 2;
-require("../DataAccess/generalFunctions.php");
+require("../functions/generalFunctions.php");
 checkAccessLevel($requiredLevel, "You must be logged in to add listings to favorites");
 
 $result;
@@ -20,7 +20,7 @@ if(!isset($_POST["listingId"])){
 $userId = $_SESSION["user"]["user_id"];
 $listingId = $_POST["listingId"];
 
-require("../DataAccess/favoriteFunctions.php");
+require("../functions/favoriteFunctions.php");
 
 $alreadyFavorite = checkIfAlreadyFavorite($userId, $listingId);
 

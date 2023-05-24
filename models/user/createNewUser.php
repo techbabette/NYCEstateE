@@ -1,5 +1,5 @@
 <?php
-require("../DataAccess/generalFunctions.php");
+require("../functions/generalFunctions.php");
 
 session_start();
 $result;
@@ -54,7 +54,7 @@ if(!preg_match($reEmail, $email)){
     echoUnprocessableEntity("Invalid email");
 }
 
-require("../DataAccess/userFunctions.php");
+require("../functions/userFunctions.php");
 try{
     $emailInUse = checkIfEmailInUse($email);
     if($emailInUse){

@@ -1,7 +1,7 @@
 <?php
 session_start();
 $requiredLevel = 2;
-require("../DataAccess/generalFunctions.php");
+require("../functions/generalFunctions.php");
 checkAccessLevel($requiredLevel);
 
 
@@ -41,7 +41,7 @@ if(!$messageTypeExists){
     echoUnprocessableEntity("Invalid message type selected");
 }
 
-require("../DataAccess/messageFunctions.php");
+require("../functions/messageFunctions.php");
 try{
     createNewMessage($_SESSION["user"]["user_id"], $messageType, $title, $body);
 }

@@ -1,11 +1,11 @@
 <?php
 session_start();
 $requiredLevel = 3;
-require("../DataAccess/generalFunctions.php");
+require("../functions/generalFunctions.php");
 
 checkAccessLevel($requiredLevel);
 
-require("../DataAccess/navigationLocationFunctions.php");
+require("../functions/navigationLocationFunctions.php");
 $result;
 
 try{

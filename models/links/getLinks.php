@@ -1,7 +1,7 @@
 <?php
-include("../DataAccess/linkFunctions.php");
-include("../DataAccess/userFunctions.php");
-require("../DataAccess/generalFunctions.php");
+include("../functions/linkFunctions.php");
+include("../functions/userFunctions.php");
+require("../functions/generalFunctions.php");
 
 $json_params = file_get_contents("php://input");
 

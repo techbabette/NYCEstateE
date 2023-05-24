@@ -1,7 +1,7 @@
 <?php
 session_start();
 $requiredLevel = 3;
-require("../DataAccess/generalFunctions.php");
+require("../functions/generalFunctions.php");
 checkAccessLevel($requiredLevel);
 
 
@@ -35,7 +35,7 @@ foreach($questionAnswers as $answer){
         echoUnprocessableEntity("Answer does not match format (Between three and eleven words)");
     }
 }
-require("../DataAccess/surveyFunctions.php");
+require("../functions/surveyFunctions.php");
 try{
     $newQuestion = saveQuestion($questionName);
     foreach($questionAnswers as $answer){

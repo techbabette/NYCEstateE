@@ -1,7 +1,7 @@
 <?php
 session_start();
 $result;
-require("../DataAccess/generalFunctions.php");
+require("../functions/generalFunctions.php");
 if(isset($_SESSION["user"])){
     session_unset();
     http_response_code(200);

@@ -1,6 +1,6 @@
 <?php
 session_start();
-require("../DataAccess/generalFunctions.php");
+require("../functions/generalFunctions.php");
 
 $json_params = file_get_contents("php://input");
 
@@ -51,7 +51,7 @@ if($errors != 0){
     echoUnauthorized("Incorrect email/password");
 }
 
-require("../DataAccess/userFunctions.php");
+require("../functions/userFunctions.php");
 try{
     $loginAttempt = attemptLogin($email, $pass);
     if(!$loginAttempt){

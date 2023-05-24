@@ -1,7 +1,7 @@
 <?php
 session_start();
 $requiredLevel = 2;
-require("../DataAccess/generalFunctions.php");
+require("../functions/generalFunctions.php");
 checkAccessLevel($requiredLevel);
 
 $json_params = file_get_contents("php://input");
@@ -13,7 +13,7 @@ if (strlen($json_params) > 0 && isValidJSON($json_params)){
 
 $result;
 
-require("../DataAccess/surveyFunctions.php");
+require("../functions/surveyFunctions.php");
 
 try{
     $questions = getQuestions($_SESSION["user"]["user_id"]);

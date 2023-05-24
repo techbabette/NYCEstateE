@@ -1,7 +1,7 @@
 <?php
 session_start();
 $requiredLevel = 3;
-require("../DataAccess/generalFunctions.php");
+require("../functions/generalFunctions.php");
 checkAccessLevel($requiredLevel);
 
 $json_params = file_get_contents("php://input");
@@ -74,7 +74,7 @@ if(!$userExists){
 }
 
 //Success
-require("../DataAccess/userFunctions.php");
+require("../functions/userFunctions.php");
 try{
     editUser($userId, $email, $name, $lastName, $roleId);
     if(!empty($password)){

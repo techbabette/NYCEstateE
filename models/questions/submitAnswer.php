@@ -1,7 +1,7 @@
 <?php
 session_start();
 $requiredLevel = 2;
-require("../DataAccess/generalFunctions.php");
+require("../functions/generalFunctions.php");
 checkAccessLevel($requiredLevel);
 
 $json_params = file_get_contents("php://input");
@@ -19,7 +19,7 @@ if(!isset($_POST["answerId"])){
 
 $answerId = $_POST["answerId"];
 
-require("../DataAccess/surveyFunctions.php");
+require("../functions/surveyFunctions.php");
 
 $userAllowedToAnswer = checkIfUserAllowedToAnswer($_SESSION["user"]["user_id"], $answerId);
 

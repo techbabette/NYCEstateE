@@ -1,7 +1,7 @@
 <?php
 session_start();
 $requiredLevel = 3;
-require("../DataAccess/generalFunctions.php");
+require("../functions/generalFunctions.php");
 checkAccessLevel($requiredLevel);
 
 $result;
@@ -116,8 +116,8 @@ foreach($rooms as $room){
     }
 }
 
-require("../DataAccess/listingFunctions.php");
-require("../DataAccess/imageFunctions.php");
+require("../functions/listingFunctions.php");
+require("../functions/imageFunctions.php");
 try{
     $lastInsertedId = editListing($listingId, $listingBorough, $listingBuildingType, $listingTitle, $listingDescription, $listingAddress, $listingSize);
     $currentPrice = getPriceOfListing($listingId)["price"];

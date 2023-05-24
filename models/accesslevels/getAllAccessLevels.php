@@ -1,10 +1,10 @@
 <?php
 session_start();
 $requiredLevel = 3;
-require("../DataAccess/generalFunctions.php");
+require("../functions/generalFunctions.php");
 checkAccessLevel($requiredLevel);
 
-require("../DataAccess/accessLevelFunctions.php");
+require("../functions/accessLevelFunctions.php");
 $result;
 
 try{

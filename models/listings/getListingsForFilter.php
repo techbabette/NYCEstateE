@@ -1,8 +1,8 @@
 <?php
 session_start();
-require("../DataAccess/generalFunctions.php");
+require("../functions/generalFunctions.php");
 
-require("../DataAccess/listingFunctions.php");
+require("../functions/listingFunctions.php");
 
 $json_params = file_get_contents("php://input");
 

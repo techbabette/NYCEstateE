@@ -1,7 +1,7 @@
 <?php
 session_start();
 $requiredLevel = 3;
-require("../DataAccess/generalFunctions.php");
+require("../functions/generalFunctions.php");
 checkAccessLevel($requiredLevel);
 
 $json_params = file_get_contents("php://input");
@@ -25,7 +25,7 @@ if(!$exists){
     echoUnprocessableEntity("Provided question id does not exist");
 }
 
-require("../DataAccess/surveyFunctions.php");
+require("../functions/surveyFunctions.php");
 
 try{
     restoreQuestion($id);

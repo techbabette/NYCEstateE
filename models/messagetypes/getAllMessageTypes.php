@@ -1,11 +1,11 @@
 <?php
 session_start();
 $requiredLevel = 2;
-require("../DataAccess/generalFunctions.php");
+require("../functions/generalFunctions.php");
 
 checkAccessLevel($requiredLevel);
 
-require("../DataAccess/messageFunctions.php");
+require("../functions/messageFunctions.php");
 $result;
 
 try{

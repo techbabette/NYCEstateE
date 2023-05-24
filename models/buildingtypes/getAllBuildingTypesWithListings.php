@@ -1,8 +1,8 @@
 <?php
 session_start();
-require("../DataAccess/generalFunctions.php");
+require("../functions/generalFunctions.php");
 
-require("../DataAccess/buildingTypeFunctions.php");
+require("../functions/buildingTypeFunctions.php");
 $result;
 
 try{

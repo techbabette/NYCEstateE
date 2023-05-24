@@ -1,6 +1,6 @@
 <?php
 session_start();
-require("../DataAccess/generalFunctions.php");
+require("../functions/generalFunctions.php");
 
 $json_params = file_get_contents("php://input");
 
@@ -25,8 +25,8 @@ if(isset($_SESSION["user"])){
     $user_id = $_SESSION["user"]["user_id"];
 }
 
-require("../DataAccess/listingFunctions.php");
-require("../DataAccess/informationFunctions.php");
+require("../functions/listingFunctions.php");
+require("../functions/informationFunctions.php");
 
 try{
     $listing = getDetailedListing($listing_id, $user_id);

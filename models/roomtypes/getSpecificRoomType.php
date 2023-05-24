@@ -1,7 +1,7 @@
 <?php
 session_start();
 $requiredLevel = 3;
-require("../DataAccess/generalFunctions.php");
+require("../functions/generalFunctions.php");
 checkAccessLevel($requiredLevel);
 
 $json_params = file_get_contents("php://input");
@@ -19,7 +19,7 @@ if(!isset($_POST["id"])){
 
 $id = $_POST["id"];
 
-require("../DataAccess/roomTypeFunctions.php");
+require("../functions/roomTypeFunctions.php");
 
 try{
     $roomType = getSpecificRoomType($id);

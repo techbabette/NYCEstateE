@@ -1,7 +1,7 @@
 <?php
 session_start();
 $requiredLevel = 3;
-require("../DataAccess/generalFunctions.php");
+require("../functions/generalFunctions.php");
 checkAccessLevel($requiredLevel);
 
 $json_params = file_get_contents("php://input");
@@ -67,7 +67,7 @@ if(!$linkExists){
     echoUnprocessableEntity("Provided id link does not exist");
 }
 
-require("../DataAccess/navigationLocationFunctions.php");
+require("../functions/navigationLocationFunctions.php");
 $acceptableLocations = getAllNavigationLocations();
 
 $locationAcceptable = in_array($LinkLocation, $acceptableLocations);
@@ -90,7 +90,7 @@ if(!$aLIdAcceptable){
 }
 
 //Success
-require("../DataAccess/linkFunctions.php");
+require("../functions/linkFunctions.php");
 $currentLinkIcon = "";
 try{
     editLink($LinkId, $LinkTitle, $LinkHref, $AccessLevelId, $LinkLocation, $priority, $main);
