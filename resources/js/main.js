@@ -19,7 +19,7 @@ if(!currentPage){
 console.log(currentPage);
 
 mainPage = true;
-if (!mainPage) ajaxPath = "../BusinessLogic/";
+if (!mainPage) ajaxPath = "../models/";
 window.onload = function(){
     data = {currentPage};
 
