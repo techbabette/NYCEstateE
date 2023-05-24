@@ -1661,7 +1661,7 @@ window.onload = function(){
                 redirect({newLocation : "listings.html", landing : false});
             }
             else{
-                redirect({ newLocation : `listings.html?boroughid=${selectedId}`, landing : false});
+                redirect({ newLocation : `listings.html&boroughid=${selectedId}`, landing : false});
             }
         })
     }

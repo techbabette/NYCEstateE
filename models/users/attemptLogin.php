@@ -66,6 +66,11 @@ try{
     if(!$user["level"] > 0){
         echoNoPermission("User banned");
     }
+
+    $time = time();
+
+    addLineToFile($email."::".$time."\n", "successfulLogins");
+
     http_response_code(200);
     $_SESSION["user"]["user_id"] = $loginAttempt;
     $result["general"] = "Successful login";
