@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 03, 2023 at 07:13 PM
+-- Generation Time: May 24, 2023 at 07:18 AM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -61,18 +61,27 @@ CREATE TABLE `answers` (
 --
 
 INSERT INTO `answers` (`answer_id`, `question_id`, `answer`, `dateDeleted`) VALUES
-(13, 5, 'Test answer one', NULL),
+(13, 5, 'Test answer one', '2023-05-09 04:47:50'),
 (14, 5, 'Test answer two', '2023-04-24 11:16:00'),
 (15, 5, 'Test answer three', '2023-04-24 11:12:48'),
 (16, 5, 'Test answer four', '2023-04-24 11:15:44'),
 (17, 5, 'Test answer five', '2023-04-24 11:15:44'),
-(18, 5, 'Test answer three', NULL),
+(18, 5, 'Test answer three', '2023-05-09 04:43:47'),
 (19, 6, 'I like it a lot', NULL),
 (20, 6, 'I dislike it', NULL),
 (21, 7, 'Yes I do', NULL),
 (22, 7, 'No I don\'t', NULL),
 (23, 8, 'I think it\'s great', NULL),
-(24, 8, 'I think it\'s not that great', NULL);
+(24, 8, 'I think it\'s not that great', NULL),
+(25, 5, 'Test answer four', '2023-05-09 04:47:50'),
+(26, 5, 'I like it a lot', '2023-05-09 04:50:22'),
+(27, 5, 'I do not like it a lot', '2023-05-09 04:50:22'),
+(28, 5, 'I think it is great', '2023-05-09 04:50:22'),
+(29, 5, 'This is an answer', '2023-05-09 04:54:21'),
+(30, 5, 'This is a second answer', '2023-05-09 04:54:21'),
+(31, 5, 'I think it is great', NULL),
+(32, 5, 'I think it is not that great', NULL),
+(33, 5, 'I think it is not that good', NULL);
 
 -- --------------------------------------------------------
 
@@ -133,9 +142,11 @@ CREATE TABLE `favorites` (
 --
 
 INSERT INTO `favorites` (`favorite_id`, `user_id`, `listing_id`) VALUES
-(44, 4, 16),
-(43, 4, 20),
-(42, 12, 12);
+(24, 4, 21),
+(31, 12, 23),
+(30, 12, 24),
+(25, 15, 22),
+(26, 16, 23);
 
 -- --------------------------------------------------------
 
@@ -183,21 +194,21 @@ INSERT INTO `linkicons` (`link_icon_id`, `link_id`, `icon`, `active`, `dateCreat
 CREATE TABLE `links` (
   `link_id` int(20) NOT NULL,
   `access_level_id` int(20) NOT NULL,
-  `link_title` varchar(50) NOT NULL,
-  `href` varchar(50) DEFAULT NULL,
+  `link_title` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `href` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
   `landing` tinyint(1) NOT NULL,
-  `location` varchar(20) NOT NULL,
+  `location` varchar(20) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `priority` int(2) NOT NULL DEFAULT 1,
   `parent_id` int(20) DEFAULT NULL
-) ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `links`
 --
 
 INSERT INTO `links` (`link_id`, `access_level_id`, `link_title`, `href`, `landing`, `location`, `priority`, `parent_id`) VALUES
-(1, 1, 'Nyc Estates', 'index.html', 1, 'head', 1, NULL),
-(3, 1, 'Home', 'index.html', 1, 'navbar', 99, NULL),
+(1, 1, 'Nyc Estates', 'index.html', 0, 'head', 1, NULL),
+(3, 1, 'Home', 'index.html', 0, 'navbar', 99, NULL),
 (4, 1, 'Listings', 'listings.html', 0, 'navbar', 97, NULL),
 (5, 4, 'Login', 'login.html', 0, 'navbar', 92, NULL),
 (6, 4, 'Register', 'register.html', 0, 'navbar', 93, NULL),
@@ -210,7 +221,8 @@ INSERT INTO `links` (`link_id`, `access_level_id`, `link_title`, `href`, `landin
 (24, 2, 'Contact', 'contact.html', 0, 'navbar', 92, NULL),
 (25, 2, 'Survey', 'survey.html', 0, 'navbar', 95, NULL),
 (26, 1, 'Listing', 'listing.html', 0, 'hidden', 1, NULL),
-(27, 1, 'Author', 'author.html', 0, 'navbar', 94, NULL);
+(27, 1, 'Author', 'author.html', 0, 'navbar', 94, NULL),
+(29, 1, 'Controller', 'index.php', 1, 'hidden', 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -231,15 +243,13 @@ CREATE TABLE `listingphotos` (
 --
 
 INSERT INTO `listingphotos` (`photo_id`, `listing_id`, `main`, `path`, `dateUploaded`) VALUES
-(3, 4, 1, '16818274541544568656643ea67eb94c0.png', '2023-04-18 14:17:34'),
-(11, 12, 1, '1681897858933328828643fb982abdef.jpg', '2023-04-19 09:50:58'),
-(15, 16, 1, '16818980812027868961643fba617d826.jpg', '2023-04-19 09:54:41'),
-(16, 17, 1, '168217066120666745526443e325515b3.jpg', '2023-04-22 13:37:41'),
-(17, 18, 1, '168230851112256859946445fd9f54852.jpg', '2023-04-24 03:55:11'),
-(19, 19, 1, '1682853534473423041644e4e9e83e59.jpg', '2023-04-30 11:18:54'),
-(20, 20, 1, '1682853916284322225644e501c097bc.jpg', '2023-04-30 11:25:16'),
-(66, 4, 1, '16831182421955634508645258a2779ec.jpg', '2023-05-03 12:50:42'),
-(67, 4, 1, '1683120115191916316964525ff301c51.jpg', '2023-05-03 13:21:55');
+(21, 21, 1, '168303037913018028666451016b21d29.jpg', '2023-05-02 12:26:19'),
+(22, 22, 1, '168303053151299789664510203742e9.jpg', '2023-05-02 12:28:51'),
+(23, 21, 1, '1683119543147456126664525db7c42d3.jpg', '2023-05-03 13:12:23'),
+(24, 22, 1, '1683119564125156160764525dcc0b80b.jpg', '2023-05-03 13:12:44'),
+(25, 23, 1, '1683119973102208334764525f6578044.jpg', '2023-05-03 13:19:33'),
+(26, 24, 1, '16832865134364778466454e9f157801.jpg', '2023-05-05 11:35:13'),
+(27, 24, 1, '168328653810963444276454ea0aac6df.jpg', '2023-05-05 11:35:38');
 
 -- --------------------------------------------------------
 
@@ -259,17 +269,11 @@ CREATE TABLE `listingprices` (
 --
 
 INSERT INTO `listingprices` (`price_id`, `listing_id`, `price`, `date`) VALUES
-(3, 4, '2000.00', '2023-04-18 14:17:34'),
-(11, 12, '1000.00', '2023-04-19 09:50:58'),
-(15, 16, '1000.00', '2023-04-19 09:54:41'),
-(16, 17, '1000.00', '2023-04-22 13:37:41'),
-(17, 18, '1000.00', '2023-04-24 03:55:11'),
-(23, 18, '1025.00', '2023-04-24 04:24:53'),
-(24, 18, '1500.00', '2023-04-24 04:28:30'),
-(25, 18, '1700.00', '2023-04-24 04:28:39'),
-(26, 12, '1500.00', '2023-04-24 04:29:58'),
-(27, 19, '1000.00', '2023-04-30 11:18:54'),
-(28, 20, '1000.00', '2023-04-30 11:25:16');
+(29, 21, '40000.00', '2023-05-02 12:26:19'),
+(30, 22, '1000000.00', '2023-05-02 12:28:51'),
+(31, 23, '199999.00', '2023-05-03 13:19:33'),
+(32, 23, '200000.00', '2023-05-03 13:20:05'),
+(33, 24, '1000000.00', '2023-05-05 11:35:13');
 
 -- --------------------------------------------------------
 
@@ -289,12 +293,17 @@ CREATE TABLE `listingrooms` (
 --
 
 INSERT INTO `listingrooms` (`listing_room_id`, `listing_id`, `room_type_id`, `numberOf`) VALUES
-(1, 16, 2, 2),
-(2, 16, 1, 1),
-(3, 18, 2, 2),
-(5, 18, 3, 1),
-(6, 19, 3, 4),
-(7, 20, 2, 1);
+(8, 21, 3, 1),
+(9, 21, 2, 2),
+(10, 21, 1, 1),
+(11, 22, 2, 2),
+(12, 22, 1, 2),
+(13, 22, 3, 1),
+(14, 23, 1, 1),
+(15, 23, 2, 3),
+(16, 23, 3, 2),
+(17, 24, 3, 2),
+(18, 24, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -319,13 +328,10 @@ CREATE TABLE `listings` (
 --
 
 INSERT INTO `listings` (`listing_id`, `borough_id`, `building_type_id`, `listing_name`, `description`, `address`, `size`, `dateCreated`, `dateDeleted`) VALUES
-(4, 1, 1, 'New listing', 'New description', 'Kings street 25', 35.00, '2023-04-22 13:24:08', NULL),
-(12, 1, 1, 'Newer listing', 'This is the newest listing', 'King\'s street 20', 30.00, '2023-04-22 13:24:08', NULL),
-(16, 3, 1, 'Listing with rooms', 'This listing has rooms', 'King\'s street 50', 30.00, '2023-04-22 13:24:08', NULL),
-(17, 3, 2, 'Listing delete', 'This will be deleted', 'King\'s street 20', 30.00, '2023-04-22 13:37:41', '2023-04-30 09:38:23'),
-(18, 3, 3, 'Listing edited', 'Listing has been edited wow', 'King\'s street NN', 200.00, '2023-04-24 03:55:11', NULL),
-(19, 5, 2, 'Test listing', 'This is a great description', 'Newest address 50', 30.00, '2023-04-30 11:18:54', '2023-04-30 11:24:49'),
-(20, 5, 2, 'Newest listing', 'This is a great description', 'Newest address 50', 30.00, '2023-04-30 11:25:16', NULL);
+(21, 3, 2, 'First street listing', 'This is a great listing with a great description', 'First Street 20', 100.00, '2023-05-02 12:26:19', NULL),
+(22, 1, 1, 'Broadway apartment', 'Broadway is famous for many things', 'Broadway 20', 500.00, '2023-05-02 12:28:51', NULL),
+(23, 4, 3, 'Brinsmade Ave', 'This is a listing in The Bronx', 'Brinsmade avenue 193', 2000.00, '2023-05-03 13:19:33', NULL),
+(24, 4, 3, 'Maximum three words', 'This is a great new listing', 'Greatest Street 22', 1500.00, '2023-05-05 11:35:13', '2023-05-05 16:55:31');
 
 -- --------------------------------------------------------
 
@@ -349,7 +355,8 @@ CREATE TABLE `messages` (
 INSERT INTO `messages` (`message_id`, `user_id`, `message_type_id`, `title`, `message`, `dateCreated`) VALUES
 (5, 4, 4, 'This is the first message', 'This is the first message', '2023-04-27 14:55:35'),
 (6, 4, 4, 'Second message', 'This is the second question', '2023-04-27 14:56:16'),
-(7, 12, 4, 'New message', 'This is a message', '2023-05-02 12:40:29');
+(7, 4, 3, 'Issue I am having', 'I have an issue', '2023-05-02 11:54:30'),
+(8, 15, 4, 'That\'s Not How Words Work', 'Yes very message very wow such text', '2023-05-02 19:13:39');
 
 -- --------------------------------------------------------
 
@@ -388,9 +395,9 @@ CREATE TABLE `questions` (
 --
 
 INSERT INTO `questions` (`question_id`, `question`, `dateDeleted`) VALUES
-(5, 'How much do you like this website', '2023-05-02 15:54:55'),
-(6, 'Do you like this website', NULL),
-(7, 'Do you like this website', NULL),
+(5, 'How much do you like this website', '2023-05-13 09:53:16'),
+(6, 'Do you like this website', '2023-05-13 05:19:15'),
+(7, 'Do you dislike this website', NULL),
 (8, 'How do you feel about this website', NULL);
 
 -- --------------------------------------------------------
@@ -452,7 +459,18 @@ CREATE TABLE `useranswers` (
 
 INSERT INTO `useranswers` (`useranswer_id`, `user_id`, `answer_id`) VALUES
 (1, 4, 19),
-(28, 12, 18);
+(24, 4, 24),
+(25, 4, 22),
+(26, 4, 18),
+(27, 15, 22),
+(28, 15, 19),
+(29, 15, 23),
+(30, 15, 18),
+(31, 16, 13),
+(32, 16, 22),
+(33, 16, 19),
+(34, 16, 23),
+(35, 12, 31);
 
 -- --------------------------------------------------------
 
@@ -477,9 +495,11 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`user_id`, `email`, `password`, `name`, `lastName`, `dateCreated`, `role_id`) VALUES
 (4, 'marinakrsticrf@gmail.com', '$2y$10$uZvQ1Eu.TyUrZs/yAOuDkOE5wM/Gvg0suI7CEGD2kM0Q8U5V31Y4K', 'Marina', 'Krstic', '2023-03-16 10:25:32', 2),
 (5, 'laznaemailadresa@ict.edu.rs', '$2y$10$1bkDlKj.jzuq7BIhacsdYe6rqKtGLxGD1Uc6c0mX8gJJFdROiw.Vy', 'Marko', 'Krstic', '2023-03-16 10:38:08', 3),
-(12, 'laznaemailadresa2@ict.edu.rs', '$2y$10$8v5/o2cUKtf06EqNZF2wdehQa/IRNrhAo1E6fmqz709cbvgpV1VLy', 'Lazan', 'Naziv', '2023-05-02 12:37:25', 3),
-(13, 'standarduser@gmail.com', '$2y$10$2gQr6gw6pmchcwC4OsacYeEyVG/WrM82XPMxRy.PIf30zyHfRxfzm', 'Stand', 'User', '2023-05-02 13:12:52', 1),
-(14, 'banneduser@gmail.com', '$2y$10$w4YlHHnsxxGNr/kPC6S75.4d2/U/yvrXgvyYW3/mdQPdHTA71SYci', 'Banned', 'User', '2023-05-02 13:14:20', 1);
+(12, 'standarduser@gmail.com', '$2y$10$dvJElE3Zf4nZfkZzi8j40uvaBMeA8deYOvCpQZsAnSjxIHRT.BkDq', 'Stand', 'User', '2023-05-02 13:15:40', 1),
+(13, 'banneduser@gmail.com', '$2y$10$mLif7XPkOUZdhmwFviCTFuXqL9CEUNvG.6V1r7km3uQ4CipwouNHq', 'Banned', 'User', '2023-05-02 13:16:13', 1),
+(14, 'testemail@gmail.com', '$2y$10$SY1zineMNb5LnROGKmPnGOfv1d.hOHY6awpA9J8P/w8Ysva5JjvrS', 'Test', 'Account', '2023-05-02 19:09:02', 1),
+(15, 'testemail2@gmail.com', '$2y$10$vJqPRMCjCpnVtZI2E3iOL.r1k7tKdH9UZ4JhW0DIq0hU.bjRLsBqy', 'Test', 'Account', '2023-05-02 19:10:01', 1),
+(16, 'noabibovski@gmail.com', '$2y$10$qmu3fD2Q/jPUPLybSVNgbOBIfEVpBcMsKCkVMkD53lx1O.aTT8.92', 'Noa', 'Bibovski', '2023-05-03 16:05:50', 1);
 
 --
 -- Indexes for dumped tables
@@ -627,7 +647,7 @@ ALTER TABLE `accesslevels`
 -- AUTO_INCREMENT for table `answers`
 --
 ALTER TABLE `answers`
-  MODIFY `answer_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `answer_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT for table `boroughs`
@@ -639,13 +659,13 @@ ALTER TABLE `boroughs`
 -- AUTO_INCREMENT for table `buildingtypes`
 --
 ALTER TABLE `buildingtypes`
-  MODIFY `building_type_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `building_type_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `favorites`
 --
 ALTER TABLE `favorites`
-  MODIFY `favorite_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
+  MODIFY `favorite_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT for table `linkicons`
@@ -657,37 +677,37 @@ ALTER TABLE `linkicons`
 -- AUTO_INCREMENT for table `links`
 --
 ALTER TABLE `links`
-  MODIFY `link_id` int(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `link_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT for table `listingphotos`
 --
 ALTER TABLE `listingphotos`
-  MODIFY `photo_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
+  MODIFY `photo_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT for table `listingprices`
 --
 ALTER TABLE `listingprices`
-  MODIFY `price_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+  MODIFY `price_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT for table `listingrooms`
 --
 ALTER TABLE `listingrooms`
-  MODIFY `listing_room_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `listing_room_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `listings`
 --
 ALTER TABLE `listings`
-  MODIFY `listing_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `listing_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `messages`
 --
 ALTER TABLE `messages`
-  MODIFY `message_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `message_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `messagetypes`
@@ -717,13 +737,13 @@ ALTER TABLE `roomtypes`
 -- AUTO_INCREMENT for table `useranswers`
 --
 ALTER TABLE `useranswers`
-  MODIFY `useranswer_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `useranswer_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `user_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- Constraints for dumped tables
@@ -799,6 +819,12 @@ ALTER TABLE `roles`
 ALTER TABLE `useranswers`
   ADD CONSTRAINT `useranswers_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
   ADD CONSTRAINT `useranswers_ibfk_2` FOREIGN KEY (`answer_id`) REFERENCES `answers` (`answer_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `users`
+--
+ALTER TABLE `users`
+  ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `roles` (`role_id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
