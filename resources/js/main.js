@@ -1963,7 +1963,7 @@ function displayListings(data, args){
         </ul> 
         </div>
         <div class="listing-footer w-100">
-        <a href="listing.html?listing_id=${body["id"]}" class="card-link  w-100 listing-read-more text-center">Read more</a>
+        <a href="index.php?page=listing.html&listing_id=${body["id"]}" class="card-link  w-100 listing-read-more text-center">Read more</a>
         </div>
     </div>
         `
