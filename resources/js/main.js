@@ -21,7 +21,6 @@ window.onpopstate = function(e){
         document.querySelector("#router-view").innerHTML = e.state.html;
         document.title = e.state.title;
         removeActiveFromAllOtherLinks();
-        console.log(e.state.page);
         addActiveToLinkThatContains(e.state.page);
         prepareJavascript();
     }
@@ -2053,7 +2052,6 @@ function displayListings(data, args){
         addEventListenerOnce("click", link, function(e){
             e.preventDefault();
             let href = link.href;
-            console.log(href);
             removeActiveFromAllOtherLinks();
             this.classList.add("active");
             changeUrl(href);
@@ -2347,7 +2345,6 @@ function generateNavbar(response){
         addEventListenerOnce("click", link, function(e){
             e.preventDefault();
             let href = link.href;
-            console.log(href);
             removeActiveFromAllOtherLinks();
             this.classList.add("active");
             changeUrl(href);
