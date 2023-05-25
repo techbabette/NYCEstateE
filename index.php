@@ -39,6 +39,7 @@ $title = "Loading";
           include($fileToInclude);
         ?>
       </div>
+      <div id="error-holder" class="d-flex flex-column"></div>
       
       <?php include("./views/fixed/footer.html")?>
       <?php include("./views/fixed/endOfBodyScripts.html")?>
