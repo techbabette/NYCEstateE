@@ -7,25 +7,94 @@ let data;
 let globalData = {};
 let success;
 let queryString = window.location.search;
-
 let urlParams = new URLSearchParams(queryString);
-
-let currentPage = urlParams.get("page");
-
-if(!currentPage){
-    currentPage = "index.html"
-}
-
-console.log(currentPage);
+let currentPage = urlParams.get("page") ? urlParams.get("page") : "index.html";
 
 mainPage = true;
 if (!mainPage) ajaxPath = "../models/";
 window.onload = function(){
-    data = {currentPage};
+    changePage(currentPage);
+}
+window.onpopstate = function(e){
+    if(e.state){
+        document.querySelector("#router-view").innerHTML = e.state.html;
+        document.title = e.state.title;
+        removeActiveFromAllOtherLinks();
+        console.log(e.state.page);
+        addActiveToLinkThatContains(e.state.page);
+        prepareJavascript();
+    }
+};
 
-    //Send current page to check if allwwed
-    submitAjax("links/getLinks", generateNavbar, data, { newLocation : "index.php?page=index.html", landing : true, redirectOnNotAllowed : true});
+function changePage(requestedPage){
+    let queryString = requestedPage;
+
+    let urlParams = new URLSearchParams(queryString);
+
+    console.log(requestedPage);
+
+    console.log(urlParams);
+
+    let requestedPageParts = requestedPage.split("/");
+
+    let urlPage = requestedPageParts[requestedPageParts.length - 1];
+
+    requestedPage = urlPage.split("&")[0];
+
+    let requestPath = "./views/pages/" + requestedPage;
+
+    data = {currentPage : requestedPage};
+
+    submitAjax("links/getLinks", function(response){
+        var request = createRequest();
+        request.onreadystatechange = function() {
+        if (request.readyState == 4)
+            loadPage(request.responseText, urlPage, requestedPage);
+            generateNavbar(response);
+        };
+        request.open("GET", requestPath);
+        request.send();
+
+    }, data, { newLocation : "index.html", landing : true, redirectOnNotAllowed : true});
+
+}
+
+function loadPage(data, newUrl, page){
+    let routerView = document.querySelector("#router-view");
+
+    routerView.innerHTML = data;
+
+    let title = newUrl.split(".")[0]
+
+    title = title.charAt(0).toUpperCase() + title.slice(1);
+
+    newUrl = `index.php?page=${newUrl}`;
+
+    document.title = title;
     
+    window.history.pushState({html : data, title : title, page : page}, ``, newUrl);
+
+    prepareJavascript();
+}
+
+function changeUrl(newPage){
+    console.log(newPage);
+    if(newPage == currentPage) return;
+    changePage(newPage);
+}
+
+function changeTitle(newTitle){
+
+}
+
+function prepareJavascript(){
+    let queryString = window.location.search;
+
+    let urlParams = new URLSearchParams(queryString);
+
+    currentPage = urlParams.get("page") ? urlParams.get("page") : "index.html";
+
+    console.log(currentPage);
 
     if(currentPage == "register.html"){
         let registrationForm = document.querySelector("#registrationForm");
@@ -1646,7 +1715,7 @@ window.onload = function(){
 
         console.log(id);
 
-        if(!id) redirect({ newLocation : "listings.html", landing : false});
+        // if(!id) redirect({ newLocation : "listings.html", landing : false});
 
         data = {};
 
@@ -1983,13 +2052,26 @@ function displayListings(data, args){
         </ul> 
         </div>
         <div class="listing-footer w-100">
-        <a href="index.php?page=listing.html&listing_id=${body["id"]}" class="card-link  w-100 listing-read-more text-center">Read more</a>
+        <a href="listing.html&listing_id=${body["id"]}" class="card-link w-100 listing-read-more text-center router-link">Read more</a>
         </div>
     </div>
         `
     }
 
     listingHolder.innerHTML = html;
+
+    let routerLinks = document.querySelectorAll(".router-link");
+
+    for(let link of routerLinks){
+        addEventListenerOnce("click", link, function(e){
+            e.preventDefault();
+            let href = link.href;
+            console.log(href);
+            removeActiveFromAllOtherLinks();
+            this.classList.add("active");
+            changeUrl(href);
+        })
+    }
 
     addFavoriteFunctionality();
 }
@@ -2232,25 +2314,40 @@ function generateNavbar(response){
     let navbarElements = data.filter(el => el.location == "navbar");
     let footerElements = data.filter(el => el.location == "footer");
 
-    url = generateUrl(headerElement, "index.php?page=");
+    let navbarHTML = ""
+    let footerHTML = ""
+
+    url = generateUrl(headerElement, "");
 
     headerHolder.href = url;
     headerHolder.text = headerElement.link_title;
+    headerHolder.classList.add("router-link");
 
     footerHeaderHolder.href = url;
     footerHeaderHolder.text = headerElement.link_title;
+    footerHeaderHolder.classList.add("router-link");
 
     for(let navbarElement of navbarElements){
-        navbarHolder.innerHTML += generateLinkElement(navbarElement, "index.php?page=");
+        navbarHTML += generateLinkElement(navbarElement, "", true);
     }
 
     if(accessLevel > 1){
-        navbarHolder.innerHTML += 
+        navbarHTML += 
         `
           <li class="nav-item">
             <a class="nav-link" id="logoutButton" aria-current="page" href="#">Log out</a>
           </li>
         `;
+    }
+
+    for(let footerElement of footerElements){
+        footerHTML += generateLinkElement(footerElement, "", false);
+    }
+
+    navbarHolder.innerHTML = navbarHTML;
+    footerHolder.innerHTML = footerHTML;
+
+    if(accessLevel > 1){
         let logoutButton = document.querySelector("#logoutButton");
         logoutButton.addEventListener("click", function(e){
             e.preventDefault();
@@ -2258,8 +2355,32 @@ function generateNavbar(response){
         })
     }
 
-    for(let footerElement of footerElements){
-        footerHolder.innerHTML += generateLinkElement(footerElement);
+    let routerLinks = document.querySelectorAll(".router-link");
+    for(let link of routerLinks){
+        addEventListenerOnce("click", link, function(e){
+            e.preventDefault();
+            let href = link.href;
+            console.log(href);
+            removeActiveFromAllOtherLinks();
+            this.classList.add("active");
+            changeUrl(href);
+        })
+    }
+}
+
+function addActiveToLinkThatContains(page){
+    let links = document.querySelectorAll(".router-link");
+    for(let link of links){
+        if(link.href.includes(page)){
+            link.classList.add("active");
+        }
+    }
+}
+
+function removeActiveFromAllOtherLinks(){
+    let links = document.querySelectorAll(".router-link");
+    for(let link of links){
+        link.classList.remove("active");
     }
 }
 
@@ -2431,14 +2552,16 @@ function addError(field, msg, errorHolderDistance){
 
 function redirect(args){
     let newLocation = args.newLocation;
-    let additionalText = ""
-    if(window.location.hostname === "localhost"){
-        additionalText = "/nycestatee";
-    }
+    // let additionalText = ""
+    // if(window.location.hostname === "localhost"){
+    //     additionalText = "/nycestatee";
+    // }
 
-    // let newLink = window.location.hostname + additionalText + (landing ? `/${newLocation}` : `/pages/${newLocation}`); 
-    let newLink = window.location.hostname + additionalText + (`/index.php?page=${newLocation}`); 
-    window.location.assign("https://" + newLink);
+    // // let newLink = window.location.hostname + additionalText + (landing ? `/${newLocation}` : `/pages/${newLocation}`); 
+    // let newLink = window.location.hostname + additionalText + (`/index.php?page=${newLocation}`); 
+    // window.location.assign("https://" + newLink);
+
+    changeUrl(newLocation);
 }
 
 //Wrapper for the redirect function
@@ -2525,32 +2648,37 @@ function handleServerResponse(resultFunction, args, request){
 function generateUrl(object, redirect = ""){
     let url = "";
     if(object.landing == 1){
-       url += mainPage? '' : '../';
+       url += '';
     }
     else{
-       url += mainPage? `${redirect}` : '';
+       url += `${redirect}`;
     }
     url += object.href;
     return url;
  }
 
- function generateLinkElement(object, redirect = ""){
+ function getCurrPage(){
+    
+ }
+
+ function generateLinkElement(object, redirect, routerLink){
     let html;
     let url = generateUrl(object, redirect);
     let text = object.link_title;
     let icon = object.icon;
+    let currPage = getCurrPage();
     if(icon == null){
         html = 
         `
         <li class="nav-item">
-          <a class="nav-link ${currentPage == object.href ? "active" : ""}" id=${text} aria-current="page" href="${url}">${text}</a>
+          <a class="nav-link ${currentPage == object.href ? "active" : ""} ${routerLink ? "router-link" : ""}" id=${text} aria-current="page" href="${url}">${text}</a>
         </li>
       `
     }
     else{
         html = `
         <li class="col-md-3 col-6 icon-holder">
-            <a class="" href="${url}">
+            <a class="${currentPage == object.href ? "active" : ""} ${routerLink ? "router-link" : ""}" href="${url}">
                 <span class="iconify" id="${text}-icon" data-icon="${icon}"></span>
             </a>
         </li>
