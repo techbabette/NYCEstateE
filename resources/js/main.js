@@ -9,11 +9,12 @@ let success;
 let queryString = window.location.search;
 let urlParams = new URLSearchParams(queryString);
 let currentPage = urlParams.get("page") ? urlParams.get("page") : "index.html";
+let firstSearch = window.location.search.replace("?page=", "");
 
 mainPage = true;
 if (!mainPage) ajaxPath = "../models/";
 window.onload = function(){
-    changePage(currentPage);
+    changePage(firstSearch);
 }
 window.onpopstate = function(e){
     if(e.state){
@@ -26,19 +27,7 @@ window.onpopstate = function(e){
     }
 };
 
-function changePage(requestedPage){
-    let queryString = requestedPage;
-
-    let urlParams = new URLSearchParams(queryString);
-
-    console.log(requestedPage);
-
-    console.log(urlParams);
-
-    let requestedPageParts = requestedPage.split("/");
-
-    let urlPage = requestedPageParts[requestedPageParts.length - 1];
-
+function changePage(urlPage){
     requestedPage = urlPage.split("&")[0];
 
     let requestPath = "./views/pages/" + requestedPage;
@@ -78,13 +67,13 @@ function loadPage(data, newUrl, page){
 }
 
 function changeUrl(newPage){
-    console.log(newPage);
+    let requestedPageParts = newPage.split("/");
+
+    newPage = requestedPageParts[requestedPageParts.length - 1];
+
+    //Do not change page if already on page
     if(newPage == currentPage) return;
     changePage(newPage);
-}
-
-function changeTitle(newTitle){
-
 }
 
 function prepareJavascript(){
@@ -93,8 +82,6 @@ function prepareJavascript(){
     let urlParams = new URLSearchParams(queryString);
 
     currentPage = urlParams.get("page") ? urlParams.get("page") : "index.html";
-
-    console.log(currentPage);
 
     if(currentPage == "register.html"){
         let registrationForm = document.querySelector("#registrationForm");
