@@ -2564,6 +2564,7 @@ function redirect(args){
 
 //Wrapper for the redirect function
 function redirectSuccess(data, args){
+    showSuccess(data);
     redirect(args);
 }
 

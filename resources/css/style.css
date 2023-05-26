@@ -271,6 +271,7 @@ footer{
     padding: 20px;
     z-index: 5;
     pointer-events: none;
+    text-align: center;
 }
 .question-form{
     border: 1px solid black;
