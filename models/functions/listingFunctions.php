@@ -240,7 +240,7 @@ function getDetailedListing($listing_id, $user_id){
         ";
     }
     else{
-        $statement = "SELECT l.listing_id AS id, listing_name, b.borough_name AS borough, bt.type_name AS Type, price, description, address, size, 0 AS favorite,
+        $statement = "SELECT l.listing_id AS id, listing_name, b.borough_name AS borough, b.borough_id AS borough_id, bt.building_type_id AS type_id, bt.type_name AS Type, price, description, address, size, 0 AS favorite,
         IF(l.dateDeleted IS NULL, true, false) AS active
         FROM listings l 
         INNER JOIN listingprices lp ON l.listing_id = lp.listing_id
