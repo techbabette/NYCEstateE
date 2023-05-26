@@ -10,6 +10,7 @@ let queryString = window.location.search;
 let urlParams = new URLSearchParams(queryString);
 let currentPage = urlParams.get("page") ? urlParams.get("page") : "index.html";
 let firstSearch = window.location.search.replace("?page=", "");
+firstSearch = firstSearch ? firstSearch : "index.html";
 let canUseRouter = window.history ? true : false;
 let prefix = canUseRouter ? "" : "index.php?page="
 
