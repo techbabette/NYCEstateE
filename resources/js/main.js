@@ -1801,7 +1801,7 @@ function showSingleListing(data){
       <p class="">${body["description"]}</p>
       <a class="router-link" href="${prefix}listings.html&boroughid=${body["borough_id"]}">Borough: ${body["borough"]}</a>
       </br>
-      <a class="router-link" href="${prefix}listings.html&buildingtypeid=${body["type_id"]}">Building type: Duplex</a>
+      <a class="router-link" href="${prefix}listings.html&buildingtypeid=${body["type_id"]}">Building type: ${body["Type"]}</a>
       <p>Size: ${body["size"]} feet</p>
     </div>
     <div class="d-flex justify-content-between">
