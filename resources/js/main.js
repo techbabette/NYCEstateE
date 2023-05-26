@@ -10,12 +10,17 @@ let queryString = window.location.search;
 let urlParams = new URLSearchParams(queryString);
 let currentPage = urlParams.get("page") ? urlParams.get("page") : "index.html";
 let firstSearch = window.location.search.replace("?page=", "");
+let canUseRouter = window.history ? true : false;
+let prefix = canUseRouter ? "" : "index.php?page="
 
 mainPage = true;
 if (!mainPage) ajaxPath = "../models/";
+
 window.onload = function(){
     changePage(firstSearch);
 }
+
+if(canUseRouter);
 window.onpopstate = function(e){
     if(e.state){
         document.querySelector("#router-view").innerHTML = e.state.html;
@@ -37,8 +42,13 @@ function changePage(urlPage){
         var request = createRequest();
         request.onreadystatechange = function() {
         if (request.readyState == 4)
-            loadPage(request.responseText, urlPage, requestedPage);
-            generateNavbar(response);
+            if(request.status >= 200 && request.status < 300){
+                loadPage(request.responseText, urlPage, requestedPage);
+                generateNavbar(response);
+            }
+            else{
+                changeUrl("index.html");
+            }
         };
         request.open("GET", requestPath);
         request.send();
@@ -60,6 +70,7 @@ function loadPage(data, newUrl, page){
 
     document.title = title;
     
+    if(canUseRouter);
     window.history.pushState({html : data, title : title, page : page}, ``, newUrl);
 
     prepareJavascript();
@@ -1701,7 +1712,7 @@ function prepareJavascript(){
 
         console.log(id);
 
-        // if(!id) redirect({ newLocation : "listings.html", landing : false});
+        if(!id) redirect({ newLocation : "listings.html", landing : false});
 
         data = {};
 
@@ -1787,9 +1798,9 @@ function showSingleListing(data){
     <div class="listing-body">
       <h3 class="">${body["listing_name"]}</h3>
       <p class="">${body["description"]}</p>
-      <a href="listings.html?boroughid=${body["borough_id"]}">Borough: ${body["borough"]}</a>
+      <a class="router-link" href="${prefix}listings.html&boroughid=${body["borough_id"]}">Borough: ${body["borough"]}</a>
       </br>
-      <a href="listings.html?buildingtypeid=${body["type_id"]}">Building type: Duplex</a>
+      <a class="router-link" href="${prefix}listings.html&buildingtypeid=${body["type_id"]}">Building type: Duplex</a>
       <p>Size: ${body["size"]} feet</p>
     </div>
     <div class="d-flex justify-content-between">
@@ -1823,6 +1834,7 @@ function showSingleListing(data){
     
     listingHolder.innerHTML = html;
 
+    addRouterClick();
     addFavoriteFunctionality();
 
     let copyNumberButton = document.querySelector("#copy-number-button");
@@ -2038,7 +2050,7 @@ function displayListings(data, args){
         </ul> 
         </div>
         <div class="listing-footer w-100">
-        <a href="listing.html&listing_id=${body["id"]}" class="card-link w-100 listing-read-more text-center router-link">Read more</a>
+        <a href="${prefix}listing.html&listing_id=${body["id"]}" class="card-link w-100 listing-read-more text-center router-link">Read more</a>
         </div>
     </div>
         `
@@ -2046,19 +2058,25 @@ function displayListings(data, args){
 
     listingHolder.innerHTML = html;
 
+
+    addRouterClick();
+    addFavoriteFunctionality();
+}
+
+function addRouterClick(){
+    if(canUseRouter){
     let routerLinks = document.querySelectorAll(".router-link");
 
-    for(let link of routerLinks){
-        addEventListenerOnce("click", link, function(e){
+    for(let elem of routerLinks){
+        addEventListenerOnce("click", elem, function(e){
             e.preventDefault();
-            let href = link.href;
+            let href = this.href;
             removeActiveFromAllOtherLinks();
             this.classList.add("active");
             changeUrl(href);
         })
     }
-
-    addFavoriteFunctionality();
+    }
 }
 
 function flipListingFavoriteIcon(args){
@@ -2302,7 +2320,7 @@ function generateNavbar(response){
     let navbarHTML = ""
     let footerHTML = ""
 
-    url = generateUrl(headerElement, "");
+    url = generateUrl(headerElement, prefix);
 
     headerHolder.href = url;
     headerHolder.text = headerElement.link_title;
@@ -2313,7 +2331,7 @@ function generateNavbar(response){
     footerHeaderHolder.classList.add("router-link");
 
     for(let navbarElement of navbarElements){
-        navbarHTML += generateLinkElement(navbarElement, "", true);
+        navbarHTML += generateLinkElement(navbarElement, prefix, true);
     }
 
     if(accessLevel > 1){
@@ -2326,7 +2344,7 @@ function generateNavbar(response){
     }
 
     for(let footerElement of footerElements){
-        footerHTML += generateLinkElement(footerElement, "", false);
+        footerHTML += generateLinkElement(footerElement, prefix, false);
     }
 
     navbarHolder.innerHTML = navbarHTML;
@@ -2340,16 +2358,7 @@ function generateNavbar(response){
         })
     }
 
-    let routerLinks = document.querySelectorAll(".router-link");
-    for(let link of routerLinks){
-        addEventListenerOnce("click", link, function(e){
-            e.preventDefault();
-            let href = link.href;
-            removeActiveFromAllOtherLinks();
-            this.classList.add("active");
-            changeUrl(href);
-        })
-    }
+    addRouterClick();
 }
 
 function addActiveToLinkThatContains(page){
@@ -2536,16 +2545,20 @@ function addError(field, msg, errorHolderDistance){
 
 function redirect(args){
     let newLocation = args.newLocation;
-    // let additionalText = ""
-    // if(window.location.hostname === "localhost"){
-    //     additionalText = "/nycestatee";
-    // }
+    if(canUseRouter){
+        changeUrl(newLocation);
+        return;
+    }
+    
+    let additionalText = ""
+    if(window.location.hostname === "localhost"){
+        additionalText = "/nycestatee";
+    }
 
-    // // let newLink = window.location.hostname + additionalText + (landing ? `/${newLocation}` : `/pages/${newLocation}`); 
-    // let newLink = window.location.hostname + additionalText + (`/index.php?page=${newLocation}`); 
-    // window.location.assign("https://" + newLink);
+    // let newLink = window.location.hostname + additionalText + (landing ? `/${newLocation}` : `/pages/${newLocation}`); 
+    let newLink = window.location.hostname + additionalText + (`/index.php?page=${newLocation}`); 
+    window.location.assign("https://" + newLink);
 
-    changeUrl(newLocation);
 }
 
 //Wrapper for the redirect function
