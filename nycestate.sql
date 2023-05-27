@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 24, 2023 at 07:18 AM
+-- Generation Time: May 27, 2023 at 06:19 AM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -42,6 +42,19 @@ INSERT INTO `accesslevels` (`access_level_id`, `level`, `level_title`) VALUES
 (2, 2, 'Logged in'),
 (3, 3, 'Admin'),
 (4, 0, 'Only logged out');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `activationlinks`
+--
+
+CREATE TABLE `activationlinks` (
+  `activation_link_id` int(20) NOT NULL,
+  `activation_link` varchar(255) NOT NULL,
+  `user_id` int(20) NOT NULL,
+  `dateCreated` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -143,6 +156,7 @@ CREATE TABLE `favorites` (
 
 INSERT INTO `favorites` (`favorite_id`, `user_id`, `listing_id`) VALUES
 (24, 4, 21),
+(35, 4, 23),
 (31, 12, 23),
 (30, 12, 24),
 (25, 15, 22),
@@ -419,7 +433,8 @@ CREATE TABLE `roles` (
 INSERT INTO `roles` (`role_id`, `access_level_id`, `role_name`) VALUES
 (1, 2, 'Standard'),
 (2, 3, 'Admin'),
-(3, 4, 'Banned');
+(3, 4, 'Banned'),
+(5, 4, 'Inactive');
 
 -- --------------------------------------------------------
 
@@ -510,6 +525,13 @@ INSERT INTO `users` (`user_id`, `email`, `password`, `name`, `lastName`, `dateCr
 --
 ALTER TABLE `accesslevels`
   ADD PRIMARY KEY (`access_level_id`);
+
+--
+-- Indexes for table `activationlinks`
+--
+ALTER TABLE `activationlinks`
+  ADD PRIMARY KEY (`activation_link_id`),
+  ADD KEY `user_id` (`user_id`);
 
 --
 -- Indexes for table `answers`
@@ -644,6 +666,12 @@ ALTER TABLE `accesslevels`
   MODIFY `access_level_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
+-- AUTO_INCREMENT for table `activationlinks`
+--
+ALTER TABLE `activationlinks`
+  MODIFY `activation_link_id` int(20) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `answers`
 --
 ALTER TABLE `answers`
@@ -665,7 +693,7 @@ ALTER TABLE `buildingtypes`
 -- AUTO_INCREMENT for table `favorites`
 --
 ALTER TABLE `favorites`
-  MODIFY `favorite_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `favorite_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT for table `linkicons`
@@ -725,7 +753,7 @@ ALTER TABLE `questions`
 -- AUTO_INCREMENT for table `roles`
 --
 ALTER TABLE `roles`
-  MODIFY `role_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `role_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `roomtypes`
@@ -748,6 +776,12 @@ ALTER TABLE `users`
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `activationlinks`
+--
+ALTER TABLE `activationlinks`
+  ADD CONSTRAINT `activationlinks_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `answers`
