@@ -66,7 +66,7 @@ function checkIfEmailInUse($email){
 function attemptLogin($email, $password){
     include ("../../../connection.php");
 
-    $statement = "SELECT password, user_id FROM users WHERE email = ?";
+    $statement = "SELECT password, user_id, role_id FROM users WHERE email = ?";
     $prepSt = $conn->prepare($statement);
 
     $prepSt->bindParam(1, $email);
@@ -81,7 +81,13 @@ function attemptLogin($email, $password){
 
     $userId = $user["user_id"];
 
+    $role_id = $user["role_id"];
+
     $encryptedPassword = $user["password"];
+
+    if($role_id == 5){
+        return "Inactive";
+    }
 
     if(password_verify($password, $encryptedPassword)){
         return $userId;
@@ -229,5 +235,53 @@ function activateUser($userId){
     $prepSt->execute();
 
     return 1;
+}
+
+function disableUser($userId){
+    include ("../../../connection.php");
+
+    $statement = "UPDATE users
+                  SET role_id = 5
+                  WHERE user_id = :user_id";
+
+    $prepSt = $conn->prepare($statement);
+
+    $prepSt->bindParam(":user_id", $userId);
+
+    $prepSt->execute();
+
+    return 1;
+}
+
+function checkIfThreeFailedLoginAttempts($userId, $currTime){
+    $lines = file("../../data/failedLoginAttempts.txt", FILE_IGNORE_NEW_LINES);
+
+    $numberOfFailedAttemptsForUser = 0;
+
+    $minute = 60;
+
+    $timeLimit = 3 * $minute;
+    
+    for($i = count($lines) - 1; $i > -1; $i--){
+        $line = $lines[$i];
+
+        $data = explode("::", $line);
+        $user = $data[0];
+        $timeOfVisit = (int)$data[1];
+
+        if($numberOfFailedAttemptsForUser == 3) break;
+
+        if($currTime - $timeLimit > $timeOfVisit) break;
+
+        if($user == $userId){
+            $numberOfFailedAttemptsForUser++;
+        }
+    }
+
+    if($numberOfFailedAttemptsForUser == 3){
+        return true;
+    }
+
+    return false;
 }
 ?>

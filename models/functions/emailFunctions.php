@@ -29,19 +29,32 @@ function createNewBlankEmail(){
     return $mail;
 
 }
-function sendActivationLink($email, $link){
+function sendActivationLink($email, $link, $type = "Register"){
     require("../../../emailSetup.php");
 
     try{
         $mail = createNewBlankEmail();
 
+        $subject = "";
+        $body = "";
+
         $mail->addAddress($email, "New user");
+
+        if($type == "Register"){
+            $subject = "Your NYCEstate activation link";
+            $body = "<h2>Thank you for registering</h2><h3>Here's your activation link</h3>";
+        }
+
+        if($type == "Reactivate"){
+            $subject = "Your NYCEstate reactivation link";
+            $body = "<h2>Your account has been disabled</h2><h3>Reactivate it by clicking the link below</h3>";
+        }
     
-        $mail->Subject = "Your NYCEstate activation link";
+        $mail->Subject = $subject;
     
         $href = $linkPrefix."login.html&activation=$link";
     
-        $mail->Body = "<a href=\"$href\">Activate your account</a>";
+        $mail->Body = $body."<a href=\"$href\">Activate your account</a>";
     
         $mail->send();
     }

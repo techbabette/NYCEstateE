@@ -52,19 +52,28 @@ if($errors != 0){
 }
 
 require("../functions/userFunctions.php");
+require("../functions/emailFunctions.php");
 try{
     $loginAttempt = attemptLogin($email, $pass);
     if(!$loginAttempt){
         echoUnauthorized("Incorrect email/password");
     }
+    if($loginAttempt == "Inactive"){
+        echoUnauthorized("Activate your account first, check your email");
+    }
     if($loginAttempt < 1){
         $time = time();
-        addLineToFile(abs($loginAttempt)."::".$time."\n", "failedLoginAttempts");
-        $disableAccount = checkIfThreeFailedLoginAttempts(abs($loginAttempt), $time);
+        $userId = abs($loginAttempt);
+        addLineToFile($userId."::".$time."\n", "failedLoginAttempts");
+        $disableAccount = checkIfThreeFailedLoginAttempts($userId, $time);
+        $disableText = $disableAccount ? "Yes" : "No";
         if($disableAccount){
-            disableAccount(abs($loginAttempt));
+            disableUser($userId);
+            $newLink = createActivationLink($userId);
+            sendActivationLink($email, $newLink, "Reactivate");
+            echoUnauthorized("Account blocked, we sent you a reactivation link to your email");
         }
-        echoUnauthorized("Incorrect email/password");
+        echoUnauthorized("Incorrect email/password".$loginAttempt.$disableText);
     }
     $user = getUserInformation($loginAttempt);
     if(!$user["level"] > 0){
