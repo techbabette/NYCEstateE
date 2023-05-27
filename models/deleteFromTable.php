@@ -70,7 +70,7 @@ if($dataTable == ""){
 $exists = count(getEveryRowWhereParamFromTable($dataTable, $dataParam, $requestedId)) > 0;
 
 if(!$exists){
-    echoUnprocessableEntity(substr($requestedTable, 0, -1)." with given id does not exist");
+    echoNotFound(substr($requestedTable, 0, -1)." with given id does not exist");
 }
 
 try{
