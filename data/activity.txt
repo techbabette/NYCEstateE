@@ -975,3 +975,6 @@
 /::register.html::1685163829
 /::login.html::1685165838
 /::login.html::1685165931
+/::login.html::1685166902
+/::register.html::1685166903
+/::register.html::1685167002

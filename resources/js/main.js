@@ -129,7 +129,7 @@ function prepareJavascript(){
             ]
 
             let passwordTests = [
-            {re : rePass5, field: passwordField, message : `Password must be between 7 and 30 characters long`},
+            {re : rePass5, field: passwordField, message : `Password must be between 7 and 30 characters long, contain an uppercase letter, a lowercase letter, a digit, and ! or ? or .`},
             {re : rePass1, field: passwordField, message : `Password must contain an uppercase letter`},
             {re : rePass2, field: passwordField, message : `Password must contain a lowercase letter`},
             {re : rePass3, field: passwordField, message : `Password must contain a digit`},
@@ -1143,7 +1143,7 @@ function prepareJavascript(){
             ]
 
             let passwordTests = [
-                {re : rePass5, field: userPasswordField, message : `Password must be between 7 and 30 characters long`},
+                {re : rePass5, field: userPasswordField, message : `Password must be between 7 and 30 characters long, contain an uppercase letter, a lowercase letter, a digit, and ! or ? or .`},
                 {re : rePass1, field: userPasswordField, message : `Password must contain an uppercase letter`},
                 {re : rePass2, field: userPasswordField, message : `Password must contain a lowercase letter`},
                 {re : rePass3, field: userPasswordField, message : `Password must contain a digit`},
