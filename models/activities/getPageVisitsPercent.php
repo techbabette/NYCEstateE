@@ -1,8 +1,8 @@
 <?php
 session_start();
-// $requiredLevel = 3;
+$requiredLevel = 3;
 require("../functions/generalFunctions.php");
-// checkAccessLevel($requiredLevel);
+checkAccessLevel($requiredLevel);
 
 require("../functions/activityFunctions.php");
 $result;
