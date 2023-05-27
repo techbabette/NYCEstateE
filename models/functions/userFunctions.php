@@ -208,7 +208,7 @@ function deleteActivationLink($activationLink){
                   WHERE activation_link = :activation_link";
     $prepSt = $conn->prepare($statement);
 
-    $prepSt->bindParam(":activationLink", $activationLink);
+    $prepSt->bindParam(":activation_link", $activationLink);
 
     $prepSt->execute();
 
