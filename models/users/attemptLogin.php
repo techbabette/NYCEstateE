@@ -57,9 +57,13 @@ try{
     if(!$loginAttempt){
         echoUnauthorized("Incorrect email/password");
     }
-    if($loginAttempt == -1){
+    if($loginAttempt < 1){
         $time = time();
-        addLineToFile($email."::".$time."\n", "failedLoginAttempts");
+        addLineToFile(abs($loginAttempt)."::".$time."\n", "failedLoginAttempts");
+        $disableAccount = checkIfThreeFailedLoginAttempts(abs($loginAttempt), $time);
+        if($disableAccount){
+            disableAccount(abs($loginAttempt));
+        }
         echoUnauthorized("Incorrect email/password");
     }
     $user = getUserInformation($loginAttempt);
@@ -69,7 +73,7 @@ try{
 
     $time = time();
 
-    addLineToFile($email."::".$time."\n", "successfulLogins");
+    addLineToFile($loginAttempt."::".$time."\n", "successfulLogins");
 
     http_response_code(200);
     $_SESSION["user"]["user_id"] = $loginAttempt;

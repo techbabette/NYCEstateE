@@ -87,7 +87,7 @@ function attemptLogin($email, $password){
         return $userId;
     }
     else{
-        return -1;
+        return -$userId;
     }
 }
 
@@ -183,5 +183,51 @@ function createActivationLink($userId){
     $prepSt ->execute();
 
     return $link;
+}
+
+function getUserFromActivationLink($activationLink){
+    include ("../../../connection.php");
+
+    $statement = "SELECT u.user_id, email FROM users u
+                  INNER JOIN activationlinks al ON u.user_id = al.user_id
+                  WHERE al.activation_link = :activationLink";
+              
+    $prepSt = $conn->prepare($statement);
+
+    $prepSt->bindParam(":activationLink", $activationLink);
+
+    $prepSt->execute();
+
+    return $prepSt->fetch();
+}
+
+function deleteActivationLink($activationLink){
+    include ("../../../connection.php");
+
+    $statement = "DELETE FROM activationlinks
+                  WHERE activation_link = :activation_link";
+    $prepSt = $conn->prepare($statement);
+
+    $prepSt->bindParam(":activationLink", $activationLink);
+
+    $prepSt->execute();
+
+    return $prepSt->fetch();
+}
+
+function activateUser($userId){
+    include ("../../../connection.php");
+
+    $statement = "UPDATE users
+                  SET role_id = 1
+                  WHERE user_id = :user_id";
+
+    $prepSt = $conn->prepare($statement);
+
+    $prepSt->bindParam(":user_id", $userId);
+
+    $prepSt->execute();
+
+    return 1;
 }
 ?>

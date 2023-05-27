@@ -156,6 +156,17 @@ function prepareJavascript(){
     }
     if(currentPage == "login.html"){
         let loginForm = document.querySelector("#loginForm");
+
+        let queryString = window.location.search;
+
+        let urlParams = new URLSearchParams(queryString);
+
+        let activationLink = urlParams.get("activation");
+
+        if(activationLink){
+            submitAjax("users/activateUser", redirectSuccess, {activationLink : activationLink}, { newLocation : "index.html", landing : true});
+        }
+
         loginForm.addEventListener("submit", function(e){
             e.preventDefault();
 
