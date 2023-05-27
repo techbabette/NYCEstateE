@@ -17,6 +17,8 @@ function createNewUser($email, $password, $name, $lastName){
     $prepSt->bindParam(4, $lastName);
 
     $prepSt->execute(); 
+
+    return $conn->lastInsertId();
 }
 function editUser($userId, $email, $name, $lastName, $role){
     include ("../../../connection.php");
@@ -165,5 +167,21 @@ function getAllUserRoles(){
     $prepSt->execute();
 
     return $prepSt->fetchAll();
+}
+
+function createActivationLink($userId){
+    include ("../../../connection.php");
+
+    $link = md5(uniqid(rand())).md5(time()).md5(uniqid(rand()));
+
+    $statement = "INSERT INTO activationlinks(activation_link, user_id) VALUES(:link, :userId)";
+    $prepSt = $conn->prepare($statement);
+
+    $prepSt->bindParam(":link", $link);
+    $prepSt->bindParam(":userId", $userId, PDO::PARAM_INT);
+
+    $prepSt ->execute();
+
+    return $link;
 }
 ?>

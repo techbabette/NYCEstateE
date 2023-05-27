@@ -972,3 +972,6 @@
 /::listing.html::1685125901
 /::listings.html::1685125902
 /::listings.html::1685160789
+/::register.html::1685163829
+/::login.html::1685165838
+/::login.html::1685165931

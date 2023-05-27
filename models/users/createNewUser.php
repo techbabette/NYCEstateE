@@ -55,6 +55,7 @@ if(!preg_match($reEmail, $email)){
 }
 
 require("../functions/userFunctions.php");
+require("../functions/emailFunctions.php");
 try{
     $emailInUse = checkIfEmailInUse($email);
     if($emailInUse){
@@ -64,14 +65,16 @@ try{
         die();
     }
     else{
-        createNewUser($email, $pass, $name, $lastName);
+        $newUser = createNewUser($email, $pass, $name, $lastName);
+        $newLink = createActivationLink($newUser);
+        sendActivationLink($email, $newLink);
         http_response_code(201);
-        $result["general"] = "Successful registration";
+        $result["general"] = "We sent you an activation email to $email";
         echo json_encode($result);
         die();
     }
 }
 catch(PDOException $e){
-    echoUnexpectedError();
+    echoUnexpectedError($e);
 }
 ?>
