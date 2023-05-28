@@ -226,11 +226,6 @@ function prepareJavascript(){
                     {Name : "Page name", Key : "name", Sort : {Desc : 2, Asc : 3}},
                     {Name : "Number of visits", Key : "number", Sort : {Desc : 0, Asc : 1}}
                     ], target : "activities/getPageVisitsLastDay", defaultSort : {Header: 1, Position : "Desc"}, delete : false},
-                    {title : "Login activity", headers :
-                    [
-                    {Name : "Time period", Key : "name"},
-                    {Name : "Number of users logged in", Key : "number"}
-                    ], target : "activities/getSuccessfulLoginsNum", delete : false},
                     {title : "Users", headers : 
                     [
                     {Name : "Name", Key : "name", Sort : {Desc : 0, Asc : 1}},
@@ -340,13 +335,24 @@ function prepareJavascript(){
                 //If any is to be preselected
                 sortType = -1;
                 saveToLocalStorage(activeTable, "activeAdminTable");
+                updateNumOfUsersLoggedIn();
                 generateTable(this.dataset.id);
                 applyCurrentTab(this.dataset.id);
             })
         }
+        updateNumOfUsersLoggedIn();
         generateTable();
         //Set up all modals
         setUpModals();
+        function updateNumOfUsersLoggedIn(){
+            let target = "activities/getSuccessfulLoginsNum";
+
+            let displayLocation = document.querySelector("#numOfUsers");
+
+            readAjax(target, function(data){
+                displayLocation.innerHTML = data;
+            }, {}, {});
+        }
         //Generates the structure of a table
         function generateTable(){
             generateHeaderTableRow(activeTable)

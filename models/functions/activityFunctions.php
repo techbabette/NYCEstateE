@@ -94,9 +94,7 @@ function getLogins(){
         array_push($arrayOfUsers, $user);
         $numberOfLogins++;
     }
-    $returnArray["name"] = "Number of logins in the last 24h";
-    $returnArray["number"] = $numberOfLogins;
-    $returnArray = array($returnArray);
+    $returnArray = $numberOfLogins;
     return $returnArray;
 }
 ?>
