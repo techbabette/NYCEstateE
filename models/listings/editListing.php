@@ -60,11 +60,12 @@ if($listingPrice > 1000000000){
 }
 $imgUpload = false;
 if(isset($_FILES["listingPhoto"])){
-    $target_dir = "../resources/imgs/";
+    $target_dir = "../../resources/imgs/";
     $nameToSave = basename($_FILES["listingPhoto"]["name"]);
     $imageFileType = strtolower(pathinfo($nameToSave,PATHINFO_EXTENSION));
     $newFileName = time().uniqid(rand());
     $target_file = $target_dir.$newFileName.".".$imageFileType;
+    $target_file_thumb = $target_dir."thumb".$newFileName.".".$imageFileType;
     
     $check = getimagesize($_FILES["listingPhoto"]["tmp_name"]);
     
@@ -128,10 +129,13 @@ try{
     //If new image submitted
     if($imgUpload){
         //If successfully saved new image to disk, save it in the database
-        $imgUploadSuccess = saveAdjustedPhotoToDisk($_FILES["listingPhoto"], $target_file, 640, 360);
-        if($imgUploadSuccess){
-            saveMainListingPhoto($listingId, $newFileName.".".$imageFileType);
+        $imgUploadSuccess1 = saveAdjustedPhotoToDisk($_FILES["listingPhoto"], $target_file_thumb, 640, 360);
+        $imgUploadSuccess2 = saveAdjustedPhotoToDisk($_FILES["listingPhoto"], $target_file, 1280, 720);
+        //If saving the image locally fails, stop execution
+        if(!$imgUploadSuccess1 || !$imgUploadSuccess2){
+            echoUnexpectedError();
         }
+        saveMainListingPhoto($listingId, $newFileName.".".$imageFileType);
     }
     $roomsSubmited = array_map(function($elem){
         return $elem->roomId;

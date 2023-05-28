@@ -61,10 +61,11 @@ if($listingPrice > 1000000000){
     echoUnprocessableEntity("Price cannot be above 1000000000$");
 }
 
-$target_dir = "../resources/imgs/";
+$target_dir = "../../resources/imgs/";
 $nameToSave = basename($_FILES["listingPhoto"]["name"]);
 $imageFileType = strtolower(pathinfo($nameToSave,PATHINFO_EXTENSION));
 $newFileName = time().uniqid(rand());
+$target_file_thumb = $target_dir."thumb".$newFileName.".".$imageFileType;
 $target_file = $target_dir.$newFileName.".".$imageFileType;
 
 $check = getimagesize($_FILES["listingPhoto"]["tmp_name"]);
@@ -113,9 +114,10 @@ require("../functions/listingFunctions.php");
 require("../functions/imageFunctions.php");
 try{
     //First attempt to save main image of the listing to disk
-    $imgUploadSuccess = saveAdjustedPhotoToDisk($_FILES["listingPhoto"], $target_file, 640, 360);
+    $imgUploadSuccess1 = saveAdjustedPhotoToDisk($_FILES["listingPhoto"], $target_file_thumb, 640, 360);
+    $imgUploadSuccess2 = saveAdjustedPhotoToDisk($_FILES["listingPhoto"], $target_file, 1280, 720);
     //If saving the image locally fails, stop execution
-    if(!$imgUploadSuccess){
+    if(!$imgUploadSuccess1 || !$imgUploadSuccess2){
         echoUnexpectedError();
     }
     /*If saving the image locally does not fail, continue

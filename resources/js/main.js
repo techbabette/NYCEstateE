@@ -1194,7 +1194,7 @@ function prepareJavascript(){
 
             data = {};
 
-            target = "editUser";
+            target = "users/editUser";
 
             data.userId = userIdField.value;
 
@@ -1223,13 +1223,13 @@ function prepareJavascript(){
 
             let type = listingId > 0 ? "edit" : "create";
 
-            let target = "createNewListing";
+            let target = "listings/createNewListing";
 
             let errors = 0;
 
             if(type == "edit"){
                 formData.append("listingId", listingId);
-                target = "editListing";
+                target = "listings/editListing";
             }
 
             let reTitle = /^[A-Z][a-z]{2,15}(\s[A-Za-z][a-z]{2,15}){0,2}$/;
@@ -1324,11 +1324,11 @@ function prepareJavascript(){
 
             let data = {};
 
-            let target = "createNewLink";
+            let target = "links/createNewLink";
 
             if(submitType === "edit"){
                 data.linkId = linkId;
-                target = "editLink";
+                target = "links/editLink";
             }
             
             let errors = 0;
@@ -1373,12 +1373,12 @@ function prepareJavascript(){
 
             let type = boroughId > 0 ? "edit" : "create";
 
-            let target = "createNewBorough";
+            let target = "boroughs/createNewBorough";
 
             let data = {};
 
             if(type == "edit"){
-                target = "editBorough";
+                target = "boroughs/editBorough";
                 data.id = boroughId;
             }
 
@@ -1405,12 +1405,12 @@ function prepareJavascript(){
 
             let type = buildingTypeId > 0 ? "edit" : "create";
 
-            let target = "createNewBuildingType";
+            let target = "buildingtypes/createNewBuildingType";
 
             let data = {};
 
             if(type == "edit"){
-                target = "editBuildingType";
+                target = "buildingtypes/editBuildingType";
                 data.id = buildingTypeId;
             }
 
@@ -1436,12 +1436,12 @@ function prepareJavascript(){
 
             let type = roomTypeId > 0 ? "edit" : "create";
 
-            let target = "createNewRoomType";
+            let target = "roomtypes/createNewRoomType";
 
             let data = {};
 
             if(type == "edit"){
-                target = "editRoomType";
+                target = "roomtypes/editRoomType";
                 data.id = roomTypeId;
             }
 
@@ -1464,13 +1464,13 @@ function prepareJavascript(){
 
             let type = questionIdField.value > 0 ? "edit" : "create";
 
-            let target = "createNewQuestion";
+            let target = "questions/createNewQuestion";
 
             let data = {};
 
             if(type == "edit"){
                 data.questionId = questionIdField.value;
-                target = "editQuestion"
+                target = "questions/editQuestion"
             }
 
             let providedAnswers = document.querySelectorAll(".questionAnswer");
@@ -1534,12 +1534,12 @@ function prepareJavascript(){
 
             let type = messageTypeId > 0 ? "edit" : "create";
 
-            let target = "createNewmessageType";
+            let target = "messagetypes/createNewmessageType";
 
             let data = {};
 
             if(type == "edit"){
-                target = "editMessageType";
+                target = "messagetypes/editMessageType";
                 data.id = messageTypeId;
             }
 
@@ -2051,7 +2051,7 @@ function displayListings(data, args){
         </a>
         <div class="listing-main">
           <div class="listing-img w-100 listing-img-height">
-            <img src="./resources/imgs/${img}" alt="${body["listing_name"]} img" class="img-fluid mk-img-fluid">
+            <img src="./resources/imgs/thumb${img}" alt="${body["listing_name"]} img" class="img-fluid mk-img-fluid">
           </div>
           <div class="listing-body">
             <h3 class="h5 listing-title">${body["listing_name"]}</h3>
