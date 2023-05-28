@@ -1703,6 +1703,12 @@ function prepareJavascript(){
             document.querySelector("#listingsSort").value = selectedSort;
         }
 
+        let page = readFromLocalStorage("listingPage");
+
+        console.log(page);
+
+        data.page = page? page : 1; 
+
         readAjax("boroughs/getAllBoroughsWithListings", fillCheckbox, {}, boroughArgs);
 
         readAjax("buildingtypes/getAllBuildingTypesWithListings", fillCheckbox, {}, buildingTypeArgs);
@@ -1927,8 +1933,6 @@ function sendFiltersDisplayListings(){
         }
     }
 
-    data.boroughFilter = selectedBoroughs;
-
     let selectedBuildingTypes = new Array();
     let buildingTypeFilters = document.querySelectorAll(".buildingTypeFilter");
 
@@ -1937,22 +1941,31 @@ function sendFiltersDisplayListings(){
             selectedBuildingTypes.push(parseInt(buildingType.value));
         }
     }
-    
-    let selectedSort = parseInt(document.querySelector("#listingsSort").value);
 
-    saveToLocalStorage(selectedSort, "selectedSort");
+    if(document.querySelector("#listingsSort") != null){
+        var selectedSort = parseInt(document.querySelector("#listingsSort").value);
+        saveToLocalStorage(selectedSort, "selectedSort");
+        data.sortType = selectedSort;
+    }
 
-    saveToLocalStorage(selectedBoroughs, "boroughFilter");
+    if(boroughFilters.length > 0){
+        saveToLocalStorage(selectedBoroughs, "boroughFilter");
+        data.boroughFilter = selectedBoroughs;
+    }
 
-    saveToLocalStorage(selectedBuildingTypes, "buildingTypeFilter");
+    if(buildingTypeFilters.length > 0){
+        saveToLocalStorage(selectedBuildingTypes, "buildingTypeFilter");
+        data.buildingTypeFilter = selectedBuildingTypes;
+    }
 
-    data.buildingTypeFilter = selectedBuildingTypes;
+    if(document.querySelector("#titleFilter") != null){
+        let titleFilter = document.querySelector("#titleFilter");
+        data.titleFilter = titleFilter.value;
+    }
 
-    data.sortType = selectedSort;
+    let page = readFromLocalStorage("listingPage");
 
-    let titleFilter = document.querySelector("#titleFilter");
-
-    data.titleFilter = titleFilter.value;
+    data.page = page ? page : 1; 
 
     submitAjax("listings/getListingsForFilter", displayListings, data, args);
 }
@@ -1995,15 +2008,25 @@ function fillCheckbox(data, args){
 }
 
 function displayListings(data, args){
-    console.log(data);
-
     let listingHolder = args.listingHolder;
+
+    let paginatinHolder = document.querySelector("#paginationHolder");
 
     let html = "";
 
     listingHolder.innerHTML = "";
 
-    if(data.length < 1){
+    let page = data.page;
+
+    saveToLocalStorage(page, "listingPage");
+
+    globalData.listingPage = page;
+
+    let maxPage = data.maxPage;
+
+    let listings = data.listings;
+
+    if(listings.length < 1){
         let errorText = "No listings found for filters provided";
         if(args.noListingsMessage){
             errorText = args.noListingsMessage;
@@ -2012,7 +2035,7 @@ function displayListings(data, args){
         return;
     }
 
-    for(let row of data){
+    for(let row of listings){
         let body = row["body"];
         let img = row["img"];
         let rooms = row["rooms"]; 
@@ -2083,11 +2106,58 @@ function displayListings(data, args){
         `
     }
 
+    let paginationHTML = generatePaginationButtons(page, maxPage);
+
     listingHolder.innerHTML = html;
 
+    paginatinHolder.innerHTML = paginationHTML;
 
     addRouterClick();
     addFavoriteFunctionality();
+    addPaginationClick("listingPage", sendFiltersDisplayListings);
+}
+
+function generatePaginationButtons(page, maxPage){
+    paginationHTML = "";
+    if(maxPage == 1){
+        return "";
+    }
+    if(page == maxPage && page > 2){
+        paginationHTML += 
+        `
+        <button data-page=${page - 2} class="col-2 btn soft-blue paginate">${page - 2}</button>
+        `;
+    }
+
+    if(page > 1){
+        paginationHTML += 
+        `
+        <button data-page=${page - 1} class="col-2 btn soft-blue paginate">${page - 1}</button>
+        `;
+    }
+
+    let nextPage = page
+
+    paginationHTML += 
+    `
+    <button data-page=${nextPage} class="col-2 btn deep-blue">${nextPage}</button>
+    `;
+
+    if(page < maxPage - 1 && page == 1){
+        paginationHTML += 
+        `
+        <button data-page=${++nextPage} class="col-2 btn soft-blue paginate">${nextPage}</button>
+        `;
+    }
+
+    if(page < maxPage){
+        paginationHTML += 
+        `
+        <button data-page=${++nextPage} class="col-2 btn soft-blue paginate">${nextPage}</button>
+        `;
+    }
+
+    return paginationHTML;
 }
 
 function addRouterClick(){
@@ -2103,6 +2173,18 @@ function addRouterClick(){
             changeUrl(href);
         })
     }
+    }
+}
+
+function addPaginationClick(storeName, onClick){
+    let paginationButtons = document.querySelectorAll(".paginate");
+    for(let button of paginationButtons){
+        addEventListenerOnce("click", button, function(e){
+            e.preventDefault();
+            let page = this.dataset.page;
+            saveToLocalStorage(page, storeName);
+            onClick();
+        })
     }
 }
 

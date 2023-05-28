@@ -268,7 +268,7 @@ function getDetailedListing($listing_id, $user_id){
     return $result;
 }
 
-function getListingsForFilter($listingTitleFilter, $listingBuildingTypeFilter, $listingBoroughFilter, $user_id, $userFavoriteFilter, $sortType){
+function getListingsForFilter($listingTitleFilter, $listingBuildingTypeFilter, $listingBoroughFilter, $user_id, $userFavoriteFilter, $sortType, $page, $perPage){
     include ("../../../connection.php");
 
     if($user_id != 0){
@@ -341,7 +341,17 @@ function getListingsForFilter($listingTitleFilter, $listingBuildingTypeFilter, $
 
     $statement .= " ORDER BY ".$sortTypes[$sortType];
 
+    $numberToSkip = ($page - 1) * $perPage;
+
+    $statement .= 
+    "
+     LIMIT :numberToSkip,:perPage
+    ";
+
     $prepSt = $conn->prepare($statement);
+
+    $prepSt->bindParam("numberToSkip", $numberToSkip, PDO::PARAM_INT);
+    $prepSt->bindParam("perPage", $perPage, PDO::PARAM_INT);
 
     if($titleFilter){
         $listingTitleFilter = "%".$listingTitleFilter."%";
@@ -369,6 +379,88 @@ function getListingsForFilter($listingTitleFilter, $listingBuildingTypeFilter, $
     $prepSt->execute();
     $result = $prepSt->fetchAll();
     return $result;
+}
+
+function getNumOfListingsForFilter($listingTitleFilter, $listingBuildingTypeFilter, $listingBoroughFilter, $user_id, $userFavoriteFilter, $sortType){
+    include ("../../../connection.php");
+
+    $statement = "SELECT COUNT(DISTINCT l.listing_id) AS num
+    FROM listings l 
+    INNER JOIN listingprices lp ON l.listing_id = lp.listing_id
+    INNER JOIN boroughs b on l.borough_id = b.borough_id
+    INNER JOIN buildingtypes bt ON l.building_type_id = bt.building_type_id
+    LEFT JOIN favorites f ON l.listing_id = f.listing_id
+    WHERE lp.date = (SELECT MAX(date) FROM listingprices WHERE listing_id = l.listing_id)
+    AND l.dateDeleted IS NULL 
+    ";
+
+    $titleFilter = false;
+    $buildingTypeFilter = false;
+    $boroughFilter = false;
+
+    if($listingTitleFilter != ""){
+        $titleFilter = true;
+        $statement .= " AND l.listing_name LIKE :listingTitleFilter"; 
+    }
+
+    if(count($listingBuildingTypeFilter) > 0){
+        $buildingTypeFilter = true;
+        $counter = 0;
+        $placeholders = "";
+        for($i = 0; $i < count($listingBuildingTypeFilter) - 1; $i++){
+            $tag = ":lbuildingtype".$counter++;
+            $placeholders .= $tag.", ";
+        }
+        $tag = ":lbuildingtype".$counter++;
+        $placeholders .= $tag;
+        $statement .= " AND l.building_type_id IN ($placeholders)";
+    }
+
+    if(count($listingBoroughFilter) > 0){
+        $boroughFilter = true;
+        $counter = 0;
+        $placeholders = "";
+        for($i = 0; $i < count($listingBoroughFilter) - 1; $i++){
+            $tag =":lborough".$counter++;
+            $placeholders .= $tag.", ";
+        }
+        $tag =":lborough".$counter++;
+        $placeholders .= $tag;
+        $statement .= " AND l.borough_id IN ($placeholders)";
+    }
+
+    if($userFavoriteFilter && $user_id != 0){
+        $statement .= " AND f.user_id = :user_id";
+    }
+
+    $prepSt = $conn->prepare($statement);
+
+    if($titleFilter){
+        $listingTitleFilter = "%".$listingTitleFilter."%";
+        $prepSt->bindParam(":listingTitleFilter", $listingTitleFilter);
+    }
+
+    if($buildingTypeFilter){
+        for($i = 0; $i < count($listingBuildingTypeFilter); $i++){
+            $tag = ':lbuildingtype'.$i;
+            $prepSt->bindValue($tag, $listingBuildingTypeFilter[$i], PDO::PARAM_INT);
+        }
+    }
+
+    if($boroughFilter){
+        for($i = 0; $i < count($listingBoroughFilter); $i++){
+            $tag = ':lborough'.$i;
+            $prepSt->bindValue($tag, $listingBoroughFilter[$i], PDO::PARAM_INT);
+        }
+    }
+    
+    if($userFavoriteFilter && $user_id != 0){
+        $prepSt->bindParam(":user_id", $user_id, PDO::PARAM_INT);
+    }
+
+    $prepSt->execute();
+    $result = $prepSt->fetch();
+    return $result["num"];
 }
 
 function getPriceOfListing($listing_id){
