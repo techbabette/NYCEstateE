@@ -179,21 +179,23 @@ function prepareJavascript(){
             //Check if data is valid
             let errors = 0;
 
-            let rePass1 = /[A-Z]/; 
-            let rePass2 = /[a-z]/; 
-            let rePass3 = /[0-9]/; 
-            let rePass4 = /[!\?\.]/; 
-            let rePass5 = /^[A-Za-z0-9!\?\.]{7,30}$/;
+            // let rePass1 = /[A-Z]/; 
+            // let rePass2 = /[a-z]/; 
+            // let rePass3 = /[0-9]/; 
+            // let rePass4 = /[!\?\.]/; 
+            // let rePass5 = /^[A-Za-z0-9!\?\.]{7,30}$/;
 
             let reEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
             errors += reTestText(reEmail, emailField, "");
 
-            errors += reTestText(rePass1, passwordField, "");
-            errors += reTestText(rePass2, passwordField, "");
-            errors += reTestText(rePass3, passwordField, "");
-            errors += reTestText(rePass4, passwordField, "");
-            errors += reTestText(rePass5, passwordField, "");
+
+            //Disable checks for password format
+            // errors += reTestText(rePass1, passwordField, "");
+            // errors += reTestText(rePass2, passwordField, "");
+            // errors += reTestText(rePass3, passwordField, "");
+            // errors += reTestText(rePass4, passwordField, "");
+            // errors += reTestText(rePass5, passwordField, "");
 
             let data = {"attemptLogin" : true, "email" : email, "pass" : password};
 
@@ -201,7 +203,7 @@ function prepareJavascript(){
                 submitAjax("users/attemptLogin", redirectSuccess, data, { newLocation : "index.html", landing : true});
             }
             else{
-                errorHandler("Incorrect email/password");
+                errorHandler("Email does not match format");
             }
         })
     }
@@ -328,6 +330,10 @@ function prepareJavascript(){
         for(let tab of adminTabs){
             tab.addEventListener("click", function(e){
                 e.preventDefault();
+                //Only change tab if different tab is selected
+                if(activeTable == this.dataset.id){
+                    return;
+                }
                 activeTable = this.dataset.id;
                 //Clear selected sort type before switching tabs
                 //Correct sorting will be preselected during header generation
