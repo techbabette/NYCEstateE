@@ -3,23 +3,44 @@ function saveAdjustedPhotoToDisk($image, $targetFile, $maxW, $maxH){
     //Get information from about provided
     $file_name = $image['tmp_name'];
     list($width, $height, $type, $attr) = getimagesize( $file_name );
-    /*/If the width is greater than the height, calculate scaling 
-    ratio based on width, else calculate based on height */
-    if($width > $height){
-        $ratio = $maxW / $width;
-    }
-    else{
-        $ratio = $maxH / $height;
-    }
-    $target_filename = $file_name;
+
     //Set the initial values of new width and new height to the current ones in case no resizing is to be done.
     $new_width = $width;
     $new_height = $height;
+
+    // $a = $maxW;
+    // $b = $maxH;
+    // $c = $width;
+    // $d = $height;
+    // $potentialNewWidth = ($d * $a) / $b;
+    // $potentialNewHeight = ($b * $c) / $a;
+    
+    // if($potentialNewWidth < $new_width){
+    //      $ratio = $new_width /  $potentialNewWidth;
+    // }
+    // else{
+    //      $ratio = $new_height / $potentialNewHeight;
+    // }
+
+    // if($ratio < 1){
+    //     $new_width = $new_width * $ratio;
+    //     $new_height = $new_height * $ratio;
+    // }
+
+    if($new_width > $new_height){
+        $ratio = $maxW /  $new_width;
+    }
+    else{
+        $ratio = $maxH / $new_height;
+    }
+
     //If image would get smaller by multiplying with the calculated ratio, multiply.
     if($ratio < 1){
-        $new_width = $width*$ratio;
-        $new_height = $height*$ratio;
+        $new_width = $new_width * $ratio;
+        $new_height = $new_height * $ratio;
     }
+
+    $target_filename = $file_name;
     $src = imagecreatefromstring((file_get_contents($file_name)));
     $dst = imagecreatetruecolor($new_width, $new_height);
     //Copy image onto image of rescaled size, ie make the image resized
