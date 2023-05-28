@@ -12,7 +12,7 @@ let currentPage = urlParams.get("page") ? urlParams.get("page") : "index.html";
 let firstSearch = window.location.search.replace("?page=", "");
 firstSearch = firstSearch ? firstSearch : "index.html";
 let canUseRouter = window.history ? true : false;
-let prefix = canUseRouter ? "" : "index.php?page="
+let prefix = "index.php?page="
 
 mainPage = true;
 if (!mainPage) ajaxPath = "../models/";
@@ -82,6 +82,9 @@ function changeUrl(newPage){
 
     newPage = requestedPageParts[requestedPageParts.length - 1];
 
+
+    newPage =  newPage.split(/=(.*)/s)[1];
+    
     //Do not change page if already on page
     if(newPage == currentPage) return;
     changePage(newPage);
@@ -2570,7 +2573,7 @@ function addError(field, msg, errorHolderDistance){
 function redirect(args){
     let newLocation = args.newLocation;
     if(canUseRouter){
-        changeUrl(newLocation);
+        changeUrl(prefix + newLocation);
         return;
     }
     
