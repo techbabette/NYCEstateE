@@ -8,31 +8,34 @@ function saveAdjustedPhotoToDisk($image, $targetFile, $maxW, $maxH){
     $new_width = $width;
     $new_height = $height;
 
-    // $a = $maxW;
-    // $b = $maxH;
-    // $c = $width;
-    // $d = $height;
-    // $potentialNewWidth = ($d * $a) / $b;
-    // $potentialNewHeight = ($b * $c) / $a;
-    
-    // if($potentialNewWidth < $new_width){
-    //      $ratio = $new_width /  $potentialNewWidth;
+    //New solution
+    $ratio = 1;
+    $ratioW = -1;
+    $ratioH = -1;
+
+    if($new_width > $maxW){
+        $ratioW = $maxW / $new_width;
+    }
+
+    if($new_height > $maxH){
+        $ratioH = $maxH / $new_height;
+    }
+
+    if($ratioH < $ratioW){
+        $ratio = $ratioH;
+    }
+
+    if($ratioW < $ratioH){
+        $ratio = $ratioW;
+    }
+
+    //Old solution
+    // if($new_width > $height){
+    //     $ratio = $maxW /  $new_width;
     // }
     // else{
-    //      $ratio = $new_height / $potentialNewHeight;
+    //     $ratio = $maxH / $new_height;
     // }
-
-    // if($ratio < 1){
-    //     $new_width = $new_width * $ratio;
-    //     $new_height = $new_height * $ratio;
-    // }
-
-    if($new_width > $new_height){
-        $ratio = $maxW /  $new_width;
-    }
-    else{
-        $ratio = $maxH / $new_height;
-    }
 
     //If image would get smaller by multiplying with the calculated ratio, multiply.
     if($ratio < 1){
