@@ -378,7 +378,6 @@ footer{
 .mk-main-img{
     max-width: 100%;
     width: 100%;
-    aspect-ratio: 16/9 !important;
     border: 2px solid black;
     border-radius: 2%;
 }
