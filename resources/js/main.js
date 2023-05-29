@@ -418,12 +418,19 @@ function prepareJavascript(){
             let tableResultHolder = args.tableResultHolder;
             let currentTable = tables[activeTable];
             let headers = currentTable.headers;
+            let paginate = currentTable.paginate && data.perPage;
             if(data.length < 1){
                 html += `<p class="text-center w-100 d-block text-dark">No rows to display</p>`
                 tableResultHolder.innerHTML = "";
                 tableResultHolder.innerHTML += html;
+                if(paginate){
+                    paginatinHolder = document.querySelector("#table-pagination");
+
+                    paginatinHolder.classList.add("hidden");
+                }
+                return;
             }
-            if(currentTable.paginate){
+            if(paginate){
                 lines = data.lines;
 
                 var page = data.page;
@@ -536,7 +543,7 @@ function prepareJavascript(){
                     adminDeleteRequest(tab, elemId);
                 })
             }
-            if(currentTable.paginate){
+            if(paginate){
                 let paginationHTML = generatePaginationButtons(page, maxPage);
 
                 paginatinHolder = document.querySelector("#table-pagination");

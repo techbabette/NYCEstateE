@@ -22,10 +22,6 @@ if(isset($_GET["page"])){
 
 try{
     $result["general"]["count"] = getNumberOfPageVisits();
-    if($result["general"]["count"] == 0){
-        echoNotFound("No page visits found search");
-    }
-
     $result["general"]["maxPage"] = ceil($result["general"]["count"] / $perPage);
     if($page > $result["general"]["maxPage"]) $page = $result["general"]["maxPage"];
 

@@ -68,9 +68,6 @@ if(isset($_SESSION["user"])){
 
 try{
     $result["general"]["count"] = getNumOfListingsForFilter($listingTitleFilter, $listingBuildingTypeFilter, $listingBoroughFilter, $user_id, $onlyFavorite, $sortType);
-    if($result["general"]["count"] == 0){
-        echoNotFound("No listings found for search");
-    }
     $result["general"]["maxPage"] = ceil($result["general"]["count"] / $perPage);
     if($page > $result["general"]["maxPage"]) $page = $result["general"]["maxPage"];
     $listings = getListingsForFilter($listingTitleFilter, $listingBuildingTypeFilter, $listingBoroughFilter, $user_id, $onlyFavorite, $sortType, $page, $perPage);
@@ -87,5 +84,5 @@ try{
     echo json_encode($result);
 }
 catch (PDOException $e){
-    echoUnexpectedError($e);
+    echoUnexpectedError();
 }
