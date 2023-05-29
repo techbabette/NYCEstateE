@@ -100,7 +100,7 @@ function attemptLogin($email, $password){
 function getUserInformation($id){
     include ("../../../connection.php");
 
-    $statement = "SELECT user_id, CONCAT(name, ' ', lastName) AS username, level 
+    $statement = "SELECT user_id, email, CONCAT(name, ' ', lastName) AS username, role_name, level 
     FROM users u 
     INNER JOIN roles r ON u.role_id = r.role_id
     INNER JOIN accesslevels al ON r.access_level_id = al.access_level_id

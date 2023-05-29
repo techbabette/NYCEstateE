@@ -33,13 +33,15 @@ try{
 
     addLineToFile($user_id."::".$time."\n", "successfulLogins");
 
+    $user = getUserInformation($user_id);
+
     http_response_code(200);
-    $_SESSION["user"]["user_id"] = $user_id;
+    $_SESSION["user"] = $user;
     $result["general"] = "Successfully activated account";
     echo json_encode($result);
 }
 catch(PDOException $e){
-    echoUnexpectedError($e);
+    echoUnexpectedError();
 }
 
 ?>

@@ -85,7 +85,7 @@ try{
     addLineToFile($loginAttempt."::".$time."\n", "successfulLogins");
 
     http_response_code(200);
-    $_SESSION["user"]["user_id"] = $loginAttempt;
+    $_SESSION["user"] = $user;
     $result["general"] = "Successful login";
     echo json_encode($result);
 }

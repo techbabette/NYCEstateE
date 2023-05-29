@@ -19,9 +19,10 @@ $allowed = false;
 session_start();
 //If user is logged in, get their access level and set logged in to true
 if(isset($_SESSION["user"])){
-    $accessLevel = getUserLevel($_SESSION["user"]["user_id"])["level"];
+    $_SESSION["user"] = getUserInformation($_SESSION["user"]["user_id"]);
+    $accessLevel = $_SESSION["user"]["level"];
     if($accessLevel != 1){
-        $loggedIn = true;        
+        $loggedIn = true;
     }
 }
 try{
@@ -40,9 +41,11 @@ try{
         $currDate = time();
         $user = $loggedIn ? $_SESSION["user"]["user_id"] : "/";
         $page = $currentPage;
+        $email = $_SESSION["user"]["email"];
+        $role = $_SESSION["user"]["role_name"];
 
         //Form new string
-        $arrayOfData = array($user, $page, $currDate);
+        $arrayOfData = array($user, $page, $currDate, $email, $role);
         $newLine = implode("::", $arrayOfData)."\n";
 
         //Add new string to activity log
