@@ -354,6 +354,18 @@ function prepareJavascript(){
         generateTable();
         //Set up all modals
         setUpModals();
+        function showNoRows(data, args){
+            let tableResultHolder = args.tableResultHolder;
+
+            let text = data;
+
+            if(args.noRowsText){
+                text = args.noRowsText;
+            }
+
+            html = `<p class="text-center w-100 d-block text-dark">${text}</p>`
+            tableResultHolder.innerHTML = html;
+        }
         function updateNumOfUsersLoggedIn(){
             let target = "activities/getSuccessfulLoginsNum";
 
@@ -380,7 +392,11 @@ function prepareJavascript(){
                 let page = readFromLocalStorage(tables[tableId].title + "Page");
                 params.page = page ? page : 1;
             }
-            readAjax(target, fillTable, params);
+            let args = {};
+            args.tableResultHolder = document.querySelector("#table-result-holder");
+            args.errorFunction = showNoRows;
+            args.noRowsText = "No rows found";
+            readAjax(target, fillTable, params, args);
         }
         function applyCurrentTab(){
             activeTable;
@@ -395,11 +411,11 @@ function prepareJavascript(){
                 }
             }
         }
-        function fillTable(data){
+        function fillTable(data, args){
             let html = "";
             let counter = 1;
             let lines = data;
-            let tableResultHolder = document.querySelector("#table-result-holder");
+            let tableResultHolder = args.tableResultHolder;
             let currentTable = tables[activeTable];
             let headers = currentTable.headers;
             if(data.length < 1){
@@ -676,7 +692,7 @@ function prepareJavascript(){
         }
         function adminDeleteRequest(table, elementId){
             let data = {table, id : elementId};
-            submitAjax("models/deleteFromTable", showResultGenerateTable, data, {closeModal : false});
+            submitAjax("general/deleteFromTable", showResultGenerateTable, data, {closeModal : false});
         }
         function showResultGenerateTable(data, args){
             generateTable();
@@ -1755,6 +1771,8 @@ function prepareJavascript(){
 
         //Get preexisting filters from local storage, then query for listings
 
+        args.errorFunction = showNoListings;
+
         submitAjax("listings/getListingsForFilter", displayListings, data, args);
 
         let searchButton = document.querySelector("#searchListings");
@@ -1795,6 +1813,8 @@ function prepareJavascript(){
 
         args.errorFunction = showListingNotFound;
 
+        args.listingHolder = document.querySelector("#singleListingHolder");
+
         submitAjax("listings/getSpecificDetailedListing", showSingleListing, data, args);
     }
     if(currentPage === "index.html"){
@@ -1814,6 +1834,19 @@ function prepareJavascript(){
             }
         })
     }
+}
+
+function showNoListings(text, args){
+    let listingHolder = args.listingHolder;
+
+    let errorText = text;
+
+    if(args.noListingsMessage){
+        errorText = args.noListingsMessage;
+    }
+
+    listingHolder.innerHTML = `<p class="h3">${errorText}</p>`;
+    return;
 }
 
 function showSingleListing(data){
@@ -1951,9 +1984,9 @@ function addFavoriteFunctionality(){
     }
 }
 
-function showListingNotFound(data){
+function showListingNotFound(data, args){
     errorHandler(data);
-    let listingHolder = document.querySelector("#singleListingHolder");
+    let listingHolder = args.listingHolder;
     listingHolder.innerHTML =  `<p class="h3">${data}</p>`;
 }
 
@@ -2165,14 +2198,14 @@ function generatePaginationButtons(page, maxPage){
     if(page == maxPage && page > 2){
         paginationHTML += 
         `
-        <button data-page=${page - 2} class="col-2 btn soft-blue paginate">${page - 2}</button>
+        <a data-page=${page - 2} class="col-2 btn soft-blue paginate">${page - 2}</a>
         `;
     }
 
     if(page > 1){
         paginationHTML += 
         `
-        <button data-page=${page - 1} class="col-2 btn soft-blue paginate">${page - 1}</button>
+        <a data-page=${page - 1} class="col-2 btn soft-blue paginate">${page - 1}</a>
         `;
     }
 
@@ -2180,20 +2213,20 @@ function generatePaginationButtons(page, maxPage){
 
     paginationHTML += 
     `
-    <button data-page=${nextPage} class="col-2 btn deep-blue">${nextPage}</button>
+    <a data-page=${nextPage} class="col-2 btn deep-blue">${nextPage}</a>
     `;
 
     if(page < maxPage - 1 && page == 1){
         paginationHTML += 
         `
-        <button data-page=${++nextPage} class="col-2 btn soft-blue paginate">${nextPage}</button>
+        <a data-page=${++nextPage} class="col-2 btn soft-blue paginate">${nextPage}</a>
         `;
     }
 
     if(page < maxPage){
         paginationHTML += 
         `
-        <button data-page=${++nextPage} class="col-2 btn soft-blue paginate">${nextPage}</button>
+        <a data-page=${++nextPage} class="col-2 btn soft-blue paginate">${nextPage}</a>
         `;
     }
 
@@ -2783,7 +2816,7 @@ function handleServerResponse(resultFunction, args, request){
     else{
         let data = JSON.parse(request.responseText);
         if(args.errorFunction){
-            args.errorFunction(data["error"]);
+            args.errorFunction(data["error"], args);
             return;
         }
         errorHandler(data["error"]);

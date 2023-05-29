@@ -2,7 +2,7 @@
 session_start();
 $requiredLevel = 3;
 require("../functions/generalFunctions.php");
-// checkAccessLevel($requiredLevel);
+checkAccessLevel($requiredLevel);
 
 require("../functions/activityFunctions.php");
 $result;
@@ -23,7 +23,7 @@ if(isset($_GET["page"])){
 try{
     $result["general"]["count"] = getNumberOfPageVisits();
     if($result["general"]["count"] == 0){
-        echoNotFound("No listings found for search");
+        echoNotFound("No page visits found search");
     }
 
     $result["general"]["maxPage"] = ceil($result["general"]["count"] / $perPage);

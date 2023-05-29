@@ -1,7 +1,7 @@
 <?php
 session_start();
 $requiredLevel = 3;
-require("./functions/generalFunctions.php");
+require("../functions/generalFunctions.php");
 checkAccessLevel($requiredLevel);
 
 $data = json_decode(file_get_contents('php://input'), true);
