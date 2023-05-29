@@ -41,8 +41,8 @@ try{
         $currDate = time();
         $user = $loggedIn ? $_SESSION["user"]["user_id"] : "/";
         $page = $currentPage;
-        $email = $_SESSION["user"]["email"];
-        $role = $_SESSION["user"]["role_name"];
+        $email = $loggedIn ? $_SESSION["user"]["email"] : "/";
+        $role = $loggedIn ? $_SESSION["user"]["role_name"] : "Not logged in";
 
         //Form new string
         $arrayOfData = array($user, $page, $currDate, $email, $role);

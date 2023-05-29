@@ -219,7 +219,14 @@ function prepareJavascript(){
             }
         })
         let tables = [
-                    {title : "Page visits", headers :
+                    {title : "All page visits", headers : 
+                    [
+                    {Name : "Page name", Key : "page"},
+                    {Name : "Time of visit", Key : "timeOfVisit", Sort : {Desc : 0, Asc : 1}},
+                    {Name : "Email", Key : "email"},
+                    {Name : "Role", Key : "role"}
+                    ], target : "activities/getIndividualPageVisits", defaultSort : {Header: 1, Position : "Desc"}, delete : false, paginate : true},
+                    {title : "Page visits %", headers :
                     [
                     {Name : "Page name", Key : "name", Sort : {Desc : 2, Asc : 3}},
                     {Name : "Percentage of visits", Key : "number", Sort : {Desc : 0, Asc : 1}, Suffix : "%"}
@@ -369,6 +376,10 @@ function prepareJavascript(){
             if(sortType != -1){
                 params.sort = sortType;
             }
+            if(tables[tableId].paginate){
+                let page = readFromLocalStorage(tables[tableId].title + "Page");
+                params.page = page ? page : 1;
+            }
             readAjax(target, fillTable, params);
         }
         function applyCurrentTab(){
@@ -387,6 +398,7 @@ function prepareJavascript(){
         function fillTable(data){
             let html = "";
             let counter = 1;
+            let lines = data;
             let tableResultHolder = document.querySelector("#table-result-holder");
             let currentTable = tables[activeTable];
             let headers = currentTable.headers;
@@ -395,8 +407,20 @@ function prepareJavascript(){
                 tableResultHolder.innerHTML = "";
                 tableResultHolder.innerHTML += html;
             }
-            currData = data;
-            for(let row of data){
+            if(currentTable.paginate){
+                lines = data.lines;
+
+                var page = data.page;
+
+                var maxPage = data.maxPage;
+
+                var perPage = data.perPage;
+
+                counter = perPage * (page - 1) + 1;
+
+                saveToLocalStorage(page, currentTable.title + "Page");
+            }
+            for(let row of lines){
                 html += 
                 `
                 <tr>
@@ -495,6 +519,22 @@ function prepareJavascript(){
                     let elemId = this.dataset.id;
                     adminDeleteRequest(tab, elemId);
                 })
+            }
+            if(currentTable.paginate){
+                let paginationHTML = generatePaginationButtons(page, maxPage);
+
+                paginatinHolder = document.querySelector("#table-pagination");
+
+                paginatinHolder.innerHTML = paginationHTML;
+
+                paginatinHolder.classList.remove("hidden");
+
+                addPaginationClick(currentTable.title + "Page", updateTable);
+            }
+            else{ 
+                paginatinHolder = document.querySelector("#table-pagination");
+
+                paginatinHolder.classList.add("hidden");
             }
         }
         function generateHeaderTableRow(){

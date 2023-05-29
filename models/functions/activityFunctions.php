@@ -97,4 +97,57 @@ function getLogins(){
     $returnArray = $numberOfLogins;
     return $returnArray;
 }
+
+function getNumberOfPageVisits(){
+    $lines = file("../../data/activity.txt", FILE_IGNORE_NEW_LINES);
+
+    $count = count($lines);
+
+    return $count;
+}
+
+function getIndividualPageVisits($page, $perPage, $sort){
+    $lines = file("../../data/activity.txt", FILE_IGNORE_NEW_LINES);
+
+    $resultArray = array();
+    $count = count($lines);
+    $resultArray["count"] = $count;
+    $resultArray["maxPage"] = ceil($count / $perPage);
+    $resultArray["lines"] = array();
+
+    $numberToSkip = ($page - 1) * $perPage;
+
+    if($sort == 0){
+        for($i = $count - 1 - $numberToSkip; $i > $count - $numberToSkip - $perPage - 1; $i--){
+            if(!isset($lines[$i])) break;
+            $line = $lines[$i];
+    
+            $data = explode("::", $line);
+            $returnElement = array();
+            $returnElement["page"] = $data[1];
+            $returnElement["timeOfVisit"] = date('l jS \of F Y h:i:s A',(int)$data[2]);
+            $returnElement["email"] = $data[3];
+            $returnElement["role"] = $data[4];
+
+            array_push($resultArray["lines"], $returnElement);
+        }
+    }
+    if($sort == 1){
+        for($i = 0 + $numberToSkip; $i < $numberToSkip + $perPage; $i++){
+            if(!isset($lines[$i])) break;
+            $line = $lines[$i];
+    
+            $data = explode("::", $line);
+            $returnElement = array();
+            $returnElement["page"] = $data[1];
+            $returnElement["timeOfVisit"] = date('l jS \of F Y h:i:s A',(int)$data[2]);
+            $returnElement["email"] = $data[3];
+            $returnElement["role"] = $data[4];
+
+            array_push($resultArray["lines"], $returnElement);
+        }
+    }
+
+    return $resultArray;
+}
 ?>
