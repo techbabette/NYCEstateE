@@ -419,7 +419,18 @@ function prepareJavascript(){
             let currentTable = tables[activeTable];
             let headers = currentTable.headers;
             let paginate = currentTable.paginate && data.perPage;
-            if(data.length < 1){
+            if(paginate){
+                lines = data.lines;
+
+                var page = data.page;
+
+                var maxPage = data.maxPage;
+
+                var perPage = data.perPage;
+
+                counter = perPage * (page - 1) + 1;
+            }
+            if(lines.length < 1){
                 html += `<p class="text-center w-100 d-block text-dark">No rows to display</p>`
                 tableResultHolder.innerHTML = "";
                 tableResultHolder.innerHTML += html;
@@ -431,16 +442,6 @@ function prepareJavascript(){
                 return;
             }
             if(paginate){
-                lines = data.lines;
-
-                var page = data.page;
-
-                var maxPage = data.maxPage;
-
-                var perPage = data.perPage;
-
-                counter = perPage * (page - 1) + 1;
-
                 saveToLocalStorage(page, currentTable.title + "Page");
             }
             for(let row of lines){
