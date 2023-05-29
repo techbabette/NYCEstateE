@@ -260,7 +260,7 @@ function checkIfThreeFailedLoginAttempts($userId, $currTime){
 
     $minute = 60;
 
-    $timeLimit = 3 * $minute;
+    $timeLimit = 5 * $minute;
     
     for($i = count($lines) - 1; $i > -1; $i--){
         $line = $lines[$i];
