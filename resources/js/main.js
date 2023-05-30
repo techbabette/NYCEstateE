@@ -276,7 +276,7 @@ function prepareJavascript(){
                     {Name :"Location", Key : "location", Sort : {Desc : 8, Asc : 9}},
                     {Name : "Priority", Key : "priority", Sort : {Desc : 10, Asc : 11}},
                     {Name : "Icon", Key : "icon", Sort : {Desc : 14, Asc : 15}}
-                    ], target : "links/getAllLinks", createNew : showLinkModal, edit : showLinkModal, delete : true, defaultSort : {Header : 5, Position : "Desc"}},
+                    ], target : "links/getAllLinks", createNew : showLinkModal, edit : showLinkModal, delete : true, defaultSort : {Header : 5, Position : "Desc"}, paginate : true},
                     {title : "Boroughs", headers : 
                     [
                     {Name : "Title", Key : "title", Sort : {Desc : 0, Asc : 1}}, 

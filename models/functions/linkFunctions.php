@@ -22,7 +22,7 @@ function getLinks($accessLevel, $loggedIn){
 
     return $results;
 }
-function getAllLinks($sort){
+function getAllLinks($sort, $page, $perPage){
     include ("../../../connection.php");
 
     $statement = "SELECT l.link_id AS id, link_title, level_title, href, IF(landing, \"Root\", \"Pages\") as flocation, location, priority, IFNULL((SELECT link_title FROM links WHERE link_id = l.parent_id),\"None\") AS Parent, 
@@ -57,7 +57,18 @@ function getAllLinks($sort){
     if($sort == 15) $orderByStub.= " icon ASC";
 
     $statement .= $orderByStub;
+
+    $numberToSkip = ($page - 1) * $perPage;
+    
+    $statement .= 
+    "
+     LIMIT :numberToSkip,:perPage
+    ";
+
     $prepSt = $conn->prepare($statement);
+
+    $prepSt->bindParam("numberToSkip", $numberToSkip, PDO::PARAM_INT);
+    $prepSt->bindParam("perPage", $perPage, PDO::PARAM_INT);
 
     $prepSt->execute();
     $results = $prepSt->fetchAll();
