@@ -28,7 +28,7 @@ try{
     
     $result["general"]["lines"] = array();
 
-    if($result["general"]["count"] < 1){
+    if($page < 1){
         http_response_code(200);
         echo json_encode($result);
         die();
