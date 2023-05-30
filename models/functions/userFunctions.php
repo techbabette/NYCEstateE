@@ -115,7 +115,21 @@ function getUserInformation($id){
     return $result;
 }
 
-function getAllUsers($sort = -1){
+function getAllUsersCount(){
+    include ("../../../connection.php");
+
+    $statement = "SELECT COUNT(user_id) as num
+                  FROM users";
+
+    $prepSt = $conn->prepare($statement);
+
+    $prepSt->execute();
+    $result = $prepSt->fetch();
+
+    return $result["num"];
+}
+
+function getAllUsers($sort, $page, $perPage){
     include ("../../../connection.php");
 
     $statement = "SELECT user_id AS id, name, lastName, email, dateCreated, role_name
@@ -143,7 +157,17 @@ function getAllUsers($sort = -1){
 
     $statement .= $orderByStub;
 
+    $numberToSkip = ($page - 1) * $perPage;
+    
+    $statement .= 
+    "
+     LIMIT :numberToSkip,:perPage
+    ";
+
     $prepSt = $conn->prepare($statement);
+
+    $prepSt->bindParam("numberToSkip", $numberToSkip, PDO::PARAM_INT);
+    $prepSt->bindParam("perPage", $perPage, PDO::PARAM_INT);
 
     $prepSt->execute();
     $result = $prepSt->fetchAll();
