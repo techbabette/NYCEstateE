@@ -53,14 +53,13 @@ try{
         $userId = abs($loginAttempt);
         addLineToFile($userId."::".$time."\n", "failedLoginAttempts");
         $disableAccount = checkIfThreeFailedLoginAttempts($userId, $time);
-        $disableText = $disableAccount ? "Yes" : "No";
         if($disableAccount){
             disableUser($userId);
             $newLink = createActivationLink($userId);
             sendActivationLink($email, $newLink, "Reactivate");
             echoUnauthorized("Account blocked, we sent you a reactivation link to your email");
         }
-        echoUnauthorized("Incorrect email/password".$loginAttempt.$disableText);
+        echoUnauthorized("Incorrect email/password");
     }
     $user = getUserInformation($loginAttempt);
     if(!$user["level"] > 0){
