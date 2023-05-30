@@ -230,12 +230,12 @@ function prepareJavascript(){
                     [
                     {Name : "Page name", Key : "name", Sort : {Desc : 2, Asc : 3}},
                     {Name : "Percentage of visits", Key : "number", Sort : {Desc : 0, Asc : 1}, Suffix : "%"}
-                    ], target : "activities/getPageVisitsPercent", defaultSort : {Header: 1, Position : "Desc"}, delete : false},
+                    ], target : "activities/getPageVisitsPercent", defaultSort : {Header: 1, Position : "Desc"}, delete : false, paginate : true},
                     {title : "Page visits last 24h", headers :
                     [
                     {Name : "Page name", Key : "name", Sort : {Desc : 2, Asc : 3}},
                     {Name : "Number of visits", Key : "number", Sort : {Desc : 0, Asc : 1}}
-                    ], target : "activities/getPageVisitsLastDay", defaultSort : {Header: 1, Position : "Desc"}, delete : false},
+                    ], target : "activities/getPageVisitsLastDay", defaultSort : {Header: 1, Position : "Desc"}, delete : false, paginate : true},
                     {title : "Users", headers : 
                     [
                     {Name : "Name", Key : "name", Sort : {Desc : 0, Asc : 1}},
@@ -243,7 +243,7 @@ function prepareJavascript(){
                     {Name : "Email", Key : "email", Sort : {Desc : 8, Asc : 9}}, 
                     {Name : "Date of creation", Key : "dateCreated", Sort : {Desc : 4, Asc : 5}}, 
                     {Name : "Role", Key : "role_name", Sort : {Desc : 6, Asc : 7}}
-                    ], target : "users/getAllUsers", edit : showUserModal, delete : true, defaultSort : {Header : "Date of creation", Position : "Desc", delete : true }},
+                    ], target : "users/getAllUsers", edit : showUserModal, delete : true, defaultSort : {Header : "Date of creation", Position : "Desc", delete : true }, paginate : true},
                     {title : "Messages", headers : 
                     [
                     {Name : "Sender", Key : "email", Sort : {Desc : 0, Asc : 1}},
@@ -2200,7 +2200,7 @@ function displayListings(data, args){
 
 function generatePaginationButtons(page, maxPage){
     paginationHTML = "";
-    if(maxPage == 1){
+    if(maxPage <= 1){
         return "";
     }
     if(page == maxPage && page > 2){

@@ -1,5 +1,5 @@
 <?php
-function getPageVisits($timeLimit, $convertToPercentage, $sortType){
+function getPageVisits($timeLimit, $convertToPercentage, $sortType, $pageV, $perPage){
     $lines = file("../../data/activity.txt", FILE_IGNORE_NEW_LINES);
 
     $resultArray = array();
@@ -70,7 +70,19 @@ function getPageVisits($timeLimit, $convertToPercentage, $sortType){
         return $a['name'] <=> $b['name'];
     });
 
-    return $resultArray;
+    $returnArray["count"] = count($resultArray);
+    $returnArray["maxPage"] = ceil($returnArray["count"] / $perPage);
+
+    if($pageV > $returnArray["maxPage"]) $pageV = $returnArray["maxPage"];
+
+    $returnArray["page"] = $pageV;
+    $returnArray["perPage"] = $perPage;
+
+    $numberToSkip = ($pageV - 1) * $perPage;
+
+    $returnArray["lines"] = array_slice($resultArray, $numberToSkip, $perPage);
+
+    return $returnArray;
 }
 function getLogins(){
     $lines = file("../../data/successfulLogins.txt", FILE_IGNORE_NEW_LINES);
