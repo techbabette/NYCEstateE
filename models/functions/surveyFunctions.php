@@ -1,5 +1,5 @@
 <?php
-function getAllQuestions($sort, $deleted){
+function getAllQuestions($sort, $deleted, $page, $perPage){
     include ("../../../connection.php");
 
     $statement = "SELECT q.question_id AS id, q.question, COUNT(ua.user_id) as Count FROM questions q
@@ -22,7 +22,18 @@ function getAllQuestions($sort, $deleted){
     if($sort == 3) $orderByStub.= " COUNT(ua.user_id) ASC";
 
     $statement.=$orderByStub;
+
+    $numberToSkip = ($page - 1) * $perPage;
+    
+    $statement .= 
+    "
+     LIMIT :numberToSkip,:perPage
+    ";
+
     $prepSt = $conn->prepare($statement);
+
+    $prepSt->bindParam("numberToSkip", $numberToSkip, PDO::PARAM_INT);
+    $prepSt->bindParam("perPage", $perPage, PDO::PARAM_INT);
 
     $prepSt->execute();
 
