@@ -28,20 +28,7 @@ if(!isset($_POST["pass"])
 $pass = $_POST["pass"];
 $email = $_POST["email"];
 
-$rePass1 = '/[A-Z]/'; 
-$rePass2 = '/[a-z]/'; 
-$rePass3 = '/[0-9]/'; 
-$rePass4 = '/[!\?\.]/'; 
-$rePass5 = '/^[A-Za-z0-9!\?\.]{7,30}$/';
-
 $errors = 0;
-
-if(!preg_match($rePass1, $pass) || !preg_match($rePass2, $pass)
-|| !preg_match($rePass3, $pass) || !preg_match($rePass4, $pass)
-|| !preg_match($rePass5, $pass))
-{
-    $errors++;
-}
 
 if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
     $errors++;
