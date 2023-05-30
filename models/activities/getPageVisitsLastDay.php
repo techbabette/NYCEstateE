@@ -23,7 +23,15 @@ if(isset($_GET["page"])){
 }
 
 try{
-    $result["general"] = getPageVisits($timeLimit, $convertToPercentage, $sort, $page, $perPage);
+    $information = getPageVisits($timeLimit, $convertToPercentage, $sort, $page, $perPage);
+    $page = $information["page"];
+    $result["general"] = $information;
+    if($page < 1){
+        $result["general"]["lines"] = array();
+        http_response_code(200);
+        echo json_encode($result);
+        die();
+    }
     http_response_code(200);
     echo json_encode($result);
 }

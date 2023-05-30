@@ -81,10 +81,6 @@ function getPageVisits($timeLimit, $convertToPercentage, $sortType, $pageV, $per
 
     $numberToSkip = ($pageV - 1) * $perPage;
 
-    if($pageV < 1){
-        return $returnArray;
-    }
-
     $returnArray["lines"] = array_slice($resultArray, $numberToSkip, $perPage);
 
     return $returnArray;
