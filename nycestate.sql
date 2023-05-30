@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 27, 2023 at 06:19 AM
+-- Generation Time: May 30, 2023 at 06:34 AM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -156,6 +156,7 @@ CREATE TABLE `favorites` (
 
 INSERT INTO `favorites` (`favorite_id`, `user_id`, `listing_id`) VALUES
 (24, 4, 21),
+(36, 4, 22),
 (35, 4, 23),
 (31, 12, 23),
 (30, 12, 24),
@@ -263,7 +264,64 @@ INSERT INTO `listingphotos` (`photo_id`, `listing_id`, `main`, `path`, `dateUplo
 (24, 22, 1, '1683119564125156160764525dcc0b80b.jpg', '2023-05-03 13:12:44'),
 (25, 23, 1, '1683119973102208334764525f6578044.jpg', '2023-05-03 13:19:33'),
 (26, 24, 1, '16832865134364778466454e9f157801.jpg', '2023-05-05 11:35:13'),
-(27, 24, 1, '168328653810963444276454ea0aac6df.jpg', '2023-05-05 11:35:38');
+(27, 24, 1, '168328653810963444276454ea0aac6df.jpg', '2023-05-05 11:35:38'),
+(28, 22, 1, '168524706621347766486472d45a44ae2.jpg', '2023-05-28 04:11:06'),
+(29, 23, 1, '168524718212122345376472d4ced2c30.jpg', '2023-05-28 04:13:02'),
+(30, 21, 1, '16852472133880683266472d4ed20095.jpg', '2023-05-28 04:13:34'),
+(31, 23, 1, '16852540557974377316472efa7d8215.jpg', '2023-05-28 06:07:36'),
+(32, 23, 1, '16852542567237493676472f070a802e.jpg', '2023-05-28 06:10:56'),
+(33, 23, 1, '168525429919764614236472f09bb7470.jpg', '2023-05-28 06:11:40'),
+(34, 23, 1, '168525448717950470196472f1571c3c8.jpg', '2023-05-28 06:14:47'),
+(35, 23, 1, '168525455013689531106472f196f2a44.jpg', '2023-05-28 06:15:51'),
+(36, 23, 1, '16852546162791009076472f1d85b682.jpg', '2023-05-28 06:16:56'),
+(37, 23, 1, '16852549291426124996472f311bdd2e.jpg', '2023-05-28 06:22:09'),
+(38, 23, 1, '16852550247865130006472f37053ed9.jpg', '2023-05-28 06:23:44'),
+(39, 23, 1, '168525507911365573766472f3a7bb46c.jpg', '2023-05-28 06:24:39'),
+(40, 23, 1, '168525546016641923056472f52411d64.jpg', '2023-05-28 06:31:00'),
+(41, 23, 1, '16852557484367665516472f6440e3e6.jpg', '2023-05-28 06:35:48'),
+(42, 23, 1, '16852557747257220686472f65ea8de3.jpg', '2023-05-28 06:36:15'),
+(43, 23, 1, '16852579744550082586472fef69ea29.jpg', '2023-05-28 07:12:55'),
+(44, 23, 1, '168525811310972790666472ff816d301.jpg', '2023-05-28 07:15:13'),
+(45, 23, 1, '1685258436962211683647300c436c56.jpg', '2023-05-28 07:20:36'),
+(46, 23, 1, '16852584661080325625647300e292ab2.jpg', '2023-05-28 07:21:07'),
+(47, 23, 1, '1685258595157084763364730163ea70a.jpg', '2023-05-28 07:23:16'),
+(48, 23, 1, '16852586931788572757647301c5d24cb.jpg', '2023-05-28 07:24:53'),
+(49, 23, 1, '16852587401137575631647301f44d892.jpg', '2023-05-28 07:25:40'),
+(50, 23, 1, '1685259063202396240164730337a7ede.jpg', '2023-05-28 07:31:03'),
+(51, 23, 1, '1685259157181268673264730395d7438.jpg', '2023-05-28 07:32:38'),
+(52, 23, 1, '16852593253375781616473043d724c4.jpg', '2023-05-28 07:35:25'),
+(53, 23, 1, '16852594711330203212647304cf42bed.jpg', '2023-05-28 07:37:51'),
+(54, 23, 1, '16852595031810726348647304ef40c91.jpg', '2023-05-28 07:38:23'),
+(55, 23, 1, '168525967614652192316473059cbc81f.jpg', '2023-05-28 07:41:16'),
+(56, 23, 1, '16852597702031741141647305fa79947.jpg', '2023-05-28 07:42:51'),
+(57, 23, 1, '16852598375957122336473063d207ff.jpg', '2023-05-28 07:43:57'),
+(58, 23, 1, '168525993120889287976473069be646e.jpg', '2023-05-28 07:45:32'),
+(59, 23, 1, '16852599328856353526473069c8e95f.jpg', '2023-05-28 07:45:33'),
+(60, 23, 1, '16852599711677465146647306c3f07f5.jpg', '2023-05-28 07:46:12'),
+(61, 23, 1, '168526010814242732476473074c7ad7d.jpg', '2023-05-28 07:48:29'),
+(62, 23, 1, '16852601921908983353647307a064978.jpg', '2023-05-28 07:49:52'),
+(63, 23, 1, '1685260201982126290647307a9d8752.jpg', '2023-05-28 07:50:02'),
+(64, 23, 1, '1685260642126058193564730962c8489.jpg', '2023-05-28 07:57:22'),
+(65, 23, 1, '168526077426998597647309e66a7d7.jpg', '2023-05-28 07:59:34'),
+(66, 23, 1, '1685263062363722783647312d6d79b3.jpg', '2023-05-28 08:37:42'),
+(67, 23, 1, '16852631346045117486473131e2b3e1.jpg', '2023-05-28 08:38:54'),
+(68, 23, 1, '168526316521423004326473133d5fe72.jpg', '2023-05-28 08:39:25'),
+(69, 23, 1, '1685263295452514076647313bf0ab5f.jpg', '2023-05-28 08:41:35'),
+(70, 23, 1, '168526365913256893816473152bec871.jpg', '2023-05-28 08:47:40'),
+(71, 23, 1, '16852637114727884016473155f1cc32.jpg', '2023-05-28 08:48:31'),
+(72, 23, 1, '1685263793933152553647315b15d9ff.jpg', '2023-05-28 08:49:53'),
+(73, 23, 1, '1685263923154579665064731633ab23b.jpg', '2023-05-28 08:52:03'),
+(74, 23, 1, '168526394614307653376473164a893be.jpg', '2023-05-28 08:52:26'),
+(75, 23, 1, '1685264065719462152647316c1372e5.jpg', '2023-05-28 08:54:25'),
+(76, 23, 1, '16852640752014419803647316cbd1ee8.jpg', '2023-05-28 08:54:35'),
+(77, 23, 1, '1685264084151722645647316d410ac2.jpg', '2023-05-28 08:54:44'),
+(78, 23, 1, '1685264249158781595264731779e9845.jpg', '2023-05-28 08:57:30'),
+(79, 23, 1, '16852643781341239393647317fa2747d.png', '2023-05-28 08:59:38'),
+(80, 23, 1, '168526439419855839026473180a8a1cf.jpg', '2023-05-28 08:59:54'),
+(81, 22, 1, '168526442714511831186473182b8ff1e.jpg', '2023-05-28 09:00:28'),
+(82, 21, 1, '16852644622960976946473184eeab6f.jpg', '2023-05-28 09:01:03'),
+(83, 23, 1, '1685264635552583373647318fbd6a4f.png', '2023-05-28 09:03:56'),
+(84, 23, 1, '168526464715783812676473190762008.jpg', '2023-05-28 09:04:07');
 
 -- --------------------------------------------------------
 
@@ -342,10 +400,10 @@ CREATE TABLE `listings` (
 --
 
 INSERT INTO `listings` (`listing_id`, `borough_id`, `building_type_id`, `listing_name`, `description`, `address`, `size`, `dateCreated`, `dateDeleted`) VALUES
-(21, 3, 2, 'First street listing', 'This is a great listing with a great description', 'First Street 20', 100.00, '2023-05-02 12:26:19', NULL),
+(21, 3, 3, 'First street listing', 'This is a great listing with a great description', 'First Street 20', 100.00, '2023-05-02 12:26:19', NULL),
 (22, 1, 1, 'Broadway apartment', 'Broadway is famous for many things', 'Broadway 20', 500.00, '2023-05-02 12:28:51', NULL),
-(23, 4, 3, 'Brinsmade Ave', 'This is a listing in The Bronx', 'Brinsmade avenue 193', 2000.00, '2023-05-03 13:19:33', NULL),
-(24, 4, 3, 'Maximum three words', 'This is a great new listing', 'Greatest Street 22', 1500.00, '2023-05-05 11:35:13', '2023-05-05 16:55:31');
+(23, 4, 2, 'Brinsmade Ave', 'This is a listing in The Bronx', 'Brinsmade avenue 193', 2000.00, '2023-05-03 13:19:33', NULL),
+(24, 4, 3, 'Maximum three words', 'This is a great new listing', 'Greatest Street 22', 1500.00, '2023-05-05 11:35:13', '2023-05-29 12:17:49');
 
 -- --------------------------------------------------------
 
@@ -500,7 +558,7 @@ CREATE TABLE `users` (
   `name` varchar(50) NOT NULL,
   `lastName` varchar(50) NOT NULL,
   `dateCreated` timestamp NOT NULL DEFAULT current_timestamp(),
-  `role_id` int(20) NOT NULL DEFAULT 1
+  `role_id` int(20) NOT NULL DEFAULT 5
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -669,7 +727,7 @@ ALTER TABLE `accesslevels`
 -- AUTO_INCREMENT for table `activationlinks`
 --
 ALTER TABLE `activationlinks`
-  MODIFY `activation_link_id` int(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `activation_link_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `answers`
@@ -681,7 +739,7 @@ ALTER TABLE `answers`
 -- AUTO_INCREMENT for table `boroughs`
 --
 ALTER TABLE `boroughs`
-  MODIFY `borough_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `borough_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `buildingtypes`
@@ -693,7 +751,7 @@ ALTER TABLE `buildingtypes`
 -- AUTO_INCREMENT for table `favorites`
 --
 ALTER TABLE `favorites`
-  MODIFY `favorite_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `favorite_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT for table `linkicons`
@@ -711,7 +769,7 @@ ALTER TABLE `links`
 -- AUTO_INCREMENT for table `listingphotos`
 --
 ALTER TABLE `listingphotos`
-  MODIFY `photo_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `photo_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=85;
 
 --
 -- AUTO_INCREMENT for table `listingprices`
@@ -771,7 +829,7 @@ ALTER TABLE `useranswers`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `user_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- Constraints for dumped tables
