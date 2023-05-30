@@ -169,4 +169,18 @@ function addLineToFile($line, $file){
 
     fclose($fileToAddTo);
 }
+
+function getNumberOfField($table, $field){
+    include ("../../../connection.php");
+
+    $statement = "SELECT COUNT($field) as num
+                  FROM $table";
+
+    $prepSt = $conn->prepare($statement);
+
+    $prepSt->execute();
+    $result = $prepSt->fetch();
+
+    return $result["num"];
+}
 ?>

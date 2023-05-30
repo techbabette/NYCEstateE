@@ -256,7 +256,7 @@ function prepareJavascript(){
                     [
                     {Name : "Title", Key : "title", Sort : {Desc : 0, Asc : 1}},
                     {Name : "Number of messages", Key : "Count", Sort : {Desc : 2, Asc : 3}}
-                    ], target : "messagetypes/getAllMessageTypesCount", edit : showMessageTypeModal, createNew : showMessageTypeModal, delete : true, defaultSort : {Header : 1, Position : "Desc"}},
+                    ], target : "messagetypes/getAllMessageTypesCount", edit : showMessageTypeModal, createNew : showMessageTypeModal, delete : true, defaultSort : {Header : 1, Position : "Desc"}, paginate : true},
                     {title : "Listings", headers : 
                     [
                     {Name : "Name", Key : "listing_name", Sort : {Desc : 0, Asc : 1} }, 

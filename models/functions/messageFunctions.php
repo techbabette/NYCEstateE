@@ -9,7 +9,8 @@ function getAllMessageTypes(){
 
     return $prepSt->fetchAll();
 }
-function getAllMessageTypesCount($sort){
+
+function getAllMessageTypesCount($sort, $page, $perPage){
     include ("../../../connection.php");
 
     $statement = "SELECT mt.message_type_id AS id, message_type_name AS title, COUNT(m.message_id) AS Count
@@ -25,7 +26,17 @@ function getAllMessageTypesCount($sort){
 
     $statement.=$orderByStub;
 
+    $numberToSkip = ($page - 1) * $perPage;
+    
+    $statement .= 
+    "
+     LIMIT :numberToSkip,:perPage
+    ";
+
     $prepSt = $conn->prepare($statement);
+
+    $prepSt->bindParam("numberToSkip", $numberToSkip, PDO::PARAM_INT);
+    $prepSt->bindParam("perPage", $perPage, PDO::PARAM_INT);
 
     $prepSt->execute();
 
@@ -90,7 +101,5 @@ function createNewMessage($user_id, $message_type_id, $title, $message){
     $prepSt->bindParam("message", $message);
 
     return $prepSt->execute();
-}
-function createNewMessageType($message_type_name){
 }
 ?>
