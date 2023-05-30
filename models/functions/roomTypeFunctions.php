@@ -1,5 +1,5 @@
 <?php
-function getAllRoomTypes($sort){
+function getAllRoomTypes($sort, $page, $perPage){
     include ("../../../connection.php");
 
     $statement = "SELECT room_type_id AS id, room_name as title FROM roomtypes";
@@ -10,7 +10,17 @@ function getAllRoomTypes($sort){
 
     $statement.=$orderByStub;
 
+    $numberToSkip = ($page - 1) * $perPage;
+    
+    $statement .= 
+    "
+     LIMIT :numberToSkip,:perPage
+    ";
+
     $prepSt = $conn->prepare($statement);
+
+    $prepSt->bindParam("numberToSkip", $numberToSkip, PDO::PARAM_INT);
+    $prepSt->bindParam("perPage", $perPage, PDO::PARAM_INT);
 
     $prepSt->execute();
 

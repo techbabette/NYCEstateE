@@ -9,7 +9,7 @@ function getAllBuildingTypes(){
 
     return $prepSt->fetchAll();
 }
-function getAllBuildingTypesCount($sort){
+function getAllBuildingTypesCount($sort, $page, $perPage){
     include ("../../../connection.php");
 
     $statement = "SELECT bt.building_type_id AS id, type_name as title,  COUNT(l.listing_id) as Count
@@ -25,7 +25,17 @@ function getAllBuildingTypesCount($sort){
 
     $statement.=$orderByStub;
     
+    $numberToSkip = ($page - 1) * $perPage;
+    
+    $statement .= 
+    "
+     LIMIT :numberToSkip,:perPage
+    ";
+
     $prepSt = $conn->prepare($statement);
+
+    $prepSt->bindParam("numberToSkip", $numberToSkip, PDO::PARAM_INT);
+    $prepSt->bindParam("perPage", $perPage, PDO::PARAM_INT);
 
     $prepSt->execute();
 

@@ -281,26 +281,26 @@ function prepareJavascript(){
                     [
                     {Name : "Title", Key : "title", Sort : {Desc : 0, Asc : 1}}, 
                     {Name : "Number of listings (Both active and deleted)", Key : "Count", Sort : {Desc : 2, Asc : 3}}
-                    ], target : "boroughs/getAllBoroughsCount", createNew: showBoroughModal, edit: showBoroughModal, delete : true, defaultSort : {Header : 1, Position : "Desc"}},
+                    ], target : "boroughs/getAllBoroughsCount", createNew: showBoroughModal, edit: showBoroughModal, delete : true, defaultSort : {Header : 1, Position : "Desc"}, paginate : true},
                     {title : "Building types", headers : 
                     [
                     {Name : "Title", Key : "title", Sort : {Desc : 0, Asc : 1}}, 
                     {Name : "Number of listings (Both active and deleted)", Key : "Count", Sort : {Desc : 2, Asc : 3}}
-                    ], target : "buildingtypes/getAllBuildingTypesCount", createNew: showBuildingTypeModal, edit: showBuildingTypeModal, delete : true, defaultSort : {Header : 1, Position : "Desc"}},
+                    ], target : "buildingtypes/getAllBuildingTypesCount", createNew: showBuildingTypeModal, edit: showBuildingTypeModal, delete : true, defaultSort : {Header : 1, Position : "Desc"}, paginate : true},
                     {title : "Survey questions", headers : 
                     [
                     {Name : "Title", Key : "question", Sort : {Desc : 0, Asc : 1}}, 
                     {Name : "Number of times answered", Key : "Count", Sort : {Desc : 2, Asc : 3}}
-                    ], target : "questions/getAllQuestions", createNew : showQuestionModal, edit: showQuestionModal, delete : true, viewAnswers: "questions/getSpecificQuestionAnswers", defaultSort : {Header : 1, Position : "Desc"}},
+                    ], target : "questions/getAllQuestions", createNew : showQuestionModal, edit: showQuestionModal, delete : true, viewAnswers: "questions/getSpecificQuestionAnswers", defaultSort : {Header : 1, Position : "Desc"}, paginate : true},
                     {title : "Deleted survey questions", headers : 
                     [
                     {Name : "Title", Key : "question", Sort : {Desc : 0, Asc : 1}}, 
                     {Name : "Number of times answered", Key : "Count", Sort : {Desc : 2, Asc : 3}}
-                    ], target : "questions/getAllDeletedQuestions", edit: showQuestionModal, restore : "questions/restoreQuestion", viewAnswers: "questions/getSpecificQuestionAnswers", defaultSort : {Header : 1, Position : "Desc"}},
+                    ], target : "questions/getAllDeletedQuestions", edit: showQuestionModal, restore : "questions/restoreQuestion", viewAnswers: "questions/getSpecificQuestionAnswers", defaultSort : {Header : 1, Position : "Desc"}, paginate : true},
                     {title : "Room types", headers : 
                     [
                     {Name : "Title", Key : "title", Sort : {Desc : 0, Asc : 1}}
-                    ], target : "roomtypes/getAllRoomTypes", createNew: showRoomTypeModal, edit: showRoomTypeModal, delete : true, defaultSort : {Header : "Title", Position : "Desc"}},
+                    ], target : "roomtypes/getAllRoomTypes", createNew: showRoomTypeModal, edit: showRoomTypeModal, delete : true, defaultSort : {Header : "Title", Position : "Desc"}, paginate : true},
                     {title : "Deleted listings", headers : 
                     [
                     {Name : "Name", Key : "listing_name", Sort : {Desc : 0, Asc : 1} }, 

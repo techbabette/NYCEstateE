@@ -9,7 +9,7 @@ function getAllBoroughs(){
 
     return $prepSt->fetchAll();
 }
-function getAllBoroughsCount($sort){
+function getAllBoroughsCount($sort, $page, $perPage){
     include ("../../../connection.php");
 
     $statement = "SELECT b.borough_id AS id, borough_name as title, COUNT(l.listing_id) as Count
@@ -24,7 +24,18 @@ function getAllBoroughsCount($sort){
     if($sort == 3) $orderByStub.= " COUNT(l.listing_id) ASC";
 
     $statement.=$orderByStub;
+
+    $numberToSkip = ($page - 1) * $perPage;
+    
+    $statement .= 
+    "
+     LIMIT :numberToSkip,:perPage
+    ";
+
     $prepSt = $conn->prepare($statement);
+
+    $prepSt->bindParam("numberToSkip", $numberToSkip, PDO::PARAM_INT);
+    $prepSt->bindParam("perPage", $perPage, PDO::PARAM_INT);
 
     $prepSt->execute();
 
