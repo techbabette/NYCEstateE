@@ -251,7 +251,7 @@ function prepareJavascript(){
                     {Name : "Title", Key : "title", Sort : {Desc : 4, Asc : 5}}, 
                     {Name : "Body", Key : "message", Sort : {Desc : 6, Asc : 7}},
                     {Name :"Date sent", Key : "dateCreated", Sort : {Desc : 8, Asc : 9}}
-                    ], target : "messages/getAllMessages", defaultSort : {Header : 4, Position : "Desc"}, delete : true},
+                    ], target : "messages/getAllMessages", defaultSort : {Header : 4, Position : "Desc"}, delete : true, paginate : true},
                     {title : "Message types", headers : 
                     [
                     {Name : "Title", Key : "title", Sort : {Desc : 0, Asc : 1}},
@@ -266,7 +266,7 @@ function prepareJavascript(){
                     {Name :"Building type", Key : "type_name", Sort : {Desc : 8, Asc : 9}},
                     {Name : "Address", Key : "address", Sort : {Desc : 10, Asc : 11}}, 
                     {Name :"Size", Key : "size", Suffix : " feet", Sort : {Desc : 12, Asc : 13}}
-                    ], target : "listings/getAllListings", createNew : showListingModal, edit: showListingModal, delete : true, defaultSort : {Header : 0, Position : "Desc"}},
+                    ], target : "listings/getAllListings", createNew : showListingModal, edit: showListingModal, delete : true, defaultSort : {Header : 0, Position : "Desc"}, paginate : true},
                     {title : "Links", headers : 
                     [
                     {Name : "Title", Key : "link_title", Sort : {Desc : 0, Asc : 1}}, 
@@ -310,7 +310,7 @@ function prepareJavascript(){
                     {Name :"Building type", Key : "type_name", Sort : {Desc : 8, Asc : 9}},
                     {Name : "Address", Key : "address", Sort : {Desc : 10, Asc : 11}}, 
                     {Name :"Size", Key : "size", Suffix : " feet", Sort : {Desc : 12, Asc : 13}}
-                    ], target : "listings/getAllDeletedListings", edit: showListingModal, restore : "listings/restoreListing", defaultSort : {Header : "Name", Position : "Desc"}},
+                    ], target : "listings/getAllDeletedListings", edit: showListingModal, restore : "listings/restoreListing", defaultSort : {Header : "Name", Position : "Desc"}, paginate : true},
                     ];
         let activeTable = 0;
         let savedTable = readFromLocalStorage("activeAdminTable");

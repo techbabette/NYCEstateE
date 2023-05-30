@@ -42,7 +42,7 @@ function getAllMessageTypesCount($sort, $page, $perPage){
 
     return $prepSt->fetchAll();
 }
-function getAllMessages($sort){
+function getAllMessages($sort, $page, $perPage){
     include ("../../../connection.php");
 
     $statement = "SELECT m.message_id AS id, email, message_type_name, title, message, m.dateCreated
@@ -70,7 +70,17 @@ function getAllMessages($sort){
 
     $statement.=$orderByStub;
 
+    $numberToSkip = ($page - 1) * $perPage;
+    
+    $statement .= 
+    "
+     LIMIT :numberToSkip,:perPage
+    ";
+
     $prepSt = $conn->prepare($statement);
+
+    $prepSt->bindParam("numberToSkip", $numberToSkip, PDO::PARAM_INT);
+    $prepSt->bindParam("perPage", $perPage, PDO::PARAM_INT);
 
     $prepSt->execute();
 

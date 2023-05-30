@@ -183,4 +183,20 @@ function getNumberOfField($table, $field){
 
     return $result["num"];
 }
+
+function getNumberOfFieldCheckDeleted($table, $field, $deleted){
+    include ("../../../connection.php");
+
+    $statement = "SELECT COUNT($field) as num FROM $table WHERE dateDeleted ";
+
+    $deletedStub = $deleted  ? "IS NOT NULL " : "IS NULL";
+    $statement.=$deletedStub;
+
+    $prepSt = $conn->prepare($statement);
+
+    $prepSt->execute();
+    $result = $prepSt->fetch();
+
+    return $result["num"];
+}
 ?>

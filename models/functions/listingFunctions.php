@@ -177,7 +177,7 @@ function getSpecificListing($listing){
     return $result;
 }
 
-function getAllListings($sort, $deleted){
+function getAllListings($sort, $deleted, $page, $perPage){
     include ("../../../connection.php");
 
     $statement = "SELECT l.listing_id AS id, listing_name, price, description, b.borough_name, bt.type_name, address, size
@@ -216,7 +216,17 @@ function getAllListings($sort, $deleted){
     $statement.=$orderByStub;
 
 
+    $numberToSkip = ($page - 1) * $perPage;
+    
+    $statement .= 
+    "
+     LIMIT :numberToSkip,:perPage
+    ";
+
     $prepSt = $conn->prepare($statement);
+
+    $prepSt->bindParam("numberToSkip", $numberToSkip, PDO::PARAM_INT);
+    $prepSt->bindParam("perPage", $perPage, PDO::PARAM_INT);
 
     $prepSt->execute();
     $result = $prepSt->fetchAll();
