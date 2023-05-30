@@ -18,11 +18,14 @@ $currentPage = $_POST["currentPage"];
 $allowed = false;
 session_start();
 //If user is logged in, get their access level and set logged in to true
-if(isset($_SESSION["user"])){
-    $_SESSION["user"] = getUserInformation($_SESSION["user"]["user_id"]);
-    $accessLevel = $_SESSION["user"]["level"];
-    if($accessLevel != 1){
-        $loggedIn = true;
+if(isset($_SESSION["user"]["user_id"])){
+    $newData = getUserInformation($_SESSION["user"]["user_id"]);
+    if($newData){
+        $_SESSION["user"] = $newData;
+        $accessLevel = $_SESSION["user"]["level"];
+        if($accessLevel != 1){
+            $loggedIn = true;
+        }
     }
 }
 try{
