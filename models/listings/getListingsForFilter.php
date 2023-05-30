@@ -70,10 +70,18 @@ try{
     $result["general"]["count"] = getNumOfListingsForFilter($listingTitleFilter, $listingBuildingTypeFilter, $listingBoroughFilter, $user_id, $onlyFavorite, $sortType);
     $result["general"]["maxPage"] = ceil($result["general"]["count"] / $perPage);
     if($page > $result["general"]["maxPage"]) $page = $result["general"]["maxPage"];
-    $listings = getListingsForFilter($listingTitleFilter, $listingBuildingTypeFilter, $listingBoroughFilter, $user_id, $onlyFavorite, $sortType, $page, $perPage);
     $result["general"]["listings"] = array();
     $result["general"]["page"] = $page;
     $result["general"]["perPage"] = $perPage;
+
+    if($result["general"]["count"] < 1){
+        http_response_code(200);
+        echo json_encode($result);
+        die();
+    }
+
+    $listings = getListingsForFilter($listingTitleFilter, $listingBuildingTypeFilter, $listingBoroughFilter, $user_id, $onlyFavorite, $sortType, $page, $perPage);
+
     foreach($listings as $listing){
         $listingWithInformation["body"] = $listing;
         $listingWithInformation["img"] = getCurrentMainListingPhoto($listing["id"])["path"];
@@ -84,5 +92,5 @@ try{
     echo json_encode($result);
 }
 catch (PDOException $e){
-    echoUnexpectedError();
+    echoUnexpectedError($e);
 }

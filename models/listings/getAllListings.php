@@ -27,6 +27,14 @@ try{
 
     $result["general"]["page"] = $page;
     $result["general"]["perPage"] = $perPage;
+    $result["general"]["lines"] = array();
+
+    if($result["general"]["count"] < 1){
+        http_response_code(200);
+        echo json_encode($result);
+        die();
+    }
+
     $result["general"]["lines"] = getAllListings($sort, $deleted, $page, $perPage);
 
     http_response_code(200);

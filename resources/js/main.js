@@ -2113,6 +2113,7 @@ function displayListings(data, args){
             errorText = args.noListingsMessage;
         }
         listingHolder.innerHTML = `<p class="h3">${errorText}</p>`;
+        paginatinHolder.innerHTML = generatePaginationButtons(page, maxPage);
         return;
     }
 
