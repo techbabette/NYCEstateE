@@ -299,8 +299,9 @@ function prepareJavascript(){
                     ], target : "questions/getAllDeletedQuestions", edit: showQuestionModal, restore : "questions/restoreQuestion", viewAnswers: "questions/getSpecificQuestionAnswers", defaultSort : {Header : 1, Position : "Desc"}, paginate : true},
                     {title : "Room types", headers : 
                     [
-                    {Name : "Title", Key : "title", Sort : {Desc : 0, Asc : 1}}
-                    ], target : "roomtypes/getAllRoomTypes", createNew: showRoomTypeModal, edit: showRoomTypeModal, delete : true, defaultSort : {Header : "Title", Position : "Desc"}, paginate : true},
+                    {Name : "Title", Key : "title", Sort : {Desc : 0, Asc : 1}},
+                    {Name : "Number of listings with room (Both active and deleted)", Key : "Count", Sort : {Desc : 2, Asc : 3}}
+                    ], target : "roomtypes/getAllRoomTypesCount", createNew: showRoomTypeModal, edit: showRoomTypeModal, delete : true, defaultSort : {Header : "Title", Position : "Desc"}, paginate : true},
                     {title : "Deleted listings", headers : 
                     [
                     {Name : "Name", Key : "listing_name", Sort : {Desc : 0, Asc : 1} }, 
