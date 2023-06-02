@@ -2,62 +2,8 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
    <url>
       <loc>https://nycestate.000webhostapp.com/</loc>
-      <lastmod>02-05-2023</lastmod>
+      <lastmod>02-06-2023</lastmod>
       <changefreq>daily</changefreq>
       <priority>1</priority>
-   </url>
-    <url>
-      <loc>https://nycestate.000webhostapp.com/pages/listings.html</loc>
-      <lastmod>02-05-2023</lastmod>
-      <changefreq>weekly</changefreq>
-      <priority>0.95</priority>
-   </url>
-   <url>
-      <loc>https://nycestate.000webhostapp.com/pages/listing.html</loc>
-      <lastmod>02-05-2023</lastmod>
-      <changefreq>weekly</changefreq>
-      <priority>0.90</priority>
-   </url>
-    <url>
-      <loc>https://nycestate.000webhostapp.com/pages/favorites.html</loc>
-      <lastmod>02-05-2023</lastmod>
-      <changefreq>monthly</changefreq>
-      <priority>0.85</priority>
-   </url>
-    <url>
-      <loc>https://nycestate.000webhostapp.com/pages/login.html</loc>
-      <lastmod>02-05-2023</lastmod>
-      <changefreq>yearly</changefreq>
-      <priority>0.80</priority>
-   </url>
-    <url>
-      <loc>https://nycestate.000webhostapp.com/pages/register.html</loc>
-      <lastmod>02-05-2023</lastmod>
-      <changefreq>yearly</changefreq>
-      <priority>0.75</priority>
-   </url>
-    <url>
-      <loc>https://nycestate.000webhostapp.com/pages/survey.html</loc>
-      <lastmod>02-05-2023</lastmod>
-      <changefreq>yearly</changefreq>
-      <priority>0.70</priority>
-   </url>
-    <url>
-      <loc>https://nycestate.000webhostapp.com/pages/contact.html</loc>
-      <lastmod>02-05-2023</lastmod>
-      <changefreq>yearly</changefreq>
-      <priority>0.65</priority>
-   </url>
-    <url>
-      <loc>https://nycestate.000webhostapp.com/pages/admin.html</loc>
-      <lastmod>02-05-2023</lastmod>
-      <changefreq>yearly</changefreq>
-      <priority>0.60</priority>
-   </url>
-    <url>
-      <loc>https://nycestate.000webhostapp.com/pages/author.html</loc>
-      <lastmod>02-05-2023</lastmod>
-      <changefreq>yearly</changefreq>
-      <priority>0.55</priority>
    </url>
 </urlset> 

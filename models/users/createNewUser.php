@@ -75,6 +75,6 @@ try{
     }
 }
 catch(PDOException $e){
-    echoUnexpectedError($e);
+    echoUnexpectedError();
 }
 ?>

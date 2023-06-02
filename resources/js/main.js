@@ -2847,16 +2847,12 @@ function generateUrl(object, redirect = ""){
     return url;
  }
 
- function getCurrPage(){
-    
- }
 
  function generateLinkElement(object, redirect, routerLink){
     let html;
     let url = generateUrl(object, redirect);
     let text = object.link_title;
     let icon = object.icon;
-    let currPage = getCurrPage();
     if(icon == null){
         html = 
         `

@@ -2,7 +2,7 @@
 session_start();
 $requiredLevel = 2;
 require("../functions/generalFunctions.php");
-checkAccessLevel($requiredLevel, "You must be logged in to add listings to favorites");
+checkAccessLevel($requiredLevel, "You must be logged in to remove listings from favorites");
 
 $result;
 

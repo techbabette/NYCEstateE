@@ -29,3 +29,4 @@ try{
 catch (PDOException $e){
     echoUnexpectedError();
 }
+?>
