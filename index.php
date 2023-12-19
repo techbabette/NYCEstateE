@@ -1,7 +1,25 @@
 <?php
+//Decide what file to include here, include later
 $page = null;
-$fileToInclude = "./views/pages/loading.html";
-$title = "Loading";
+// $fileToInclude = "./views/pages/loading.html";
+// $title = "Loading";
+if(isset($_GET["page"])){
+  $page = $_GET["page"];
+}
+if(!$page){
+  $title = "Index";
+  $fileToInclude = "./views/pages/index.html";
+}
+else{
+    $success = file_exists("./views/pages/".$page);
+    if(!$success){
+      $fileToInclude = ("./views/pages/"."index.html");
+    }
+    else{
+      $fileToInclude = ("./views/pages/".$page);
+    }
+    $title = ucfirst(explode(".",$page)[0]);
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">

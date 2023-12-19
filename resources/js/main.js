@@ -18,7 +18,8 @@ mainPage = true;
 if (!mainPage) ajaxPath = "../models/";
 
 window.onload = function(){
-    changePage(firstSearch);
+    getLinks(firstSearch);
+    prepareJavascript();
 }
 
 if(canUseRouter);
@@ -31,6 +32,15 @@ window.onpopstate = function(e){
         prepareJavascript();
     }
 };
+
+function getLinks(urlPage){
+    requestedPage = urlPage.split("&")[0];
+
+    data = {currentPage : requestedPage};
+    submitAjax("links/getLinks", function(response){
+                generateNavbar(response);
+    }, data, {redirectOnNotAllowed : true, newLocation : "index.html", landing : true});
+}
 
 function changePage(urlPage){
     requestedPage = urlPage.split("&")[0];
