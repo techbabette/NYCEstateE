@@ -6,7 +6,7 @@ Made with vanilla PHP, Javascript and HTML.
 
 ## Notable features
 
-### Vanilla Javascript/PHP page routing (SSR)
+### Vanilla Javascript/PHP page routing (SPA)
 
 PHP serves the first page the user requests and any page navigation afterwards is handled by Javascript.
 
